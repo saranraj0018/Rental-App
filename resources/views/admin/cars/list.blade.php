@@ -12,9 +12,9 @@
                 <div class="col-sm-6 text-right">
                     <button class="btn btn-primary mb-3" id="add_car">Add Car</button>
                     <button class="btn btn-primary mb-3" id="add_car_model">Add Model</button>
+                </div>
             </div>
         </div>
-
         <!-- /.container-fluid -->
     </section>
     <!-- Main content -->
@@ -27,11 +27,13 @@
                     <div class="card-header">
                         <div class="card-title">
                             <button type="button" onclick="window.location.href=''"
-                                    class="btn btn-default btn-sm">Reset</button>
+                                    class="btn btn-default btn-sm">Reset
+                            </button>
                         </div>
                         <div class="card-tools">
                             <div class="input-group input-group" style="width: 250px;">
-                                <input type="text" value="{{ Request::get('keyword') }}" name="keyword" class="form-control float-right" placeholder="Search">
+                                <input type="text" value="{{ Request::get('keyword') }}" name="keyword"
+                                       class="form-control float-right" placeholder="Search">
 
                                 <div class="input-group-append">
                                     <button type="submit" class="btn btn-default">
@@ -70,12 +72,11 @@
             </div>
         </div>
 
-        @include('admin.hub.model')
+        @include('admin.cars.model')
         <!-- /.card -->
     </section>
-
     <!-- /.content -->
 @endsection
 @section('customJs')
-<script src="{{asset("admin/js/car-details.js")}}"></script>
+    <script src="{{asset("admin/js/car-details.js")}}"></script>
 @endsection

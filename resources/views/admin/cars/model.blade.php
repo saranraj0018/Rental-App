@@ -7,47 +7,98 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <!-- Success Alert -->
+
             <div class="modal-body">
                 <form id="car_form">
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label for="service_city">Choose Service City</label>
-                            <select id="service_city" name="service_city" class="form-control" data-live-search="true">
+                            <label for="service_city" class="form-label">Choose Service City</label>
+                            <select id="service_city" name="service_city" class="form-select @error('service_city') is-invalid @enderror" data-live-search="true">
                                 <option selected disabled>City</option>
-                                <option value="632">Coimbatore</option>
+                                <option value=632-Coimbatore" {{ old('service_city') == 632 ? 'selected' : '' }}>Coimbatore</option>
                             </select>
+                            <div class="invalid-feedback">
+                                Please choose a service city.
+                            </div>
                         </div>
+
                         <div class="form-group col-md-4">
-                            <label for="hub">Choose a Hub</label>
-                            <select id="hub" class="form-control" data-live-search="true">
+                            <label for="hub_city">Choose a Hub</label>
+                            <select id="hub_city" name="hub_city" class="form-control @error('hub') is-invalid @enderror" data-live-search="true">
                                 <option selected disabled>Hub</option>
-                                <option value="632">Coimbatore</option>
+                                <option value="632-Coimbatore" {{ old('hub') == 632 ? 'selected' : '' }}>Coimbatore</option>
                             </select>
+                            @error('hub')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                            <div class="invalid-feedback">
+                                Please choose a hub.
+                            </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="car_model">Choose a Car Model</label>
-                            <select id="car_model" class="form-control" data-live-search="true">
+                            <select id="car_model" name="car_model" class="form-control @error('car_model') is-invalid @enderror" data-live-search="true">
                                 <option selected disabled>Model</option>
-                                <option value="1">EcoSport</option>
-                                <option value="2">Grandi10</option>
-                                <option value="3">Xuv</option>
-                                <option value="4">Scorpio</option>
-                                <option value="5">City</option>
+                                <option value="1" {{ old('car_model') == 1 ? 'selected' : '' }}>EcoSport</option>
+                                <option value="2" {{ old('car_model') == 2 ? 'selected' : '' }}>Grandi10</option>
+                                <option value="3" {{ old('car_model') == 3 ? 'selected' : '' }}>Xuv</option>
+                                <option value="4" {{ old('car_model') == 4 ? 'selected' : '' }}>Scorpio</option>
+                                <option value="5" {{ old('car_model') == 5 ? 'selected' : '' }}>City</option>
                             </select>
+                            @error('car_model')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                            <div class="invalid-feedback">
+                                Please choose a car model.
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="register_number">Car Registration Number</label>
-                            <input type="number" class="form-control" id="register_number" placeholder="Registration Number">
+                            <input type="text" class="form-control @error('register_number') is-invalid @enderror" id="register_number" name="register_number" value="{{ old('register_number') }}" placeholder="Registration Number">
+                            @error('register_number')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                            <div class="invalid-feedback">
+                                Please enter your car registration number.
+                            </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="current_km">Current KM Reading</label>
-                            <input type="text" class="form-control" id="current_km" placeholder="4 KM">
+                            <input type="number" class="form-control @error('current_km') is-invalid @enderror" id="current_km" name="current_km" value="{{ old('current_km') }}" placeholder="4 KM">
+                            @error('current_km')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                            <div class="invalid-feedback">
+                                Please enter the current KM reading.
+                            </div>
                         </div>
                     </div>
+                    <input type="hidden" value="" id="car_id"  name="car_id">
                     <div class="col-auto my-1">
-                        <button type="submit" id="submitBtn" class="btn btn-primary mb-2">Submit</button>
+
+
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <button type="submit" id="submit_btn" class="btn btn-primary mb-2">Submit</button>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <div id="successAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
+                                <strong>Success!</strong> Your message has been sent successfully.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -136,5 +187,6 @@
         </div>
     </div>
 </div>
+
 
 

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PickupDeliveryController;
+use App\Http\Controllers\Admin\CarDetailsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,7 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::get('/pickup-delivery/list', [PickupDeliveryController::class, 'list'])->name('pickup-delivery.list');
 
         // Cars list
-        Route::get('/cars/list', [\App\Http\Controllers\Admin\CarDetailsController::class, 'list'])->name('car.list');
+        Route::get('/cars/list', [CarDetailsController::class, 'list'])->name('car.list');
+        Route::post('/car/save', [CarDetailsController::class, 'save'])->name('car.save');
     });
 });
