@@ -9,4 +9,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class AdminDetail extends Authenticatable
 {
     use HasFactory;
+
+
 }

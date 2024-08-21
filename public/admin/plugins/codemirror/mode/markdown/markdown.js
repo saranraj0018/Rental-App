@@ -111,7 +111,7 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
     return !line || !/\S/.test(line.string)
   }
 
-  // Blocks
+  // blocks
 
   function blankLine(state) {
     // Reset linkTitle state

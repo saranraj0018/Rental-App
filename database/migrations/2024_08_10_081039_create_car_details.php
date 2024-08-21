@@ -17,7 +17,7 @@ return new class extends Migration
             $table->mediumInteger('city_code');
             $table->string('hub',144);
             $table->mediumInteger('hub_code');
-            $table->mediumInteger('model_id');
+            $table->string('model_id');
             $table->string('register_number',144);
             $table->mediumInteger('current_km');
             $table->timestamps();

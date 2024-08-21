@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="{{ asset('admin/css/adminlte.min.css')}}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/dropzone/min/dropzone.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/bootstrap-select/dist/css/bootstrap-select.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/plugins/alertifyjs/css/alertify.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/plugins/bootstrap-4-master/build/css/tempusdominus-bootstrap-4.min.css') }}">
 
     <link rel="stylesheet" href="{{ asset('admin/css/custom.css')}}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -85,6 +87,9 @@
 <script src="{{asset("admin/js/adminlte.min.js")}}"></script>
 <script src="{{asset("admin/plugins/dropzone/min/dropzone.min.js")}}"></script>
 <script src="{{asset("admin/plugins/bootstrap-select/dist/js/bootstrap-select.min.js")}}"></script>
+<script src="{{asset("admin/plugins/alertifyjs/alertify.min.js")}}"></script>
+<script src="{{asset("admin/plugins/moment/moment.min.js")}}"></script>
+<script src="{{asset("admin/plugins/bootstrap-4-master/build/js/tempusdominus-bootstrap-4.min.js")}}"></script>
 
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset("admin/js/demo.js")}}"></script>
