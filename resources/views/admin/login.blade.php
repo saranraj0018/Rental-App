@@ -12,12 +12,12 @@
     <link rel="stylesheet" href="{{ asset('admin/css/adminlte.min.css')}}">
     <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}">
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" style="background-image:  url('{{ asset('admin/img/imgpsh_fullsize_anim.jfif') }}');  background-size: cover; background-position: center;">
 <div class="login-box">
     @include('admin.message')
     <!-- /.login-logo -->
     <div class="card card-outline card-primary">
-        <div class="card-header text-center">
+        <div class="card-header text-right">
             <a href="#" class="h3">Administrative Panel</a>
         </div>
         <div class="card-body">
@@ -54,6 +54,9 @@
             </form>
             <p class="mb-1 mt-3">
                 <a href="forgot-password.html">I forgot my password</a>
+            </p>
+            <p class="mb-1 mt-3">
+                <a href="{{ route('admin.register') }}">Register Admin page</a>
             </p>
         </div>
         <!-- /.card-body -->

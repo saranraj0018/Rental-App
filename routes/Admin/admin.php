@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PickupDeliveryController;
+use App\Http\Controllers\Admin\CarDetailsController;
+use App\Http\Controllers\Admin\CarBlockController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +23,7 @@ use App\Http\Controllers\Admin\PickupDeliveryController;
 Route::group(['prefix'=> 'admin'],function (){
     Route::group(['middleware'=> 'admin.guest'],function (){
         Route::view('/login',  'admin.login')->name('admin.login');
+        Route::view('/register',  'admin.register')->name('admin.register');
         Route::post('/authenticate', [AdminAuthController::class, 'adminAuthenticate'])->name('admin.authenticate');
     });
 
@@ -32,6 +35,19 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::get('/pickup-delivery/list', [PickupDeliveryController::class, 'list'])->name('pickup-delivery.list');
 
         // Cars list
-        Route::get('/cars/list', [\App\Http\Controllers\Admin\CarDetailsController::class, 'list'])->name('car.list');
+        Route::get('/cars/list', [CarDetailsController::class, 'list'])->name('car.list');
+        Route::post('/car/save', [CarDetailsController::class, 'save'])->name('car.save');
+        Route::delete('/car/{id}/delete', [CarDetailsController::class, 'delete'])->name('car.delete');
+        Route::get('/cars/search', [CarDetailsController::class, 'search'])->name('cars.search');
+
+        // Car Models
+        Route::post('/car/model/save', [CarDetailsController::class, 'saveModels'])->name('model.save');
+
+        // Car-block list
+        Route::get('/car-block/list', [CarBlockController::class, 'list'])->name('car-block.list');
+        Route::post('/car-block/save', [CarBlockController::class, 'save'])->name('car-block.save');
+        Route::put('/car-block/update', [CarBlockController::class, 'update'])->name('car-block.update');
+        Route::get('/car-block/search', [CarBlockController::class, 'search'])->name('car-block.search');
+
     });
 });

@@ -34,7 +34,7 @@ class AdminAuthController extends Controller
         }
 
         $admin = Auth::guard('admin')->user();
-        if ($admin->role != 'admin'){
+        if ($admin->role != 'super-admin'){
             Auth::guard('admin')->logout();
             return redirect()->route('admin.login')->with('error','You are not authorized to access');
         }
