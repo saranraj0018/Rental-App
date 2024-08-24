@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use App\Models\CarDetails;
 use App\Models\CarDocument;
@@ -10,17 +11,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
-class CarDetailsController extends Controller
+class CarDetailsController extends BaseController
 {
+
     public function list(Request $request)
     {
+        $this->authorizePermission('car_list_tab');
+        $permissions = getAdminPermissions();
         $car_list =  CarDetails::with('carModel')->orderBy('created_at', 'desc')->paginate(10);
         $car_models = CarModel::all(['car_model_id','model_name']);
-        return view('admin.cars.list',compact('car_list','car_models'));
+        return view('admin.cars.list',compact('car_list','car_models','permissions'));
     }
 
     public function save(Request $request)
     {
+        $this->authorizePermission('car_list_add');
+
+        if (!empty($request['car_id'])) {
+            $this->authorizePermission('car_list_edit');
+        }
          $request->validate([
             'service_city' => 'required',
             'hub_city' => 'required',
@@ -54,6 +63,12 @@ class CarDetailsController extends Controller
 
     public function saveModels(Request $request)
     {
+        $this->authorizePermission('car_list_add_model');
+
+        if (!empty($request['model_id'])) {
+            $this->authorizePermission('car_list_model_edit');
+        }
+
         $request->validate([
             'producer' => 'required|max:144',
             'model_name' => 'required|unique:car_models|max:50',
@@ -109,6 +124,7 @@ class CarDetailsController extends Controller
 
     public function delete($id)
     {
+        $this->authorizePermission('car_list_delete');
         $delete_car = CarDetails::find($id);
         $delete_car->delete();
         $cars = CarDetails::with('carModel')->orderBy('created_at', 'desc')->get();
@@ -138,7 +154,4 @@ class CarDetailsController extends Controller
             'data' => $car_list,
         ]);
     }
-
-
-
 }

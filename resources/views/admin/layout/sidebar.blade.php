@@ -1,4 +1,7 @@
 <!-- Main Sidebar Container -->
+@php
+    $permissions = getAdminPermissions();
+@endphp
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
@@ -18,12 +21,14 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
+                @if(in_array('hub_list',$permissions))
                 <li class="nav-item">
                     <a href="{{ route('pickup-delivery.list') }}" class="nav-link">
                         <i class="nav-icon fas fa-file-alt"></i>
                         <p>Hub panel</p>
                     </a>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a href="" class="nav-link">
                         <i class="nav-icon fas fa fa-cogs"></i>
@@ -36,13 +41,15 @@
                         <p>Cities Map</p>
                     </a>
                 </li>
+                @if(in_array('car_list_tab',$permissions))
                 <li class="nav-item">
                     <a href="{{route('car.list')}}" class="nav-link">
                         <i class="nav-icon fas fa fa-car"></i>
                         <p>Car Listing</p>
                     </a>
                 </li>
-
+                @endif
+                @if(in_array('car_av_tab',$permissions))
                 <li class="nav-item">
                     <a href="{{route('car-block.list')}}" class="nav-link">
                         <!-- <i class="nav-icon fas fa-tag"></i> -->
@@ -50,6 +57,7 @@
                         <p>Car Availability</p>
                     </a>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a href="orders.html" class="nav-link">
                         <i class="nav-icon fas fa fa-flag"></i>
@@ -62,12 +70,14 @@
                         <p>Payment Invoice</p>
                     </a>
                 </li>
+                @if(in_array('role_tab',$permissions))
                 <li class="nav-item">
-                    <a href="users.html" class="nav-link">
+                    <a href="{{route('user-role.list')}}" class="nav-link">
                         <i class="nav-icon  fas fa-users"></i>
-                        <p>Upload files</p>
+                        <p>User Roles</p>
                     </a>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a href="pages.html" class="nav-link">
                         <i class="nav-icon  far fa-file-alt"></i>

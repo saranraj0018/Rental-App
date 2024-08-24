@@ -17,3 +17,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 require 'Admin/admin.php';
+
+require 'User/frontend.php';
