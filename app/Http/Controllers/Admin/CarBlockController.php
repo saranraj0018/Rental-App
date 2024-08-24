@@ -2,25 +2,28 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Models\CarBlock;
 use App\Models\CarDetails;
 use App\Models\CarModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CarBlockController extends Controller
+class CarBlockController extends BaseController
 {
     public function list(Request $request)
     {
+        $this->authorizePermission('car_av_tab');
         $car_block = CarBlock::with('user')->orderBy('created_at', 'desc')->paginate(5);
         $car_models = CarModel::all(['car_model_id','model_name']);
         $car_details = CarDetails::all(['register_number']);
-        return view('admin.cars.blocks.list',compact('car_block','car_models','car_details'));
+        $permissions = getAdminPermissions();
+        return view('admin.cars.blocks.list',compact('car_block','car_models','car_details','permissions'));
     }
 
     public function save(Request $request)
     {
+        $this->authorizePermission('car_av_add');
         $blockType = $request['block_type'];
         $request->validate([
             'block_type' => 'required|in:0,1,2,3,4,5',
@@ -54,6 +57,7 @@ class CarBlockController extends Controller
 
     public function update(Request $request)
     {
+        $this->authorizePermission('car_av_edit');
         $request->validate([
             'edit_start_date' => 'required|date',
             'edit_end_date' => 'required|date|after:start_date',
@@ -63,6 +67,7 @@ class CarBlockController extends Controller
         $car_block->start_date = $request['edit_start_date'];
         $car_block->end_date = $request['edit_end_date'];
         $car_block->comment = $request['edit_comment'];
+        $car_block->user_id = Auth::guard('admin')->id();
         $car_block->save();
         $car_block_list = CarBlock::with('user')->orderBy('created_at', 'desc')->get();
         return response()->json(['data'=> $car_block_list,'success' => 'Car blocked Update successfully']);

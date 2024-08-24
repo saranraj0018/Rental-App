@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PickupDeliveryController;
 use App\Http\Controllers\Admin\CarDetailsController;
 use App\Http\Controllers\Admin\CarBlockController;
+Use App\Http\Controllers\Admin\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,7 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::view('/login',  'admin.login')->name('admin.login');
         Route::view('/register',  'admin.register')->name('admin.register');
         Route::post('/authenticate', [AdminAuthController::class, 'adminAuthenticate'])->name('admin.authenticate');
+        Route::post('/register/update', [AdminAuthController::class, 'registerUpdate'])->name('admin.register.update');
     });
 
     Route::group(['middleware'=> 'admin.auth'],function (){
@@ -37,7 +39,7 @@ Route::group(['prefix'=> 'admin'],function (){
         // Cars list
         Route::get('/cars/list', [CarDetailsController::class, 'list'])->name('car.list');
         Route::post('/car/save', [CarDetailsController::class, 'save'])->name('car.save');
-        Route::delete('/car/{id}/delete', [CarDetailsController::class, 'delete'])->name('car.delete');
+        Route::delete('/car/{id?}/delete', [CarDetailsController::class, 'delete'])->name('car.delete');
         Route::get('/cars/search', [CarDetailsController::class, 'search'])->name('cars.search');
 
         // Car Models
@@ -48,6 +50,12 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::post('/car-block/save', [CarBlockController::class, 'save'])->name('car-block.save');
         Route::put('/car-block/update', [CarBlockController::class, 'update'])->name('car-block.update');
         Route::get('/car-block/search', [CarBlockController::class, 'search'])->name('car-block.search');
+
+        // User Role list
+        Route::get('/user-role/list', [RoleController::class, 'list'])->name('user-role.list');
+        Route::post('/user-role/save', [RoleController::class, 'save'])->name('user-role.save');
+        Route::put('/user-role/update', [RoleController::class, 'update'])->name('user-role.update');
+        Route::delete('/user-role/{id?}/delete', [RoleController::class, 'delete'])->name('user-role.delete');
 
     });
 });

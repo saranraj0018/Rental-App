@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{{ asset('admin/css/adminlte.min.css')}}">
 </head>
 <body class="hold-transition register-page">
+@php($roles = \App\Models\Role::all())
 <div class="register-box">
     <div class="card card-outline card-primary">
         <div class="card-header text-center">
@@ -19,16 +20,35 @@
         </div>
         <div class="card-body">
             <p class="login-box-msg">Register a new membership</p>
-            <form action="" method="post">
+            <form action="{{ route('admin.register.update') }}" method="post">
                 @csrf
                 <div class="input-group mb-3">
-                    <input type="text" name="name" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" placeholder="Full name">
+                    <select name="role" class="form-control @error('role') is-invalid @enderror">
+                        <option disabled selected>Select Role</option>
+                        @if(filled($roles)) @endif
+                        @foreach($roles as $role)
+                            <option value="{{ $role->id }}">{{ $role->user_role}}</option>
+                        @endforeach
+                    </select>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-user-tag"></span>
+                        </div>
+                    </div>
+                    @error('role')
+                    <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                    @enderror
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" name="user_name" value="{{ old('user_name') }}" class="form-control @error('user_name') is-invalid @enderror" placeholder="Username">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-user"></span>
                         </div>
                     </div>
-                    @error('name')
+                    @error('user_name')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -45,6 +65,19 @@
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
+                    @enderror
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" name="mobile_number" value="{{ old('mobile_number') }}" class="form-control @error('mobile_number') is-invalid @enderror" placeholder="Mobile Number">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-phone"></span>
+                        </div>
+                    </div>
+                    @error('mobile_number')
+                    <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
                     @enderror
                 </div>
                 <div class="input-group mb-3">
@@ -67,6 +100,19 @@
                             <span class="fas fa-lock"></span>
                         </div>
                     </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" name="referral_code" class="form-control @error('referral_code') is-invalid @enderror" placeholder="Referral Code">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                    @error('referral_code')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
                 </div>
                 <div class="row">
                     <div class="col-4">
