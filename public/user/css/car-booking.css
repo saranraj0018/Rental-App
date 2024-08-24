@@ -1,0 +1,254 @@
+.back-btn {
+    background-color: #4161a6;
+    border: 1px solid rgba(255, 255, 255, 0.57);
+}
+
+.bg-blue {
+    background-color: #123984;
+}
+
+.booking-inputs input.form-control {
+    background-color: transparent;
+    color: white;
+}
+
+.form-dates {
+    background: none !important;
+    border: none !important;
+}
+
+.booking-inputs {
+    background-color: #395288;
+    border-radius: 5px;
+}
+
+.booking-inputs-2 {
+    background-color: #395288;
+    border-radius: 5px;
+    padding: 5px 5px;
+
+}
+
+.booking-inputs-2 input.form-control {
+    background-color: transparent;
+    color: white;
+    border: none;
+}
+
+input.form-control.coupen-input {
+    height: 30px;
+}
+
+/* TOGGGLE */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 55px;
+    height: 30px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    border-radius: 50%;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked+.slider:before {
+    background-color: #123984;
+}
+
+
+input:checked+.slider {
+    background-color: white;
+}
+
+
+input:checked+.slider:before {
+    transform: translateX(26px);
+}
+
+/* TOGGLE END */
+
+.ipr-card {
+    background-color: #d8edff;
+}
+
+.ipr-card img {
+    width: 18%;
+}
+
+/* MODAL STYLE */
+.fade-element {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+/* Show the element with fading effect */
+.fade-element.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.h-600px {
+    height: 600px;
+}
+
+.modal {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 1rem;
+}
+
+.modal-dialog.position-top-right {
+    position: absolute;
+    width: 100%;
+    top: 5px;
+    right: 20px;
+    margin: 0;
+}
+
+.line-container {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.line-container::before,
+.line-container::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #525252;
+    /* Line color and thickness */
+    margin: 0 10px;
+    /* Space between the line and the text */
+}
+
+.line-container span {
+    color: #6c757d;
+    /* Adjust text color as needed */
+}
+
+.form-bdr {
+    border: 1px solid #EBECEF;
+}
+
+/* MODAL STYLE */
+
+/* TOGGLE INPUTS */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 55px;
+    height: 30px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #E9E9E9;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    border-radius: 50%;
+    left: 4px;
+    bottom: 4px;
+    background-color: #BBBBBB;
+    transition: .4s;
+}
+
+input:checked+.slider:before {
+    background-color: #123984;
+}
+
+input:checked+.slider {
+    background-color: white;
+}
+
+input:checked+.slider:before {
+    transform: translateX(26px);
+}
+
+/* Hide the toggle divs and buttons initially and add transition */
+.toggle,
+.toggle-btn {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+
+/* When shown, expand the height and increase opacity */
+.toggle.show,
+.toggle-btn.show {
+    max-height: 200px;
+    /* Adjust this value based on content */
+    opacity: 1;
+}
+
+/* Sliding effect for the toggle-btn */
+.toggle-btn {
+    position: relative;
+    left: -100%;
+    transition: left 0.5s ease;
+}
+
+/* When the toggle is active, slide the button into view and resize both buttons */
+.toggle-btn.show {
+    left: 0;
+}
+
+/* Smooth transition for width changes */
+
+.col-12.tras,
+.col-6.tras {
+    transition: width 0.6s ease;
+}
+
+/* TOGGLE INPUTS */
