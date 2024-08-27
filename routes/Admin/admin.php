@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PickupDeliveryController;
 use App\Http\Controllers\Admin\CarDetailsController;
 use App\Http\Controllers\Admin\CarBlockController;
 Use App\Http\Controllers\Admin\RoleController;
+Use App\Http\Controllers\Admin\BannerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,11 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::post('/user-role/save', [RoleController::class, 'save'])->name('user-role.save');
         Route::put('/user-role/update', [RoleController::class, 'update'])->name('user-role.update');
         Route::delete('/user-role/{id?}/delete', [RoleController::class, 'delete'])->name('user-role.delete');
+
+
+        // Front-end Banner Section
+        Route::get('/banner', [BannerController::class, 'view'])->name('banner.list');
+        Route::post('/banner/save', [BannerController::class, 'save'])->name('banner.save');
 
     });
 });

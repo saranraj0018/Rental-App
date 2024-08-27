@@ -84,6 +84,46 @@
                         <p>Swap panel</p>
                     </a>
                 </li>
+                <!-- Manage Section with Hide/Show Functionality -->
+                <li class="nav-item">
+                    <a href="#manageSection" class="nav-link" data-bs-toggle="collapse">
+                        <i class="nav-icon fas fa-cogs"></i>
+                        <p>
+                            Manage Section
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview collapse" id="manageSection">
+                        <!-- Hub Panel -->
+
+                            <li class="nav-item">
+                                <a href="{{ route('banner.list') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-file-alt"></i>
+                                    <p>Banner Section</p>
+                                </a>
+                            </li>
+
+                        <!-- Car Listing -->
+
+                            <li class="nav-item">
+                                <a href="{{ route('car.list') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-car"></i>
+                                    <p>Coupon && Real Time Information</p>
+                                </a>
+                            </li>
+
+                        <!-- Car Availability -->
+
+                            <li class="nav-item">
+                                <a href="{{ route('car-block.list') }}" class="nav-link">
+                                    <i class="fas fa-truck nav-icon"></i>
+                                    <p>Car Availability</p>
+                                </a>
+                            </li>
+
+                    </ul>
+                </li>
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

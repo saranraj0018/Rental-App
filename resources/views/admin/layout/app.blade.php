@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('admin/plugins/dropzone/min/dropzone.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/bootstrap-select/dist/css/bootstrap-select.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/alertifyjs/css/alertify.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/bootstrap-4-master/build/css/tempusdominus-bootstrap-4.min.css') }}">
 
     <link rel="stylesheet" href="{{ asset('admin/css/custom.css')}}">
@@ -88,6 +89,7 @@
 <script src="{{asset("admin/plugins/dropzone/min/dropzone.min.js")}}"></script>
 <script src="{{asset("admin/plugins/bootstrap-select/dist/js/bootstrap-select.min.js")}}"></script>
 <script src="{{asset("admin/plugins/alertifyjs/alertify.min.js")}}"></script>
+<script src="{{asset("admin/plugins/select2/js/select2.min.js")}}"></script>
 <script src="{{asset("admin/plugins/moment/moment.min.js")}}"></script>
 <script src="{{asset("admin/plugins/bootstrap-4-master/build/js/tempusdominus-bootstrap-4.min.js")}}"></script>
 
@@ -101,5 +103,6 @@
     });
 </script>
 @yield('customJs')
+@yield('customCss')
 </body>
 </html>

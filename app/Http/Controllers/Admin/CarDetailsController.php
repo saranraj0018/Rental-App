@@ -110,7 +110,6 @@ class CarDetailsController extends BaseController
             foreach ($request['car_other_image'] as $image) {
                 $img_name = $image->getClientOriginalName();
                 $image->storeAs('car_other_image/',  $img_name.'-'.$uniq_id, 'public');
-                dump($img_name);
                 $car_documents =  !empty($request['model_id']) ? CarDocument::where('model_id',$request['model_id'])->first()
                     : new CarDocument();
                 $car_documents->name = $img_name;
