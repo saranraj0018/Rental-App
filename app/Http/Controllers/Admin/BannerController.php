@@ -15,8 +15,10 @@ class BannerController extends Controller
 
    public function save(Request $request)
    {
+
+
        $request->validate([
-           'image_car.*' => 'mimes:jpeg,png,jpg|max:2048',
+           'image_car' => 'required|mimes:jpeg,png,jpg|max:2048',
            'title' => 'required|string',
            'description' => 'required|string',
            'features' => 'required|array|min:1',

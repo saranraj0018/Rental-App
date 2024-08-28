@@ -63,62 +63,102 @@ $(function () {
         $('#banner_section').on('submit', function(e) {
             e.preventDefault(); // Prevent form submission for validation
 
-            let isValid = true;
+             let isValid = true;
+            //
+            // // Define the elements and their conditions
+            // let fields = [
+            //     { id: '#description', condition: (val) => val.trim() === '' },
+            //     { id: '#social_description', condition: (val) => val.trim() === '' },
+            //     { id: '#features', condition: (val) => !val || val.length === 0 }, // Validate array for features
+            // ];
+            //
+            // let imageInputs = $('input[name="image_car[]"]');
+            // let selectedImages = 0;
+            //
+            // if (imageInputs.length) {
+            //     imageInputs.each(function() {
+            //         if ($(this).val()) {
+            //             selectedImages++;
+            //         }
+            //     });
+            //
+            //     if (selectedImages < 3) {
+            //         isValid = false;
+            //         imageInputs.each(function() {
+            //             if (!$(this).val()) {
+            //                 $(this).addClass('is-invalid');
+            //             }
+            //         });
+            //     } else {
+            //         imageInputs.removeClass('is-invalid');
+            //     }
+            // } else {
+            //     isValid = false;
+            //     console.error('No image input fields found.');
+            // }
+            //
+            // fields.forEach(function(field) {
+            //     let element = $(field.id);
+            //     let parent = element.closest('.form-group');
+            //
+            //     if (element.length) {
+            //         let value = element.val();
+            //         if (field.condition(value)) {
+            //             parent.find('.invalid-feedback').show();
+            //             element.addClass('is-invalid');
+            //             parent.addClass('is-invalid');
+            //             isValid = false;
+            //         } else {
+            //             parent.find('.invalid-feedback').hide();
+            //             element.removeClass('is-invalid');
+            //             parent.removeClass('is-invalid');
+            //         }
+            //     } else {
+            //         console.error('Element not found: ' + field.id);
+            //     }
+            // });
+            if (isValid) {
+                $('#banner_save').prop('disabled', true);  // Disable submit button during AJAX
 
-            // Define the elements and their conditions
-            let fields = [
-                { id: '#description', condition: (val) => val.trim() === '' },
-                { id: '#social_description', condition: (val) => val.trim() === '' },
-                { id: '#features', condition: (val) => !val || val.length === 0 }, // Validate array for features
-            ];
+                let formData = new FormData(this);
+                $.ajax({
+                    url: '/admin/banner/save',
+                    type: 'POST',
+                    data: formData,
+                    processData: false, // Required for jQuery to send the data properly
+                    contentType: false, // Required to handle file uploads correctly
+                    success: function(response) {
+                        alertify.success(response.success);
+                        window.location.reload();
+                    },
+                    error: function(response) {
+                        if (response.status === 422) {
+                            let errors = response.responseJSON.errors;
+                            for (let key in errors) {
+                                let inputElement = $(`[name="${key}"]`);
 
-            let imageInputs = $('input[name="image_car[]"]');
-            let selectedImages = 0;
+                                // Check for array inputs
+                                if (key.includes('.')) {
+                                    let baseKey = key.split('.')[0];
+                                    inputElement = $(`[name="${baseKey}[]"]`);
+                                }
 
-            if (imageInputs.length) {
-                imageInputs.each(function() {
-                    if ($(this).val()) {
-                        selectedImages++;
+                                if (inputElement.length) {
+                                    inputElement.addClass('is-invalid');
+                                    inputElement.closest('.form-group').find('.invalid-feedback').text(errors[key][0]).show();
+                                } else {
+                                    console.error('Element not found for key:', key); // Log missing element key
+                                }
+                            }
+                        } else {
+                            console.log(response);
+                        }
+
+                    },
+                    complete: function() {
+                        $('#banner_save').prop('disabled', false);  // Re-enable the submit button
                     }
                 });
-
-                if (selectedImages < 3) {
-                    isValid = false;
-                    imageInputs.each(function() {
-                        if (!$(this).val()) {
-                            $(this).addClass('is-invalid');
-                        }
-                    });
-                } else {
-                    imageInputs.removeClass('is-invalid');
-                }
-            } else {
-                isValid = false;
-                console.error('No image input fields found.');
-            }
-
-            fields.forEach(function(field) {
-                let element = $(field.id);
-                let parent = element.closest('.form-group');
-
-                if (element.length) {
-                    let value = element.val();
-                    if (field.condition(value)) {
-                        parent.find('.invalid-feedback').show();
-                        element.addClass('is-invalid');
-                        parent.addClass('is-invalid');
-                        isValid = false;
-                    } else {
-                        parent.find('.invalid-feedback').hide();
-                        element.removeClass('is-invalid');
-                        parent.removeClass('is-invalid');
-                    }
-                } else {
-                    console.error('Element not found: ' + field.id);
-                }
-            });
-            if (isValid) {
-                this.submit(); // Submit the form if validation passes
             }
         });
     });

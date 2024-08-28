@@ -55,7 +55,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary btn-block btn-lg">Update</button>
+                                    <button type="submit" id="banner_save" class="btn btn-primary btn-block btn-lg">Update</button>
                                 </div>
                             </div>
                         </div>
