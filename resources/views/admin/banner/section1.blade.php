@@ -1,6 +1,14 @@
 @extends('admin.layout.app')
-
 @section('content')
+    @php
+        if (!empty($frontend)) {
+            $data = json_decode($frontend->data_values, true);
+            $title = $data['title'] ?? '';
+            $description = $data['description'] ?? '';
+             $features = json_decode($data['features'], true);
+             $images = json_decode($data['images'], true);
+        }
+    @endphp
     <div class="row">
         <div class="col-lg-12 col-md-12 mb-4">
             <div class="card">
@@ -10,46 +18,52 @@
                             <div class="col-xl-4">
                                 <div id="image-upload-container">
                                     <!-- Initial Image Upload Sections -->
+                                    <input type="hidden" name="banner_id" id="banner_id" value="{{ $frontend->id ?? 0 }}">
                                     <div class="image-upload-section mb-3">
                                         <div class="border p-2 rounded text-center">
-                                            <img id="image_preview_1" src="#" alt="Your Image" class="img-fluid mb-2 d-none" style="max-height: 150px;">
-                                            <input type="file" class="form-control" name="image_car[]" id="car_pic_1" accept=".png, .jpg, .jpeg">
-                                            <div class="invalid-feedback">Please upload an image.</div>
+                                            <img id="image_preview_1" src="{{ asset('storage/section1-image-car/' . current($images)) }}" alt="Your Image" class="img-fluid mb-2 @if(empty($images)) d-none @endif" style="max-height: 150px;">
+                                            <input type="file" class="form-control" name="image_car[]" id="image_car" value="{{ current($images) }}" accept=".png, .jpg, .jpeg">
+                                            <div class="invalid-feedback">Please upload Minimum 3 image.</div>
                                         </div>
                                     </div>
                                     <div class="image-upload-section mb-3">
                                         <div class="border p-2 rounded text-center">
-                                            <img id="image_preview_2" src="#" alt="Your Image" class="img-fluid mb-2 d-none" style="max-height: 150px;">
-                                            <input type="file" class="form-control" name="image_car[]" id="car_pic_2" accept=".png, .jpg, .jpeg">
-                                            <div class="invalid-feedback">Please upload an image.</div>
+                                            <img id="image_preview_2" src="{{ asset('storage/section1-image-car/' . $images[1] ?? '') }}" alt="Your Image" class="img-fluid mb-2 @if(empty($images)) d-none @endif" style="max-height: 150px;">
+                                            <input type="file" class="form-control" name="image_car[]" id="image_car" accept=".png, .jpg, .jpeg">
+                                            <div class="invalid-feedback">Please upload Minimum 3 image.</div>
                                         </div>
                                     </div>
                                     <div class="image-upload-section mb-3">
                                         <div class="border p-2 rounded text-center">
-                                            <img id="image_preview_3" src="#" alt="Your Image" class="img-fluid mb-2 d-none" style="max-height: 150px;">
-                                            <input type="file" class="form-control" name="image_car[]" id="car_pic_3" accept=".png, .jpg, .jpeg">
-                                            <div class="invalid-feedback">Please upload an image.</div>
+                                            <img id="image_preview_3" src="{{ asset('storage/section1-image-car/' . end($images)) }}" alt="Your Image" class="img-fluid mb-2 @if(empty($images)) d-none @endif" style="max-height: 150px;">
+                                            <input type="file" class="form-control" name="image_car[]" id="image_car" accept=".png, .jpg, .jpeg">
+                                            <div class="invalid-feedback">Please upload Minimum 3 image.</div>
                                         </div>
                                     </div>
                                 </div>
-{{--                                <button type="button" id="add-more-images" class="btn btn-secondary mb-3">Add More Images</button>--}}
+                                {{--                                <button type="button" id="add-more-images" class="btn btn-secondary mb-3">Add More Images</button>--}}
                             </div>
 
                             <div class="col-xl-8">
                                 <div class="form-group">
                                     <label class="form-control-label font-weight-bold">Title</label>
-                                    <textarea name="title" id="title" rows="3" class="form-control" placeholder="Title"></textarea>
+                                    <textarea name="title" id="title" rows="3" class="form-control" placeholder="Title">{{ $title }}</textarea>
                                     <div class="invalid-feedback">Please provide a title.</div>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-control-label font-weight-bold">Description</label>
-                                    <textarea name="description" id="description" rows="3" class="form-control" placeholder="Car description"></textarea>
+                                    <textarea name="description" id="description" rows="3" class="form-control" placeholder="Car description">{{ $description }}</textarea>
                                     <div class="invalid-feedback">Please provide a description.</div>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-control-label font-weight-bold">Features</label>
                                     <small class="ml-2 mt-2 text-facebook">Separate multiple features by <code>,</code>(comma) or <code>enter</code> key</small>
                                     <select name="features[]" class="form-control select2-auto-tokenize" multiple="multiple" id="features">
+                                        @if(!empty($features))
+                                            @foreach($features as $option)
+                                                <option value="{{ $option }}" selected>{{ __($option) }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                     <div class="invalid-feedback">Please select at least one feature.</div>
                                 </div>

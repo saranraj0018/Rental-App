@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('car_documents', function (Blueprint $table) {
-            $table->Integer('id')->autoIncrement();
-            $table->Integer('model_id')->unsigned()->index();
+        Schema::create('frontend_images', function (Blueprint $table) {
+            $table->id();
+            $table->integer('frontend_id');
             $table->string('name',144)->nullable();
             $table->string('slug',30)->nullable();
             $table->timestamps();
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('car_documents');
+        Schema::dropIfExists('frontend_images');
     }
 };

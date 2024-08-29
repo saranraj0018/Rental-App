@@ -5,29 +5,24 @@ $(function () {
         $(".select2-auto-tokenize").select2();
         let imageUploadCount = 3;
 
-        function readURL(input, previewId) {
-            const [file] = input.files;
-            if (file) {
-                const reader = new FileReader();
+        // Function to handle image preview
+        function readURL(input, previewElement) {
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+
                 reader.onload = function(e) {
-                    const preview = document.getElementById(previewId);
-                    preview.src = e.target.result;
-                    preview.classList.remove('d-none');
+                    $(previewElement).attr('src', e.target.result).removeClass('d-none');
                 };
-                reader.readAsDataURL(file);
+
+                reader.readAsDataURL(input.files[0]);
             }
         }
 
-        document.getElementById('car_pic_1').addEventListener('change', function() {
-            readURL(this, 'image_preview_1');
-        });
-
-        document.getElementById('car_pic_2').addEventListener('change', function() {
-            readURL(this, 'image_preview_2');
-        });
-
-        document.getElementById('car_pic_3').addEventListener('change', function() {
-            readURL(this, 'image_preview_3');
+// Attach change event listener to all file inputs with name 'image_car[]'
+        $('input[name="image_car[]"]').on('change', function() {
+            // Find the corresponding preview element
+            let previewElement = $(this).closest('.image-upload-section').find('img');
+            readURL(this, previewElement);
         });
 
         // Add more image upload sections vertically
@@ -64,85 +59,84 @@ $(function () {
             e.preventDefault(); // Prevent form submission for validation
 
              let isValid = true;
-            //
-            // // Define the elements and their conditions
-            // let fields = [
-            //     { id: '#description', condition: (val) => val.trim() === '' },
-            //     { id: '#social_description', condition: (val) => val.trim() === '' },
-            //     { id: '#features', condition: (val) => !val || val.length === 0 }, // Validate array for features
-            // ];
-            //
-            // let imageInputs = $('input[name="image_car[]"]');
-            // let selectedImages = 0;
-            //
-            // if (imageInputs.length) {
-            //     imageInputs.each(function() {
-            //         if ($(this).val()) {
-            //             selectedImages++;
-            //         }
-            //     });
-            //
-            //     if (selectedImages < 3) {
-            //         isValid = false;
-            //         imageInputs.each(function() {
-            //             if (!$(this).val()) {
-            //                 $(this).addClass('is-invalid');
-            //             }
-            //         });
-            //     } else {
-            //         imageInputs.removeClass('is-invalid');
-            //     }
-            // } else {
-            //     isValid = false;
-            //     console.error('No image input fields found.');
-            // }
-            //
-            // fields.forEach(function(field) {
-            //     let element = $(field.id);
-            //     let parent = element.closest('.form-group');
-            //
-            //     if (element.length) {
-            //         let value = element.val();
-            //         if (field.condition(value)) {
-            //             parent.find('.invalid-feedback').show();
-            //             element.addClass('is-invalid');
-            //             parent.addClass('is-invalid');
-            //             isValid = false;
-            //         } else {
-            //             parent.find('.invalid-feedback').hide();
-            //             element.removeClass('is-invalid');
-            //             parent.removeClass('is-invalid');
-            //         }
-            //     } else {
-            //         console.error('Element not found: ' + field.id);
-            //     }
-            // });
+if ($('#banner_id').val() !== '') {
+    // Define the elements and their conditions
+    let fields = [
+        {id: '#title', condition: (val) => val.trim() === ''},
+        {id: '#description', condition: (val) => val.trim() === ''},
+        {id: '#features', condition: (val) => !val || val.length === 0}, // Validate array for features
+    ];
+
+    let imageInputs = $('input[name="image_car[]"]');
+
+    if (imageInputs.length < 3) {
+        isValid = false;
+        imageInputs.each(function () {
+            if (!$(this).val()) {
+                $(this).addClass('is-invalid');
+            }
+        });
+    } else {
+        imageInputs.removeClass('is-invalid');
+    }
+
+
+    fields.forEach(function (field) {
+        let element = $(field.id);
+        let parent = element.closest('.form-group');
+
+        if (element.length) {
+            let value = element.val();
+            if (field.condition(value)) {
+                parent.find('.invalid-feedback').show();
+                element.addClass('is-invalid');
+                parent.addClass('is-invalid');
+                isValid = false;
+            } else {
+                parent.find('.invalid-feedback').hide();
+                element.removeClass('is-invalid');
+                parent.removeClass('is-invalid');
+            }
+        } else {
+            console.error('Element not found: ' + field.id);
+        }
+    });
+}
             if (isValid) {
-                $('#banner_save').prop('disabled', true);  // Disable submit button during AJAX
+               // $('#banner_save').prop('disabled', true);  // Disable submit button during AJAX
 
                 let formData = new FormData(this);
+
+// Log all the
+
+
                 $.ajax({
                     url: '/admin/banner/save',
                     type: 'POST',
                     data: formData,
+
                     processData: false, // Required for jQuery to send the data properly
                     contentType: false, // Required to handle file uploads correctly
                     success: function(response) {
                         alertify.success(response.success);
-                        window.location.reload();
+                        setTimeout(function() {
+                            //window.location.reload();
+                        }, 1000);
                     },
                     error: function(response) {
-                        if (response.status === 422) {
+                        if (response.responseJSON.errors) {
                             let errors = response.responseJSON.errors;
                             for (let key in errors) {
-                                let inputElement = $(`[name="${key}"]`);
-
+                                let inputElement = $(`[name="${key+[]}"]`);
                                 // Check for array inputs
                                 if (key.includes('.')) {
                                     let baseKey = key.split('.')[0];
                                     inputElement = $(`[name="${baseKey}[]"]`);
                                 }
-
+                                // If the inputElement is still not found, look by ID
+                                if (!inputElement.length) {
+                                    inputElement = $(`#${key}`);
+                                }
                                 if (inputElement.length) {
                                     inputElement.addClass('is-invalid');
                                     inputElement.closest('.form-group').find('.invalid-feedback').text(errors[key][0]).show();
@@ -153,7 +147,6 @@ $(function () {
                         } else {
                             console.log(response);
                         }
-
                     },
                     complete: function() {
                         $('#banner_save').prop('disabled', false);  // Re-enable the submit button

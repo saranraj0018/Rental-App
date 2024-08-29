@@ -3,54 +3,73 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CarDocument;
 use App\Models\Frontend;
+use App\Models\FrontendId;
+use App\Models\FrontendImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
-   public function view()
-   {
-   return view('admin.banner.section1');
-   }
+    public function view()
+    {
+        $frontend = Frontend::where('data_keys','section1-image-car')->first();
+        return view('admin.banner.section1', compact('frontend'));
+    }
 
-   public function save(Request $request)
-   {
+    public function save(Request $request)
+    {
+        if (empty($request['banner_id'])) {
+            $request->validate([
+                'image_car' => 'required|array|min:3',
+                'image_car.*' => 'mimes:jpeg,png,jpg|max:2048',
+            ]);
+        }
+
+        $request->validate([
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'features' => 'required|array|min:1',
+            'features.*' => 'string',
+        ]);
 
 
-       $request->validate([
-           'image_car' => 'required|mimes:jpeg,png,jpg|max:2048',
-           'title' => 'required|string',
-           'description' => 'required|string',
-           'features' => 'required|array|min:1',
-           'features.*' => 'string',
-       ]);
+        $data = [
+            'title' => $request['title'],
+            'description' => $request['description'],
+            'features' => json_encode($request['features']),
+        ];
 
-dd($request->all());
-       if (count($request->file('image_car')) < 3) {
-           return back()->withErrors(['image_car' => 'Please upload at least 3 images.']);
-       }
+        $frontend = $request['banner_id'] == 'section1-image-car' ? Frontend::where('data_keys', $request['banner_id'])->first() : new Frontend();
+        $frontend->data_keys = 'section1-image-car';
+        $frontend->data_values = json_encode($data);
+        $frontend->save();
 
-       $imageData = [];
-       if ($request->hasFile('image_car')) {
-           foreach ($request['image_car'] as $image) {
-               $img_name = $image->getClientOriginalName();
-               $image->storeAs('section1-image-car/',  $img_name, 'public');
-               $imageData[] = $img_name;
-           }
-       }
+        if ($request->hasFile('image_car')) {
+            // Clear the existing files from the directory
+            Storage::disk('public')->deleteDirectory('section1-image-car/');
+            Storage::disk('public')->makeDirectory('section1-image-car/');
 
-       $data = [
-           'title' => $request['title'],
-           'description' => $request['description'],
-           'features' => json_encode($request['features']),
-           'images' => json_encode($imageData) // Store image paths as JSON
-       ];
+            foreach ($request['image_car'] as $key => $image) {
+                // Get the original file name
+                $img_name = $image->getClientOriginalName();
+                // Allow duplicate files by appending a timestamp to the file name
+                $img_name = uniqid() . '_' . $img_name;
+                // Store the file in the directory
+                $image->storeAs('section1-image-car/', $img_name, 'public');
+                if (!empty($request['image_car']) ){
+                    $car_image = FrontendImage::where('slug','banner-car-'.$key)->first();
+                } else {
+                    $car_image = new FrontendImage();
+                    $car_image->slug = 'banner-car-'.$key;
+                }
+                $car_image->frontend_id = 3;
+                $car_image->data_values = $img_name;
+                $car_image->save();
+            }
+        }
 
-      $frontend = new Frontend();
-      $frontend->data_keys = 'section1-image-car';
-      $frontend->data_values = json_encode($data);
-      $frontend->save();
-
-       return redirect()->back()->with('success', 'Data updated successfully.');
-   }
+        return response()->json(['success' => 'Banner section saved successfully']);
+    }
 }

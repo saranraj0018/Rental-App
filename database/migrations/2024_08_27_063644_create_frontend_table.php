@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('frontend', function (Blueprint $table) {
+        Schema::create('frontends', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('data_keys',50);
             $table->text('data_values')->nullable();
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('frontend');
+        Schema::dropIfExists('frontends');
     }
 };
