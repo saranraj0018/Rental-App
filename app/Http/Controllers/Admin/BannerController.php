@@ -14,7 +14,7 @@ class BannerController extends Controller
 {
     public function view()
     {
-        $frontend = Frontend::where('data_keys','section1-image-car')->first();
+        $frontend = Frontend::with('frontendImage')->where('data_keys','section1-image-car')->first();
         return view('admin.banner.section1', compact('frontend'));
     }
 
@@ -41,31 +41,28 @@ class BannerController extends Controller
             'features' => json_encode($request['features']),
         ];
 
-        $frontend = $request['banner_id'] == 'section1-image-car' ? Frontend::where('data_keys', $request['banner_id'])->first() : new Frontend();
+        $frontend = !empty($request['banner_id'])  ? Frontend::find($request['banner_id']) : new Frontend();
         $frontend->data_keys = 'section1-image-car';
         $frontend->data_values = json_encode($data);
         $frontend->save();
 
         if ($request->hasFile('image_car')) {
             // Clear the existing files from the directory
-            Storage::disk('public')->deleteDirectory('section1-image-car/');
-            Storage::disk('public')->makeDirectory('section1-image-car/');
+//            Storage::disk('public')->deleteDirectory('section1-image-car/');
+//            Storage::disk('public')->makeDirectory('section1-image-car/');
 
             foreach ($request['image_car'] as $key => $image) {
-                // Get the original file name
                 $img_name = $image->getClientOriginalName();
-                // Allow duplicate files by appending a timestamp to the file name
                 $img_name = uniqid() . '_' . $img_name;
-                // Store the file in the directory
                 $image->storeAs('section1-image-car/', $img_name, 'public');
-                if (!empty($request['image_car']) ){
+                if (!empty($request['banner_id']) ){
                     $car_image = FrontendImage::where('slug','banner-car-'.$key)->first();
                 } else {
                     $car_image = new FrontendImage();
                     $car_image->slug = 'banner-car-'.$key;
                 }
-                $car_image->frontend_id = 3;
-                $car_image->data_values = $img_name;
+                $car_image->frontend_id = $frontend->id;
+                $car_image->name = $img_name;
                 $car_image->save();
             }
         }

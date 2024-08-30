@@ -1,14 +1,17 @@
 @extends('admin.layout.app')
 @section('content')
     @php
-        if (!empty($frontend)) {
-            $data = json_decode($frontend->data_values, true);
-            $title = $data['title'] ?? '';
-            $description = $data['description'] ?? '';
-             $features = json_decode($data['features'], true);
-             $images = json_decode($data['images'], true);
-        }
+        $data = !empty($frontend) && optional($frontend)->data_values ? json_decode($frontend->data_values, true) : [];
+        $title = $data['title'] ?? '';
+        $description = $data['description'] ?? '';
+        $features = !empty($data['features']) ? json_decode($data['features'], true) : [];
+
+        $images = $frontend->frontendImage ?? [];
+        $image1 = $images[0]->name ?? '';
+        $image2 = $images[1]->name ?? '';
+        $image3 = $images[2]->name ?? '';
     @endphp
+
     <div class="row">
         <div class="col-lg-12 col-md-12 mb-4">
             <div class="card">
@@ -21,21 +24,21 @@
                                     <input type="hidden" name="banner_id" id="banner_id" value="{{ $frontend->id ?? 0 }}">
                                     <div class="image-upload-section mb-3">
                                         <div class="border p-2 rounded text-center">
-                                            <img id="image_preview_1" src="{{ asset('storage/section1-image-car/' . current($images)) }}" alt="Your Image" class="img-fluid mb-2 @if(empty($images)) d-none @endif" style="max-height: 150px;">
-                                            <input type="file" class="form-control" name="image_car[]" id="image_car" value="{{ current($images) }}" accept=".png, .jpg, .jpeg">
+                                            <img id="image_preview_1" src="{{ asset('storage/section1-image-car/' . $image1) }}" alt="Your Image" class="img-fluid mb-2 @if(empty($image1)) d-none @endif" style="max-height: 150px;">
+                                            <input type="file" class="form-control" name="image_car[]" id="image_car"  accept=".png, .jpg, .jpeg">
                                             <div class="invalid-feedback">Please upload Minimum 3 image.</div>
                                         </div>
                                     </div>
                                     <div class="image-upload-section mb-3">
                                         <div class="border p-2 rounded text-center">
-                                            <img id="image_preview_2" src="{{ asset('storage/section1-image-car/' . $images[1] ?? '') }}" alt="Your Image" class="img-fluid mb-2 @if(empty($images)) d-none @endif" style="max-height: 150px;">
+                                            <img id="image_preview_2" src="{{ asset('storage/section1-image-car/' . $image2) }}" alt="Your Image" class="img-fluid mb-2 @if(empty($image2)) d-none @endif" style="max-height: 150px;">
                                             <input type="file" class="form-control" name="image_car[]" id="image_car" accept=".png, .jpg, .jpeg">
                                             <div class="invalid-feedback">Please upload Minimum 3 image.</div>
                                         </div>
                                     </div>
                                     <div class="image-upload-section mb-3">
                                         <div class="border p-2 rounded text-center">
-                                            <img id="image_preview_3" src="{{ asset('storage/section1-image-car/' . end($images)) }}" alt="Your Image" class="img-fluid mb-2 @if(empty($images)) d-none @endif" style="max-height: 150px;">
+                                            <img id="image_preview_3" src="{{ asset('storage/section1-image-car/' . $image3) }}" alt="Your Image" class="img-fluid mb-2 @if(empty($image3)) d-none @endif" style="max-height: 150px;">
                                             <input type="file" class="form-control" name="image_car[]" id="image_car" accept=".png, .jpg, .jpeg">
                                             <div class="invalid-feedback">Please upload Minimum 3 image.</div>
                                         </div>
@@ -47,12 +50,12 @@
                             <div class="col-xl-8">
                                 <div class="form-group">
                                     <label class="form-control-label font-weight-bold">Title</label>
-                                    <textarea name="title" id="title" rows="3" class="form-control" placeholder="Title">{{ $title }}</textarea>
+                                    <textarea name="title" id="title" rows="3" class="form-control" placeholder="Title">{{ $title ?? '' }}</textarea>
                                     <div class="invalid-feedback">Please provide a title.</div>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-control-label font-weight-bold">Description</label>
-                                    <textarea name="description" id="description" rows="3" class="form-control" placeholder="Car description">{{ $description }}</textarea>
+                                    <textarea name="description" id="description" rows="3" class="form-control" placeholder="Car description">{{ $description ?? '' }}</textarea>
                                     <div class="invalid-feedback">Please provide a description.</div>
                                 </div>
                                 <div class="form-group">

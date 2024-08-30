@@ -1,7 +1,6 @@
 $(function () {
     'use strict'
     $(document).ready(function() {
-        // Add Cars
         $('#add_role').click(function() {
             $('#user_role_label').text("Add User Role");
             $('#add_user_role').modal('show');

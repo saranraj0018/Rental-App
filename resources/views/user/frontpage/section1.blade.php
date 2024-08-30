@@ -1,4 +1,14 @@
+@php
+    $data = !empty($section1) && optional($section1)->data_values ? json_decode($section1->data_values, true) : [];
+    $title = $data['title'] ?? '';
+    $description = $data['description'] ?? '';
+    $features = !empty($data['features']) ? json_decode($data['features'], true) : [];
 
+    $images = $section1->frontendImage ?? [];
+    $image1 = $images[0]->name ?? '';
+    $image2 = $images[1]->name ?? '';
+    $image3 = $images[2]->name ?? '';
+@endphp
 
 
 <section class="section-1-bg">
@@ -65,35 +75,33 @@
     <div class="container py-5 d-none d-lg-block">
         <div class="row">
             <div class="col-12 col-lg-6">
-                <h1 class="fs-1 text-white fw-500">
-                    Rent the Perfect Car<br>
-                    for Every Journey!
-                </h1>
-                <p class="text-white my-4">
-                    We open the door for you to explore the world in comfort and style. <br>Being your trusted travel partner,
-                </p>
+                <h1 class="fs-1 text-white fw-500">{!! $title !!}</h1>
+                <p class="text-white my-4">{!! $description !!}</p>
                 <div class="row">
-                    <div class="col-12 col-lg-6">
-                        <div class="text-white">
-                            <div class="mb-3">
-                                <i class="fa-regular fa-circle-check me-1" style="color:#E66742;font-size:17px;"></i> Book with flexibility
-                            </div>
-                            <div>
-                                <i class="fa-regular fa-circle-check me-1" style="color:#E66742;font-size:17px;"></i> Book with flexibility
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-6">
-                        <div class="text-white">
-                            <div class="mb-3">
-                                <i class="fa-regular fa-circle-check me-1" style="color:#E66742;font-size:17px;"></i> Price transparency
-                            </div>
-                            <div>
-                                <i class="fa-regular fa-circle-check me-1" style="color:#E66742;font-size:17px;"></i> Price transparency
-                            </div>
-                        </div>
-                    </div>
-{{--                    <button class="btn fs-16 mt-3 fac-button">Find a Car</button>--}}
+
+                    @if(!empty($features))
+                        @foreach($features as $key => $option)
+                            @if($key <= 1)
+                                <div class="col-12 col-lg-6">
+                                    <div class="text-white">
+                                        <div class="mb-3">
+                                            <i class="fa-regular fa-circle-check me-1" style="color:#E66742;font-size:17px;"></i> {{ $option }}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            @if($key > 1)
+                                <div class="col-12 col-lg-6">
+                                    <div class="text-white">
+                                        <div class="mb-3">
+                                            <i class="fa-regular fa-circle-check me-1" style="color:#E66742;font-size:17px;"></i> {{ $option }}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            @endif
+                        @endforeach
+                    @endif
                     <button class="btn fs-16 mt-3 fac-button">Find a car</button>
                 </div>
             </div>
@@ -101,14 +109,14 @@
                 <div id="carouselExampleFade" class="carousel slide carousel-fade">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img src="{{ asset('user/img/Component 10.png') }}" class="d-block w-100 mb-5" alt="Slide 1">
+                            <img src="{{ asset('storage/section1-image-car/' . $image1) }}" class="d-block w-100 mb-5" alt="Slide 1">
                         </div>
                         <div class="carousel-item">
-                            <img src="{{ asset('user/img/Component 11.png') }}" class="d-block w-100 mb-5" alt="Slide 1">
+                            <img src="{{ asset('storage/section1-image-car/' . $image2) }}" class="d-block w-100 mb-5" alt="Slide 1">
 
                         </div>
                         <div class="carousel-item">
-                            <img src="{{ asset('user/img/Component 9.png') }}" class="d-block w-100 mb-5" alt="Slide 1">
+                            <img src="{{ asset('storage/section1-image-car/' . $image3) }}" class="d-block w-100 mb-5" alt="Slide 1">
                         </div>
                     </div>
                     <!-- Pagination Dots -->
@@ -174,10 +182,3 @@
         <p>Duration 1 day , 14 hrs.</p>
     </div>
 </section>
-
-
-<script>
-    $(document).ready(function() {
-
-    });
-</script>

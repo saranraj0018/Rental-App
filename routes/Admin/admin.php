@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CarDetailsController;
 use App\Http\Controllers\Admin\CarBlockController;
 Use App\Http\Controllers\Admin\RoleController;
 Use App\Http\Controllers\Admin\BannerController;
+Use App\Http\Controllers\Admin\CouponController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,9 @@ Route::group(['prefix'=> 'admin'],function (){
         // Front-end Banner Section
         Route::get('/banner', [BannerController::class, 'view'])->name('banner.list');
         Route::post('/banner/save', [BannerController::class, 'save'])->name('banner.save');
+
+        Route::get('/coupon/list', [CouponController::class, 'list'])->name('coupon.list');
+        Route::post('/coupon/save', [CouponController::class, 'save'])->name('coupon.save');
 
     });
 });

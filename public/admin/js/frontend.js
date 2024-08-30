@@ -58,56 +58,64 @@ $(function () {
         $('#banner_section').on('submit', function(e) {
             e.preventDefault(); // Prevent form submission for validation
 
-             let isValid = true;
-if ($('#banner_id').val() !== '') {
-    // Define the elements and their conditions
-    let fields = [
-        {id: '#title', condition: (val) => val.trim() === ''},
-        {id: '#description', condition: (val) => val.trim() === ''},
-        {id: '#features', condition: (val) => !val || val.length === 0}, // Validate array for features
-    ];
+            let isValid = true;
 
-    let imageInputs = $('input[name="image_car[]"]');
+                // Define the elements and their conditions
+                let fields = [
+                    {id: '#title', condition: (val) => val.trim() === ''},
+                    {id: '#description', condition: (val) => val.trim() === ''},
+                    {id: '#features', condition: (val) => !val || val.length === 0}, // Validate array for features
+                ];
+            if ($('#banner_id').val() === '0') {
+                let imageInputs = $('input[name="image_car[]"]');
+                let filledInputs = 0;
 
-    if (imageInputs.length < 3) {
-        isValid = false;
-        imageInputs.each(function () {
-            if (!$(this).val()) {
-                $(this).addClass('is-invalid');
+                imageInputs.each(function () {
+                    if ($(this).val()) {
+                        filledInputs++;
+                    } else {
+                        $(this).addClass('is-invalid');
+                    }
+                });
+
+
+                if (filledInputs < 3) {
+                    isValid = false;
+                    imageInputs.each(function () {
+                        if (!$(this).val()) {
+                            $(this).addClass('is-invalid');
+                        }
+                    });
+                } else {
+                    imageInputs.removeClass('is-invalid');
+                }
             }
-        });
-    } else {
-        imageInputs.removeClass('is-invalid');
-    }
 
+            fields.forEach(function (field) {
+                let element = $(field.id);
+                let parent = element.closest('.form-group');
 
-    fields.forEach(function (field) {
-        let element = $(field.id);
-        let parent = element.closest('.form-group');
+                if (element.length) {
+                    let value = element.val();
+                    if (field.condition(value)) {
+                        parent.find('.invalid-feedback').show();
+                        element.addClass('is-invalid');
+                        parent.addClass('is-invalid');
+                        isValid = false;
+                    } else {
+                        parent.find('.invalid-feedback').hide();
+                        element.removeClass('is-invalid');
+                        parent.removeClass('is-invalid');
+                    }
+                } else {
+                    console.error('Element not found: ' + field.id);
+                }
+            });
 
-        if (element.length) {
-            let value = element.val();
-            if (field.condition(value)) {
-                parent.find('.invalid-feedback').show();
-                element.addClass('is-invalid');
-                parent.addClass('is-invalid');
-                isValid = false;
-            } else {
-                parent.find('.invalid-feedback').hide();
-                element.removeClass('is-invalid');
-                parent.removeClass('is-invalid');
-            }
-        } else {
-            console.error('Element not found: ' + field.id);
-        }
-    });
-}
             if (isValid) {
-               // $('#banner_save').prop('disabled', true);  // Disable submit button during AJAX
+                // $('#banner_save').prop('disabled', true);  // Disable submit button during AJAX
 
                 let formData = new FormData(this);
-
-// Log all the
 
 
                 $.ajax({
@@ -120,7 +128,7 @@ if ($('#banner_id').val() !== '') {
                     success: function(response) {
                         alertify.success(response.success);
                         setTimeout(function() {
-                            //window.location.reload();
+                            window.location.reload();
                         }, 1000);
                     },
                     error: function(response) {

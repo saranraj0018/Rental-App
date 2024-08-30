@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{{ asset('admin/plugins/alertifyjs/css/alertify.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/bootstrap-4-master/build/css/tempusdominus-bootstrap-4.min.css') }}">
-
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('admin/css/custom.css')}}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -92,7 +92,7 @@
 <script src="{{asset("admin/plugins/select2/js/select2.min.js")}}"></script>
 <script src="{{asset("admin/plugins/moment/moment.min.js")}}"></script>
 <script src="{{asset("admin/plugins/bootstrap-4-master/build/js/tempusdominus-bootstrap-4.min.js")}}"></script>
-
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset("admin/js/demo.js")}}"></script>
 <script type="text/javascript">

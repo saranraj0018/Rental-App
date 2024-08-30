@@ -106,7 +106,7 @@
                         <!-- Car Listing -->
 
                             <li class="nav-item">
-                                <a href="{{ route('car.list') }}" class="nav-link">
+                                <a href="{{ route('coupon.list') }}" class="nav-link">
                                     <i class="nav-icon fas fa-car"></i>
                                     <p>Coupon && Real Time Information</p>
                                 </a>
