@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\BaseController;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CouponController extends BaseController
 {
@@ -13,7 +14,7 @@ class CouponController extends BaseController
      */
     public function list(Request $request)
     {
-        $coupons = Coupon::paginate(10);
+        $coupons = Coupon::with('user')->orderBy('created_at', 'desc')->paginate(5);
         return view('admin.coupon.list', compact('coupons'));
     }
 
@@ -22,59 +23,74 @@ class CouponController extends BaseController
      */
     public function save(Request $request)
     {
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
             'prefix' => 'max:144',
             'coupon_code' => 'required|string|max:20',
-            'coupon_start_date' => 'required|date|before:coupon_end_date',
-            'coupon_end_date' => 'required||after:coupon_start_date',
+            'coupon_start_date' => [
+                'nullable',
+                'date',
+                function ($attribute, $value, $fail) use ($request) {
+                    $endDate = $request->input('coupon_end_date');
+                    if ($endDate && $value >= $endDate) {
+                        $fail('The ' . $attribute . ' must be before the end date.');
+                    }
+                },
+            ],
+            'coupon_end_date' => [
+                'nullable',
+                'date',
+                function ($attribute, $value, $fail) use ($request) {
+                    $startDate = $request->input('coupon_start_date');
+                    if ($startDate && $value <= $startDate) {
+                        $fail('The ' . $attribute . ' must be after the start date.');
+                    }
+                },
+            ],
         ]);
+
         $coupon = $request['coupon_id'] ? Coupon::find($request['coupon_id']) : new Coupon();
-        $car_details->city_name = $city_name;
-        $car_details->city_code = $city_code;
-        $car_details->hub = $hub_city;
-        $car_details->hub_code = $hub_code;
-        $car_details->model_id = $request['car_model'];
-        $car_details->register_number = $request['register_number'];
-        $car_details->current_km = $request['current_km'];
-        $car_details->save();
+        $coupon->title = $request['title'];
+        $coupon->description = $request['description'];
+        $coupon->amount = $request['amount'];
+        $coupon->type = $request['type'];
+        $coupon->prefix = $request['prefix'];
+        $coupon->code = $request['coupon_code'];
+        $coupon->start_date = $request['coupon_start_date'];
+        $coupon->end_date = $request['coupon_end_date'];
+        $coupon->status = $request['status'];
+        $coupon->user_id = Auth::guard('admin')->id();
+        $coupon->save();
 
-        $cars = CarDetails::with('carModel')->orderBy('created_at', 'desc')->get();
-        return response()->json(['data'=> $cars,'success' => 'Car details saved successfully']);
+        $coupon_list = Coupon::with('user')->orderBy('created_at', 'desc')->paginate(5);
+        return response()->json(['data'=> ['coupon' => $coupon_list->items(), 'pagination' => $coupon_list->links()->render()],'success' => 'Coupon Created successfully']);
 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Coupon $coupon)
+    public function delete($id)
     {
-        //
+        $coupon = Coupon::find($id);
+        $coupon->delete();
+        $coupon_list = Coupon::with('user')->orderBy('created_at', 'desc')->paginate(5);
+        return response()->json(['data'=> ['coupon' => $coupon_list->items(), 'pagination' => $coupon_list->links()->render()],'success' => 'Coupon Created successfully']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Coupon $coupon)
+    public function search(Request $request)
     {
-        //
+        $query = Coupon::with('user');
+        if ($request->filled('coupon_code')) {
+            $query->where('code', 'like', '%' .  $request['coupon_code']. '%');
+        }
+
+        if ($request['status'] != 'Both' && $request->filled('status')) {
+            $query->where('status', 'like', '%' .  $request['status']. '%');
+        }
+        $coupon = $query->paginate(5);
+        return response()->json(['data'=> ['coupon' => $coupon->items(),'pagination' => $coupon->links()->render()]]);
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Coupon $coupon)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Coupon $coupon)
-    {
-        //
-    }
 }

@@ -64,8 +64,11 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::get('/banner', [BannerController::class, 'view'])->name('banner.list');
         Route::post('/banner/save', [BannerController::class, 'save'])->name('banner.save');
 
+        //Coupon Section
         Route::get('/coupon/list', [CouponController::class, 'list'])->name('coupon.list');
         Route::post('/coupon/save', [CouponController::class, 'save'])->name('coupon.save');
+        Route::delete('/coupon/{id?}/delete', [CouponController::class, 'delete'])->name('coupon.delete');
+        Route::get('/coupon/search', [CouponController::class, 'search'])->name('coupon.search');
 
     });
 });

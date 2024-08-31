@@ -2,96 +2,29 @@
     <div class="container-fluid container-lg my-3 my-lg-4">
         <div class="home-demo sec-2">
             <div class="owl-carousel owl-carousel-1 owl-theme">
+                @foreach($section2 as $item)
+                    @if($item->status == 1)
                 <div class="item p-2 pb-2 pb-lg-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     <div class="ms-2">
                         <p class="text-primary fs-12 fs-mb-9 mb-1">
-                            <i class="fa-solid fa-car"></i> Ride Safe with Valam
+                            <i class="fa-solid fa-car"></i>{{ $item->title }}
                         </p>
                         <p class="fs-12 fs-mb-9 mb-1">
-                            Valam Cars offers 10% off for <br>new users in Coimbatore.
+                            {!! $item->description !!}
                         </p>
                         <div class="card blue-bg p-2 text-white d-flex">
                             <div class="d-flex">
-                                <img src="{{ asset('user/img/Vector.png') }}" alt="Bagde Percentage" class="img-fluid d-block badge-perc me-1 me-lg-2"> <span class="fs-16 fs-mb-12 fw-500">10%</span>
+                                <img src="{{ asset('user/img/Vector.png') }}" alt="Bagde Percentage" class="img-fluid d-block badge-perc me-1 me-lg-2">
+                                <span class="fs-16 fs-mb-12 fw-500"> {{ $item->amount }}{{  $item->type == 1 ? '%' : '₹' }}</span>
                             </div>
                             <div class="fs-14 fs-mb-9 text-white">
-                                for all Users
+                                {{ $item->prefix }}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="item p-2 pb-2 pb-lg-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="ms-2">
-                        <p class="text-primary fs-12 fs-mb-9 mb-1">
-                            <i class="fa-solid fa-car"></i> Ride Safe with Valam
-                        </p>
-                        <p class="fs-12 fs-mb-9 mb-1">
-                            Valam Cars offers 10% off for <br>new users in Coimbatore.
-                        </p>
-                        <div class="card blue-bg p-2 text-white d-flex">
-                            <div class="d-flex">
-                                <img src="{{ asset('user/img/Vector.png') }}" alt="Bagde Percentage" class="img-fluid d-block badge-perc me-1 me-lg-2"> <span class="fs-16 fs-mb-12 fw-500">10%</span>
-                            </div>
-                            <div class="fs-14 fs-mb-9 text-white">
-                                for all Users
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item p-2 pb-2 pb-lg-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="ms-2">
-                        <p class="text-primary fs-12 fs-mb-9 mb-1">
-                            <i class="fa-solid fa-car"></i> Ride Safe with Valam
-                        </p>
-                        <p class="fs-12 fs-mb-9 mb-1">
-                            Valam Cars offers 10% off for <br>new users in Coimbatore.
-                        </p>
-                        <div class="card blue-bg p-2 text-white d-flex">
-                            <div class="d-flex">
-                                <img src="{{ asset('user/img/Vector.png') }}" alt="Bagde Percentage" class="img-fluid d-block badge-perc me-1 me-lg-2"> <span class="fs-16 fs-mb-12 fw-500">10%</span>
-                            </div>
-                            <div class="fs-14 fs-mb-9 text-white">
-                                for all Users
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item p-2 pb-2 pb-lg-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="ms-2">
-                        <p class="text-primary fs-12 fs-mb-9 mb-1">
-                            <i class="fa-solid fa-car"></i> Ride Safe with Valam
-                        </p>
-                        <p class="fs-12 fs-mb-9 mb-1">
-                            Valam Cars offers 10% off for <br>new users in Coimbatore.
-                        </p>
-                        <div class="card blue-bg p-2 text-white d-flex">
-                            <div class="d-flex">
-                                <img src="{{ asset('user/img/Vector.png') }}" alt="Bagde Percentage" class="img-fluid d-block badge-perc me-1 me-lg-2"> <span class="fs-16 fs-mb-12 fw-500">10%</span>
-                            </div>
-                            <div class="fs-14 fs-mb-9 text-white">
-                                for all Users
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item p-2 pb-2 pb-lg-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="ms-2">
-                        <p class="text-primary fs-12 fs-mb-9 mb-1">
-                            <i class="fa-solid fa-car"></i> Ride Safe with Valam
-                        </p>
-                        <p class="fs-12 fs-mb-9 mb-1">
-                            Valam Cars offers 10% off for <br>new users in Coimbatore.
-                        </p>
-                        <div class="card blue-bg p-2 text-white d-flex">
-                            <div class="d-flex">
-                                <img src="{{ asset('user/img/Vector.png') }}" alt="Bagde Percentage" class="img-fluid d-block badge-perc me-1 me-lg-2"> <span class="fs-16 fs-mb-12 fw-500">10%</span>
-                            </div>
-                            <div class="fs-14 fs-mb-9 text-white">
-                                for all Users
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    @endif
+                @endforeach
             </div>
         </div>
     </div>
@@ -134,9 +67,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div> -->
             </div>
         </div>
     </div>

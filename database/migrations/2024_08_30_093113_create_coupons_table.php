@@ -16,10 +16,13 @@ return new class extends Migration
             $table->smallInteger('user_id');
             $table->string('title',144);
             $table->string('description');
+            $table->dateTime('start_date',0)->nullable();
+            $table->dateTime('end_date',0)->nullable();
             $table->decimal('amount',18,2)->default(0);
             $table->tinyInteger('type')->nullable()->comment('1-percentage, 2-fixed');
             $table->string('prefix',144)->nullable();
             $table->string('code',20);
+            $table->tinyInteger('status')->nullable()->comment('1-activate, 2-deactivate');
             $table->timestamps();
         });
     }

@@ -1,22 +1,18 @@
-<style>
-    .toggle.btn.btn-success {
-        border-radius: 30px;
-    }
-    .toggle.btn.btn-default.off {
-         border-radius: 30px;
-     }
-
-</style>
 <div class="modal fade" id="coupon_model" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="coupon_label">Create Coupon</h5>
-                <div class="form-check form-switch">
-                    <label class="form-check-label" for="toggleSwitch">Toggle Switch</label>
-                    <input type="checkbox" checked data-toggle="toggle" data-onstyle="success">
+                <div class="d-flex m-left">
+                    <div class="my-auto">
+                        <label for="title">Active - Status</label>
+                    </div>
+                    <div class="toggle-wrapper mx-2" id="toggle-button">
+                        <div class="label off">OFF</div>
+                        <div class="toggle-switch"></div>
+                        <div class="label on" style="display: none;">ON</div>
+                    </div>
                 </div>
-
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -25,6 +21,8 @@
             <div class="modal-body">
                 <form id="coupon_form">
                     <div class="form-row">
+                        <input type="hidden" name="status" id="toggle-value" value="2">
+                        <input type="hidden" name="coupon_id">
                         <div class="form-group col-md-6">
                             <label for="title">Title</label>
                             <input type="text" class="form-control" name="title" id="title" placeholder="Title">
@@ -43,14 +41,14 @@
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="amount">Amount</label>
-                            <input type="number" class="form-control" id="amount" name="number" placeholder="amount">
+                            <input type="number" class="form-control" id="amount" name="amount" placeholder="amount">
                             <div class="invalid-feedback">
                                 Please enter the Amount.
                             </div>
                         </div>
                         <div class="form-group col-md-3">
                             <label for="type">Type</label>
-                            <select id="type" class="form-control">
+                            <select id="type" name="type" class="form-control">
                                 <option selected value="1">Percentage</option>
                                 <option value="2">Fixed</option>
                             </select>
@@ -65,11 +63,10 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-4">
                             <label for="coupon_code">Coupon Code</label>
                             <div class="input-group">
                                 <input id="coupon_code" type="text" name="coupon_code" class="form-control" placeholder="Valam#1234" />
-                                <button class="btn btn-dark" data-clipboard-target="#kt_clipboard_1">Copy</button>
                                 <div class="invalid-feedback">
                                     Please enter the Coupon Code.
                                 </div>
@@ -104,6 +101,27 @@
                         <button type="submit" id="save_coupon" class="btn btn-primary mb-2">Save</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this item?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
             </div>
         </div>
     </div>
