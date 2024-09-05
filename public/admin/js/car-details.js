@@ -10,7 +10,20 @@ $(function () {
                 $(this).closest('.bootstrap-select').addClass('is-invalid');
             }
         });
-
+        function resetInput() {
+            // Clear form fields
+            $('#create_car').find('input, select,textarea').val('');
+            // Reset toggle button
+            $('#toggle-button').removeClass('on').css('background-color', 'red');
+            $('#toggle-button').find('.label.off').show();
+            $('#toggle-button').find('.label.on').hide();
+            $('#toggle-value').val(2);
+            // Remove Bootstrap validation classes
+            $('#create_car').find('.is-invalid').removeClass('is-invalid');
+            $('#create_car').find('.is-valid').removeClass('is-valid');
+            // Optionally reset other elements
+            $('#save_coupon').text('');
+        }
 
         // Add Cars
         $('#add_car').click(function() {
@@ -21,13 +34,7 @@ $(function () {
             $('select').selectpicker('refresh');
         });
 
-        // Add Car Models
-        $('#add_car_model').click(function() {
-            $('select').selectpicker();
-            $('#car_model_form').trigger("reset");
-            $('#car_modal_label').text("Add New Car");
-            $('#create_car_modal').modal('show');
-        });
+
 
         // Store Cars
         $('#car_form').on('submit', function(e) {
@@ -110,7 +117,23 @@ $(function () {
                     tbody.append(`
                 <tr>
                     <td>${item.id}</td>
-                    <td>${item.car_model ? item.car_model.model_name : ''}</td>
+                    <td>${item.car_model ? item.car_model.model_name : ''} -
+                    <a href="javascript:void(0)" class="edit_model" data-id="${item.car_model ? item.car_model.id : 0}"
+                           data-producer="${item.car_model ? item.car_model.producer : ''}"
+                           data-model_name="${item.car_model ? item.car_model.model_name : ''}"
+                           data-seat="${item.car_model ? item.car_model.seat : ''}"
+                           data-fuel_type="${item.car_model ? item.car_model.fuel_type : ''}"
+                           data-transmission="${item.car_model ? item.car_model.transmission : ''}"
+                           data-engine_power="${item.car_model ? item.car_model.engine_power : ''}"
+                           data-price_per_hour="${item.car_model ? item.car_model.price_per_hour : ''}"
+                           data-weekend_surge="${item.car_model ? item.car_model.weekend_surge : ''}"
+                           data-peak_reason_surge="${item.car_model ? item.car_model.peak_reason_surge : ''}"
+                           data-extra_km_charge="${item.car_model ? item.car_model.extra_km_charge : ''}">
+                                        <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                                        </svg>
+                                    </a>
+                    </td>
                     <td>${item.model_id}</td>
                     <td>${item.register_number}</td>
                     <td>${item.hub}</td>
@@ -138,8 +161,10 @@ $(function () {
             }
         }
 
+
         // Edit Car
         $('#car_table').on('click', '.btnEdit', function() {
+            resetInput();
             let modal = $('#create_car');
             $('#car_label').text("Edit Car");
             $('#submit_btn').text("Update");
@@ -157,7 +182,15 @@ $(function () {
         });
 
 
-        // Edit Car
+        // Add Car Models
+        $('#add_car_model').click(function() {
+            $('select').selectpicker();
+            $('#car_model_form').trigger("reset");
+            $('#car_modal_label').text("Add New Car");
+            $('#create_car_modal').modal('show');
+        });
+
+        // Edit Car model
         $('#car_table').on('click', '.edit_model', function() {
             let modal = $('#create_car_modal');
             $('#car_modal_label').text("Edit Model");
@@ -208,7 +241,6 @@ $(function () {
                 { id: '#model_name' },
                 { id: '#seats'},
                 { id: '#fuel_type'},
-                { id: '#current_km'},
                 { id: '#transmission'},
                 { id: '#engine_power'},
                 { id: '#price_per_hours'},
@@ -220,11 +252,13 @@ $(function () {
             ];
 
             let isValid = true;
-
             // Loop through the fields and validate each one
+
             fieldsToValidate.forEach(function(field) {
                 let element = $(field.id);
                 if (element.val() === '') {
+                    console.log(element)
+                    console.log(field)
                     element.addClass('is-invalid');
                     isValid = false;
                 } else {
@@ -235,7 +269,7 @@ $(function () {
 
 
             if (isValid) {
-                $('#car_model_Submit').prop('disabled', true);  // Disable submit button during AJAX
+                // $('#car_model_Submit').prop('disabled', true);  // Disable submit button during AJAX
 
                 let formData = new FormData(this);
                 $.ajax({
@@ -261,7 +295,7 @@ $(function () {
                         });
                     },
                     complete: function() {
-                        $('#submitBtn').prop('disabled', false);  // Re-enable the submit button
+                      //  $('#car_model_Submit').prop('disabled', false);  // Re-enable the submit button
                     }
                 });
             }

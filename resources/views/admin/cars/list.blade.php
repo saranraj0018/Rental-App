@@ -70,8 +70,8 @@
                                 <tr>
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->carModel->model_name ?? '' }}
-                                        @if(in_array('car_list_model_edit',$permissions))
-                                        -  <a href="javascript:void(0)" class="edit_model" data-id="{{ $item->id }}"
+                                        @if(in_array('car_list_model_edit',$permissions) && !empty($item->carModel))
+                                        -  <a href="javascript:void(0)" class="edit_model" data-id="{{ $item->carModel->id}}"
                                                                                       data-producer="{{ $item->carModel->producer}}"
                                                                                       data-model_name="{{ $item->carModel->model_name}}"
                                                                                       data-seat="{{ $item->carModel->seat}}"

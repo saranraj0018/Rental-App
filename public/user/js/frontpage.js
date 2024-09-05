@@ -30,15 +30,6 @@ $(function () {
             }
         });
 
-        document.getElementById('copyButton').addEventListener('click', function () {
-            const couponCode = document.getElementById('couponCode').textContent;
-            navigator.clipboard.writeText(couponCode).then(() => {
-                alert('Coupon code copied: ' + couponCode);
-            }).catch(err => {
-                alert('Failed to copy text: ', err);
-            });
-        });
-
         let owl2 = $(".owl-carousel.owl-carousel-5");
         owl2.owlCarousel({
             items: 4,
@@ -130,6 +121,32 @@ $(function () {
             locale: {
                 format: 'M/DD hh:mm A'
             }
+        });
+
+        $('#coupon_section').on('click', '.coupon_info', function() {
+            let modal = $('#coupon_model');
+            modal.find('#title').html('<i class="fa-solid fa-car"></i> ' +$(this).data('title'));
+            modal.find('#description').html($(this).data('description'));
+            modal.find('#amount').html($(this).data('amount') + $(this).data('type'));
+            modal.find('#prefix').html($(this).data('prefix'));
+            modal.find('#coupon_code').html($(this).data('code'));
+            modal.modal('show');
+        });
+
+        $('#copyButton').on('click', function() {
+            const couponCode = $('#coupon_code').text();
+
+            navigator.clipboard.writeText(couponCode).then(() => {
+                // Change the button text to indicate the code was copied
+                $(this).text('Copied!');
+
+                // Optionally, reset the button text after a short delay
+                setTimeout(() => {
+                    $(this).text('Copy Code');
+                }, 2000); // Reset after 2 seconds
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
         });
     });
 });

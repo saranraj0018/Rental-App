@@ -70,5 +70,20 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::delete('/coupon/{id?}/delete', [CouponController::class, 'delete'])->name('coupon.delete');
         Route::get('/coupon/search', [CouponController::class, 'search'])->name('coupon.search');
 
+        // Front-end Car - Info Section
+        Route::get('/car-info', [BannerController::class, 'carInfo'])->name('car-info.view');
+        Route::post('/car-info/save', [BannerController::class, 'carSave'])->name('car-info.save');
+
+        // Front-end Car - Brand Section
+        Route::get('/brand', [BannerController::class, 'brandList'])->name('brand.view');
+        Route::post('/brand/save', [BannerController::class, 'brandSave'])->name('brand.save');
+        Route::delete('/brand/{id?}/delete', [BannerController::class, 'delete'])->name('brand.delete');
+
+        // Faq list
+        Route::get('/faq/list', [BannerController::class, 'faqList'])->name('faq.list');
+        Route::post('/faq/save', [BannerController::class, 'faqSave'])->name('faq.save');
+        Route::delete('/faq/{id?}/delete', [BannerController::class, 'faqDelete'])->name('faq.delete');
+        Route::get('/faq/search', [BannerController::class, 'search'])->name('faq.search');
+
     });
 });

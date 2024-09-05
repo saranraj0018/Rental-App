@@ -26,8 +26,6 @@
 @include('user.frontpage.section2')
 @include('user.frontpage.section3')
 @include('user.frontpage.section4')
-@include('user.frontpage.section5')
-@include('user.frontpage.section6')
 @include('user.frontpage.section7')
 @include('user.frontpage.section8')
 @include('user.frontpage.section9')

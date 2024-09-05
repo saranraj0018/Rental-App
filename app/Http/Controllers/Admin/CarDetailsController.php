@@ -10,6 +10,7 @@ use App\Models\CarModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class CarDetailsController extends BaseController
 {
@@ -34,7 +35,7 @@ class CarDetailsController extends BaseController
             'service_city' => 'required',
             'hub_city' => 'required',
             'car_model' => 'required',
-            'register_number' => 'required|string|max:80',
+            'register_number' => 'required|string|max:50',
             'current_km' => 'required|numeric',
         ]);
 
@@ -63,6 +64,7 @@ class CarDetailsController extends BaseController
 
     public function saveModels(Request $request)
     {
+
         $this->authorizePermission('car_list_add_model');
 
         if (!empty($request['model_id'])) {
@@ -71,7 +73,11 @@ class CarDetailsController extends BaseController
 
         $request->validate([
             'producer' => 'required|max:144',
-            'model_name' => 'required|unique:car_models|max:50',
+            'model_name' => [
+                'required_if:model_id,null',
+                'max:50',
+                Rule::unique('car_models')->ignore($request['model_id'])
+            ],
             'seats' => 'required|max:14',
             'fuel_type' => 'required|string|max:30',
             'transmission' => 'required|max:50',
@@ -84,10 +90,14 @@ class CarDetailsController extends BaseController
             'car_other_image' => 'required|array|min:2',
             'car_other_image.*' => 'mimes:jpg,png',
         ]);
-
         $uniq_id =  Str::random(15);
-        $car_models = !empty($request['model_id']) ? CarModel::find($request['model_id']) :  new CarModel();
-        $car_models->car_model_id = $uniq_id;
+
+        if (!empty($request['model_id'])) {
+            $car_models = CarModel::find($request['model_id']);
+        } else {
+            $car_models = new CarModel();
+            $car_models->car_model_id = $uniq_id;
+        }
         $car_models->producer = $request['producer'];
         $car_models->model_name = $request['model_name'];
         $car_models->seat = $request['seats'];
@@ -101,7 +111,8 @@ class CarDetailsController extends BaseController
 
         if ($request->hasFile('car_image')) {
             $img_name = $request->file('car_image')->getClientOriginalName();
-            $request->car_image->storeAs('car_image/', $img_name.'-'.$uniq_id, 'public');
+            $img_name = $uniq_id . '_' . $img_name;
+            $request->car_image->storeAs('car_image/', $img_name, 'public');
             $car_models->car_image =  $img_name;
         }
         $car_models->save();
@@ -109,7 +120,8 @@ class CarDetailsController extends BaseController
         if ($request->hasFile('car_other_image')) {
             foreach ($request['car_other_image'] as $image) {
                 $img_name = $image->getClientOriginalName();
-                $image->storeAs('car_other_image/',  $img_name.'-'.$uniq_id, 'public');
+                $img_name = $uniq_id . '_' . $img_name;
+                $image->storeAs('car_other_image/',  $img_name, 'public');
                 $car_documents =  !empty($request['model_id']) ? CarDocument::where('model_id',$request['model_id'])->first()
                     : new CarDocument();
                 $car_documents->name = $img_name;

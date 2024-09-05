@@ -16,6 +16,8 @@ return new class extends Migration
             $table->integer('frontend_id');
             $table->string('name',144)->nullable();
             $table->string('slug',30)->nullable();
+            $table->string('title')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

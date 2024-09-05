@@ -113,8 +113,8 @@ $(function () {
             } else {
                 window.history.pushState(null, '', '/admin/user-role/list?page=' + 1);
                 $.each(data.role, function(index, item) {
-                    let editPermission = permission.includes('role_edit') && item.id !== 1;
-                    let deletePermission = permission.includes('role_delete') && item.id !== 1;
+                    let editPermission = permission.includes('role_edit');
+                    let deletePermission = permission.includes('role_delete');
 
                     tbody.append(`
                 <tr>

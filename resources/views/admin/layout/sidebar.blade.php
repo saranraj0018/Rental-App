@@ -108,18 +108,31 @@
                             <li class="nav-item">
                                 <a href="{{ route('coupon.list') }}" class="nav-link">
                                     <i class="nav-icon fas fa-car"></i>
-                                    <p>Coupon && Real Time Information</p>
+                                    <p>Coupon </p>
                                 </a>
                             </li>
 
                         <!-- Car Availability -->
 
                             <li class="nav-item">
-                                <a href="{{ route('car-block.list') }}" class="nav-link">
+                                <a href="{{ route('car-info.view') }}" class="nav-link">
                                     <i class="fas fa-truck nav-icon"></i>
-                                    <p>Car Availability</p>
+                                    <p> Real Time Information</p>
                                 </a>
                             </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('brand.view') }}" class="nav-link">
+                                <i class="fas fa-truck nav-icon"></i>
+                                <p>Brands And Vacation</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('faq.list') }}" class="nav-link">
+                                <i class="fas fa-truck nav-icon"></i>
+                                <p>FAQ</p>
+                            </a>
+                        </li>
 
                     </ul>
                 </li>

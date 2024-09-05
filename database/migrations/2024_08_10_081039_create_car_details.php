@@ -19,7 +19,7 @@ return new class extends Migration
             $table->mediumInteger('hub_code');
             $table->string('model_id');
             $table->string('register_number',144);
-            $table->mediumInteger('current_km');
+            $table->bigInteger('current_km');
             $table->timestamps();
         });
     }

@@ -154,9 +154,6 @@ button[type="button"][role="presentation"].owl-next {
 }
 
 /*--------------HEADER---------------*/
-/*--------------HEADER---------------*/
-/*--------------HEADER---------------*/
-/*--------------HEADER---------------*/
 
 .bg-head-grey {
     border-radius: 50px;
@@ -205,16 +202,8 @@ button.navbar-toggler {
 }
 
 /*--------------END---------------*/
-/*--------------END---------------*/
-/*--------------END---------------*/
-/*--------------END---------------*/
-
 
 /*--------------FOOTER---------------*/
-/*--------------FOOTER---------------*/
-/*--------------FOOTER---------------*/
-/*--------------FOOTER---------------*/
-
 
 .footer-bg {
     background: url("../img/Group\ 35493.png");
@@ -238,14 +227,7 @@ button.navbar-toggler {
 }
 
 /*--------------FOOTER---------------*/
-/*--------------FOOTER---------------*/
-/*--------------FOOTER---------------*/
-/*--------------FOOTER---------------*/
 
-
-/*--------------HOME-SECTION-1---------------*/
-/*--------------HOME-SECTION-1---------------*/
-/*--------------HOME-SECTION-1---------------*/
 /*--------------HOME-SECTION-1---------------*/
 .carousel-indicators {
     position: absolute;
@@ -344,13 +326,7 @@ span#basic-addon1 {
 }
 
 /*--------------HOME-SECTION-1---------------*/
-/*--------------HOME-SECTION-1---------------*/
-/*--------------HOME-SECTION-1---------------*/
-/*--------------HOME-SECTION-1---------------*/
 
-/*--------------HOME-SECTION-2---------------*/
-/*--------------HOME-SECTION-2---------------*/
-/*--------------HOME-SECTION-2---------------*/
 /*--------------HOME-SECTION-2---------------*/
 
 .sec-2 .item {
@@ -416,17 +392,14 @@ span#basic-addon1 {
     color:white;
     border-radius:10px;
 }
+.copy-btn:hover{
+    color:white;
+}
 
 /*--------------HOME-SECTION-2---------------*/
-/*--------------HOME-SECTION-2---------------*/
-/*--------------HOME-SECTION-2---------------*/
-/*--------------HOME-SECTION-2---------------*/
-
 
 /*--------------HOME-SECTION-3---------------*/
-/*--------------HOME-SECTION-3---------------*/
-/*--------------HOME-SECTION-3---------------*/
-/*--------------HOME-SECTION-3---------------*/
+
 .r2dc-card-bg {
     background-color: #E9F2FF;
     border-top-left-radius: 16px;
@@ -452,14 +425,7 @@ span#basic-addon1 {
 }
 
 /*--------------HOME-SECTION-3---------------*/
-/*--------------HOME-SECTION-3---------------*/
-/*--------------HOME-SECTION-3---------------*/
-/*--------------HOME-SECTION-3---------------*/
 
-
-/*--------------HOME-SECTION-4---------------*/
-/*--------------HOME-SECTION-4---------------*/
-/*--------------HOME-SECTION-4---------------*/
 /*--------------HOME-SECTION-4---------------*/
 
 .bg-grey-sec-4 {
@@ -470,17 +436,8 @@ span#basic-addon1 {
 .bdr-ryt-grey {
     border-right: 1px solid #CECECE;
 }
-
-
-
-/*--------------HOME-SECTION-4---------------*/
-/*--------------HOME-SECTION-4---------------*/
-/*--------------HOME-SECTION-4---------------*/
 /*--------------HOME-SECTION-4---------------*/
 
-/*--------------HOME-SECTION-5---------------*/
-/*--------------HOME-SECTION-5---------------*/
-/*--------------HOME-SECTION-5---------------*/
 /*--------------HOME-SECTION-5---------------*/
 
 .y-valam-card {
@@ -494,13 +451,7 @@ span#basic-addon1 {
 }
 
 /*--------------HOME-SECTION-5---------------*/
-/*--------------HOME-SECTION-5---------------*/
-/*--------------HOME-SECTION-5---------------*/
-/*--------------HOME-SECTION-5---------------*/
 
-/*--------------HOME-SECTION-6---------------*/
-/*--------------HOME-SECTION-6---------------*/
-/*--------------HOME-SECTION-6---------------*/
 /*--------------HOME-SECTION-6---------------*/
 
 .ltt-bg {
@@ -526,13 +477,7 @@ span#basic-addon1 {
 }
 
 /*--------------HOME-SECTION-6---------------*/
-/*--------------HOME-SECTION-6---------------*/
-/*--------------HOME-SECTION-6---------------*/
-/*--------------HOME-SECTION-6---------------*/
 
-/*--------------HOME-SECTION-7---------------*/
-/*--------------HOME-SECTION-7---------------*/
-/*--------------HOME-SECTION-7---------------*/
 /*--------------HOME-SECTION-7---------------*/
 .lightblue-bdr {
     border: 1px solid #52b2ff;
@@ -549,18 +494,9 @@ span#basic-addon1 {
 .progress-bar{
     background-color: #E66742;
 }
-
-/*--------------HOME-SECTION-7---------------*/
-/*--------------HOME-SECTION-7---------------*/
-/*--------------HOME-SECTION-7---------------*/
 /*--------------HOME-SECTION-7---------------*/
 
 /*--------------HOME-SECTION-8---------------*/
-/*--------------HOME-SECTION-8---------------*/
-/*--------------HOME-SECTION-8---------------*/
-/*--------------HOME-SECTION-8---------------*/
-
-
 .accordion-button {
     border: none;
     background-color: #f6f6f6;
@@ -586,57 +522,18 @@ span#basic-addon1 {
 button.accordion-button.collapsed {
     border-radius: 15px;
 }
-
-/*--------------HOME-SECTION-8---------------*/
-/*--------------HOME-SECTION-8---------------*/
-/*--------------HOME-SECTION-8---------------*/
 /*--------------HOME-SECTION-8---------------*/
 
 /*--------------HOME-SECTION-9---------------*/
-/*--------------HOME-SECTION-9---------------*/
-/*--------------HOME-SECTION-9---------------*/
-/*--------------HOME-SECTION-9---------------*/
-
+.vt-img{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    height:151px;
+    width:251px !important;
+}
 .vt-bg {
     background-color: #EEF7FF;
 }
 
-.vt-card-1 {
-    background: url('../img/Rectangle\ 23.png');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-
-.vt-card-2 {
-    background: url('../img/Rectangle\ 23\ \(1\).png');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-
-.vt-card-3 {
-    background: url('../img/Rectangle\ 23\ \(2\).png');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-
-.vt-card-4 {
-    background: url('../img/Rectangle\ 23\ \(3\).png');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-
-.vt-card-5 {
-    background: url('../img/Rectangle\ 23\ \(4\).png');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-
 /*--------------HOME-SECTION-9---------------*/
-/*--------------HOME-SECTION-9---------------*/
-/*--------------HOME-SECTION-9---------------*/
-/*--------------HOME-SECTION-9---------------*/
+

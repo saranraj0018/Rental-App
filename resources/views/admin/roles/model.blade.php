@@ -167,7 +167,7 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" value="" id="role_id"  name="role_id">
+                    <input type="hidden" id="role_id"  name="role_id">
                     <div class="form-row mt-3">
                         <div class="form-group col-md-6">
                             <button type="submit" id="update_user_role" class="btn btn-primary mb-2">Save</button>
