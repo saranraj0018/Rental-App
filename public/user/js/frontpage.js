@@ -97,35 +97,77 @@ $(function () {
                 }
             }
         });
-            // Initialize Owl Carousel
-            $('#owl1').owlCarousel({
-                loop: true,
-                margin: 10,
-                nav: true,
-                responsive: {
-                    0: {
-                        items: 1
-                    },
-                    600: {
-                        items: 3
-                    },
-                    1000: {
-                        items: 5
-                    }
+        // Initialize Owl Carousel
+        $('#owl1').owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 3
+                },
+                1000: {
+                    items: 5
                 }
-            });
-        $('input[name="datetimes"]').daterangepicker({
-            timePicker: true,
-            startDate: moment().startOf('hour'),
-            endDate: moment().startOf('hour').add(32, 'hour'),
-            locale: {
-                format: 'M/DD hh:mm A'
             }
         });
+        // $('.daterange').daterangepicker({
+        //     timePicker: true,
+        //     startDate: moment().startOf('hour'),
+        //     endDate: moment().startOf('hour').add(32, 'hour'),
+        //     locale: {
+        //         format: 'M/DD hh:mm A'
+        //     }
+        // });
 
-        $('#coupon_section').on('click', '.coupon_info', function() {
+        // flatpickr("#daterange", {
+        //     mode: "range",            // Enable date range selection
+        //     enableTime: true,         // Enable time selection
+        //     time_24hr: true,          // Use 24-hour format (optional, for 12-hour, set to false)
+        //     dateFormat: "Y-m-d H:i",  // Customize the date and time format
+        //     minuteIncrement: 30,      // Set 30-minute intervals
+        // });
+
+        // flatpickr("#uncontrolled-picker", {
+        //     mode: "range",
+        //     enableTime: true,
+        //     time_24hr: true,
+        //     defaultDate: ['2022-04-17 15:30', '2022-04-21 18:30'],  // Default dates
+        //     dateFormat: "Y-m-d H:i",
+        //     minuteIncrement: 30,
+        // });
+
+            // Controlled input using a model-based approach
+            let currentValue = ['2022-04-17 15:30', '2022-04-21 18:30']; // Example model value
+
+            const controlledPicker = flatpickr("#controlled-picker", {
+            mode: "range",
+            enableTime: true,
+            time_24hr: true,
+            defaultDate: currentValue,  // Set the current value as default
+            dateFormat: "Y-m-d H:i",
+            minuteIncrement: 30,
+            onChange: function(selectedDates, dateStr, instance) {
+            // Update the model value when the user changes the date range
+            currentValue = selectedDates.map(date => instance.formatDate(date, "Y-m-d H:i"));
+            console.log("Updated date range:", currentValue);
+            // Here you can send this updated value to your backend or process it further
+        }
+        });
+
+            // Example: Update the controlled picker programmatically based on new model data
+            function updatePicker() {
+            const newDateRange = ['2022-05-01 12:00', '2022-05-05 16:30'];
+            controlledPicker.setDate(newDateRange, true);  // Set new dates programmatically
+            currentValue = newDateRange;
+        }
+
+        $('#coupon_section').on('click', '.coupon_info', function () {
             let modal = $('#coupon_model');
-            modal.find('#title').html('<i class="fa-solid fa-car"></i> ' +$(this).data('title'));
+            modal.find('#title').html('<i class="fa-solid fa-car"></i> ' + $(this).data('title'));
             modal.find('#description').html($(this).data('description'));
             modal.find('#amount').html($(this).data('amount') + $(this).data('type'));
             modal.find('#prefix').html($(this).data('prefix'));
@@ -133,7 +175,7 @@ $(function () {
             modal.modal('show');
         });
 
-        $('#copyButton').on('click', function() {
+        $('#copyButton').on('click', function () {
             const couponCode = $('#coupon_code').text();
 
             navigator.clipboard.writeText(couponCode).then(() => {
