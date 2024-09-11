@@ -281,6 +281,9 @@ $(function () {
                     success: function(response) {
                         $('#create_car_modal').modal('hide');
                         alertify.success(response.success);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1000);
                     },
                     error: function(response) {
                         let errors = response.responseJSON.errors;

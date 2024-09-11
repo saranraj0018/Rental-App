@@ -23,51 +23,39 @@ class UserController extends Controller
         $brand_image = !empty($brand_info->frontendImage) ? $brand_info->frontendImage : null;
         $car_image = !empty($car_info->frontendImage) ? $car_info->frontendImage : null;
         $faq_items = Frontend::where('data_keys','faq-section')->orderBy('created_at', 'desc')->get();
-        return view('user.frontpage.main',compact('section1','section2','section3','section4','car_image'
-        ,'brand_image','section8','faq_items'));
+        return view('user.frontpage.list-home',compact('section1','section2','section3','section4','car_image'
+            ,'brand_image','section8','faq_items'));
     }
 
     public function updateLocation(Request $request)
     {
-        $latitude = $request->input('latitude');
-        $longitude = $request->input('longitude');
 
-        $client = new Client();
-        $response = $client->get('https://maps.googleapis.com/maps/api/geocode/json', [
-            'query' => [
-                'latlng' => $latitude . ',' . $longitude,
-                'key' => 'AIzaSyCgkUiA7zkxsdc8BwvCqVeSTDuJVncMmAY',
-            ]
-        ]);
+        if (!empty($request['latitude']) && !empty($request['longitude'])) {
+            $latitude = $request['latitude'];
+            $longitude = $request['longitude'];
 
-        $data = json_decode($response->getBody(), true);
-        $isWithinCoimbatore = $this->isWithinCoimbatore($data);
 
-        return response()->json(['isWithinCoimbatore' => $isWithinCoimbatore]);
+            $client = new Client();
+            $response = $client->get('https://maps.googleapis.com/maps/api/geocode/json', [
+                'query' => [
+                    'latlng' => $latitude . ',' . $longitude,
+                    'key' => 'AIzaSyCgkUiA7zkxsdc8BwvCqVeSTDuJVncMmAY',
+                ]
+            ]);
+
+            $data = json_decode($response->getBody(), true);
+            $isWithinCoimbatore = $this->isWithinCoimbatore($data);
+
+            return response()->json(['isWithinCoimbatore' => $isWithinCoimbatore]);
+        }
+        return response()->json(['isWithinCoimbatore' => false]);
     }
-
-//    private function getDistrictFromCoordinates($latitude, $longitude)
-//    {
-//        $apiKey = 'AIzaSyCgkUiA7zkxsdc8BwvCqVeSTDuJVncMmAY'; // Store your API key in .env file
-//        $client = new Client();
-//        $response = $client->get("https://maps.googleapis.com/maps/api/geocode/json?latlng={$latitude},{$longitude}&key={$apiKey}");
-//        $data = json_decode($response->getBody(), true);
-//
-//        if (!empty($data['results'])) {
-//
-//            foreach ($data['results'][0]['address_components'] as $component) {
-//                if (in_array('administrative_area_level_3', $component['types'])) {
-//                    dd($data);
-//                    return $component['long_name'];
-//                }
-//            }
-//        }
-//
-//        return 'Unknown district';
-//    }
 
     private function isWithinCoimbatore($data)
     {
+        if (empty($data)) {
+            return false;
+        }
         foreach ($data['results'] as $result) {
             foreach ($result['address_components'] as $component) {
                 if (in_array('administrative_area_level_3', $component['types']) && $component['long_name'] === 'Coimbatore') {
@@ -78,4 +66,17 @@ class UserController extends Controller
         return false;
     }
 
+    public function listCars() {
+        $car_models = CarModel::with('carDoc')->get();
+        return view('user.frontpage.list-cars.list',compact('car_models'));
+    }
+
+    public function bookingCar(Request $request,$id)
+    {
+        if (!empty($id)) {
+            $car_model = CarModel::with('carDoc')->where('car_model_id', $id)->first();
+        }
+        return view('user.frontpage.single-car.view',compact('car_model'));
+
+    }
 }

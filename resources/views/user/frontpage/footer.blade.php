@@ -1,23 +1,9 @@
-<!--BOOTSTRAP 5 CDN-->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
-<!--BOOTSTRAP 5 CDN-->
-
-<!--FONTAWSOME CDN-->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-<!--FONTAWSOME CDN-->
-
-<!--LOCAL CSS -->
-<link rel="stylesheet" href="{{ asset('user/css/home.css')}}">
-<link rel="stylesheet" href="{{ asset('user/css/responsive.css')}}">
-<!--LOCAL CSS -->
-
 <footer>
     <section class="d-none d-lg-block mt-5 footer-bg">
         <div class="container p-3">
             <div class="row g-0">
                 <div class="col-12 col-lg-3">
-                    <img src="./user/img/Logo (4).png" alt="Site-Logo" class="img-fluid d-block">
+                    <img src="{{ asset('user/img/Logo (4).png') }}" alt="Site-Logo" class="img-fluid d-block">
                 </div>
                 <div class="col-12 col-lg-6 mx-auto my-auto">
                     <div class="d-flex justify-content-around">

@@ -114,57 +114,51 @@ $(function () {
                 }
             }
         });
-        // $('.daterange').daterangepicker({
-        //     timePicker: true,
-        //     startDate: moment().startOf('hour'),
-        //     endDate: moment().startOf('hour').add(32, 'hour'),
-        //     locale: {
-        //         format: 'M/DD hh:mm A'
-        //     }
-        // });
 
-        // flatpickr("#daterange", {
-        //     mode: "range",            // Enable date range selection
-        //     enableTime: true,         // Enable time selection
-        //     time_24hr: true,          // Use 24-hour format (optional, for 12-hour, set to false)
-        //     dateFormat: "Y-m-d H:i",  // Customize the date and time format
-        //     minuteIncrement: 30,      // Set 30-minute intervals
-        // });
-
-        // flatpickr("#uncontrolled-picker", {
-        //     mode: "range",
-        //     enableTime: true,
-        //     time_24hr: true,
-        //     defaultDate: ['2022-04-17 15:30', '2022-04-21 18:30'],  // Default dates
-        //     dateFormat: "Y-m-d H:i",
-        //     minuteIncrement: 30,
-        // });
-
-            // Controlled input using a model-based approach
-            let currentValue = ['2022-04-17 15:30', '2022-04-21 18:30']; // Example model value
-
-            const controlledPicker = flatpickr("#controlled-picker", {
-            mode: "range",
-            enableTime: true,
-            time_24hr: true,
-            defaultDate: currentValue,  // Set the current value as default
-            dateFormat: "Y-m-d H:i",
-            minuteIncrement: 30,
-            onChange: function(selectedDates, dateStr, instance) {
-            // Update the model value when the user changes the date range
-            currentValue = selectedDates.map(date => instance.formatDate(date, "Y-m-d H:i"));
-            console.log("Updated date range:", currentValue);
-            // Here you can send this updated value to your backend or process it further
-        }
+        // First Owl Carousel
+        let owl5 = $(".owl-carousel.owl-carousel-6");
+        owl5.owlCarousel({
+            items: 4,
+            margin: 10,
+            loop: true,
+            nav: true,
+            navText: ['<button class="owl-prev"><i class="fas fa-chevron-left"></i></button>',
+                '<button class="owl-next"><i class="fas fa-chevron-right"></i></button>'],
+            responsive: {
+                // Breakpoint from 0 up
+                0: {
+                    items: 2
+                },
+                768: {
+                    items: 3
+                },
+                // Breakpoint from 768 up
+                769: {
+                    items: 3
+                }
+            }
         });
-
-            // Example: Update the controlled picker programmatically based on new model data
-            function updatePicker() {
-            const newDateRange = ['2022-05-01 12:00', '2022-05-05 16:30'];
-            controlledPicker.setDate(newDateRange, true);  // Set new dates programmatically
-            currentValue = newDateRange;
-        }
-
+        let owl7 = $(".owl-carousel.owl-carousel-7");
+        owl7.owlCarousel({
+            items: 4,
+            margin: 10,
+            loop: true,
+            nav: true,
+            navText: ['<button class="owl-prev"><i class="fas fa-chevron-left"></i></button>', '<button class="owl-next"><i class="fas fa-chevron-right"></i></button>'],
+            responsive: {
+                // Breakpoint from 0 up
+                0: {
+                    items: 1
+                },
+                768: {
+                    items: 2
+                },
+                // Breakpoint from 768 up
+                769: {
+                    items: 3
+                }
+            }
+        });
         $('#coupon_section').on('click', '.coupon_info', function () {
             let modal = $('#coupon_model');
             modal.find('#title').html('<i class="fa-solid fa-car"></i> ' + $(this).data('title'));
@@ -189,6 +183,119 @@ $(function () {
             }).catch(err => {
                 console.error('Failed to copy text: ', err);
             });
+        });
+
+        $('#get_location').on('submit', function(e) {
+            e.preventDefault();
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(sendPosition);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+            function sendPosition(position) {
+                $.ajax({
+                    url: '/update-location',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    }),
+                    success: function(data) {
+                        if (data.isWithinCoimbatore) {
+                            // If the location is within Coimbatore, submit the form
+                            window.location.href = '/search-car/list';
+                        } else {
+                            $('#errorModal').modal('show');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        });
+        $('.navbar-light .dmenu').hover(function() {
+            $(this).find('.sm-menu').first().stop(true, true).slideDown(150);
+        }, function() {
+            $(this).find('.sm-menu').first().stop(true, true).slideUp(105)
+        });
+
+        // Get user's geolocation
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                // Send geolocation data to server
+                $.ajax({
+                    url: '/api/save-geolocation',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    }),
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+        }
+        document.querySelectorAll('.next-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const currentSet = this.closest('.input-set');
+                const nextSetNumber = this.getAttribute('data-next');
+                const nextSet = document.querySelector(`.input-set[data-set="${nextSetNumber}"]`);
+
+                // Fade out the current set
+                currentSet.classList.remove('show');
+                currentSet.addEventListener('transitionend', function() {
+                    currentSet.style.display = 'none'; // Hide it after fading out
+                    // Fade in the next set
+                    nextSet.style.display = 'block'; // Ensure it's display is block for transition
+                    nextSet.classList.add('show');
+                }, {
+                    once: true
+                });
+            });
+        });
+
+        document.querySelectorAll('.back-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const currentSet = this.closest('.input-set');
+                const prevSetNumber = this.getAttribute('data-prev');
+                const prevSet = document.querySelector(`.input-set[data-set="${prevSetNumber}"]`);
+
+                // Fade out the current set
+                currentSet.classList.remove('show');
+                currentSet.addEventListener('transitionend', function() {
+                    currentSet.style.display = 'none'; // Hide it after fading out
+                    // Fade in the previous set
+                    prevSet.style.display = 'block'; // Ensure it's display is block for transition
+                    prevSet.classList.add('show');
+                }, {
+                    once: true
+                });
+            });
+        });
+        document.getElementById('toggleSwitch').addEventListener('change', function() {
+            const toggleDivs = document.querySelectorAll('.toggle');
+            const show = this.checked;
+            const toggleFadeDiv = document.querySelector('.toggle-fade');
+            const isChecked = this.checked;
+
+            toggleDivs.forEach(div => {
+                if (show) {
+                    div.classList.add('show');
+                } else {
+                    div.classList.remove('show');
+                }
+            });
+            if (isChecked) {
+                toggleFadeDiv.style.display = 'none';
+            } else {
+                toggleFadeDiv.style.display = 'block';
+            }
         });
     });
 });

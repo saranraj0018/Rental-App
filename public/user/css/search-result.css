@@ -1,5 +1,5 @@
 .other-heads-bg {
-    background: url('../assets/search-result/bg\ \(12\).png');
+    background: url('../img/search-result/bg\ \(12\).png');
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -30,7 +30,7 @@
 }
 
 .rrr {
-    background: url('../assets/search-result/Group\ 35353\ \(1\).png');
+    background: url('../img/search-result/Group\ 35353\ \(1\).png');
     background-position: top left;
     background-size: cover;
     background-repeat: no-repeat;
