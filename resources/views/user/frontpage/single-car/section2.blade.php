@@ -43,14 +43,14 @@
 <section class="my-4 bg-grey py-4">
     <div class="container">
         <div class="text-blue fs-5 fw-600">
-            Important Points To Remember
+            {{ $ipr_data['point_title'] ?? 'Important Points To Remember' }}
         </div>
         <div class="row mt-4">
             <div class="col-12 col-md-6 col-lg-3 my-3">
                 <div class="ipr-card p-3 bdr-10 d-flex flex-column justify-content-between h-100">
                     <div>
-                        <p class="fs-16 fw-500 mb-2">Change In Pricing Plan</p>
-                        <p class="fs-14 text-justify">The pricing plan (10 kms/hr, without fuel) cannot be changed after the booking is made</p>
+                        <p class="fs-16 fw-500 mb-2">{{  $ipr_data['price_plan'] ?? '' }}</p>
+                        <p class="fs-14 text-justify">{{ $ipr_data['price_description'] ?? ''}}</p>
                     </div>
                     <div>
                         <img src="{{ asset('user/img/car-booking/Group 35379.png') }}" alt="IPR image" class="img-fluid mt-4">
@@ -61,8 +61,8 @@
             <div class="col-12 col-md-6 col-lg-3 my-3">
                 <div class="ipr-card p-3 bdr-10 d-flex flex-column justify-content-between h-100">
                     <div>
-                        <p class="fs-16 fw-500 mb-2">Fuel</p>
-                        <p class="fs-14 text-justify">In case you are returning the car at a lower fuel level than what was received, we will charge a flat Rs 500 refuelling service charge + actual fuel cost to get the tank to the same level as what was received</p>
+                        <p class="fs-16 fw-500 mb-2">{{ $ipr_data['fuel'] ?? '' }}</p>
+                        <p class="fs-14 text-justify">{{ $ipr_data['fuel_description'] ?? '' }}</p>
                     </div>
                     <div>
                         <img src="{{ asset('user/img/car-booking/Group 35379s.png') }}" alt="IPR image" class="img-fluid mt-4">
@@ -73,8 +73,8 @@
             <div class="col-12 col-md-6 col-lg-3 my-3">
                 <div class="ipr-card p-3 bdr-10 d-flex flex-column justify-content-between h-100">
                     <div>
-                        <p class="fs-16 fw-500 mb-2">ID Verification</p>
-                        <p class="fs-14 text-justify">Please present your original/DigiLocker driving license and ID for verification at delivery. Failure to do so will result in cancellation (100% fare charge). No A4 paper licenses accepted.</p>
+                        <p class="fs-16 fw-500 mb-2">{{ $ipr_data['picture_id'] ?? '' }}</p>
+                        <p class="fs-14 text-justify">{{ $ipr_data['picture_description'] ?? '' }}</p>
                     </div>
                     <div>
                         <img src="{{ asset('user/img/car-booking/Group 353792.png') }}" alt="IPR image" class="img-fluid mt-4">
@@ -85,8 +85,8 @@
             <div class="col-12 col-md-6 col-lg-3 my-3">
                 <div class="ipr-card p-3 bdr-10 d-flex flex-column justify-content-between h-100">
                     <div>
-                        <p class="fs-16 fw-500 mb-2">Pre-Handover Inspection</p>
-                        <p class="fs-14 text-justify">Please inspect the car (including the fuel gauge and odometer) thoroughly before approving the checklist.</p>
+                        <p class="fs-16 fw-500 mb-2">{{ $ipr_data['car_key'] ?? '' }}</p>
+                        <p class="fs-14 text-justify">{{ $ipr_data['car_key_description'] ?? '' }}</p>
                     </div>
                     <div>
                         <img src="{{ asset('user/img/car-booking/Group 353791.png') }}" alt="IPR image" class="img-fluid mt-4">

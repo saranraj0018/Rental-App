@@ -43,7 +43,7 @@
                             <p class="text-primary fs-16 mb-3" id="title"></p>
                             <p class="fs-18 fw-500 my-3" id="description"></p>
                             <div class="d-flex my-3">
-                                <img src="{{ asset('user/img/bxs_offer.png') }}" alt="Bagde Percentage" class="img-fluid me-1 me-lg-2 badge-perc-2 my-auto">
+                                <img src="{{ asset('user/img/bxs_offer.svg') }}" alt="Bagde Percentage" class="img-fluid me-1 me-lg-2 badge-perc-2 my-auto">
                                 <span class="fs-2 fs-mb-12 fw-600 text-blue" id="amount"></span>
                                 <div class="fs-14 fs-mb-9 fw-500 text-blue my-auto lh-base ms-2" id="prefix">
                                 </div>

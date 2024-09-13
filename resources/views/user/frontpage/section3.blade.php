@@ -30,24 +30,24 @@
                                     </div>
                                 </div>
                                 <div class="d-block">
-                                    <img src="{{ asset('storage/car_image/' . $item->car_image ?? '') }}" alt="Cars" class="img-fluid w-75 mx-auto">
+                                    <img src="{{ asset('storage/car_image/' . $item->carModel->car_image ?? '') }}" alt="Cars" class="img-fluid w-75 mx-auto">
                                 </div>
                             </div>
                             <div class="r2dc-card-content-bg p-3">
                                 <div class="d-flex justify-content-between">
                                     <div>
                                         <p class="fs-15 fw-600">
-                                           {{ $item->model_name }}
+                                           {{ $item->carModel->model_name ?? '' }}
                                         </p>
                                         <p class="d-flex text-secondary fs-12">
-                                            <img src="{{ asset('user/img/iconTransmission.png') }}" alt="icon" class="img-fluid me-1"> {{ $item->transmission }}
+                                            <img src="{{ asset('user/img/iconTransmission.png') }}" alt="icon" class="img-fluid me-1"> {{ $item->carModel->transmission ?? ''}}
                                             <img src="{{ asset('user/img/iconSeat.png') }}" alt="icon" class="img-fluid mx-1">
-                                            {{ $item->seat.' Seats' }}
+                                            {{ $item->carModel->seat.' Seats' ?? ''}}
                                         </p>
                                     </div>
                                     <div>
                                         <p class="fs-15 fw-600 mb-2">
-                                            ₹ {{ $item->price_per_hour }} <span class="fw-500 fs-12">per hours</span>
+                                            ₹ {{ $item->carModel->price_per_hour ?? ''}} <span class="fw-500 fs-12">per hours</span>
                                         </p>
                                         <button class="my-button btn fs-14">
                                             Book now

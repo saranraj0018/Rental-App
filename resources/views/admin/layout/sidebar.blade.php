@@ -36,7 +36,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="brands.html" class="nav-link">
+                    <a href="{{ route('city.map') }}" class="nav-link">
                         <i class="nav-icon fas fa fa-map"></i>
                         <p>Cities Map</p>
                     </a>
@@ -133,7 +133,12 @@
                                 <p>FAQ</p>
                             </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a href="{{ route('ipr-info.view') }}" class="nav-link">
+                                <i class="fas fa-truck nav-icon"></i>
+                                <p>Important Points</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 

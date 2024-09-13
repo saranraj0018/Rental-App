@@ -196,7 +196,7 @@
 </section>
 
 <!-- Modal Structure -->
-<div class="modal fade custom-modal m-0" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+<div class="modal left fade custom-modal m-0 overflow-hidden" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog position-top-right">
         <div class="modal-content bdr-20">
@@ -215,12 +215,11 @@
                     <div class="py-3 px-2 px-lg-5">
                         <div class="mb-3">
                             <label for="input1" class="form-label fs-12 fw-500">Enter your Mobile Number</label>
-                            <input type="tel" class="form-control bg-grey form-bdr" id="input1" placeholder="+91">
+                            <input type="tel" class="form-control bg-grey form-bdr" id="input1" placeholder="9329*****1">
                         </div>
                         <div class="fs-10 line-container"> or sign-in with</div>
                         <div class="d-flex justify-content-center my-3">
                             <img src="{{ asset('user/img/car-booking/Group 35412.png') }}" alt="form-icon" class="img-fluid mx-2">
-                            <img src="{{ asset('user/img/car-booking/Group 35413.png') }}" alt="form-icon" class="img-fluid mx-2">
                         </div>
                         <button type="button" class="btn my-button next-button w-100" data-next="2">Request OTP</button>
                         <div class="fs-10 text-secondary text-center mt-3">Don't have an account? <span class="text-dark fw-500">Register</span></div>
@@ -295,26 +294,34 @@
 
 <!-- Second Modal Structure -->
 <div class="modal fade m-0 m-md-auto" id="secondModal" tabindex="-1" aria-labelledby="secondModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content bdr-20">
             <div class="modal-body">
                 <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
                 <div class="p-3">
                     <p class="fs-16 fw-500">Select Location on Map</p>
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.245463514176!2d-122.40641708467874!3d37.7858349797575!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064bde8148d%3A0x8c06b5cdff54a6b5!2sRandom%20Location%2C%20San%20Francisco%2C%20CA%2094111%2C%20USA!5e0!3m2!1sen!2sin!4v1628606487902!5m2!1sen!2sin"
-                        style="border:0;"
-                        allowfullscreen=""
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                        class="w-100 h-100 bdr-10">
-                    </iframe>
+                    <div class="container">
+
+                        <div id="custom_map" style="height: 500px; width: 100%;"></div>
+                    </div>
                     <p class="fs-16 fw-500 mt-2">(or) Enter manually</p>
-                    <input type="text" class="form-control border-0 border-bottom">
+{{--                    <input type="text" id="cityInput" class="form-control" placeholder="Enter a city name">--}}
+                    <input id="custom-city" type="text" placeholder="Search city" class="form-control">
                     <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" data-bs-dismiss="modal">Submit</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<style>
+    .pac-container {
+        z-index: 1051 !important; /* Set it higher than the modal (Bootstrap modals usually have a z-index of 1050) */
+    }
+    .modal-body {
+        position: relative;
+        z-index: 1050; /* Default z-index for modal content */
+    }
+</style>
+<script async src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&libraries=places&callback=initMarker"></script>
+
 

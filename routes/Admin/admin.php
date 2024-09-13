@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\CarBlockController;
 Use App\Http\Controllers\Admin\RoleController;
 Use App\Http\Controllers\Admin\BannerController;
 Use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\MapController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,6 +85,14 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::post('/faq/save', [BannerController::class, 'faqSave'])->name('faq.save');
         Route::delete('/faq/{id?}/delete', [BannerController::class, 'faqDelete'])->name('faq.delete');
         Route::get('/faq/search', [BannerController::class, 'search'])->name('faq.search');
+
+        // Map Section
+        Route::get('/city-map', [MapController::class, 'show'])->name('city.map');
+       // Route::post('/car-info/save', [BannerController::class, 'carSave'])->name('car-info.save');
+
+        // Front-end Car - Info Section
+        Route::get('/ipr-info', [BannerController::class, 'iprInfo'])->name('ipr-info.view');
+        Route::post('/ipr-info/save', [BannerController::class, 'iprSave'])->name('ipr-info.save');
 
     });
 });

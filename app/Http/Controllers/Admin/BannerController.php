@@ -264,6 +264,44 @@ class BannerController extends Controller
         return response()->json(['success' => 'Deleted Image successfully']);
     }
 
+    public function iprInfo()
+    {
+        $ipr_info = Frontend::where('data_keys','ipr-info-section')->first();
+        $ipr_data = !empty($ipr_info['data_values']) ? json_decode($ipr_info['data_values'],true) : [];
+        $ipr_id = !empty($ipr_info['id']) ? $ipr_info['id'] : null;
+        return view('admin.ipr-info.list',compact('ipr_data','ipr_id'));
+    }
 
+    public function iprSave(Request $request)
+    {
+        $request->validate([
+            'price_plan' => 'required|string',
+            'price_description' => 'required|string',
+            'fuel' => 'required|string',
+            'fuel_description' => 'required|string',
+            'picture_id' => 'required|string',
+            'picture_description' => 'required|string',
+            'car_key' => 'required|string',
+            'car_key_description' => 'required|string',
+        ]);
+
+        $data = [
+            'point_title'=> $request['point_title'],
+            'price_plan' => $request['price_plan'],
+            'price_description' => $request['price_description'],
+            'fuel' => $request['fuel'],
+            'fuel_description' => $request['fuel_description'],
+            'picture_id' => $request['picture_id'],
+            'picture_description' => $request['picture_description'],
+            'car_key' => $request['car_key'],
+            'car_key_description' => $request['car_key_description'],
+        ];
+        $frontend = !empty($request['ipr_info_id'])  ? Frontend::find($request['ipr_info_id']) : new Frontend();
+        $frontend->data_keys = 'ipr-info-section';
+        $frontend->data_values = json_encode($data);
+        $frontend->save();
+
+        return response()->json(['success' => 'Important Points section saved successfully']);
+    }
 
 }

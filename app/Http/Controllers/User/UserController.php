@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\CarDetails;
 use GuzzleHttp\Client;
 use App\Models\CarModel;
 use App\Models\Coupon;
@@ -15,7 +16,7 @@ class UserController extends Controller
     {
         $section1 = Frontend::with('frontendImage')->where('data_keys','section1-image-car')->first();
         $section2 = Coupon::all();
-        $section3 = CarModel::all();
+        $section3 = CarDetails::with('carModel')->get();
         $car_info = Frontend::with('frontendImage')->where('data_keys','car-info-section')->first();
         $section4 = !empty($car_info['data_values']) ? json_decode($car_info['data_values'],true) : [];
         $brand_info = Frontend::with('frontendImage')->where('data_keys','brand-section')->first();
@@ -73,10 +74,12 @@ class UserController extends Controller
 
     public function bookingCar(Request $request,$id)
     {
+        $car_model = [];
         if (!empty($id)) {
             $car_model = CarModel::with('carDoc')->where('car_model_id', $id)->first();
         }
-        return view('user.frontpage.single-car.view',compact('car_model'));
-
+        $ipr_info = Frontend::where('data_keys','ipr-info-section')->first();
+        $ipr_data = !empty($ipr_info['data_values']) ? json_decode($ipr_info['data_values'],true) : [];
+        return view('user.frontpage.single-car.view',compact('car_model','ipr_data'));
     }
 }

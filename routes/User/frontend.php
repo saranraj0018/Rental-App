@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 
 
 Route::get('/', [UserController::class,'view'])->name('home');
-//Route::view('/test', 'dummy')->name('dummy');
+Route::view('/test', 'dummy')->name('dummy');
 
 Route::post('/update-location', [UserController::class, 'updateLocation']);
 
@@ -21,7 +21,9 @@ Route::post('/api/save-geolocation', function (Request $request) {
 });
 
 
-Route::group(['middleware' => 'check.location'], function () {
-    Route::get('/search-car/list', [UserController::class,'listCars'])->name('search-car.list');
-    Route::get('/book/{model_id?}', [UserController::class, 'bookingCar'])->name('book.car');
-});
+//Route::group(['middleware' => 'check.location'], function () {
+//    Route::get('/search-car/list', [UserController::class,'listCars'])->name('search-car.list');
+//    Route::get('/book/{model_id?}', [UserController::class, 'bookingCar'])->name('book.car');
+//});
+Route::get('/search-car/list', [UserController::class,'listCars'])->name('search-car.list');
+Route::get('/book/{model_id?}', [UserController::class, 'bookingCar'])->name('book.car');
