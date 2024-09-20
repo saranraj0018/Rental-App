@@ -10,6 +10,7 @@ Use App\Http\Controllers\Admin\RoleController;
 Use App\Http\Controllers\Admin\BannerController;
 Use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\MapController;
+use App\Http\Controllers\Admin\HolidayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,11 +89,16 @@ Route::group(['prefix'=> 'admin'],function (){
 
         // Map Section
         Route::get('/city-map', [MapController::class, 'show'])->name('city.map');
-       // Route::post('/car-info/save', [BannerController::class, 'carSave'])->name('car-info.save');
 
         // Front-end Car - Info Section
         Route::get('/ipr-info', [BannerController::class, 'iprInfo'])->name('ipr-info.view');
         Route::post('/ipr-info/save', [BannerController::class, 'iprSave'])->name('ipr-info.save');
 
+
+        //Holidays Section
+        Route::get('/holiday/list', [HolidayController::class, 'list'])->name('holidays.list');
+        Route::post('/holiday/save', [HolidayController::class, 'save'])->name('holiday.save');
+        Route::delete('/holiday/{id?}/delete', [HolidayController::class, 'delete'])->name('holiday.delete');
+        Route::get('/holiday/search', [HolidayController::class, 'search'])->name('holiday.search');
     });
 });

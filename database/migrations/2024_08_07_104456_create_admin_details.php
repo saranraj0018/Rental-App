@@ -15,7 +15,7 @@ return new class extends Migration
             $table->mediumInteger('id');
             $table->string('user_name',144)->default(null);
             $table->string('email',64);
-            $table->string('password',16);
+            $table->string('password',144);
             $table->smallInteger('role')->default(null);
             $table->string('mobile_number',15)->default(null);
             $table->timestamps();

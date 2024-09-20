@@ -36,10 +36,10 @@
                             <label for="car_model">Choose a Car Model</label>
                             <select id="car_model" name="car_model" class="form-control" data-live-search="true">
                                 <option selected disabled>Model</option>
-                               @if(filled($car_models))
-                                @foreach($car_models as $model)
-                                    <option value="{{$model->car_model_id}}"> {{$model->model_name}}</option>
-                                @endforeach
+                                @if(filled($car_models))
+                                    @foreach($car_models as $model)
+                                        <option value="{{$model->car_model_id}}"> {{$model->model_name}}</option>
+                                    @endforeach
                                 @endif
                             </select>
                             <div class="invalid-feedback">
@@ -63,7 +63,30 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" value="1" id="car_location_option" name="car_location_option">
+                                <label class="form-check-label" for="car_location_option">Set Car Location</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row d-none" id="show_map">
+                        <div class="form-group col-md-12">
+                            <div>
+                                <input id="car_location" type="text" name="car_location" placeholder="Search city" class="form-control" autocomplete="off">
+                                <div class="invalid-feedback">
+                                    Please enter your address.
+                                </div>
+                            </div>
+
+                            <div id="car-location-map" style="height: 500px; width: 100%;"></div>
+                        </div>
+                    </div>
                     <input type="hidden" value="" id="car_id"  name="car_id">
+                    <input type="hidden" id="car_latitude" name="car_latitude" value="">
+                    <input type="hidden" id="car_longitude" name="car_longitude" value="">
+                    <input type="hidden" id="car_address" name="car_address" value="">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <button type="submit" id="submit_btn" class="btn btn-primary mb-2">Submit</button>
@@ -74,7 +97,15 @@
         </div>
     </div>
 </div>
-
+<style>
+    .pac-container {
+        z-index: 1051 !important;
+    }
+    .modal-body {
+        position: relative;
+        z-index: 1050;
+    }
+</style>
 
 {{--Add the car Model Popup --}}
 <div class="modal fade" id="create_car_modal" tabindex="-1" role="dialog" aria-labelledby="carModalLabel" aria-hidden="true">
@@ -145,10 +176,10 @@
                             </div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="weekend_surge">Weekend Surge</label>
-                            <input type="number" class="form-control" id="weekend_surge" name="weekend_surge" placeholder="0">
+                            <label for="extra_hours_charge">Extra Hours Charge</label>
+                            <input type="number" class="form-control" id="extra_hours_charge" name="extra_hours_charge" placeholder="4">
                             <div class="invalid-feedback">
-                                Please enter the Weekend Surge.
+                                Please enter the Extra Hours Charge.
                             </div>
                         </div>
                     </div>
@@ -161,10 +192,35 @@
                             </div>
                         </div>
                         <div class="form-group col-md-6">
+                            <label for="weekend_surge">Weekend Surge</label>
+                            <input type="number" class="form-control" id="weekend_surge" name="weekend_surge" placeholder="0">
+                            <div class="invalid-feedback">
+                                Please enter the Weekend Surge.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="day_km">Per Day Kms</label>
+                            <input type="number" class="form-control" id="day_km" name="day_km" placeholder="45 km">
+                            <div class="invalid-feedback">
+                                Please enter the Extra Kms Charge.
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
                             <label for="extra_km_charge">Extra Kms Charge</label>
                             <input type="number" class="form-control" id="extra_km_charge" name="extra_km_charge" placeholder="4">
                             <div class="invalid-feedback">
                                 Please enter the Extra Kms Charge.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="dep_amount">Security Deposit Amount</label>
+                            <input type="number" class="form-control" id="dep_amount" name="dep_amount" placeholder="1200">
+                            <div class="invalid-feedback">
+                                Please enter the Deposit Amount.
                             </div>
                         </div>
                     </div>

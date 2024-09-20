@@ -1,35 +1,85 @@
-<html>
+<!-- resources/views/calendar.blade.php -->
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Bootstrap Date and Time</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Holiday Calendar</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
     <style>
-        .container {
-            margin-top: 5px;
-            margin-left: 10px;
-            width: 600px;
+        .fc-daygrid-day.bg-holiday {
+            background-color: #ff9f89 !important;
         }
     </style>
-    <script>
-        $(function() {
-            $('#datetimepicker1').datetimepicker({
-                format: 'YYYY-MM-DD HH:mm',
-                stepping: 1 // Allows selecting any minute
-            });
-        });
-    </script>
 </head>
 <body>
-<div class="container">
-    <div class="row">
-        <div class='col-sm-6'>
-            <input type='text' class="form-control" id='datetimepicker1' />
-        </div>
-    </div>
-</div>
+<div id="calendar"></div>
+<button id="save-holidays">Save Selected Holidays</button>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            selectable: true,
+            select: function(info) {
+                // Add holiday class to selected date
+                var dateStr = info.startStr;
+                var dayCell = document.querySelector(`[data-date="${dateStr}"]`);
+                if (dayCell) {
+                    dayCell.classList.add('bg-holiday');
+                }
+            },
+            events: function(fetchInfo, successCallback, failureCallback) {
+                $.ajax({
+                    url: '/holidays',
+                    method: 'GET',
+                    success: function(response) {
+                        const holidays = response.map(date => ({
+                            title: 'Holiday',
+                            start: date,
+                            display: 'background',
+                            backgroundColor: '#ff9f89',
+                        }));
+
+                        successCallback(holidays);
+                    },
+                    error: function() {
+                        failureCallback();
+                    }
+                });
+            },
+        });
+
+        calendar.render();
+
+        // Save selected holidays
+        $('#save-holidays').on('click', function() {
+            var selectedDates = [];
+            document.querySelectorAll('.fc-daygrid-day.bg-holiday').forEach(function(day) {
+                selectedDates.push(day.dataset.date);
+            });
+
+            $.ajax({
+                url: '/holidays',
+                method: 'POST',
+                data: {
+                    dates: selectedDates,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    alert(response.message);
+                },
+                error: function() {
+                    alert('An error occurred while saving holidays.');
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

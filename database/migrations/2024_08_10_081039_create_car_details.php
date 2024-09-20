@@ -17,6 +17,9 @@ return new class extends Migration
             $table->mediumInteger('city_code');
             $table->string('hub',144);
             $table->mediumInteger('hub_code');
+            $table->decimal('latitude',10,8)->nullable();
+            $table->decimal('longitude',10,8)->nullable();
+            $table->string('address',255)->nullable();
             $table->string('model_id');
             $table->string('register_number',144);
             $table->bigInteger('current_km');

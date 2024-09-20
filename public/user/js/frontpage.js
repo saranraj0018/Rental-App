@@ -297,5 +297,35 @@ $(function () {
                 toggleFadeDiv.style.display = 'block';
             }
         });
+        let $datetimepicker = $('#datetimepicker1');
+
+        // Initialize datetimepicker
+        $datetimepicker.datetimepicker({
+            format: 'YYYY-MM-DD | hh:mm A',
+            sideBySide: true,
+            icons: {
+                time: "fa fa-clock",
+                date: "fa fa-calendar",
+                up: "fa fa-chevron-up",
+                down: "fa fa-chevron-down"
+            },
+            widgetPositioning: {
+                horizontal: 'auto',
+                vertical: 'bottom'
+            }
+        });
+
+        // Show the picker when input is clicked
+        $('#datetimepicker1 input').on('focus click', function () {
+            $datetimepicker.data("DateTimePicker").show();
+        });
+
+        // Hide the picker when clicked outside
+        $(document).on('click', function (e) {
+            if (!$datetimepicker.is(e.target) && $datetimepicker.has(e.target).length === 0) {
+                $datetimepicker.data("DateTimePicker").hide();
+            }
+        });
+
     });
 });

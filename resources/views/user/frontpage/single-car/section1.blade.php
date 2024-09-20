@@ -44,10 +44,11 @@
                             @endif
                         </div>
                     </div>
+                    @dd($car_model->carDetails)
                     <div class="d-flex justify-content-between mt-1">
-                        <div class="fs-14 fs-mb-10 fw-500 my-auto">
+                        <div class="fs-14 fs-mb-10 fw-500 my-auto {{ $car_model->carDetails->address ? '' : 'd-none' }}">
                             <img src="{{ asset('user/img/search-result/Group 4 (1).png') }}" alt="location icon" class="img-fluid me-1">
-                            Gandhipuram, Coimbatore
+                            {{$car_model->carDetails->address ?? ''}}
                         </div>
                         <div class="text-success fs-14 fs-mb-10 fw-500 my-auto">
                             <i class="fas fa-circle fs-12 fs-mb-9"></i> Available Now
@@ -65,8 +66,8 @@
                     <div class="row mt-2">
                         <div class="col-7">
                             <ul class="fs-13 fw-500 ps-3">
-                                <li>Pricing Plan: Includes 480 kms, excludes fuel</li>
-                                <li>Extra Hour: ₹550 / per hour</li>
+                                <li>Pricing Plan: Per day {{$car_model->per_day_km ?? ''}} kms, excludes fuel</li>
+                                <li>Extra Hour: ₹{{ $car_model->extra_hours_price ?? '' }} / per hour</li>
                             </ul>
                         </div>
                         <div class="col-5">
@@ -247,7 +248,7 @@
                             </div>
                         </div>
                         <div class="mt-5 pt-5">
-                            <div class="fs-10 text-secondary text-center my-3">Don't recieve the OTP? <span class="text-dark fw-500">RESEND OTP</span></div>
+                            <div class="fs-10 text-secondary text-center my-3">Don't receive the OTP? <span class="text-dark fw-500">RESEND OTP</span></div>
                             <button type="button" class="btn my-button next-button w-100" data-next="3">Verify Code</button>
                         </div>
                     </div>
@@ -301,11 +302,9 @@
                 <div class="p-3">
                     <p class="fs-16 fw-500">Select Location on Map</p>
                     <div class="container">
-
                         <div id="custom_map" style="height: 500px; width: 100%;"></div>
                     </div>
-                    <p class="fs-16 fw-500 mt-2">(or) Enter manually</p>
-{{--                    <input type="text" id="cityInput" class="form-control" placeholder="Enter a city name">--}}
+                    <p class="fs-16 fw-500 mt-2"> Enter manually</p>
                     <input id="custom-city" type="text" placeholder="Search city" class="form-control">
                     <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" data-bs-dismiss="modal">Submit</button>
                 </div>

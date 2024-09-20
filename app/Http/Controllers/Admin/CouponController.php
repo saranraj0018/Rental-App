@@ -75,7 +75,7 @@ class CouponController extends BaseController
         $coupon = Coupon::find($id);
         $coupon->delete();
         $coupon_list = Coupon::with('user')->orderBy('created_at', 'desc')->paginate(5);
-        return response()->json(['data'=> ['coupon' => $coupon_list->items(), 'pagination' => $coupon_list->links()->render()],'success' => 'Coupon Created successfully']);
+        return response()->json(['data'=> ['coupon' => $coupon_list->items(), 'pagination' => $coupon_list->links()->render()],'success' => 'Coupon Deleted successfully']);
     }
 
     public function search(Request $request)

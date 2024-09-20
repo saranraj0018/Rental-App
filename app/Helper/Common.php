@@ -43,3 +43,8 @@ function showDateTime($date, $format = 'm/d/Y h:i:s A')
 {
     return Carbon::parse($date)->format($format);
 }
+
+function showDate($date, $format = 'm/d/Y')
+{
+    return Carbon::parse($date)->format($format);
+}

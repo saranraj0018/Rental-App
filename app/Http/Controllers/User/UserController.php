@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\CarDetails;
+use App\Models\Holiday;
 use GuzzleHttp\Client;
 use App\Models\CarModel;
 use App\Models\Coupon;
@@ -68,16 +69,14 @@ class UserController extends Controller
     }
 
     public function listCars() {
-        $car_models = CarModel::with('carDoc')->get();
-        return view('user.frontpage.list-cars.list',compact('car_models'));
+        $car_models = CarDetails::with('carModel')->get();
+        $festival_days = Holiday::pluck('event_date')->toArray();
+        return view('user.frontpage.list-cars.list',compact('car_models','festival_days'));
     }
 
     public function bookingCar(Request $request,$id)
     {
-        $car_model = [];
-        if (!empty($id)) {
-            $car_model = CarModel::with('carDoc')->where('car_model_id', $id)->first();
-        }
+        $car_model = !empty($id) ? CarModel::with(['carDoc','carDetails'])->where('car_model_id', $id)->first() : [];
         $ipr_info = Frontend::where('data_keys','ipr-info-section')->first();
         $ipr_data = !empty($ipr_info['data_values']) ? json_decode($ipr_info['data_values'],true) : [];
         return view('user.frontpage.single-car.view',compact('car_model','ipr_data'));

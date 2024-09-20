@@ -2,15 +2,11 @@
     <div class="container">
         <div class="row">
             <div class="col-12 col-lg-6">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.245463514176!2d-122.40641708467874!3d37.7858349797575!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064bde8148d%3A0x8c06b5cdff54a6b5!2sRandom%20Location%2C%20San%20Francisco%2C%20CA%2094111%2C%20USA!5e0!3m2!1sen!2sin!4v1628606487902!5m2!1sen!2sin"
-                    style="border:0;"
-                    allowfullscreen=""
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                    class="w-100 h-100 bdr-20">
-                </iframe>
-
+                <div class="container">
+                    <input type="hidden" id="car_latitude" name="car_latitude" value="">
+                    <input type="hidden" id="car_longitude" name="car_longitude" value="">
+                    <div id="car_location_map" style="height: 500px; width: 100%;"></div>
+                </div>
             </div>
             <div class="col-12 col-lg-6 d-none d-lg-block">
                 <div class="card p-3 bdr-30">
@@ -272,3 +268,4 @@
         </div>
     </div>
 </section>
+<script async src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&libraries=places&callback=carMarker"></script>

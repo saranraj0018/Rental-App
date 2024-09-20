@@ -156,11 +156,11 @@
             </div>
             <div class="col-12 col-lg-3 my-1 mt-2 my-lg-0">
                 <label class="fs-16 fw-500">Starting Date</label>
-                <div class="input-group">
+                <div class="input-group" id='datetimepicker1'>
                     <span class="input-group-text" id="basic-addon1">
                         <i class=" text-white fa-solid fa-calendar-days"></i>
                     </span>
-                    <input type="datetime-local" class="form-control daterange">
+                    <input type='text' class="form-control" placeholder="Click to pick date & time" />
                 </div>
             </div>
             <div class="col-12 col-lg-3 mt-2 mb-2 my-lg-0">

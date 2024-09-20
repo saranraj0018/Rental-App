@@ -79,9 +79,9 @@
                 </li>
                 @endif
                 <li class="nav-item">
-                    <a href="pages.html" class="nav-link">
+                    <a href="{{ route('holidays.list') }}" class="nav-link">
                         <i class="nav-icon  far fa-file-alt"></i>
-                        <p>Swap panel</p>
+                        <p>Holidays</p>
                     </a>
                 </li>
                 <!-- Manage Section with Hide/Show Functionality -->

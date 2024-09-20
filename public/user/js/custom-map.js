@@ -1,7 +1,7 @@
 $(function () {
     'use strict';
     $(document).ready(function() {
-        let map, marker, searchBox;
+        let map, marker, searchBox, car_map, car_marker;
 
         window.initMarker = function() {
             // Initialize the map, centered on a default location (optional)
@@ -23,7 +23,7 @@ $(function () {
             searchBox.addListener('places_changed', function () {
                 const places = searchBox.getPlaces();
 
-                if (places.length == 0) {
+                if (places.length === 0) {
                     return;
                 }
 
@@ -53,5 +53,23 @@ $(function () {
             window.initMarker();
             $('#custom-city').focus();
         });
+
+
+        window.carMarker = function() {
+            // Initialize the map, centered on a default location (optional)
+            car_map = new google.maps.Map(document.getElementById('car_location_map'), {
+                center: {lat: 11.0168, lng: 76.9558}, // Coimbatore, as an example
+                zoom: 12,
+            });
+
+            // Add a marker at the provided lat/lng (default is Coimbatore)
+            car_marker = new google.maps.Marker({
+                position: { lat: lat, lng: lng },
+                map: car_map,
+                title: "Selected Location",
+            });
+
+
+        }
     });
 });

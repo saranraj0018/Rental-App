@@ -11,7 +11,7 @@ class CarModel extends Model
 
     public function carDetails()
     {
-        return $this->hasMany(CarDetails::class, 'model_id', 'car_model_id');
+        return $this->hasOne(CarDetails::class, 'model_id', 'car_model_id');
     }
 
     public function carDoc()

@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
 use App\Models\CarDetails;
 use App\Models\CarDocument;
 use App\Models\CarModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -31,11 +29,20 @@ class CarDetailsController extends BaseController
         if (!empty($request['car_id'])) {
             $this->authorizePermission('car_list_edit');
         }
+        if (!empty($request['car_location_option']) && empty($request['car_latitude'])) {
+            $request->merge(['car_location' => '']);
+            $request->validate([
+                'car_location' => 'required',
+            ]);
+        }
+
+
+
          $request->validate([
             'service_city' => 'required',
             'hub_city' => 'required',
             'car_model' => 'required',
-            'register_number' => 'required|string|max:50',
+            'register_number' => 'required|string|max:50|unique:car_details,register_number',
             'current_km' => 'required|numeric',
         ]);
 
@@ -55,6 +62,9 @@ class CarDetailsController extends BaseController
         $car_details->model_id = $request['car_model'];
         $car_details->register_number = $request['register_number'];
         $car_details->current_km = $request['current_km'];
+        $car_details->latitude = $request['car_latitude'];
+        $car_details->longitude = $request['car_longitude'];
+        $car_details->address = $request['car_address'];
         $car_details->save();
 
         $cars = CarDetails::with('carModel')->orderBy('created_at', 'desc')->get();
@@ -86,6 +96,9 @@ class CarDetailsController extends BaseController
             'weekend_surge' => 'required|max:144',
             'peak_season' => 'required|max:144',
             'extra_km_charge' => 'required',
+            'dep_amount' => 'required|numeric',
+            'extra_hours_charge' => 'required',
+            'day_km' => 'required',
             'car_image' => 'required|mimes:jpg,png',
             'car_other_image' => 'required|array|min:2',
             'car_other_image.*' => 'mimes:jpg,png',
@@ -104,6 +117,9 @@ class CarDetailsController extends BaseController
         $car_models->fuel_type = $request['fuel_type'];
         $car_models->transmission = $request['transmission'];
         $car_models->engine_power = $request['engine_power'];
+        $car_models->extra_hours_price = $request['extra_hours_charge'];
+        $car_models->dep_amount = $request['dep_amount'];
+        $car_models->per_day_km = $request['day_km'];
         $car_models->price_per_hour = $request['price_per_hours'];
         $car_models->weekend_surge = $request['weekend_surge'];
         $car_models->peak_reason_surge = $request['peak_season'];
