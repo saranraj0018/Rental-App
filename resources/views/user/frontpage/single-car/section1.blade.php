@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="d-block">
-                        <img src="{{ asset('storage/car_image/' . $car_model->car_image ?? '') }}" alt="car-pic" class="img-fluid">
+                        <img src="{{ asset('storage/car_image/' . $car_model->carModel->car_image ?? '') }}" alt="car-pic" class="img-fluid">
                     </div>
                     <div class="home-demo">
                         <div class="owl-carousel owl-carousel-6 owl-theme">
@@ -44,35 +44,34 @@
                             @endif
                         </div>
                     </div>
-                    @dd($car_model->carDetails)
                     <div class="d-flex justify-content-between mt-1">
-                        <div class="fs-14 fs-mb-10 fw-500 my-auto {{ $car_model->carDetails->address ? '' : 'd-none' }}">
+                        <div class="fs-14 fs-mb-10 fw-500 my-auto {{ $car_model->address ? '' : 'd-none' }}">
                             <img src="{{ asset('user/img/search-result/Group 4 (1).png') }}" alt="location icon" class="img-fluid me-1">
-                            {{$car_model->carDetails->address ?? ''}}
+                            {{$car_model->address ?? ''}}
                         </div>
                         <div class="text-success fs-14 fs-mb-10 fw-500 my-auto">
                             <i class="fas fa-circle fs-12 fs-mb-9"></i> Available Now
                         </div>
                     </div>
                     <p class="fs-4 fw-600 my-3 m-0">
-                       {{$car_model->model_name}}
+                       {{$car_model->carModel->model_name}}
                     </p>
                     <p class="d-flex text-secondary fs-12">
-                        <img src="{{ asset('user/img/search-result/iconTransmission.png') }}" alt="icon" class="img-fluid me-1 conf-icon">{{ $car_model->transmission }}
-                        <img src="{{ asset('user/img/search-result/iconSeat.png') }}" alt="icon" class="img-fluid mx-1 conf-icon ms-3"> {{ $car_model->seat.'Seats' }}
+                        <img src="{{ asset('user/img/search-result/iconTransmission.png') }}" alt="icon" class="img-fluid me-1 conf-icon">{{ $car_model->carModel->transmission }}
+                        <img src="{{ asset('user/img/search-result/iconSeat.png') }}" alt="icon" class="img-fluid mx-1 conf-icon ms-3"> {{ $car_model->carModel->seat.'Seats' }}
                         <img src="{{ asset('user/img/search-result/material-symbols-light_air.png') }}" alt="icon" class="img-fluid mx-1 conf-icon ms-3">AC
-                        <img src="{{ asset('user/img/search-result/streamline_gas-station-fuel-petroleum.png') }}" alt="icon" class="img-fluid mx-1 conf-icon ms-3"> {{ $car_model->fuel_type }}
+                        <img src="{{ asset('user/img/search-result/streamline_gas-station-fuel-petroleum.png') }}" alt="icon" class="img-fluid mx-1 conf-icon ms-3"> {{ $car_model->carModel->fuel_type }}
                     </p>
                     <div class="row mt-2">
                         <div class="col-7">
                             <ul class="fs-13 fw-500 ps-3">
-                                <li>Pricing Plan: Per day {{$car_model->per_day_km ?? ''}} kms, excludes fuel</li>
-                                <li>Extra Hour: ₹{{ $car_model->extra_hours_price ?? '' }} / per hour</li>
+                                <li>Pricing Plan: Per day {{$car_model->carModel->per_day_km ?? ''}} kms, excludes fuel</li>
+                                <li>Extra Hour: ₹{{ $car_model->carModel->extra_hours_price ?? '' }} / per hour</li>
                             </ul>
                         </div>
                         <div class="col-5">
                             <ul class="fs-13 fw-500 ps-3">
-                                <li>Extra Km: ₹{{ $car_model->extra_km_charge }} / per KM</li>
+                                <li>Extra Km: ₹{{ $car_model->carModel->extra_km_charge }} / per KM</li>
                             </ul>
                         </div>
                     </div>

@@ -61,7 +61,7 @@
                                 @endphp
                                 <div class="fs-3 fw-600"> ₹{{ $price * 24 ?? '' }} <span class="fs-16 fw-500">/ per day</span></div>
                             </div>
-                            <a href="{{ route('book.car', ['model_id' => $model->model_id]) }}" class="btn my-button p-1 px-3 w-50">Book now</a>
+                            <a href="{{ route('book.car', ['model_id' => $model->id]) }}" class="btn my-button p-1 px-3 w-50">Book now</a>
                         </div>
                     </div>
                 </div>

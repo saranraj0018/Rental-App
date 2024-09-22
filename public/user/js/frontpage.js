@@ -199,7 +199,8 @@ $(function () {
                     contentType: 'application/json',
                     data: JSON.stringify({
                         latitude: position.coords.latitude,
-                        longitude: position.coords.longitude
+                        longitude: position.coords.longitude,
+                       // start_date:$()
                     }),
                     success: function(data) {
                         if (data.isWithinCoimbatore) {
@@ -278,54 +279,31 @@ $(function () {
                 });
             });
         });
-        document.getElementById('toggleSwitch').addEventListener('change', function() {
-            const toggleDivs = document.querySelectorAll('.toggle');
-            const show = this.checked;
-            const toggleFadeDiv = document.querySelector('.toggle-fade');
-            const isChecked = this.checked;
-
-            toggleDivs.forEach(div => {
-                if (show) {
-                    div.classList.add('show');
-                } else {
-                    div.classList.remove('show');
-                }
-            });
-            if (isChecked) {
-                toggleFadeDiv.style.display = 'none';
-            } else {
-                toggleFadeDiv.style.display = 'block';
-            }
+        // document.getElementById('toggleSwitch').addEventListener('change', function() {
+        //     const toggleDivs = document.querySelectorAll('.toggle');
+        //     const show = this.checked;
+        //     const toggleFadeDiv = document.querySelector('.toggle-fade');
+        //     const isChecked = this.checked;
+        //
+        //     toggleDivs.forEach(div => {
+        //         if (show) {
+        //             div.classList.add('show');
+        //         } else {
+        //             div.classList.remove('show');
+        //         }
+        //     });
+        //     if (isChecked) {
+        //         toggleFadeDiv.style.display = 'none';
+        //     } else {
+        //         toggleFadeDiv.style.display = 'block';
+        //     }
+        // });
+        flatpickr("#start_date_time", {
+            enableTime: true,
+            dateFormat: "d-m-Y | H:i",
+            time_24hr: true,
+            minuteIncrement: 30, // 30-minute intervals
+            allowInput: true,
         });
-        let $datetimepicker = $('#datetimepicker1');
-
-        // Initialize datetimepicker
-        $datetimepicker.datetimepicker({
-            format: 'YYYY-MM-DD | hh:mm A',
-            sideBySide: true,
-            icons: {
-                time: "fa fa-clock",
-                date: "fa fa-calendar",
-                up: "fa fa-chevron-up",
-                down: "fa fa-chevron-down"
-            },
-            widgetPositioning: {
-                horizontal: 'auto',
-                vertical: 'bottom'
-            }
-        });
-
-        // Show the picker when input is clicked
-        $('#datetimepicker1 input').on('focus click', function () {
-            $datetimepicker.data("DateTimePicker").show();
-        });
-
-        // Hide the picker when clicked outside
-        $(document).on('click', function (e) {
-            if (!$datetimepicker.is(e.target) && $datetimepicker.has(e.target).length === 0) {
-                $datetimepicker.data("DateTimePicker").hide();
-            }
-        });
-
     });
 });

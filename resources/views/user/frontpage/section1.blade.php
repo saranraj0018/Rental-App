@@ -156,11 +156,11 @@
             </div>
             <div class="col-12 col-lg-3 my-1 mt-2 my-lg-0">
                 <label class="fs-16 fw-500">Starting Date</label>
-                <div class="input-group" id='datetimepicker1'>
+                <div class="input-group">
                     <span class="input-group-text" id="basic-addon1">
                         <i class=" text-white fa-solid fa-calendar-days"></i>
                     </span>
-                    <input type='text' class="form-control" placeholder="Click to pick date & time" />
+                    <input type="text" id="start_date_time" class="form-control w-25" placeholder="Select Date & Time">
                 </div>
             </div>
             <div class="col-12 col-lg-3 mt-2 mb-2 my-lg-0">

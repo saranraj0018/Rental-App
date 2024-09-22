@@ -74,9 +74,9 @@ class UserController extends Controller
         return view('user.frontpage.list-cars.list',compact('car_models','festival_days'));
     }
 
-    public function bookingCar(Request $request,$id)
+    public function bookingCar($id)
     {
-        $car_model = !empty($id) ? CarModel::with(['carDoc','carDetails'])->where('car_model_id', $id)->first() : [];
+        $car_model = !empty($id) ? CarDetails::with('carModel','carDoc')->find($id) : [];
         $ipr_info = Frontend::where('data_keys','ipr-info-section')->first();
         $ipr_data = !empty($ipr_info['data_values']) ? json_decode($ipr_info['data_values'],true) : [];
         return view('user.frontpage.single-car.view',compact('car_model','ipr_data'));
