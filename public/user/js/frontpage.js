@@ -200,7 +200,8 @@ $(function () {
                     data: JSON.stringify({
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
-                       // start_date:$()
+                        start_date:$('#start_date_time').val(),
+                        end_date:$('#end_date_time').val(),
                     }),
                     success: function(data) {
                         if (data.isWithinCoimbatore) {
@@ -216,6 +217,7 @@ $(function () {
                 });
             }
         });
+        calculateDuration();
         $('.navbar-light .dmenu').hover(function() {
             $(this).find('.sm-menu').first().stop(true, true).slideDown(150);
         }, function() {
@@ -298,7 +300,56 @@ $(function () {
         //         toggleFadeDiv.style.display = 'block';
         //     }
         // });
+
+        $('#start_date_time').on('change', calculateDuration);
+        $('#end_date_time').on('change', calculateDuration);
+
+        function calculateDuration() {
+            let startDate = $('#start_date_time').val();
+            let endDate = $('#end_date_time').val();
+
+            if (startDate && endDate) {
+                // Parse the dates using the correct format
+                let start = moment(startDate, 'DD-MM-YYYY HH:mm'); // Adjust to the input date format
+                let end = moment(endDate, 'DD-MM-YYYY HH:mm');
+
+                // Validate dates
+                if (!start.isValid() || !end.isValid()) {
+                    $('.duration-display').text('Invalid date format');
+                    return;
+                }
+
+                // Calculate the exact difference between dates
+                let diff = moment.duration(end.diff(start));
+
+                // Extract days and hours
+                let days = Math.floor(diff.asDays()); // Use asDays() directly for correct day calculation
+                let hours = diff.hours();
+
+                // Handle pluralization correctly
+                let durationText = `${days} day${days !== 1 ? 's' : ''}, ${hours} hr${hours !== 1 ? 's' : ''}.`;
+
+                // Display the calculated duration
+                $('.duration-display').text(`Duration ${durationText}`);
+                if (diff.asHours() < 24) {
+                    $('#find_car').prop('disabled', true);
+                    $('.duration-error').text(`Minimum 1 day required`);
+                } else {
+                    $('#find_car').prop('disabled', false);
+                    $('.duration-error').text(``);
+                }
+            }
+        }
         flatpickr("#start_date_time", {
+            minDate: "today",
+            enableTime: true,
+            dateFormat: "d-m-Y | H:i",
+            time_24hr: true,
+            minuteIncrement: 30, // 30-minute intervals
+            allowInput: true,
+        });
+        flatpickr("#end_date_time", {
+            minDate: "today",
             enableTime: true,
             dateFormat: "d-m-Y | H:i",
             time_24hr: true,

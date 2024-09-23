@@ -160,7 +160,7 @@
                     <span class="input-group-text" id="basic-addon1">
                         <i class=" text-white fa-solid fa-calendar-days"></i>
                     </span>
-                    <input type="text" id="start_date_time" class="form-control w-25" placeholder="Select Date & Time">
+                    <input type="text" id="start_date_time" class="form-control w-25" placeholder="Start Date & Time" autocomplete="off">
                 </div>
             </div>
             <div class="col-12 col-lg-3 mt-2 mb-2 my-lg-0">
@@ -169,19 +169,20 @@
                     <span class="input-group-text" id="basic-addon1">
                         <i class=" text-white fa-solid fa-calendar-days"></i>
                     </span>
-                    <input type="datetime-local" class="form-control">
+                    <input type="text" id="end_date_time" class="form-control w-25" placeholder="End Date & Time" autocomplete="off">
                 </div>
             </div>
             <div class="col-12 col-lg-2 d-flex justify-content-center d-lg-block my-auto">
-                <button type="submit" class="btn my-button w-100 w-lg-auto p-2">
+                <button type="submit" id="find_car" class="btn my-button w-100 w-lg-auto p-2">
                     <i class=" text-white fa-solid fa-magnifying-glass"></i> Search
                 </button>
             </div>
         </div>
     </div>
-    <div class="container d-none d-lg-block text-secondary text-center my-3">
-        <p>Duration 1 day , 14 hrs.</p>
-    </div>
+        <div class="container d-none d-lg-block text-secondary text-center my-3">
+            <p class="duration-display"></p>
+            <p class="duration-error text-danger"></p>
+        </div>
     </form>
 </section>
 

@@ -252,3 +252,8 @@ input:checked+.slider:before {
 }
 
 /* TOGGLE INPUTS */
+
+.date-pick{
+    background: #ffffff30;
+    border-radius:8px;
+}

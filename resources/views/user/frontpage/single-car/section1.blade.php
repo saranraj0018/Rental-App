@@ -35,8 +35,8 @@
                     </div>
                     <div class="home-demo">
                         <div class="owl-carousel owl-carousel-6 owl-theme">
-                            @if(!empty($car_model->carDoc))
-                                @foreach($car_model->carDoc as $image)
+                            @if(!empty($image_list))
+                                @foreach($image_list as $image)
                                     <div class="item">
                                         <img src="{{ asset('storage/car_other_image/'.$image->name) }}" alt="car-logo" class="img-fluid">
                                     </div>
@@ -80,44 +80,25 @@
             <div class="col-12 col-lg-6">
                 <div class="p-3 bg-blue bdr-30 p-3 h-100">
                     <form action="">
-                        <div class="row d-block d-lg-none">
-                            <div class="me-0 me-lg-2 col-12">
-                                <label class="fs-12 fw-500 text-white">Pickup date & Time</label>
-                                <div class="input-group booking-inputs">
-                                        <span class="input-group-text form-dates" id="basic-addon1">
-                                            <i class="text-white fa-solid fa-calendar-days"></i>
-                                        </span>
-                                    <input type="datetime-local" class="form-control">
-                                </div>
-                            </div>
-                            <div class="ms-0 ms-lg-2 col-12">
-                                <label class="fs-12 fw-500 text-white">Pickup date & Time</label>
-                                <div class="input-group booking-inputs">
-                                        <span class="input-group-text form-dates" id="basic-addon1">
-                                            <i class="text-white fa-solid fa-calendar-days"></i>
-                                        </span>
-                                    <input type="datetime-local" class="form-control">
-                                </div>
-                            </div>
-                        </div>
                         <div class="d-none d-lg-block">
-                            <div class="d-flex">
-                                <div class="me-0 me-lg-2">
-                                    <label class="fs-14 text-white">Pickup date & Time</label>
-                                    <div class="input-group booking-inputs">
-                                            <span class="input-group-text form-dates" id="basic-addon1">
-                                                <i class="text-white fa-solid fa-calendar-days"></i>
-                                            </span>
-                                        <input type="datetime-local" class="form-control">
+                            <div class="d-flex justify-content-evenly">
+                                <div class="me-0 me-lg-1 my-auto">
+                                    <div class="text-white fs-14 mb-2 text-center">Pick Date & Time </div>
+                                    <div class="d-flex text-white py-2 px-4 date-pick">
+                                        <div class="fs-14">
+                                            <i class="fa fa-calendar me-2"></i><span> {!! str_replace('|', '&nbsp;', Session::get('start_date', '')) !!}</span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="ms-0 ms-lg-2">
-                                    <label class="fs-14 text-white">Pickup date & Time</label>
-                                    <div class="input-group booking-inputs">
-                                            <span class="input-group-text form-dates" id="basic-addon1">
-                                                <i class="text-white fa-solid fa-calendar-days"></i>
-                                            </span>
-                                        <input type="datetime-local" class="form-control">
+                                <div class="text-white my-auto fs-4">
+                                    <i class="fa fa-calendar mt-4"></i>
+                                </div>
+                                <div class="ms-0 ms-lg-1">
+                                    <div class="text-white fs-14 mb-2 text-center">Pick Date & Time </div>
+                                    <div class="d-flex text-white py-2 px-4 date-pick">
+                                        <div class="fs-14">
+                                            <i class="fa fa-calendar me-2"></i><span> {!! str_replace('|', '&nbsp;', Session::get('end_date', '')) !!}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -320,6 +301,6 @@
         z-index: 1050; /* Default z-index for modal content */
     }
 </style>
-<script async src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&libraries=places&callback=initMarker"></script>
+{{--<script async src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&libraries=places&callback=initMarker"></script>--}}
 
 

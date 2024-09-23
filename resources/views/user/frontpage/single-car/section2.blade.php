@@ -3,8 +3,8 @@
         <div class="row">
             <div class="col-12 col-lg-6">
                 <div class="container">
-                    <input type="hidden" id="car_latitude" name="car_latitude" value="">
-                    <input type="hidden" id="car_longitude" name="car_longitude" value="">
+                    <input type="hidden" id="car_latitude_current" value="{{$car_model->latitude ?? ''}}">
+                    <input type="hidden" id="car_longitude_current" value="{{$car_model->longitude ?? ''}}">
                     <div id="car_location_map" style="height: 500px; width: 100%;"></div>
                 </div>
             </div>
@@ -268,4 +268,4 @@
         </div>
     </div>
 </section>
-<script async src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&libraries=places&callback=carMarker"></script>
+{{--<script async src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&libraries=places&callback=carMarker"></script>--}}

@@ -54,22 +54,24 @@ $(function () {
             $('#custom-city').focus();
         });
 
-
+        let car_latitude_current = parseFloat($('#car_latitude_current').val()) || 11.0168;
+        let car_longitude_current = parseFloat($('#car_longitude_current').val()) || 76.9558;
         window.carMarker = function() {
+            let lat = car_latitude_current;
+            let lng = car_longitude_current;
             // Initialize the map, centered on a default location (optional)
             car_map = new google.maps.Map(document.getElementById('car_location_map'), {
-                center: {lat: 11.0168, lng: 76.9558}, // Coimbatore, as an example
+                center: {lat: lat, lng: lng}, // Coimbatore, as an example
                 zoom: 12,
             });
-
+             lat = car_latitude_current;
+             lng = car_longitude_current;
             // Add a marker at the provided lat/lng (default is Coimbatore)
             car_marker = new google.maps.Marker({
                 position: { lat: lat, lng: lng },
                 map: car_map,
                 title: "Selected Location",
             });
-
-
         }
     });
 });

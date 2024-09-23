@@ -10,6 +10,7 @@ use App\Models\CarModel;
 use App\Models\Coupon;
 use App\Models\Frontend;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
@@ -35,6 +36,11 @@ class UserController extends Controller
         if (!empty($request['latitude']) && !empty($request['longitude'])) {
             $latitude = $request['latitude'];
             $longitude = $request['longitude'];
+
+            if (!empty($request['start_date']) && !empty($request['end_date'])) {
+                $request->session()->put('start_date', $request['start_date']);
+                $request->session()->put('end_date', $request['end_date']);
+            }
 
 
             $client = new Client();
@@ -69,16 +75,19 @@ class UserController extends Controller
     }
 
     public function listCars() {
+        $date = ['start_date' => Session::get('start_date'), 'end_date' =>  Session::get('end_date')];
         $car_models = CarDetails::with('carModel')->get();
         $festival_days = Holiday::pluck('event_date')->toArray();
-        return view('user.frontpage.list-cars.list',compact('car_models','festival_days'));
+        return view('user.frontpage.list-cars.list',compact('car_models','festival_days','date'));
     }
 
     public function bookingCar($id)
     {
-        $car_model = !empty($id) ? CarDetails::with('carModel','carDoc')->find($id) : [];
+        $car_model = !empty($id) ? CarDetails::with('carModel')->find($id) : [];
+        $car_images = CarModel::with(['carDoc'])->where('car_model_id', $car_model->model_id)->first();
+        $image_list = !empty($car_images->carDoc) ? $car_images->carDoc : [];
         $ipr_info = Frontend::where('data_keys','ipr-info-section')->first();
         $ipr_data = !empty($ipr_info['data_values']) ? json_decode($ipr_info['data_values'],true) : [];
-        return view('user.frontpage.single-car.view',compact('car_model','ipr_data'));
+        return view('user.frontpage.single-car.view',compact('car_model','ipr_data','image_list'));
     }
 }
