@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\CouponController;
 use Illuminate\Http\Request;
 
 
@@ -27,3 +28,9 @@ Route::post('/api/save-geolocation', function (Request $request) {
 //});
 Route::get('/search-car/list', [UserController::class,'listCars'])->name('search-car.list');
 Route::get('/book/{model_id?}', [UserController::class, 'bookingCar'])->name('book.car');
+
+
+// coupon section
+
+Route::post('user/apply-coupon', [CouponController::class,'applyCoupon'])->name('apply.coupon');
+Route::post('user/remove-coupon', [CouponController::class, 'removeCoupon'])->name('remove.coupon');

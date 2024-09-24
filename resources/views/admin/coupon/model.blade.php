@@ -67,24 +67,18 @@
                             <label for="coupon_code">Coupon Code</label>
                             <div class="input-group">
                                 <input id="coupon_code" type="text" name="coupon_code" class="form-control" placeholder="Valam#1234" />
-                                <div class="invalid-feedback">
-                                    Please enter the Coupon Code.
-                                </div>
                             </div>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label for="coupon_start_date">Start Date & Time</label>
                             <div class="input-group date" id="datetimepicker" data-target-input="nearest">
                                 <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker" id="coupon_start_date" name="coupon_start_date" placeholder="Start date and time" />
                                 <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
-                                <div class="invalid-feedback">
-                                    Please select the start date.
-                                </div>
                             </div>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label for="coupon_end_date">End Date and Time</label>
                             <div class="input-group date" id="enddatetimepicker" data-target-input="nearest">
                                 <input type="text" class="form-control datetimepicker-input" data-target="#enddatetimepicker" id="coupon_end_date" name="coupon_end_date" placeholder="End date and time" />
@@ -94,6 +88,17 @@
                                 <div class="invalid-feedback">
                                     Please select the end date.
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="order_booking">Booking Order</label>
+                            <div class="input-group">
+                                <input id="order_booking" type="text" name="order_booking" class="form-control" placeholder="5" />
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select valid booking order.
                             </div>
                         </div>
                     </div>

@@ -23,11 +23,11 @@ class CouponController extends BaseController
      */
     public function save(Request $request)
     {
-
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
+            'order_booking' => 'nullable|numeric|min:0',
             'prefix' => 'max:144',
             'coupon_code' => 'required|string|max:20',
             'coupon_start_date' => [
@@ -61,6 +61,7 @@ class CouponController extends BaseController
         $coupon->code = $request['coupon_code'];
         $coupon->start_date = $request['coupon_start_date'];
         $coupon->end_date = $request['coupon_end_date'];
+        $coupon->booking_order = $request['order_booking'];
         $coupon->status = $request['status'];
         $coupon->user_id = Auth::guard('admin')->id();
         $coupon->save();

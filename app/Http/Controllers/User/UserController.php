@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use App\Models\CarModel;
 use App\Models\Coupon;
 use App\Models\Frontend;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -84,10 +85,63 @@ class UserController extends Controller
     public function bookingCar($id)
     {
         $car_model = !empty($id) ? CarDetails::with('carModel')->find($id) : [];
+
+        $prices = ['festival' =>  $car_model->carModel->peak_reason_surge ?? 0,
+                  'weekend' => $car_model->carModel->weekend_surge ?? 0,
+                   'weekday' =>  $car_model->carModel->price_per_hour ?? 0];
+        $price_list = $this->calculatePrice($prices,session('start_date'),session('end_date'));
         $car_images = CarModel::with(['carDoc'])->where('car_model_id', $car_model->model_id)->first();
         $image_list = !empty($car_images->carDoc) ? $car_images->carDoc : [];
         $ipr_info = Frontend::where('data_keys','ipr-info-section')->first();
         $ipr_data = !empty($ipr_info['data_values']) ? json_decode($ipr_info['data_values'],true) : [];
-        return view('user.frontpage.single-car.view',compact('car_model','ipr_data','image_list'));
+        return view('user.frontpage.single-car.view',compact('car_model','ipr_data','image_list','price_list'));
     }
+
+    public function calculatePrice($prices,$from_date = null, $to_date = null)
+    {
+        $price = [];
+        if (empty($from_date) && empty($to_date)) return $price;
+        $start_date = str_replace('|', '', $from_date);
+        $end_date = str_replace('|', '', $to_date);
+
+        $start = Carbon::createFromFormat('d-m-Y H:i', $start_date);
+        $end = Carbon::createFromFormat('d-m-Y H:i', $end_date);
+        $festival_dates = Holiday::pluck('event_date')->toArray();
+
+        $current = $start->copy();
+        $dailyDetails = [];
+
+        while ($current < $end) {
+            $date = $current->format('Y-m-d');
+            if (in_array($date, $festival_dates)) {
+                $dailyDetails[$date]['hours'] = ($dailyDetails[$date]['hours'] ?? 0) + 1;
+            } elseif ($current->isWeekend()) {
+                $dailyDetails[$date]['hours'] = ($dailyDetails[$date]['hours'] ?? 0) + 1;
+            } else {
+                $dailyDetails[$date]['hours'] = ($dailyDetails[$date]['hours'] ?? 0) + 1;
+            }
+            // Move to the next hour
+            $current->addHour();
+        }
+        $total_price = $festival_amount = $week_end_amount = $week_days_amount = 0;
+        foreach ($dailyDetails as $date => $details) {
+            $hours = $details['hours'];
+            if (in_array($date, $festival_dates)) {
+                $total_price += $prices['festival'] * $hours;
+                $festival_amount = $prices['festival'] * $hours;
+            } elseif (Carbon::parse($date)->isWeekend()) {
+                $total_price += $prices['weekend'] * $hours;
+                $week_end_amount = $prices['weekend'] * $hours;;
+            } else {
+                $total_price += $prices['weekday'] * $hours;
+                $week_days_amount = $prices['weekday'] * $hours;
+            }
+        }
+        $diffInDays = $start->diffInDays($end);
+        $diffInHours = $start->diffInHours($end) % 24;
+        return ['total_days'=> $diffInDays , 'total_hours'=> $diffInHours , 'total_price'=> $total_price,
+                 'festival_amount' => $festival_amount , 'week_end_amount' => $week_end_amount, 'week_days_amount' => $week_days_amount];
+    }
+
+
 }

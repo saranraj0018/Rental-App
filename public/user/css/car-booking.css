@@ -13,8 +13,8 @@
 }
 
 .form-dates {
-    background: none !important;
-    border: none !important;
+    border-radius: 50px !important;
+    font-weight: 600;
 }
 
 .booking-inputs {
@@ -256,4 +256,7 @@ input:checked+.slider:before {
 .date-pick{
     background: #ffffff30;
     border-radius:8px;
+}
+.owl-carousel .owl-dots.disabled, .owl-carousel .owl-nav.disabled {
+    display: block;
 }

@@ -130,11 +130,11 @@ $(function () {
                     items: 2
                 },
                 768: {
-                    items: 3
+                    items: 2
                 },
                 // Breakpoint from 768 up
                 769: {
-                    items: 3
+                    items: 2
                 }
             }
         });
@@ -281,25 +281,25 @@ $(function () {
                 });
             });
         });
-        // document.getElementById('toggleSwitch').addEventListener('change', function() {
-        //     const toggleDivs = document.querySelectorAll('.toggle');
-        //     const show = this.checked;
-        //     const toggleFadeDiv = document.querySelector('.toggle-fade');
-        //     const isChecked = this.checked;
-        //
-        //     toggleDivs.forEach(div => {
-        //         if (show) {
-        //             div.classList.add('show');
-        //         } else {
-        //             div.classList.remove('show');
-        //         }
-        //     });
-        //     if (isChecked) {
-        //         toggleFadeDiv.style.display = 'none';
-        //     } else {
-        //         toggleFadeDiv.style.display = 'block';
-        //     }
-        // });
+        document.getElementById('toggleSwitch').addEventListener('change', function() {
+            const toggleDivs = document.querySelectorAll('.toggle');
+            const show = this.checked;
+            const toggleFadeDiv = document.querySelector('.toggle-fade');
+            const isChecked = this.checked;
+
+            toggleDivs.forEach(div => {
+                if (show) {
+                    div.classList.add('show');
+                } else {
+                    div.classList.remove('show');
+                }
+            });
+            if (isChecked) {
+                toggleFadeDiv.style.display = 'none';
+            } else {
+                toggleFadeDiv.style.display = 'block';
+            }
+        });
 
         $('#start_date_time').on('change', calculateDuration);
         $('#end_date_time').on('change', calculateDuration);

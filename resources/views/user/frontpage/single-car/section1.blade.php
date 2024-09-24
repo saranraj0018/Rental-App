@@ -56,24 +56,18 @@
                     <p class="fs-4 fw-600 my-3 m-0">
                        {{$car_model->carModel->model_name}}
                     </p>
-                    <p class="d-flex text-secondary fs-12">
-                        <img src="{{ asset('user/img/search-result/iconTransmission.png') }}" alt="icon" class="img-fluid me-1 conf-icon">{{ $car_model->carModel->transmission }}
-                        <img src="{{ asset('user/img/search-result/iconSeat.png') }}" alt="icon" class="img-fluid mx-1 conf-icon ms-3"> {{ $car_model->carModel->seat.'Seats' }}
-                        <img src="{{ asset('user/img/search-result/material-symbols-light_air.png') }}" alt="icon" class="img-fluid mx-1 conf-icon ms-3">AC
-                        <img src="{{ asset('user/img/search-result/streamline_gas-station-fuel-petroleum.png') }}" alt="icon" class="img-fluid mx-1 conf-icon ms-3"> {{ $car_model->carModel->fuel_type }}
+                    <p class="d-flex text-secondary fs-16">
+                        <img src="{{ asset('user/img/search-result/iconTransmission.png') }}" alt="icon" class="img-fluid me-2 conf-icon">{{ $car_model->carModel->transmission }}
+                        <img src="{{ asset('user/img/search-result/iconSeat.png') }}" alt="icon" class="img-fluid mx-2 conf-icon ms-3"> {{ $car_model->carModel->seat.'Seats' }}
+                        <img src="{{ asset('user/img/search-result/material-symbols-light_air.png') }}" alt="icon" class="img-fluid mx-2 conf-icon ms-3">AC
+                        <img src="{{ asset('user/img/search-result/streamline_gas-station-fuel-petroleum.png') }}" alt="icon" class="img-fluid mx-2 conf-icon ms-3"> {{ $car_model->carModel->fuel_type }}
                     </p>
-                    <div class="row mt-2">
-                        <div class="col-7">
-                            <ul class="fs-13 fw-500 ps-3">
-                                <li>Pricing Plan: Per day {{$car_model->carModel->per_day_km ?? ''}} kms, excludes fuel</li>
-                                <li>Extra Hour: ₹{{ $car_model->carModel->extra_hours_price ?? '' }} / per hour</li>
-                            </ul>
-                        </div>
-                        <div class="col-5">
-                            <ul class="fs-13 fw-500 ps-3">
-                                <li>Extra Km: ₹{{ $car_model->carModel->extra_km_charge }} / per KM</li>
-                            </ul>
-                        </div>
+                    <div class=" mt-2">
+                        <ul class="fs-6 fw-500 ps-3">
+                            <li>Pricing Plan: Per day {{$car_model->carModel->per_day_km ?? ''}} kms, excludes fuel</li>
+                            <li>Extra Hour: ₹{{ $car_model->carModel->extra_hours_price ?? '' }} / per hour</li>
+                            <li>Extra Km: ₹{{ $car_model->carModel->extra_km_charge }} / per KM</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -91,7 +85,7 @@
                                     </div>
                                 </div>
                                 <div class="text-white my-auto fs-4">
-                                    <i class="fa fa-calendar mt-4"></i>
+                                    <img src="{{ asset('user/img/heroicons_arrows-up-down.svg') }}" alt="icon" class="img-fluid mx-1 conf-icon ms-3">
                                 </div>
                                 <div class="ms-0 ms-lg-1">
                                     <div class="text-white fs-14 mb-2 text-center">Pick Date & Time </div>
@@ -105,11 +99,23 @@
                         </div>
                         <div class="d-flex justify-content-between text-white mt-4 border-bottom border-1">
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Total Time</p>
-                            <p class="fs-14 fs-mb-12 mt-2 mb-3">1 Day 2hr</p>
+                            <p class="fs-14 fs-mb-12 mt-2 mb-3">{{$price_list['total_days'] ?? 0 }} Day {{ $price_list['total_hours'] ?? 0 }}hr</p>
+                        </div>
+                        <div class="d-flex justify-content-between text-white mt-3 border-bottom border-1 {{ !empty($price_list['festival_amount']) ? 'd-flex' : 'd-none' }}">
+                            <p class="fs-14 fs-mb-12 mt-2 mb-3">Total festival fare</p>
+                            <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{ $price_list['festival_amount'] ?? 0  }}</p>
+                        </div>
+                        <div class="justify-content-between text-white mt-3 border-bottom border-1 {{!empty($price_list['week_end_amount']) ? 'd-flex' : 'd-none' }}">
+                            <p class="fs-14 fs-mb-12 mt-2 mb-3">Weekend fare</p>
+                            <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{$price_list['week_end_amount'] ?? 0 }}</p>
+                        </div>
+                        <div class="d-flex justify-content-between text-white mt-3 border-bottom border-1 {{ !empty($price_list['week_days_amount']) ? 'd-flex' : 'd-none' }}">
+                            <p class="fs-14 fs-mb-12 mt-2 mb-3">Total normal fare</p>
+                            <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{ $price_list['week_days_amount'] ?? 0  }}</p>
                         </div>
                         <div class="d-flex justify-content-between text-white mt-3 border-bottom border-1">
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Total base fare</p>
-                            <p class="fs-14 fs-mb-12 mt-2 mb-3">₹9299</p>
+                            <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{ $price_list['total_price'] ?? 0  }}</p>
                         </div>
                         <div class="d-flex justify-content-between text-white mt-3 mb-1 border-bottom border-1 toggle">
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Doorstep delivery & pickup</p>
@@ -117,7 +123,11 @@
                         </div>
                         <div class="d-flex justify-content-between text-white mb-2 border-bottom border-1">
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Refundable security deposit</p>
-                            <p class="fs-14 fs-mb-12 mt-2 mb-3">₹2000</p>
+                            <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{ $car_model->carModel->dep_amount ?? 0 }} </p>
+                        </div>
+                        <div class="d-none justify-content-between text-white mb-2 border-bottom border-1" id="coupon_message">
+                            <p class="fs-14 fs-mb-12 mt-2 mb-3">Coupon Amount</p>
+                            <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{ $car_model->carModel->dep_amount ?? 0 }} </p>
                         </div>
                         <div class="d-flex justify-content-between text-white border-bottom border-1">
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Insurance & GST</p>
@@ -129,13 +139,13 @@
                         </div>
                         <div class="d-flex justify-content-between text-white mt-3">
                             <p class="fs-14 fs-mb-12 my-auto my-lg-2 w-100">Promo / Coupon Code</p>
-                            <div class="input-group booking-inputs-2 my-auto bdr-30 w-50 h-50">
-                                <input type="type" class="form-control coupen-input">
-                                <span class="input-group-text form-dates bg-white text-blue fs-12 fw-500 py-0 px-3 mx-auto mx-lg-0" id="basic-addon1">
-                                        Apply
-                                    </span>
+                            <div class="input-group booking-inputs-2 my-auto w-100 h-50 border border-white rounded-pill">
+                                <input type="type" class="form-control coupen-input" id="coupon_code">
+                                <button type="button" class="input-group-text form-dates bg-light text-blue fs-12 fw-500 py-0 px-3 mx-auto mx-lg-0"
+                                        id="apply_coupon">Apply</button>
                             </div>
                         </div>
+                        <p id="discount_text" class="fs-14 fs-mb-12 mt-2 mb-3 text-success"></p>
                         <div class="mt-1 pt-2 mb-3">
                             <div class="mt-5 d-flex justify-content-between flex-column flex-md-row">
                                 <div class="my-auto">
@@ -151,8 +161,11 @@
                                         </div>
                                     </div>
                                 </div>
+                                @php
+                                $sub_total_price = $price_list['total_price'] + $car_model->carModel->dep_amount ?? 0;
+                                @endphp
                                 <div class="text-white">
-                                    <p class="fs-20 fs-mb-16 my-2 text-end">Total Price ₹11599</p>
+                                    <p class="fs-20 fs-mb-16 my-2 text-end">Total Price ₹{{ $sub_total_price }}</p>
                                 </div>
                             </div>
                         </div>

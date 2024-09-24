@@ -22,6 +22,7 @@ return new class extends Migration
             $table->tinyInteger('type')->nullable()->comment('1-percentage, 2-fixed');
             $table->string('prefix',144)->nullable();
             $table->string('code',20);
+            $table->smallInteger('booking_order')->nullable()->default(0);
             $table->tinyInteger('status')->nullable()->comment('1-activate, 2-deactivate');
             $table->timestamps();
         });
