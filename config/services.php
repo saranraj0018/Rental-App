@@ -33,6 +33,11 @@ return [
     'google_maps' => [
         'key' => env('GOOGLE_MAPS_API_KEY'),
     ],
+    'twilio_sms' => [
+        'sid' => env('TWILIO_SID'),
+        'token' => env('TWILIO_AUTH_TOKEN'),
+        'mobile_number' => env('TWILIO_PHONE_NUMBER'),
+    ],
 
 
 ];

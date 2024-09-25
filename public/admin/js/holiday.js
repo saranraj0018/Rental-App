@@ -73,9 +73,6 @@ $(function () {
                     }
                 });
             }
-
-
-
         });
 
         // Edit Holiday

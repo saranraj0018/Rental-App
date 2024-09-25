@@ -54,7 +54,7 @@
                         </div>
                     </div>
                     <p class="fs-4 fw-600 my-3 m-0">
-                       {{$car_model->carModel->model_name}}
+                        {{$car_model->carModel->model_name}}
                     </p>
                     <p class="d-flex text-secondary fs-16">
                         <img src="{{ asset('user/img/search-result/iconTransmission.png') }}" alt="icon" class="img-fluid me-2 conf-icon">{{ $car_model->carModel->transmission }}
@@ -101,7 +101,7 @@
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Total Time</p>
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">{{$price_list['total_days'] ?? 0 }} Day {{ $price_list['total_hours'] ?? 0 }}hr</p>
                         </div>
-                        <div class="d-flex justify-content-between text-white mt-3 border-bottom border-1 {{ !empty($price_list['festival_amount']) ? 'd-flex' : 'd-none' }}">
+                        <div class="justify-content-between text-white mt-3 border-bottom border-1 {{ !empty($price_list['festival_amount']) ? 'd-flex' : 'd-none' }}">
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Total festival fare</p>
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{ $price_list['festival_amount'] ?? 0  }}</p>
                         </div>
@@ -109,7 +109,7 @@
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Weekend fare</p>
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{$price_list['week_end_amount'] ?? 0 }}</p>
                         </div>
-                        <div class="d-flex justify-content-between text-white mt-3 border-bottom border-1 {{ !empty($price_list['week_days_amount']) ? 'd-flex' : 'd-none' }}">
+                        <div class="justify-content-between text-white mt-3 border-bottom border-1 {{ !empty($price_list['week_days_amount']) ? 'd-flex' : 'd-none' }}">
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Total normal fare</p>
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{ $price_list['week_days_amount'] ?? 0  }}</p>
                         </div>
@@ -125,9 +125,18 @@
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Refundable security deposit</p>
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{ $car_model->carModel->dep_amount ?? 0 }} </p>
                         </div>
-                        <div class="d-none justify-content-between text-white mb-2 border-bottom border-1" id="coupon_message">
+                        @php
+                            $total_price = !empty($price_list['total_price']) ? $price_list['total_price'] : 0 ;
+                            $sub_total_price = $total_price + $car_model->carModel->dep_amount ?? 0;
+                            $coupon = !empty(session('coupon')) ? session('coupon') : [] ;
+                            $type = !empty($coupon['type']) ? $coupon['type'] : 0 ;
+                            $amount = !empty($type) && $type == 1 ? $coupon['discount'] : ($type == 2 ? ($sub_total_price * $coupon['discount']) / 100 : 0);
+                        @endphp
+                        <div class="{{!empty(session('coupon')) ? 'd-flex' : 'd-none'}} justify-content-between text-white mb-2 border-bottom border-1" id="coupon_message" >
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Coupon Amount</p>
-                            <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{ $car_model->carModel->dep_amount ?? 0 }} </p>
+                            <p class="fs-14 fs-mb-12 mt-2 mb-3">-
+                                <span id="coupon_amount">{{ $amount }}</span> <br><a href="javascript:void(0)" class="remove-coupon fs-14">Remove</a></p>
+
                         </div>
                         <div class="d-flex justify-content-between text-white border-bottom border-1">
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Insurance & GST</p>
@@ -140,7 +149,7 @@
                         <div class="d-flex justify-content-between text-white mt-3">
                             <p class="fs-14 fs-mb-12 my-auto my-lg-2 w-100">Promo / Coupon Code</p>
                             <div class="input-group booking-inputs-2 my-auto w-100 h-50 border border-white rounded-pill">
-                                <input type="type" class="form-control coupen-input" id="coupon_code">
+                                <input type="text" class="form-control coupon-input" id="coupon_code">
                                 <button type="button" class="input-group-text form-dates bg-light text-blue fs-12 fw-500 py-0 px-3 mx-auto mx-lg-0"
                                         id="apply_coupon">Apply</button>
                             </div>
@@ -162,15 +171,17 @@
                                     </div>
                                 </div>
                                 @php
-                                $sub_total_price = $price_list['total_price'] + $car_model->carModel->dep_amount ?? 0;
-                                @endphp
+                                     $final_total = $sub_total_price - $amount ?? 0;
+                                    @endphp
+                                <input type="hidden" id="coupon_before" value="{{$sub_total_price}}">
                                 <div class="text-white">
-                                    <p class="fs-20 fs-mb-16 my-2 text-end">Total Price ₹{{ $sub_total_price }}</p>
+                                    <p class="fs-20 fs-mb-16 my-2 text-end">
+                                        Total Price ₹<span id="total_price">{{ $final_total }}</span></p>
                                 </div>
                             </div>
                         </div>
                         <div class="toggle-fade">
-                            <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#exampleModal">Proceed Payment</button>
+                            <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#mobileModal">Proceed Payment</button>
                         </div>
                         <div class="d-flex justify-content-between flex-column flex-md-row toggle">
                             <div class="mb-3 mb-md-auto">
@@ -179,7 +190,7 @@
                             </div>
 
                             <div>
-                                <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#exampleModal">Proceed Payment</button>
+                                <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#mobileModal">Proceed Payment</button>
                             </div>
                         </div>
                     </form>
@@ -188,103 +199,6 @@
         </div>
     </div>
 </section>
-
-<!-- Modal Structure -->
-<div class="modal left fade custom-modal m-0 overflow-hidden" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog position-top-right">
-        <div class="modal-content bdr-20">
-            <div class="modal-body h-600px p-0">
-                <!-- Input Sets -->
-                <div class="input-set fade-element show" data-set="1">
-                    <div class="other-heads-bg p-4 bdr-top-15">
-                        <div>
-                            <button type="button" class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-angle-left text-white fs-18"></i></button>
-                        </div>
-                        <div>
-                            <h4 class="modal-title text-white my-2 lh-sm" id="exampleModalLabel">Sign In To Your <br>Account</h4>
-                            <p class="fs-12 text-white" id="exampleModalLabel">Sign In To Your Account</p>
-                        </div>
-                    </div>
-                    <div class="py-3 px-2 px-lg-5">
-                        <div class="mb-3">
-                            <label for="input1" class="form-label fs-12 fw-500">Enter your Mobile Number</label>
-                            <input type="tel" class="form-control bg-grey form-bdr" id="input1" placeholder="9329*****1">
-                        </div>
-                        <div class="fs-10 line-container"> or sign-in with</div>
-                        <div class="d-flex justify-content-center my-3">
-                            <img src="{{ asset('user/img/car-booking/Group 35412.png') }}" alt="form-icon" class="img-fluid mx-2">
-                        </div>
-                        <button type="button" class="btn my-button next-button w-100" data-next="2">Request OTP</button>
-                        <div class="fs-10 text-secondary text-center mt-3">Don't have an account? <span class="text-dark fw-500">Register</span></div>
-                    </div>
-                </div>
-                <div class="input-set fade-element" data-set="2">
-                    <div class="other-heads-bg p-4 bdr-top-15">
-                        <div>
-                            <button type="button" class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white back-button mb-2" data-prev="1"><i class="fa fa-angle-left text-white fs-18"></i></button>
-                        </div>
-                        <div>
-                            <h4 class="modal-title text-white my-2 lh-sm" id="exampleModalLabel">OTP Verification</h4>
-                            <p class="fs-12 text-white" id="exampleModalLabel">Check your mobile to see verification code</p>
-                        </div>
-                    </div>
-                    <div class="py-3 px-2 px-lg-5">
-                        <div class="mb-3">
-                            <p class="form-label fs-12 fw-500 text-secondary text-center">Enter the OTP sent to <span class="text-dark fw-500">+91 - 8554569487</span></p>
-                            <div class="d-flex my-4">
-                                <input type="tel" class="form-control bg-grey form-bdr mx-1 mx-md-2">
-                                <input type="tel" class="form-control bg-grey form-bdr mx-1 mx-md-2">
-                                <input type="tel" class="form-control bg-grey form-bdr mx-1 mx-md-2">
-                                <input type="tel" class="form-control bg-grey form-bdr mx-1 mx-md-2">
-                                <input type="tel" class="form-control bg-grey form-bdr mx-1 mx-md-2">
-                            </div>
-                        </div>
-                        <div class="mt-5 pt-5">
-                            <div class="fs-10 text-secondary text-center my-3">Don't receive the OTP? <span class="text-dark fw-500">RESEND OTP</span></div>
-                            <button type="button" class="btn my-button next-button w-100" data-next="3">Verify Code</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-set fade-element" data-set="3">
-                    <div class="other-heads-bg p-4 bdr-top-15">
-                        <div>
-                            <button type="button" class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white back-button mb-2" data-prev="2"><i class="fa fa-angle-left text-white fs-18"></i></button>
-                        </div>
-                        <div>
-                            <h4 class="modal-title text-white my-2 lh-sm" id="exampleModalLabel">Create Your Account</h4>
-                            <p class="fs-12 text-white" id="exampleModalLabel">Create Your Account</p>
-                        </div>
-                    </div>
-                    <div class="py-3 px-2 px-lg-5">
-                        <div class="mb-2">
-                            <label for="input2" class="form-label fs-12 fw-500">Your Name</label>
-                            <input type="tel" class="form-control bg-grey form-bdr" id="input2" placeholder="Enter your name">
-                        </div>
-                        <div class="mb-3">
-                            <label for="input3  " class="form-label fs-12 fw-500">Enter Your Mobile Number</label>
-                            <input type="tel" class="form-control bg-grey form-bdr" id="input3" placeholder="+91">
-                        </div>
-                        <div class="my-3">
-                            <div class="fs-10 line-container"> or sign-in with</div>
-                            <div class="d-flex justify-content-center my-3">
-                                <img src="{{ asset('user/img/car-booking/Group 35412.png') }}" alt="form-icon" class="img-fluid mx-2">
-                                <img src="{{ asset('user/img/car-booking/Group 35413.png') }}" alt="form-icon" class="img-fluid mx-2">
-                            </div>
-                        </div>
-                        <div class="mt-2">
-                            <button type="button" class="btn my-button next-button w-100" id="submit-button" data-bs-dismiss="modal" aria-label="Close">Request OTP</button>
-                            <div class="fs-10 text-secondary text-center my-3">Already have an account? <span class="text-dark fw-500">Sign In</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div> -->
-        </div>
-    </div>
-</div>
 
 <!-- Second Modal Structure -->
 <div class="modal fade m-0 m-md-auto" id="secondModal" tabindex="-1" aria-labelledby="secondModalLabel" aria-hidden="true">

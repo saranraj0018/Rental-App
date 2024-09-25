@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\CouponController;
+Use App\Http\Controllers\User\OTPController;
 use Illuminate\Http\Request;
 
 
@@ -34,3 +35,9 @@ Route::get('/book/{model_id?}', [UserController::class, 'bookingCar'])->name('bo
 
 Route::post('user/apply-coupon', [CouponController::class,'applyCoupon'])->name('apply.coupon');
 Route::post('user/remove-coupon', [CouponController::class, 'removeCoupon'])->name('remove.coupon');
+
+// otp section
+
+Route::post('user/send-otp', [OTPController::class, 'sendOTP'])->name('send.otp');
+Route::post('user/verify-otp', [OTPController::class, 'verifyOtp'])->name('verify.otp');
+Route::post('user/register', [OTPController::class, 'register'])->name('register');

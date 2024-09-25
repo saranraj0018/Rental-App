@@ -244,62 +244,62 @@ $(function () {
         } else {
             console.log("Geolocation is not supported by this browser.");
         }
-        document.querySelectorAll('.next-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const currentSet = this.closest('.input-set');
-                const nextSetNumber = this.getAttribute('data-next');
-                const nextSet = document.querySelector(`.input-set[data-set="${nextSetNumber}"]`);
+        // document.querySelectorAll('.next-button').forEach(button => {
+        //     button.addEventListener('click', function() {
+        //         const currentSet = this.closest('.input-set');
+        //         const nextSetNumber = this.getAttribute('data-next');
+        //         const nextSet = document.querySelector(`.input-set[data-set="${nextSetNumber}"]`);
+        //
+        //         // Fade out the current set
+        //         currentSet.classList.remove('show');
+        //         currentSet.addEventListener('transitionend', function() {
+        //             currentSet.style.display = 'none'; // Hide it after fading out
+        //             // Fade in the next set
+        //             nextSet.style.display = 'block'; // Ensure it's display is block for transition
+        //             nextSet.classList.add('show');
+        //         }, {
+        //             once: true
+        //         });
+        //     });
+        // });
 
-                // Fade out the current set
-                currentSet.classList.remove('show');
-                currentSet.addEventListener('transitionend', function() {
-                    currentSet.style.display = 'none'; // Hide it after fading out
-                    // Fade in the next set
-                    nextSet.style.display = 'block'; // Ensure it's display is block for transition
-                    nextSet.classList.add('show');
-                }, {
-                    once: true
-                });
-            });
-        });
-
-        document.querySelectorAll('.back-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const currentSet = this.closest('.input-set');
-                const prevSetNumber = this.getAttribute('data-prev');
-                const prevSet = document.querySelector(`.input-set[data-set="${prevSetNumber}"]`);
-
-                // Fade out the current set
-                currentSet.classList.remove('show');
-                currentSet.addEventListener('transitionend', function() {
-                    currentSet.style.display = 'none'; // Hide it after fading out
-                    // Fade in the previous set
-                    prevSet.style.display = 'block'; // Ensure it's display is block for transition
-                    prevSet.classList.add('show');
-                }, {
-                    once: true
-                });
-            });
-        });
-        document.getElementById('toggleSwitch').addEventListener('change', function() {
-            const toggleDivs = document.querySelectorAll('.toggle');
-            const show = this.checked;
-            const toggleFadeDiv = document.querySelector('.toggle-fade');
-            const isChecked = this.checked;
-
-            toggleDivs.forEach(div => {
-                if (show) {
-                    div.classList.add('show');
-                } else {
-                    div.classList.remove('show');
-                }
-            });
-            if (isChecked) {
-                toggleFadeDiv.style.display = 'none';
-            } else {
-                toggleFadeDiv.style.display = 'block';
-            }
-        });
+        // document.querySelectorAll('.back-button').forEach(button => {
+        //     button.addEventListener('click', function() {
+        //         const currentSet = this.closest('.input-set');
+        //         const prevSetNumber = this.getAttribute('data-prev');
+        //         const prevSet = document.querySelector(`.input-set[data-set="${prevSetNumber}"]`);
+        //
+        //         // Fade out the current set
+        //         currentSet.classList.remove('show');
+        //         currentSet.addEventListener('transitionend', function() {
+        //             currentSet.style.display = 'none'; // Hide it after fading out
+        //             // Fade in the previous set
+        //             prevSet.style.display = 'block'; // Ensure it's display is block for transition
+        //             prevSet.classList.add('show');
+        //         }, {
+        //             once: true
+        //         });
+        //     });
+        // });
+        // document.getElementById('toggleSwitch').addEventListener('change', function() {
+        //     const toggleDivs = document.querySelectorAll('.toggle');
+        //     const show = this.checked;
+        //     const toggleFadeDiv = document.querySelector('.toggle-fade');
+        //     const isChecked = this.checked;
+        //
+        //     toggleDivs.forEach(div => {
+        //         if (show) {
+        //             div.classList.add('show');
+        //         } else {
+        //             div.classList.remove('show');
+        //         }
+        //     });
+        //     if (isChecked) {
+        //         toggleFadeDiv.style.display = 'none';
+        //     } else {
+        //         toggleFadeDiv.style.display = 'block';
+        //     }
+        // });
 
         $('#start_date_time').on('change', calculateDuration);
         $('#end_date_time').on('change', calculateDuration);

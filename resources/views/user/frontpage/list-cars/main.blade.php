@@ -35,6 +35,7 @@
 <script src="{{asset("user/js/frontpage.js")}}"></script>
 <script src="{{asset("user/js/custom-map.js")}}"></script>
 <script src="{{asset("user/js/booking.js")}}"></script>
+<script src="{{asset("user/js/user-verification.js")}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>

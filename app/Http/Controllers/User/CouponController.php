@@ -20,6 +20,7 @@ class CouponController extends Controller
             ]);
             return response()->json([
                 'valid' => true,
+                'code' => $request['coupon'],
                 'type' => $coupon->type,
                 'discount' => $coupon->amount,
             ]);

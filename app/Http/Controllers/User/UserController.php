@@ -128,10 +128,10 @@ class UserController extends Controller
             $hours = $details['hours'];
             if (in_array($date, $festival_dates)) {
                 $total_price += $prices['festival'] * $hours;
-                $festival_amount = $prices['festival'] * $hours;
+                $festival_amount = $total_price;
             } elseif (Carbon::parse($date)->isWeekend()) {
                 $total_price += $prices['weekend'] * $hours;
-                $week_end_amount = $prices['weekend'] * $hours;;
+                $week_end_amount = $total_price;
             } else {
                 $total_price += $prices['weekday'] * $hours;
                 $week_days_amount = $prices['weekday'] * $hours;
