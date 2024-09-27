@@ -72,7 +72,7 @@
                                 {{ $value->question ?? '' }}
                             </button>
                         </h2>
-                        <div id="collapseOne_{{$item->id}}" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                        <div id="collapseOne_{{$item->id}}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
                             <div class="accordion-body py-3 fs-mb-14 text-justify">
                                 {{ $value->answer ?? '' }}
                             </div>
@@ -86,7 +86,7 @@
                         Is there a speed limit?
                     </button>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
                     <div class="accordion-body py-3 fs-mb-14 text-justify">
                         Valam allows up to 125 km/hr. However it is 80 km/hr in a few cities where some cars might be equipped with speed governors as per government directives. Revv strictly advises to follow local speed limits.
                     </div>

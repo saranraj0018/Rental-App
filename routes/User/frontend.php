@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\CouponController;
 Use App\Http\Controllers\User\OTPController;
+use App\Http\Controllers\User\PaymentContoller;
 use Illuminate\Http\Request;
 
 
@@ -41,3 +42,16 @@ Route::post('user/remove-coupon', [CouponController::class, 'removeCoupon'])->na
 Route::post('user/send-otp', [OTPController::class, 'sendOTP'])->name('send.otp');
 Route::post('user/verify-otp', [OTPController::class, 'verifyOtp'])->name('verify.otp');
 Route::post('user/register', [OTPController::class, 'register'])->name('register');
+
+// upload documents
+Route::post('user/documentation', [UserController::class, 'storeDocuments'])->name('store.documents');
+Route::post('user/payment', [PaymentContoller::class, 'orderBooking'])->name('order.booking');
+Route::view('booking/success', 'dummy')->name('booking.success');
+
+
+
+Route::get('user/logout', function (Request $request) {
+   \Illuminate\Support\Facades\Auth::logout();
+    return response()->json(['status' => 'success']);
+});
+

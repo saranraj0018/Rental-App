@@ -5,12 +5,15 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\CarDetails;
 use App\Models\Holiday;
+use App\Models\User;
+use App\Models\UserDocument;
 use GuzzleHttp\Client;
 use App\Models\CarModel;
 use App\Models\Coupon;
 use App\Models\Frontend;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
@@ -39,10 +42,9 @@ class UserController extends Controller
             $longitude = $request['longitude'];
 
             if (!empty($request['start_date']) && !empty($request['end_date'])) {
-                $request->session()->put('start_date', $request['start_date']);
-                $request->session()->put('end_date', $request['end_date']);
+                $request->session()->put('start_date',  str_replace('|', '', $request['start_date']));
+                $request->session()->put('end_date', str_replace('|', '', $request['end_date']));
             }
-
 
             $client = new Client();
             $response = $client->get('https://maps.googleapis.com/maps/api/geocode/json', [
@@ -94,10 +96,22 @@ class UserController extends Controller
         $image_list = !empty($car_images->carDoc) ? $car_images->carDoc : [];
         $ipr_info = Frontend::where('data_keys','ipr-info-section')->first();
         $ipr_data = !empty($ipr_info['data_values']) ? json_decode($ipr_info['data_values'],true) : [];
+        // Store booking details in session
+        session([
+            'booking_details' => [
+                'car_id' => $id,
+                'car_details' => $car_model,
+                'price_list' => $price_list,
+                'total_price' => !empty($price_list['total_price']) ? $price_list['total_price'] : 0,
+                'car_model' => $car_images,
+                'start_date' => session('start_date'),
+                'end_date' => session('end_date'),
+            ]
+        ]);
         return view('user.frontpage.single-car.view',compact('car_model','ipr_data','image_list','price_list'));
     }
 
-    public function calculatePrice($prices,$from_date = null, $to_date = null)
+    public function calculatePrice($prices, $from_date = null, $to_date = null)
     {
         $price = [];
         if (empty($from_date) && empty($to_date)) return $price;
@@ -123,20 +137,21 @@ class UserController extends Controller
             // Move to the next hour
             $current->addHour();
         }
-        $total_price = $festival_amount = $week_end_amount = $week_days_amount = 0;
+        $total_price = $festival_total = $week_end_total = $week_days_total = $festival_amount = $week_end_amount = $week_days_amount = 0;
         foreach ($dailyDetails as $date => $details) {
             $hours = $details['hours'];
             if (in_array($date, $festival_dates)) {
-                $total_price += $prices['festival'] * $hours;
-                $festival_amount = $total_price;
+                $festival_total += $prices['festival'] * $hours;
+                $festival_amount = $festival_total;
             } elseif (Carbon::parse($date)->isWeekend()) {
-                $total_price += $prices['weekend'] * $hours;
-                $week_end_amount = $total_price;
+                $week_end_total += $prices['weekend'] * $hours;
+                $week_end_amount = $week_end_total;
             } else {
-                $total_price += $prices['weekday'] * $hours;
+                $week_days_total += $prices['weekday'] * $hours;
                 $week_days_amount = $prices['weekday'] * $hours;
             }
         }
+        $total_price = $festival_total + $week_end_total + $week_days_total;
         $diffInDays = $start->diffInDays($end);
         $diffInHours = $start->diffInHours($end) % 24;
         return ['total_days'=> $diffInDays , 'total_hours'=> $diffInHours , 'total_price'=> $total_price,
@@ -144,4 +159,31 @@ class UserController extends Controller
     }
 
 
+    public function storeDocuments(Request $request)
+    {
+        $request->validate([
+            'aadhaar_number' => 'required|digits:12',
+            'driving_licence' => 'required',
+            'documents' => 'required|array|max:2',
+            'documents.*' => 'mimes:jpg,png|max:2048',
+        ]);
+        $auth_id = Auth::id();
+        $user = User::find($auth_id);
+        $user->aadhaar_number = $request['aadhaar_number'];
+        $user->driving_licence = $request['driving_licence'];
+        $user->save();
+
+        if ($request->hasFile('documents')) {
+            foreach ($request['documents'] as $image) {
+                $img_name = $image->getClientOriginalName();
+                $img_name = Auth::id() . '_' . $img_name;
+                $image->storeAs('user-documents/',  $img_name, 'public');
+                $user_doc = new UserDocument();
+                $user_doc->image_name = $img_name;
+                $user_doc->user_id = Auth::id();
+                $user_doc->save();
+            }
+        }
+        return response()->json(['success' => 'User Documents saved successfully']);
+    }
 }

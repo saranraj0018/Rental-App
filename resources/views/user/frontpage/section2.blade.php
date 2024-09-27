@@ -10,7 +10,7 @@
                         <p class="text-primary fs-12 fs-mb-9 mb-1">
                             <i class="fa-solid fa-car"></i>{{ $item->title }}
                         </p>
-                        <p class="fs-12 fs-mb-9 mb-1">
+                        <p class="fs-12 fs-mb-9 mb-1 h-40px">
                             {!! $item->description !!}
                         </p>
                         <div class="card blue-bg p-2 text-white d-flex">

@@ -5,7 +5,7 @@
                 <div class="container">
                     <input type="hidden" id="car_latitude_current" value="{{$car_model->latitude ?? ''}}">
                     <input type="hidden" id="car_longitude_current" value="{{$car_model->longitude ?? ''}}">
-                    <div id="car_location_map" style="height: 500px; width: 100%;"></div>
+                    <div id="car_location_map" style="height: 183px; width: 100%;border-radius:30px;"></div>
                 </div>
             </div>
             <div class="col-12 col-lg-6 d-none d-lg-block">

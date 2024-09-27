@@ -25,7 +25,7 @@ class OTPController extends Controller
         $otp = rand(1000, 9999);
         $phone = $request['mobile_number'];
 
-        session(['otp' => $otp, 'phone' => $phone]);
+        session(['verification_code' => $otp, 'phone' => $phone]);
         $twilio = new Client( config('services.twilio_sms.sid'), config('services.twilio_sms.token'));
         $twilio->messages->create(
             '+91' . $phone,
@@ -49,8 +49,7 @@ class OTPController extends Controller
 
         $sessionOtp = session('verification_code');
         $sessionPhone = session('phone');
-        $user = User::where('mobile', $sessionPhone)->first();
-
+        $user = User::with('userDoc')->where('mobile', $sessionPhone)->first();
         if (empty($user)) {
             return response()->json([
                 'success' => 'false',
@@ -59,13 +58,15 @@ class OTPController extends Controller
         }
         if ($request['verification_code'] == $sessionOtp) {
                 Auth::login($user); // Log the user in
+
                 return response()->json([
                     'success' => 'true',
+                    'documents' => !empty($user->userDoc) ? 1 : 0,
                     'message' => 'Login successful.',
                 ]);
         } else {
             return response()->json([
-                'success' => 'true',
+                'success' => 'false',
                 'message' => 'Invalid OTP. Please try again.'
             ], 422); // Unprocessable entity, validation error status code
         }

@@ -14,12 +14,13 @@
             <div>
                 <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link m-1 active" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true"><i class="fa fa-bars"></i></a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link m-1" id="pills-profile-tab" data-bs-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false"><i class="fa fa-th-large"></i>
+                        <a class="nav-link m-1 active" id="pills-profile-tab" data-bs-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false"><i class="fa fa-th-large"></i>
                         </a>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link m-1" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true"><i class="fa fa-bars"></i></a>
+                    </li>
+
                 </ul>
             </div>
         </div>
@@ -30,7 +31,7 @@
     <div class="mt-5">
         <div class="tab-content" id="pills-tabContent">
             <!-- TAB CONTENT-1 -->
-            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+            <div class="tab-pane fade" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
 
                 @include('user.frontpage.list-cars.tab-1')
 
@@ -38,7 +39,7 @@
             <!-- TAB CONTENT-1 ENDS-->
 
             <!-- TAB CONTENT-2 -->
-            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+            <div class="tab-pane fade show active" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                 @include('user.frontpage.list-cars.tab-2')
             </div>
             <!-- TAB CONTENT-2 ENDS-->

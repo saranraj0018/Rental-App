@@ -260,3 +260,26 @@ input:checked+.slider:before {
 .owl-carousel .owl-dots.disabled, .owl-carousel .owl-nav.disabled {
     display: block;
 }
+.my-file-border {
+    border: 1px dashed rgb(177, 177, 177);
+    border-radius: 20px;
+}
+
+.file-list {
+    margin-top: 15px;
+}
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px dashed rgb(177, 177, 177);
+}
+
+.fs-13 {
+    font-size: 13px;
+}
+.modal-content{
+    border-radius: 20px;
+}

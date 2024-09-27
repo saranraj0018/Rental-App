@@ -13,6 +13,7 @@
         </div>
     </header>
 </section>
+
 <section class="my-4 mt-5">
     <div class="container">
         <div class="row gy-3 gy-lg-0">
@@ -181,16 +182,19 @@
                             </div>
                         </div>
                         <div class="toggle-fade">
-                            <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#mobileModal">Proceed Payment</button>
+                            @if(!empty(Auth::user()))
+                            <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" id="payment">Proceed Payment</button>
+                            @else
+                                <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" id="login_payment">Login To Proceed Payment</button>
+                            @endif
                         </div>
                         <div class="d-flex justify-content-between flex-column flex-md-row toggle">
                             <div class="mb-3 mb-md-auto">
                                 <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#secondModal">
                                     <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Your Location</button>
                             </div>
-
                             <div>
-                                <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#mobileModal">Proceed Payment</button>
+                                <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" id="payment">Proceed Payment</button>
                             </div>
                         </div>
                     </form>
@@ -199,6 +203,52 @@
         </div>
     </div>
 </section>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+    // When the payment button is clicked
+    document.getElementById('payment').onclick = function(e) {
+        e.preventDefault();
+
+        let options = {
+            "key": "{{ config('services.razorpay.key') }}", // Your Razorpay key
+            "amount": {{$final_total.'00' }}, // Amount in smallest currency unit (paise, for INR)
+            "currency": "INR",
+            "name": "saran",
+            "description": " {{$car_model->carModel->model_name}}",
+            "image": "https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/razorpay-icon.png",
+            "handler": function(response) {
+                let paymentData = {
+                    payment_id: response.razorpay_payment_id,
+                    _token: "{{ csrf_token() }}"
+                };
+                $.ajax({
+                    url: '/user/payment',
+                    method: 'POST',
+                    data: paymentData,
+                    success: function(response) {
+                        // If successful, redirect to the booking page
+                        window.location.href = '/booking/success';
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle any errors (optional)
+                        console.error('Payment failed:', error);
+                    }
+                });
+            },
+            "prefill": {
+                "name": "saran", // Prefilled customer name
+                "email": "saran@gmail.com"
+            },
+            "theme": {
+                "color": "#F37254"
+            }
+        };
+
+        let rzp = new Razorpay(options);
+        rzp.open(); // Opens Razorpay modal
+    }
+</script>
 
 <!-- Second Modal Structure -->
 <div class="modal fade m-0 m-md-auto" id="secondModal" tabindex="-1" aria-labelledby="secondModalLabel" aria-hidden="true">

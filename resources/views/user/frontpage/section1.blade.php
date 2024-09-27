@@ -11,7 +11,7 @@
 @endphp
 
 
-<section class="section-1-bg">
+<section class="section-1-bg pb-3">
     <header>
         <section class="d-none d-lg-block">
             <div class="container-fluid p-3">
@@ -173,7 +173,7 @@
                 </div>
             </div>
             <div class="col-12 col-lg-2 d-flex justify-content-center d-lg-block my-auto">
-                <button type="submit" id="find_car" class="btn my-button w-100 w-lg-auto p-2">
+                <button type="submit" disabled id="find_car" class="btn my-button w-100 w-lg-auto p-2">
                     <i class=" text-white fa-solid fa-magnifying-glass"></i> Search
                 </button>
             </div>

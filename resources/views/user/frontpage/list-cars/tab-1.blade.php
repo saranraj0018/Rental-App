@@ -22,9 +22,6 @@
                                     <div class="bg-white rounded-pill w-fit px-1 fw-600 fs-12 my-auto px-2 py-1">
                                         <i class="fas fa-star" style="color:#E66742;"></i> 4.5
                                     </div>
-                                    <div class="bg-white rounded-pill w-fit fw-600 fs-12 my-auto ms-1 px-3 py-1">
-                                        Available from 4 Aug 2024
-                                    </div>
                                 </div>
                                 <p class="fs-4 fw-600 my-3 m-0">
                                     {{ $model->carModel->model_name ?? '' }}
@@ -67,11 +64,11 @@
                 </div>
             </div>
             @if(($key + 1) % 3 == 0)
-                <div class="rrr p-3 my-5">
+                <div class="rrr py-5 my-5">
                     <div class="container">
                         <div class="row">
                             <div class="col-8 my-auto p-3">
-                                <div class="text-white fs-3 fw-600">
+                                <div class="text-white fs-2 fw-600">
                                     Rent. Ride. Repeat.
                                 </div>
                                 <div class="text-white fs-14 fw-500 my-2">

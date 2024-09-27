@@ -25,6 +25,10 @@ $(function () {
         }
     }
 
+    $('#login_payment').on('click', function() {
+        $('#mobileModal').modal('show');
+    });
+
     // Send OTP form
     $('#user-otp').on('submit', function(e) {
         e.preventDefault();
@@ -60,6 +64,12 @@ $(function () {
                 success: function(response) {
                     if (response.success) {
                         $('#otpModal').modal('hide');
+                        if (response.documents === 0){
+                            $('#user_document').modal('show');
+                        }
+                        $('#login_payment')
+                            .attr('id', 'payment') // Change id to 'payment'
+                            .text('Proceed Payment');
                         $('#otp_error').text('');
                     } else {
                         $('#otp_error').text('Invalid OTP');
@@ -88,6 +98,7 @@ $(function () {
     $('.register-link').click(function() {
         $('#mobileModal').modal('hide');
         $('#registerModal').modal('show');
+        // $('#user_document').modal('show');
     });
 
     // User Registration form
@@ -121,5 +132,122 @@ $(function () {
                 }
             });
         }
+    });
+
+    // To store selected files
+    let selectedFiles = [];
+
+    // Handle file input change
+    $('#documents').on('change', function (event) {
+        let files = event.target.files;
+
+        // Clear the selectedFiles array first
+        selectedFiles = [];
+
+        // Add files to the selectedFiles array
+        $.each(files, function (i, file) {
+            selectedFiles.push(file);
+        });
+
+        // Display files
+        displayFileList();
+    });
+
+    function displayFileList() {
+        let $fileList = $('#fileList');
+        let $beforeUpload = $('#beforeUpload');
+        $fileList.empty(); // Clear current file list
+
+        $.each(selectedFiles, function (index, file) {
+            // Create a file item div
+            let $fileItem = $('<div>', { 'class': 'file-item' });
+
+            // File name span
+            let $fileName = $('<span>').text(file.name);
+
+            // Delete button
+            let $deleteButton = $('<button>', { 'class': 'btn' }).html('<i class="fa-solid fa-trash" style="color:red;"></i>');
+
+            // Delete button click event
+            $deleteButton.on('click', function () {
+                removeFile(index);
+            });
+
+            // Append file name and delete button to file item
+            $fileItem.append($fileName).append($deleteButton);
+
+            // Append file item to file list
+            $fileList.append($fileItem);
+        });
+
+        // Show or hide the before-upload section
+        $beforeUpload.css('display', selectedFiles.length === 0 ? 'flex' : 'none');
+    }
+
+
+    // Function to remove a file from the selectedFiles array
+    function removeFile(index) {
+        selectedFiles.splice(index, 1);
+        displayFileList(); // Refresh the displayed file list
+    }
+
+    // User Registration form
+    $('#user_documentation').on('submit', function(e) {
+        e.preventDefault();
+        const fields = [
+            { id: '#aadhaar_number', condition: (val) => val === '' },
+            { id: '#driving_licence', condition: (val) => val === '' },
+            { id: '#documents', condition: (val) => val === '' },
+        ];
+
+        let isValid = true;
+        fields.forEach(field => {
+            if (!validateField(field)) isValid = false;
+        });
+
+        if (isValid) {
+            let formData = new FormData(this);
+            $.ajax({
+                url: '/user/documentation', // Update with your route
+                method: 'POST',
+                data: formData,
+                processData: false, // Required for jQuery to send the data properly
+                contentType: false, // Required to handle file uploads correctly
+                success: function(response) {
+                    if (response.success) {
+                        $('#user_document').modal('hide');
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function(response) {
+                    if (response.responseJSON && response.responseJSON.errors) {
+                        let errors = response.responseJSON.errors;
+                        $('.form-control').removeClass('is-invalid');
+                        $('.invalid-feedback').empty();
+                        $.each(errors, function (key, value) {
+                            let element = $('#' + key);
+                            // For other form controls
+                            element.addClass('is-invalid');
+                            // Display the error message
+                            element.siblings('.invalid-feedback').text(value[0]);
+                        });
+                    }
+                },
+            });
+        }
+    });
+
+    $('#test_payment').on('click', function(e) {
+        $.ajax({
+            url: '/user/payment',
+            method: 'POST',
+            success: function(response) {
+
+            },
+            error: function() {
+                alert('Error during registration'); // Replace alert if needed
+            }
+        });
     });
 });
