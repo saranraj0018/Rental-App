@@ -29,6 +29,13 @@ $(function () {
         $('#mobileModal').modal('show');
     });
 
+    $('#login_user').on('click', function() {
+        $('#mobileModal').modal('show');
+    });
+
+    $('#register_user').on('click', function() {
+        $('#registerModal').modal('show');
+    });
     // Send OTP form
     $('#user-otp').on('submit', function(e) {
         e.preventDefault();
@@ -64,6 +71,7 @@ $(function () {
                 success: function(response) {
                     if (response.success) {
                         $('#otpModal').modal('hide');
+                        console.log(typeof response.documents)
                         if (response.documents === 0){
                             $('#user_document').modal('show');
                         }
@@ -236,18 +244,5 @@ $(function () {
                 },
             });
         }
-    });
-
-    $('#test_payment').on('click', function(e) {
-        $.ajax({
-            url: '/user/payment',
-            method: 'POST',
-            success: function(response) {
-
-            },
-            error: function() {
-                alert('Error during registration'); // Replace alert if needed
-            }
-        });
     });
 });

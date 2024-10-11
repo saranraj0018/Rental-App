@@ -96,6 +96,13 @@
                     <ul class="nav nav-treeview collapse" id="manageSection">
                         <!-- Hub Panel -->
 
+                        <li class="nav-item">
+                            <a href="{{ route('general.list') }}" class="nav-link">
+                                <i class="nav-icon fas fa-car"></i>
+                                <p>General Setting </p>
+                            </a>
+                        </li>
+
                             <li class="nav-item">
                                 <a href="{{ route('banner.list') }}" class="nav-link">
                                     <i class="nav-icon fas fa-file-alt"></i>
@@ -111,6 +118,8 @@
                                     <p>Coupon </p>
                                 </a>
                             </li>
+
+
 
                         <!-- Car Availability -->
 

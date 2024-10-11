@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\Trait\FaqTrait;
 use App\Http\Controllers\Controller;
+use App\Models\AdminDetail;
 use App\Models\Frontend;
 use App\Models\FrontendImage;
 use Illuminate\Http\Request;
@@ -302,6 +303,36 @@ class BannerController extends Controller
         $frontend->save();
 
         return response()->json(['success' => 'Important Points section saved successfully']);
+    }
+
+    public function generalList()
+    {
+        $general = Frontend::where('data_keys','general-setting')->first();
+        $referral_code = AdminDetail::where('role',1)->value('referral_code');
+        return view('admin.general.list',compact('general','referral_code'));
+    }
+
+    public function generalSave(Request $request)
+    {
+        $request->validate([
+            'minimum_hours' => 'required|numeric',
+            'maximum_hours' => 'required|numeric|gt:minimum_hours',
+            'delivery_fee' => 'required|numeric',
+        ], [
+            'maximum_hours.gt' => 'The maximum hours must be greater than the minimum hours.',
+        ]);
+        $data = [
+            'minimum_hours' => $request['minimum_hours'],
+            'maximum_hours' => $request['maximum_hours'],
+            'delivery_fee' => $request['delivery_fee'],
+        ];
+
+        $frontend = !empty($request['general_id'])  ? Frontend::find($request['general_id']) : new Frontend();
+        $frontend->data_keys = 'general-setting';
+        $frontend->data_values = json_encode($data);
+        $frontend->save();
+
+        return response()->json(['success' => 'General Setting Saved Successfully']);
     }
 
 }

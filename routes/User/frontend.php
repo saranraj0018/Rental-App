@@ -3,7 +3,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\CouponController;
 Use App\Http\Controllers\User\OTPController;
-use App\Http\Controllers\User\PaymentContoller;
+use App\Http\Controllers\User\PaymentController;
 use Illuminate\Http\Request;
 
 
@@ -31,27 +31,24 @@ Route::post('/api/save-geolocation', function (Request $request) {
 Route::get('/search-car/list', [UserController::class,'listCars'])->name('search-car.list');
 Route::get('/book/{model_id?}', [UserController::class, 'bookingCar'])->name('book.car');
 
-
-// coupon section
-
-Route::post('user/apply-coupon', [CouponController::class,'applyCoupon'])->name('apply.coupon');
-Route::post('user/remove-coupon', [CouponController::class, 'removeCoupon'])->name('remove.coupon');
-
-// otp section
-
 Route::post('user/send-otp', [OTPController::class, 'sendOTP'])->name('send.otp');
 Route::post('user/verify-otp', [OTPController::class, 'verifyOtp'])->name('verify.otp');
 Route::post('user/register', [OTPController::class, 'register'])->name('register');
 
-// upload documents
-Route::post('user/documentation', [UserController::class, 'storeDocuments'])->name('store.documents');
-Route::post('user/payment', [PaymentContoller::class, 'orderBooking'])->name('order.booking');
-Route::view('booking/success', 'dummy')->name('booking.success');
+Route::middleware(['auth'])->group(function () {
+    Route::post('user/apply-coupon', [CouponController::class,'applyCoupon'])->name('apply.coupon');
+    Route::post('user/remove-coupon', [CouponController::class, 'removeCoupon'])->name('remove.coupon');
 
+    // upload documents
+    Route::post('user/documentation', [UserController::class, 'storeDocuments'])->name('store.documents');
+    Route::post('user/payment', [PaymentController::class, 'orderBooking'])->name('order.booking');
+    Route::view('booking/success', 'dummy')->name('booking.success');
 
+    // upload documents
+    Route::get('user/profile', [UserController::class, 'profile'])->name('user.profile');
+    Route::get('user/download/{filename}', [UserController::class, 'downloadFile'])->name('download.file');
+    Route::post('user/document/update', [UserController::class, 'updateUser'])->name('update.user');
+    Route::post('user/logout', [UserController::class, 'logout'])->name('user.logout');
+    Route::get('booking/history', [PaymentController::class, 'bookingHistory'])->name('booking.history');
 
-Route::get('user/logout', function (Request $request) {
-   \Illuminate\Support\Facades\Auth::logout();
-    return response()->json(['status' => 'success']);
 });
-

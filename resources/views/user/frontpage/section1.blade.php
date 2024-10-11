@@ -30,11 +30,22 @@
                                 </ul>
                                 <ul class="navbar-nav navbar-light">
                                     <li class="nav-item"><a class="nav-link text-white" href="#">Home</a></li>
+                                    @if(!Auth::user())
                                     <li class="nav-item"><a class="nav-link text-white" href="#">FAQ</a></li>
+                                    @else
+                                        <li class="nav-item"><a class="nav-link text-white" href="{{ route('booking.history') }}">Booking</a></li>
+                                    @endif
                                     <li class="nav-item"><a class="nav-link text-white" href="#">Blog</a></li>
                                     <li class="nav-item"><a class="nav-link text-white" href="#">Contact-us</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">
-                                            <img src="{{ asset('user/img/Group 4 (1).png') }}" alt="Site-Logo" class="img-fluid d-block sign-up-icon px-2">Sign In / Sign Up</a></li>
+                                    <li class="nav-item">
+                                        @if(!Auth::user())
+                                        <button type="button" class="btn btn-primary" id="login_user">Sign-In</button>
+                                        <button type="button" class="btn btn-primary" id="register_user">Sign-Up</button>
+                                        @else
+                                            <p class="fw-500 f-16 text-white">{{ \Illuminate\Support\Facades\Auth::user()->name ?? ''  }}</p>
+                                            <a href="{{ route('user.profile') }}">View profile</a>
+                                        @endif
+                                           </li>
                                 </ul>
                             </div>
                         </div>

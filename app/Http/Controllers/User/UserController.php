@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -89,8 +90,8 @@ class UserController extends Controller
         $car_model = !empty($id) ? CarDetails::with('carModel')->find($id) : [];
 
         $prices = ['festival' =>  $car_model->carModel->peak_reason_surge ?? 0,
-                  'weekend' => $car_model->carModel->weekend_surge ?? 0,
-                   'weekday' =>  $car_model->carModel->price_per_hour ?? 0];
+            'weekend' => $car_model->carModel->weekend_surge ?? 0,
+            'weekday' =>  $car_model->carModel->price_per_hour ?? 0];
         $price_list = $this->calculatePrice($prices,session('start_date'),session('end_date'));
         $car_images = CarModel::with(['carDoc'])->where('car_model_id', $car_model->model_id)->first();
         $image_list = !empty($car_images->carDoc) ? $car_images->carDoc : [];
@@ -155,7 +156,7 @@ class UserController extends Controller
         $diffInDays = $start->diffInDays($end);
         $diffInHours = $start->diffInHours($end) % 24;
         return ['total_days'=> $diffInDays , 'total_hours'=> $diffInHours , 'total_price'=> $total_price,
-                 'festival_amount' => $festival_amount , 'week_end_amount' => $week_end_amount, 'week_days_amount' => $week_days_amount];
+            'festival_amount' => $festival_amount , 'week_end_amount' => $week_end_amount, 'week_days_amount' => $week_days_amount];
     }
 
 
@@ -167,7 +168,7 @@ class UserController extends Controller
             'documents' => 'required|array|max:2',
             'documents.*' => 'mimes:jpg,png|max:2048',
         ]);
-        $auth_id = Auth::id();
+        $auth_id = Auth::id() ?? 0;
         $user = User::find($auth_id);
         $user->aadhaar_number = $request['aadhaar_number'];
         $user->driving_licence = $request['driving_licence'];
@@ -185,5 +186,70 @@ class UserController extends Controller
             }
         }
         return response()->json(['success' => 'User Documents saved successfully']);
+    }
+
+
+    public function profile() {
+        $user_details = User::with('userDoc')->find(Auth::id())->first();
+        return view('user.frontpage.profile.view',compact('user_details'));
+    }
+
+    public function downloadFile($filename)
+    {
+        $filePath = storage_path('app/public/user-documents/' . $filename);
+        if (file_exists($filePath)) {
+            return response()->download($filePath);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function updateUser(Request $request)
+    {
+        $request->validate([
+            'user_name' => 'required|string|max:255',
+            'user_mobile' => 'required|numeric|digits:10',
+            'aadhaar_number' => 'required|digits:12',
+            'driving_licence' => 'required',
+            'driving_licence_doc' => 'nullable|mimes:jpg,png,pdf|max:2048',
+            'aadhaar_number_doc' => 'nullable|mimes:jpg,png,pdf|max:2048',
+        ]);
+        $auth_id = Auth::id() ?? 0;
+        $user = User::find($auth_id);
+        $user->name = $request['user_name'];
+        $user->mobile = $request['user_mobile'];
+        $user->aadhaar_number = $request['aadhaar_number'];
+        $user->driving_licence = $request['driving_licence'];
+
+        $user->save();
+
+
+        $uniq_id =  Str::random(6);
+        if ($request->hasFile('driving_licence_doc') && !empty($request['driving_licence_id'])) {
+            $user_doc = UserDocument::find($request['driving_licence_id']);
+            $img_name = $request->file('driving_licence_doc')->getClientOriginalName();
+            $img_name = $uniq_id . '_' . $img_name;
+            $request->driving_licence_doc->storeAs('user-documents/', $img_name, 'public');
+            $user_doc->image_name =  $img_name;
+            $user_doc->user_id = Auth::id();
+            $user_doc->save();
+        }
+
+        if ($request->hasFile('aadhaar_number_doc') && !empty($request['aadhaar_number_id'])) {
+            $user_docs = UserDocument::find($request['aadhaar_number_id']);
+            $img_name = $request->file('aadhaar_number_doc')->getClientOriginalName();
+            $img_name = $uniq_id . '_' . $img_name;
+            $request->aadhaar_number_doc->storeAs('user-documents/', $img_name, 'public');
+            $user_docs->image_name =  $img_name;
+            $user_docs->user_id = Auth::id();
+            $user_docs->save();
+        }
+
+    }
+
+    public function logout()
+    {
+       Auth::logout();
+       return redirect()->route('home');
     }
 }

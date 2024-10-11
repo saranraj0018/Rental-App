@@ -9,4 +9,5 @@
     @include('user.frontpage.section8')
     @include('user.frontpage.section9')
     @include('user.frontpage.footer')
+    @include('user.frontpage.single-car.verified-model')
 @endsection

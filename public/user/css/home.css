@@ -496,6 +496,41 @@ button.accordion-button.collapsed {
 .vt-bg {
     background-color: #EEF7FF;
 }
+.back-btn {
+    background-color: #4161a6;
+    border: 1px solid rgba(255, 255, 255, 0.57);
+}
+.profile-bg{
+    background-color: #f9fafb;
+}
+.border-dotted {
+    border: 1px dashed #bdbdbd; /* Change color and size as needed */
+}
 
+.booking-header{
+    background: url('../img/Banner (16).png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.heart-icon{
+    width:80%;
+}
+.bg-blue{
+    background-color: #123984;
+}
+.booking-table{
+    background-color: #f9fafb;
+    border-radius: 10px;
+}
+
+.booking-table tr td:nth-child(1){
+    padding-right: 50px;
+}
+.nav-pills .nav-link, .nav-pills .show>.nav-link{
+    color:#123984;
+    background-color: white !important;
+}
 /*--------------HOME-SECTION-9---------------*/
 

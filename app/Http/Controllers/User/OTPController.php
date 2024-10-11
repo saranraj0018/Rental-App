@@ -47,21 +47,20 @@ class OTPController extends Controller
             'verification_code' => 'required|digits:4',
         ]);
 
-        $sessionOtp = session('verification_code');
-        $sessionPhone = session('phone');
-        $user = User::with('userDoc')->where('mobile', $sessionPhone)->first();
+        $session_otp = session('verification_code');
+        $session_phone = session('phone');
+        $user = User::with('userDoc')->where('mobile', $session_phone)->first();
         if (empty($user)) {
             return response()->json([
                 'success' => 'false',
                 'message' => 'User Not registered. Please registered Account try again.'
-            ], 422); // Unprocessable entity, validation error status code
+            ], 422);
         }
-        if ($request['verification_code'] == $sessionOtp) {
+        if ($request['verification_code'] == $session_otp) {
                 Auth::login($user); // Log the user in
-
                 return response()->json([
                     'success' => 'true',
-                    'documents' => !empty($user->userDoc) ? 1 : 0,
+                    'documents' => !empty(!$user->userDoc->isEmpty()) ? 1 : 0,
                     'message' => 'Login successful.',
                 ]);
         } else {

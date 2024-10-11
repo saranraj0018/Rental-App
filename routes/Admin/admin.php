@@ -100,5 +100,9 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::post('/holiday/save', [HolidayController::class, 'save'])->name('holiday.save');
         Route::delete('/holiday/{id?}/delete', [HolidayController::class, 'delete'])->name('holiday.delete');
         Route::get('/holiday/search', [HolidayController::class, 'search'])->name('holiday.search');
+
+        // Front-end Banner Section
+        Route::get('/general', [BannerController::class, 'generalList'])->name('general.list');
+        Route::post('/general/save', [BannerController::class, 'generalSave'])->name('general.save');
     });
 });

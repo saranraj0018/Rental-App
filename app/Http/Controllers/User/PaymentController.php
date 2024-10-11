@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Razorpay\Api\Api;
 
-class PaymentContoller extends Controller
+class PaymentController extends Controller
 {
 
     // Store booking details
@@ -38,6 +38,12 @@ class PaymentContoller extends Controller
             'success' => true,
             'message' => 'Payment successful',
         ]);
+    }
+
+    public function bookingHistory() {
+        $booking = Booking::with(['user','car'])->get();
+        dd($booking);
+        return view('user.frontpage.booking.list', compact('booking'));
     }
 
 }

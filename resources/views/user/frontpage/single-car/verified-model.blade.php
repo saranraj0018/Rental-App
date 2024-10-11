@@ -145,7 +145,7 @@
                     <div id="fileList" class="file-list">
                         <!-- Uploaded files will be displayed here -->
                     </div>
-                    <input type="file" id="documents" name="documents[]" class="form-control form-control-sm mt-3" multiple accept=".png, .jpg, .jpeg">
+                    <input type="file" id="documents" name="documents[]" class="form-control form-control-sm mt-3" multiple accept=".png, .jpg, .jpeg, .pdf">
                     <div class="invalid-feedback">
                         Please select the Aadhaar and Driving License Image.
                     </div>

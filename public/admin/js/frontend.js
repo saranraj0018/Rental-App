@@ -352,5 +352,62 @@ $(function () {
                 }
             });
         });
+
+        $('#general_section').on('submit', function(e) {
+            e.preventDefault(); // Prevent form submission for validation
+
+            let isValid = true;
+
+            // Define the elements and their conditions
+            let fields = [
+                {id: '#minimum_hours', condition: (val) => val.trim() === ''},
+                {id: '#maximum_hours', condition: (val) => val.trim() === ''},
+                {id: '#delivery_fee',condition: (val) => val.trim() === ''},
+            ];
+
+            fields.forEach(field => {
+                let element = $(field.id);
+                let value = element.val();
+                if (field.condition(value)) {
+                    element.addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    element.removeClass('is-invalid');
+                }
+            });
+
+            if (isValid) {
+                // $('#banner_save').prop('disabled', true);  // Disable submit button during AJAX
+
+                $.ajax({
+                    url: '/admin/general/save',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        alertify.success(response.success);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1000);
+                    },
+                    error: function(response) {
+                        if (response.responseJSON && response.responseJSON.errors) {
+                            let errors = response.responseJSON.errors;
+                            $('.form-control').removeClass('is-invalid');
+                            $('.invalid-feedback').empty();
+                            $.each(errors, function (key, value) {
+                                let element = $('#' + key);
+                                // For other form controls
+                                element.addClass('is-invalid');
+                                // Display the error message
+                                element.siblings('.invalid-feedback').text(value[0]);
+                            });
+                        }
+                    },
+                    complete: function() {
+                        // $('#banner_save').prop('disabled', false);  // Re-enable the submit button
+                    }
+                });
+            }
+        });
     });
 });

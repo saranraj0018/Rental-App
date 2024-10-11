@@ -51136,7 +51136,7 @@ module.exports = function shimFlags() {
   sax.STATE = {
     BEGIN: S++, // leading byte order mark or whitespace
     BEGIN_WHITESPACE: S++, // leading whitespace
-    TEXT: S++, // general stuff
+    TEXT: S++, //general stuff
     TEXT_ENTITY: S++, // &amp and such.
     OPEN_WAKA: S++, // <
     SGML_DECL: S++, // <!BLARG
