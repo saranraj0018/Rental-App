@@ -120,7 +120,7 @@
                         </div>
                         <div class="d-flex justify-content-between text-white mt-3 mb-1 border-bottom border-1 toggle">
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Doorstep delivery & pickup</p>
-                            <p class="fs-14 fs-mb-12 mt-2 mb-3">₹500</p>
+                            <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{ $general_section['delivery_fee'] ?? 0 }}</p>
                         </div>
                         <div class="d-flex justify-content-between text-white mb-2 border-bottom border-1">
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Refundable security deposit</p>
@@ -128,8 +128,9 @@
                         </div>
                         @php
                             $total_price = !empty($price_list['total_price']) ? $price_list['total_price'] : 0 ;
-                            $sub_total_price = $total_price + $car_model->carModel->dep_amount ?? 0;
                             $coupon = !empty(session('coupon')) ? session('coupon') : [] ;
+                            $delivery_fee = !empty(session('delivery_fee')) ? session('delivery_fee') : 0 ;
+                            $sub_total_price = $total_price + $delivery_fee + $car_model->carModel->dep_amount ?? 0;
                             $type = !empty($coupon['type']) ? $coupon['type'] : 0 ;
                             $amount = !empty($type) && $type == 1 ? $coupon['discount'] : ($type == 2 ? ($sub_total_price * $coupon['discount']) / 100 : 0);
                         @endphp
@@ -162,7 +163,7 @@
                                     <div class="d-flex">
                                         <div>
                                             <label class="switch m-0">
-                                                <input type="checkbox" id="toggleSwitch">
+                                                <input type="checkbox" id="delivery_amount">
                                                 <span class="slider"></span>
                                             </label>
                                         </div>
@@ -172,9 +173,11 @@
                                     </div>
                                 </div>
                                 @php
-                                     $final_total = $sub_total_price - $amount ?? 0;
+                                     $final_total = $sub_total_price - $amount ?? 0 ;
                                     @endphp
                                 <input type="hidden" id="coupon_before" value="{{$sub_total_price}}">
+                                <input type="hidden" id="door_delivery" value="{{$general_section['delivery_fee'] ?? 0}}">
+                                <input type="hidden" id="final_amount" value="{{$final_total}}">
                                 <div class="text-white">
                                     <p class="fs-20 fs-mb-16 my-2 text-end">
                                         Total Price ₹<span id="total_price">{{ $final_total }}</span></p>

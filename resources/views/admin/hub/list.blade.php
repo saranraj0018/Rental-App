@@ -9,9 +9,6 @@
                 <div class="col-sm-6">
                     <h1>Pickup/Delivery List</h1>
                 </div>
-                <div class="col-sm-6 text-right">
-                    <a href="" class="btn btn-primary">New Task</a>
-                </div>
             </div>
         </div>
         <!-- /.container-fluid -->
@@ -56,16 +53,20 @@
                         <tbody>
                         @if(!empty($booking))
                             @foreach($booking as $item)
+
+                                @php
+                                    $booking_details = !empty($item->car_details) ? json_decode($item->car_details) : [];
+                                    @endphp
                                 <tr>
                                     <td>{{ $item->booking_id }}</td>
                                     <td>{{ $item->user->name ?? ''}}</td>
-                                    <td>{{ $item->car->model ?? '' }}</td>
+                                    <td>{{$booking_details->car_model->model_name ?? '' }}</td>
                                     <td>{{ $item->car->register_number }}</td>
                                     <td>{{ $item->start_date }}</td>
                                     <td>{{ $item->end_date}}</td>
                                     <td>{{ $item->total_price}}</td>
-                                    <td>{{ $item->total_price}}</td>
-                                    <td>{{ $item->updated_date}}</td>
+                                    <td>Received</td>
+                                    <td>{{ $item->created_at}}</td>
                                     <td>
                                         <a href="javascript:void(0)" class="holiday_edit">
                                             <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

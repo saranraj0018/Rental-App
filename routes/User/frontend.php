@@ -50,5 +50,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('user/document/update', [UserController::class, 'updateUser'])->name('update.user');
     Route::post('user/logout', [UserController::class, 'logout'])->name('user.logout');
     Route::get('booking/history', [PaymentController::class, 'bookingHistory'])->name('booking.history');
+    Route::post('user/update-delivery-fee', [PaymentController::class, 'updateDeliveryFee'])->name('update.fee');
+
 
 });

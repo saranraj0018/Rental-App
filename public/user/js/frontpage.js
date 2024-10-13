@@ -281,25 +281,40 @@ $(function () {
         //         });
         //     });
         // });
-        // document.getElementById('toggleSwitch').addEventListener('change', function() {
-        //     const toggleDivs = document.querySelectorAll('.toggle');
-        //     const show = this.checked;
-        //     const toggleFadeDiv = document.querySelector('.toggle-fade');
-        //     const isChecked = this.checked;
-        //
-        //     toggleDivs.forEach(div => {
-        //         if (show) {
-        //             div.classList.add('show');
-        //         } else {
-        //             div.classList.remove('show');
-        //         }
-        //     });
-        //     if (isChecked) {
-        //         toggleFadeDiv.style.display = 'none';
-        //     } else {
-        //         toggleFadeDiv.style.display = 'block';
-        //     }
-        // });
+        $('#delivery_amount').on('change', function() {
+            const isChecked = $(this).is(':checked');
+            let deliveryFee = isChecked ?  parseFloat($('#door_delivery').val()) : 0;
+            let final_amount = parseFloat($('#final_amount').val());
+            const toggleDivs = $('.toggle');
+            const toggleFadeDiv = $('.toggle-fade');
+
+            if (isChecked) {
+                toggleDivs.show().addClass('show');
+                toggleFadeDiv.hide(); // Hide the fade div
+                let final_total = final_amount + deliveryFee;
+                $('#total_price').text(final_total);
+            } else {
+                toggleDivs.hide().removeClass('show');
+                toggleFadeDiv.show(); // Show the fade div
+                let final_total = final_amount - deliveryFee;
+                $('#total_price').text(final_total);
+            }
+
+            // Send an AJAX request to update the session
+            $.ajax({
+                url: '/user/update-delivery-fee',
+                type: 'POST',
+                data: {
+                    delivery_fee: deliveryFee
+                },
+                success: function(response) {
+                    console.log(response.message);
+                },
+                error: function(xhr) {
+                    console.error('An error occurred:', xhr);
+                }
+            });
+        });
 
         $('#start_date_time').on('change', calculateDuration);
         $('#end_date_time').on('change', calculateDuration);

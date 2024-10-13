@@ -21,7 +21,7 @@ class PaymentController extends Controller
       $booking->booking_id = $id;
       $booking->user_id = Auth::id();
       $booking->car_id = session('booking_details.car_id');
-      $booking->total_price = session('booking_details.total_price');
+      $booking->total_price = session('booking_details.total_price') + session('delivery_fee') ?? 0;
       $booking->start_date = formDateTime(session('booking_details.start_date'));
       $booking->end_date = formDateTime(session('booking_details.end_date'));
       $booking->status = 1;
@@ -42,8 +42,20 @@ class PaymentController extends Controller
 
     public function bookingHistory() {
         $booking = Booking::with(['user','car'])->get();
-        dd($booking);
         return view('user.frontpage.booking.list', compact('booking'));
+    }
+
+    public function updateDeliveryFee(Request $request)
+    {
+        if (!empty($request['delivery_fee'])) {
+            // Store the delivery fee in the session
+            session(['delivery_fee' => $request['delivery_fee']]);
+            return response()->json(['message' => 'Delivery fee added']);
+        } else {
+            // Remove the delivery fee from the session
+            session()->forget('delivery_fee');
+            return response()->json(['message' => 'Delivery fee removed']);
+        }
     }
 
 }

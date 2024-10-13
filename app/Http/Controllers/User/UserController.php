@@ -95,8 +95,11 @@ class UserController extends Controller
         $price_list = $this->calculatePrice($prices,session('start_date'),session('end_date'));
         $car_images = CarModel::with(['carDoc'])->where('car_model_id', $car_model->model_id)->first();
         $image_list = !empty($car_images->carDoc) ? $car_images->carDoc : [];
-        $ipr_info = Frontend::where('data_keys','ipr-info-section')->first();
-        $ipr_data = !empty($ipr_info['data_values']) ? json_decode($ipr_info['data_values'],true) : [];
+        $ipr_info = Frontend::whereIn('data_keys',['ipr-info-section','general-setting'])->get();
+        $info_section = !empty($ipr_info) ? $ipr_info->first() : [];
+        $ipr_data = !empty($info_section['data_values']) ? json_decode($info_section['data_values'],true) : [];
+        $general_setting = !empty($ipr_info) ? $ipr_info->last() : [];
+        $general_section =  !empty($general_setting['data_values']) ? json_decode($general_setting['data_values'],true) : [];
         // Store booking details in session
         session([
             'booking_details' => [
@@ -109,7 +112,7 @@ class UserController extends Controller
                 'end_date' => session('end_date'),
             ]
         ]);
-        return view('user.frontpage.single-car.view',compact('car_model','ipr_data','image_list','price_list'));
+        return view('user.frontpage.single-car.view',compact('car_model','ipr_data','image_list','price_list','general_section'));
     }
 
     public function calculatePrice($prices, $from_date = null, $to_date = null)
@@ -138,7 +141,7 @@ class UserController extends Controller
             // Move to the next hour
             $current->addHour();
         }
-        $total_price = $festival_total = $week_end_total = $week_days_total = $festival_amount = $week_end_amount = $week_days_amount = 0;
+       $festival_total = $week_end_total = $week_days_total = $festival_amount = $week_end_amount = $week_days_amount = 0;
         foreach ($dailyDetails as $date => $details) {
             $hours = $details['hours'];
             if (in_array($date, $festival_dates)) {
@@ -149,7 +152,7 @@ class UserController extends Controller
                 $week_end_amount = $week_end_total;
             } else {
                 $week_days_total += $prices['weekday'] * $hours;
-                $week_days_amount = $prices['weekday'] * $hours;
+                $week_days_amount = $week_days_total;
             }
         }
         $total_price = $festival_total + $week_end_total + $week_days_total;

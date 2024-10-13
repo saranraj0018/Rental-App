@@ -48,7 +48,7 @@
                                 <p class="fs-15 fw-600 mb-2">
                                     ₹{{ $price * 24 ?? '' }} <span class="fw-500 fs-12">per day</span>
                                 </p>
-                                <a href="{{ route('book.car', ['model_id' => $model->model_id]) }}" class="btn my-button fs-14">Book now</a>
+                                <a href="{{ route('book.car', ['model_id' => $model->id]) }}" class="btn my-button fs-14">Book now</a>
                             </div>
                         </div>
                     </div>
