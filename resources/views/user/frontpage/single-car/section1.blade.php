@@ -158,20 +158,7 @@
                         </div>
                         <p id="discount_text" class="fs-14 fs-mb-12 mt-2 mb-3 text-success"></p>
                         <div class="mt-1 pt-2 mb-3">
-                            <div class="mt-5 d-flex justify-content-between flex-column flex-md-row">
-                                <div class="my-auto">
-                                    <div class="d-flex">
-                                        <div>
-                                            <label class="switch m-0">
-                                                <input type="checkbox" id="delivery_amount">
-                                                <span class="slider"></span>
-                                            </label>
-                                        </div>
-                                        <div>
-                                            <span class="fs-14 ms-2 text-white">Door Step Delievery</span>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="mt-2 mt-lg-5">
                                 @php
                                      $final_total = $sub_total_price - $amount ?? 0 ;
                                     @endphp
@@ -184,20 +171,33 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="toggle-fade">
-                            @if(!empty(Auth::user()))
-                            <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" id="payment">Proceed Payment</button>
-                            @else
-                                <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" id="login_payment">Login To Proceed Payment</button>
-                            @endif
-                        </div>
-                        <div class="d-flex justify-content-between flex-column flex-md-row toggle">
-                            <div class="mb-3 mb-md-auto">
-                                <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#secondModal">
-                                    <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Your Location</button>
+                        <div class="d-flex justify-content-between flex-column flex-md-row">
+                            <div>
+
+                                <div class="m-minus-top my-auto">
+                                    <div class="d-flex mb-3">
+                                        <div>
+                                            <label class="switch m-0">
+                                                <input type="checkbox" id="delivery_amount">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <span class="fs-14 ms-2 text-white">Door Step Delievery</span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 mb-md-auto toggle">
+                                        <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#secondModal">
+                                            <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Your Location</button>
+                                    </div>
+                                </div>
                             </div>
                             <div>
-                                <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" id="payment">Proceed Payment</button>
+                                @if(!empty(Auth::user()))
+                                <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto payment" id="payment">Proceed Payment</button>
+                                @else
+                                    <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" id="login_payment">Login To Proceed Payment</button>
+                                @endif
                             </div>
                         </div>
                     </form>

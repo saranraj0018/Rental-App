@@ -534,3 +534,29 @@ button.accordion-button.collapsed {
 }
 /*--------------HOME-SECTION-9---------------*/
 
+.back-btn {
+    background-color: #4161a6;
+    border: 1px solid rgba(255, 255, 255, 0.57);
+}
+.b-confirm-bg{
+    background-image: url('../assets/Booking\ Confermation.png');
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.bg-blue{
+    background-color: #123984 !important;
+}
+.check-icon{
+    height:10%;
+    width:10%;
+}
+.my-bc{
+    box-shadow: 0px 0px 14.629px 0px #D3E8FF;
+    border-radius: 27.429px;
+    border: 0.914px solid #FFF;
+    width:50%;
+}
+.m-minus-top-48{
+margin-top:-46px !important;
+}

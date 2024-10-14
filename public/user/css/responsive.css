@@ -131,4 +131,7 @@
         width: 385px;
         margin-top: -35px;
     }
+    .m-minus-top-48{
+        margin-top:0 !important;
+    }
 }

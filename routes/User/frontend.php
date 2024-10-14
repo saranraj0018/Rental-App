@@ -42,7 +42,7 @@ Route::middleware(['auth'])->group(function () {
     // upload documents
     Route::post('user/documentation', [UserController::class, 'storeDocuments'])->name('store.documents');
     Route::post('user/payment', [PaymentController::class, 'orderBooking'])->name('order.booking');
-    Route::view('booking/success', 'dummy')->name('booking.success');
+    Route::view('booking/success', 'user.frontpage.booking.success')->name('booking.success');
 
     // upload documents
     Route::get('user/profile', [UserController::class, 'profile'])->name('user.profile');

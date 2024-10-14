@@ -29,6 +29,10 @@ $(function () {
         $('#mobileModal').modal('show');
     });
 
+    $('#login_map_payment').on('click', function() {
+        $('#mobileModal').modal('show');
+    });
+
     $('#login_user').on('click', function() {
         $('#mobileModal').modal('show');
     });

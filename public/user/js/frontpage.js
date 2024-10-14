@@ -283,38 +283,38 @@ $(function () {
         // });
         $('#delivery_amount').on('change', function() {
             const isChecked = $(this).is(':checked');
-            let deliveryFee = isChecked ?  parseFloat($('#door_delivery').val()) : 0;
-            let final_amount = parseFloat($('#final_amount').val());
+            const deliveryFee = isChecked ? parseFloat($('#door_delivery').val()) : 0;
+            const finalAmount = parseFloat($('#final_amount').val());
             const toggleDivs = $('.toggle');
             const toggleFadeDiv = $('.toggle-fade');
+            const toggleMarginDivs = $('.m-minus-top');
 
-            if (isChecked) {
-                toggleDivs.show().addClass('show');
-                toggleFadeDiv.hide(); // Hide the fade div
-                let final_total = final_amount + deliveryFee;
-                $('#total_price').text(final_total);
-            } else {
-                toggleDivs.hide().removeClass('show');
-                toggleFadeDiv.show(); // Show the fade div
-                let final_total = final_amount - deliveryFee;
-                $('#total_price').text(final_total);
-            }
+            // Toggle visibility and classes for the '.toggle' elements
+            toggleDivs.toggle(isChecked).toggleClass('show', isChecked);
+            toggleFadeDiv.toggle(!isChecked); // Show or hide the fade div based on the checkbox
+
+            // Adjust classes for the '.m-minus-top' elements
+            toggleMarginDivs.toggleClass('m-minus-top-48', isChecked)
+                .toggleClass('my-auto', !isChecked);
+
+            // Calculate and update the total price
+            const finalTotal = isChecked ? finalAmount + deliveryFee : finalAmount - deliveryFee;
+            $('#total_price').text(finalTotal);
 
             // Send an AJAX request to update the session
             $.ajax({
                 url: '/user/update-delivery-fee',
                 type: 'POST',
-                data: {
-                    delivery_fee: deliveryFee
-                },
+                data: { delivery_fee: deliveryFee },
                 success: function(response) {
                     console.log(response.message);
                 },
                 error: function(xhr) {
-                    console.error('An error occurred:', xhr);
+                    console.error('Error updating delivery fee:', xhr);
                 }
             });
         });
+
 
         $('#start_date_time').on('change', calculateDuration);
         $('#end_date_time').on('change', calculateDuration);
