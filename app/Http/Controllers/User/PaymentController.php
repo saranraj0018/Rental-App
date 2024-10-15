@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\BookingDetail;
+use App\Models\CarDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Razorpay\Api\Api;
@@ -34,6 +35,10 @@ class PaymentController extends Controller
       $booking_details->coupon = !empty(session('coupon')) ?  json_encode(session('coupon')) : null;
       $booking_details->save();
 
+        $car_status = CarDetails::find(session('booking_details.car_id'));
+        $car_status->status = 2;
+        $car_status->save();
+        session(['booking_id' => $id]);
         return response()->json([
             'success' => true,
             'message' => 'Payment successful',

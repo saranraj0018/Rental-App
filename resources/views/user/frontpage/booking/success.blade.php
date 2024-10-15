@@ -21,9 +21,9 @@
             </div>
             <div class="text-center fs-16 my-4">
                 Your booking is confirmed! Please visit the Booking page
-                to verify the details. Booking ID: [Your Booking ID].
+                to verify the details. Booking ID: {{ session('booking_id') }}.
             </div>
-            <button class="btn bg-blue text-white w-fit mx-auto rounded-pill">View Update</button>
+            <a href="{{ route('home') }}" class="btn bg-blue text-white w-fit mx-auto rounded-pill">Another Booking</a>
         </div>
     </div>
 </section>

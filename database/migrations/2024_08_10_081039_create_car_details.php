@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('address',255)->nullable();
             $table->string('model_id');
             $table->string('register_number',144);
+            $table->tinyInteger('status')->nullable()->comment('1-booking, 2-booked');
             $table->bigInteger('current_km');
             $table->timestamps();
         });

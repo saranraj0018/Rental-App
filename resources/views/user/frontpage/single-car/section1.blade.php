@@ -194,7 +194,7 @@
                             </div>
                             <div>
                                 @if(!empty(Auth::user()))
-                                <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto payment" id="payment">Proceed Payment</button>
+                                <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" id="payment">Proceed Payment</button>
                                 @else
                                     <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" id="login_payment">Login To Proceed Payment</button>
                                 @endif

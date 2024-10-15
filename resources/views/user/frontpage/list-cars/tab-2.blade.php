@@ -48,7 +48,14 @@
                                 <p class="fs-15 fw-600 mb-2">
                                     ₹{{ $price * 24 ?? '' }} <span class="fw-500 fs-12">per day</span>
                                 </p>
-                                <a href="{{ route('book.car', ['model_id' => $model->id]) }}" class="btn my-button fs-14">Book now</a>
+                                @if($model->status == 1)
+                                    <a href="{{ route('book.car', ['model_id' => $model->id]) }}" class="btn my-button fs-14">Book now</a>
+                                @else
+                                    <button class="sold-button btn fs-14 float-end">
+                                        Sold
+                                    </button>
+                                @endif
+
                             </div>
                         </div>
                     </div>

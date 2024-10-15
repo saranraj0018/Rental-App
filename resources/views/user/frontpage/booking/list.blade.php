@@ -90,20 +90,24 @@
                         <div class="table-responsive">
                             <table class="table booking-table table-borderless">
                                 <tbody>
+                                @foreach($booking as $details)
+                                    @php
+                                        $car_details = !empty($details->car_details) ? json_decode($details->car_details) : null;
+                                    @endphp
                                 <tr>
                                     <td>
                                         <div class="text-success fs-12 fs-mb-9">
                                             <i class="fa-solid fa-circle fs-12 fs-mb-9"></i> Booking Confirmed
                                         </div>
                                         <div class="fs-5 my-1 my-lg-2 fw-500 fs-mb-12">
-                                            Maruti Swift
+                                           {{ $car_details->car_model->model_name ?? '' }}
                                         </div>
                                         <div class="d-flex fs-12 fs-mb-9">
                                             <div>
                                                 <i class="bg-blue rounded-circle p-1 p-lg-2 text-white fa-solid fa-location-dot fs-12"></i>
                                             </div>
                                             <div class="ms-1 fw-500 my-auto">
-                                                RS Puram,Coimbatore.
+                                                {{ '' }}
                                             </div>
                                         </div>
                                     </td>
@@ -112,7 +116,7 @@
                                             Booking ID
                                         </div>
                                         <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            59437584
+                                            {{ $details->booking_id ?? '' }}
                                         </div>
                                     </td>
                                     <td class="pt-4">
@@ -120,7 +124,7 @@
                                             Starting Date
                                         </div>
                                         <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            12/08/2024 09:30AM
+                                            {{ $details->start_date ?? '' }}
                                         </div>
                                     </td>
                                     <td class="pt-4">
@@ -128,7 +132,7 @@
                                             End Date
                                         </div>
                                         <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            13/08/2024 01:30PM
+                                            {{ $details->end_date ?? '' }}
                                         </div>
                                     </td>
                                     <td class="pt-4">
@@ -136,67 +140,14 @@
                                             Total Price
                                         </div>
                                         <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            ₹11,599
+                                            ₹ {{ $details->total_price ?? '' }}
                                         </div>
                                     </td>
                                     <td class="pt-4 pt-lg-5">
                                         <a class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none">View Details</a>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <div class="text-success fs-12 fs-mb-9">
-                                            <i class="fa-solid fa-circle fs-12 fs-mb-9"></i> Booking Confirmed
-                                        </div>
-                                        <div class="fs-5 my-1 my-lg-2 fw-500 fs-mb-12">
-                                            Maruti Swift
-                                        </div>
-                                        <div class="d-flex fs-12 fs-mb-9">
-                                            <div>
-                                                <i class="bg-blue rounded-circle p-1 p-lg-2 text-white fa-solid fa-location-dot fs-12"></i>
-                                            </div>
-                                            <div class="ms-1 fw-500 my-auto">
-                                                RS Puram,Coimbatore.
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="pt-4">
-                                        <div class="fs-14 fw-500 fs-mb-12">
-                                            Booking ID
-                                        </div>
-                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            59437584
-                                        </div>
-                                    </td>
-                                    <td class="pt-4">
-                                        <div class="fs-14 fw-500 fs-mb-12">
-                                            Starting Date
-                                        </div>
-                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            12/08/2024 09:30AM
-                                        </div>
-                                    </td>
-                                    <td class="pt-4">
-                                        <div class="fs-14 fw-500 fs-mb-12">
-                                            End Date
-                                        </div>
-                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            13/08/2024 01:30PM
-                                        </div>
-                                    </td>
-                                    <td class="pt-4">
-                                        <div class="fs-14 fw-500 fs-mb-12">
-                                            Total Price
-                                        </div>
-                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            ₹11,599
-                                        </div>
-                                    </td>
-                                    <td class="pt-4 pt-lg-5">
-                                        <a class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none">View Details</a>
-                                    </td>
-                                </tr>
-
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -213,112 +164,59 @@
                         <div class="table-responsive">
                             <table class="table booking-table table-borderless">
                                 <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="text-danger fs-12 fs-mb-9">
-                                            <i class="fa-solid fa-circle fs-12 fs-mb-9"></i> Completed
-                                        </div>
-                                        <div class="fs-5 my-1 my-lg-2 fw-500 fs-mb-12">
-                                            Maruti Swift
-                                        </div>
-                                        <div class="d-flex fs-12 fs-mb-9">
-                                            <div>
-                                                <i class="bg-blue rounded-circle p-1 p-lg-2 text-white fa-solid fa-location-dot fs-12"></i>
-                                            </div>
-                                            <div class="ms-1 fw-500 my-auto">
-                                                RS Puram,Coimbatore.
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="pt-4">
-                                        <div class="fs-14 fw-500 fs-mb-12">
-                                            Booking ID
-                                        </div>
-                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            59437584
-                                        </div>
-                                    </td>
-                                    <td class="pt-4">
-                                        <div class="fs-14 fw-500 fs-mb-12">
-                                            Starting Date
-                                        </div>
-                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            12/08/2024 09:30AM
-                                        </div>
-                                    </td>
-                                    <td class="pt-4">
-                                        <div class="fs-14 fw-500 fs-mb-12">
-                                            End Date
-                                        </div>
-                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            13/08/2024 01:30PM
-                                        </div>
-                                    </td>
-                                    <td class="pt-4">
-                                        <div class="fs-14 fw-500 fs-mb-12">
-                                            Total Price
-                                        </div>
-                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            ₹11,599
-                                        </div>
-                                    </td>
-                                    <td class="pt-4 pt-lg-5">
-                                        <a class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none">View Details</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="text-danger fs-12 fs-mb-9">
-                                            <i class="fa-solid fa-circle fs-12 fs-mb-9"></i> Completed
-                                        </div>
-                                        <div class="fs-5 my-1 my-lg-2 fw-500 fs-mb-12">
-                                            Maruti Swift
-                                        </div>
-                                        <div class="d-flex fs-12 fs-mb-9">
-                                            <div>
-                                                <i class="bg-blue rounded-circle p-1 p-lg-2 text-white fa-solid fa-location-dot fs-12"></i>
-                                            </div>
-                                            <div class="ms-1 fw-500 my-auto">
-                                                RS Puram,Coimbatore.
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="pt-4">
-                                        <div class="fs-14 fw-500 fs-mb-12">
-                                            Booking ID
-                                        </div>
-                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            59437584
-                                        </div>
-                                    </td>
-                                    <td class="pt-4">
-                                        <div class="fs-14 fw-500 fs-mb-12">
-                                            Starting Date
-                                        </div>
-                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            12/08/2024 09:30AM
-                                        </div>
-                                    </td>
-                                    <td class="pt-4">
-                                        <div class="fs-14 fw-500 fs-mb-12">
-                                            End Date
-                                        </div>
-                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            13/08/2024 01:30PM
-                                        </div>
-                                    </td>
-                                    <td class="pt-4">
-                                        <div class="fs-14 fw-500 fs-mb-12">
-                                            Total Price
-                                        </div>
-                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            ₹11,599
-                                        </div>
-                                    </td>
-                                    <td class="pt-4 pt-lg-5">
-                                        <a class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none">View Details</a>
-                                    </td>
-                                </tr>
+{{--                                <tr>--}}
+{{--                                    <td>--}}
+{{--                                        <div class="text-danger fs-12 fs-mb-9">--}}
+{{--                                            <i class="fa-solid fa-circle fs-12 fs-mb-9"></i> Completed--}}
+{{--                                        </div>--}}
+{{--                                        <div class="fs-5 my-1 my-lg-2 fw-500 fs-mb-12">--}}
+{{--                                            Maruti Swift--}}
+{{--                                        </div>--}}
+{{--                                        <div class="d-flex fs-12 fs-mb-9">--}}
+{{--                                            <div>--}}
+{{--                                                <i class="bg-blue rounded-circle p-1 p-lg-2 text-white fa-solid fa-location-dot fs-12"></i>--}}
+{{--                                            </div>--}}
+{{--                                            <div class="ms-1 fw-500 my-auto">--}}
+{{--                                                RS Puram,Coimbatore.--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </td>--}}
+{{--                                    <td class="pt-4">--}}
+{{--                                        <div class="fs-14 fw-500 fs-mb-12">--}}
+{{--                                            Booking ID--}}
+{{--                                        </div>--}}
+{{--                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">--}}
+{{--                                            59437584--}}
+{{--                                        </div>--}}
+{{--                                    </td>--}}
+{{--                                    <td class="pt-4">--}}
+{{--                                        <div class="fs-14 fw-500 fs-mb-12">--}}
+{{--                                            Starting Date--}}
+{{--                                        </div>--}}
+{{--                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">--}}
+{{--                                            12/08/2024 09:30AM--}}
+{{--                                        </div>--}}
+{{--                                    </td>--}}
+{{--                                    <td class="pt-4">--}}
+{{--                                        <div class="fs-14 fw-500 fs-mb-12">--}}
+{{--                                            End Date--}}
+{{--                                        </div>--}}
+{{--                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">--}}
+{{--                                            13/08/2024 01:30PM--}}
+{{--                                        </div>--}}
+{{--                                    </td>--}}
+{{--                                    <td class="pt-4">--}}
+{{--                                        <div class="fs-14 fw-500 fs-mb-12">--}}
+{{--                                            Total Price--}}
+{{--                                        </div>--}}
+{{--                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">--}}
+{{--                                            ₹11,599--}}
+{{--                                        </div>--}}
+{{--                                    </td>--}}
+{{--                                    <td class="pt-4 pt-lg-5">--}}
+{{--                                        <a class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none">View Details</a>--}}
+{{--                                    </td>--}}
+{{--                                </tr>--}}
 
                                 </tbody>
                             </table>

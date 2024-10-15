@@ -16,7 +16,7 @@ class CarBlockController extends BaseController
         $this->authorizePermission('car_av_tab');
         $car_block = CarBlock::with('user')->orderBy('created_at', 'desc')->paginate(5);
         $car_models = CarModel::all(['car_model_id','model_name']);
-        $car_details = CarDetails::all(['register_number']);
+        $car_details = CarDetails::where('status',1)->pluck('register_number');
         $permissions = getAdminPermissions();
         return view('admin.cars.blocks.list',compact('car_block','car_models','car_details','permissions'));
     }
@@ -51,6 +51,11 @@ class CarBlockController extends BaseController
             !empty($request['reason']) ? $request['reason'] : $request['reason_discretion'] : null;
         $car_block->user_id = Auth::guard('admin')->id();
         $car_block->save();
+
+        $car_status = CarDetails::where('register_number', $request['block_car_register_number'])->first();
+        $car_status->status = 2;
+        $car_status->save();
+
         $car_block_list = CarBlock::with('user')->orderBy('created_at', 'desc')->get();
         return response()->json(['data'=> $car_block_list,'success' => 'Car blocked saved successfully']);
     }

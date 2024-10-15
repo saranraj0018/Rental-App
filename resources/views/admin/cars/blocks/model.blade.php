@@ -75,9 +75,9 @@
                         <div class="form-group col-md-3 mt-3">
                             <select id="block_car_register_number" name="block_car_register_number" class="form-select w-100" data-live-search="true">
                                 <option selected disabled>Car Register Number</option>
-                                @if(filled($car_details))
+                                @if(!empty($car_details))
                                     @foreach($car_details as $detail)
-                                        <option value="{{$detail->register_number}}"> {{$detail->register_number}}</option>
+                                        <option value="{{$detail}}"> {{$detail}}</option>
                                     @endforeach
                                 @endif
                             </select>

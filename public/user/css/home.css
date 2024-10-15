@@ -79,6 +79,12 @@
     border-radius: 30px;
 }
 
+.sold-button {
+    background-color: #000000;
+    color: white;
+    border-radius: 30px;
+}
+
 .owl-dots {
     display: none !important;
     width: fit-content;
