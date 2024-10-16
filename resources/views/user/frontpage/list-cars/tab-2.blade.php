@@ -25,8 +25,12 @@
                     <div class="r2dc-card-content-bg p-3">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <p class="fs-16 fw-600">
+                                <p class="fs-16 fw-600 m-0">
                                     {{ $model->carModel->model_name ?? '' }}
+                                </p>
+                                <p class="fs-16 fw-600 my-1">
+                                    <i class="fas fa-map-marker-alt text-blue me-2"></i>
+                                    R.S Puram
                                 </p>
                                 <p class="d-flex text-secondary fs-12">
                                     <img src="{{ asset('user/img/iconTransmission.png') }}" alt="icon" class="img-fluid me-1">{{ $model->carModel->transmission ?? '' }}

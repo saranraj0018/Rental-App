@@ -10,7 +10,7 @@
                         </div>
                     </div>
                     <div class="row gx-3 p-3">
-                        <div class="col-4">
+                        <div class="col-5">
                             <div class="d-block">
                                 <img src="{{ asset('storage/car_image/' . $model->carModel->car_image ?? '') }}" alt="cars" class="img-fluid w-100">
                             </div>
@@ -26,6 +26,10 @@
                                 <p class="fs-4 fw-600 my-3 m-0">
                                     {{ $model->carModel->model_name ?? '' }}
                                 </p>
+                                <p class="fs-5 fw-600 my-3 m-0">
+                                    <i class="fas fa-map-marker-alt text-blue me-2"></i>
+                                    R.S Puram
+                                </p>
                                 <div class="fs-14 fw-500 my-3 {{ $model->address ? '' : 'd-none' }}">
                                     <img src="{{ asset('user/img/Group 4.svg') }}" alt="location icon" class="img-fluid me-1">
                                     {{ $model->address ?? '' }}
@@ -40,10 +44,7 @@
                             </div>
                         </div>
 
-                        <div class="col-3 my-auto">
-                            <div class="d-block fs-4 text-blue fw-600">
-                                <img src="{{ asset('user/img/bxs_offer.svg') }}" alt="cars" class="img-fluid">10% <span class="fs-15">for new users*</span>
-                            </div>
+                        <div class="col-2 my-auto">
                             <div class="my-2">
                                 @php
                                 $currentDate = \Carbon\Carbon::now();
@@ -59,9 +60,9 @@
                                 <div class="fs-3 fw-600"> ₹{{ $price * 24 ?? '' }} <span class="fs-16 fw-500">/ per day</span></div>
                             </div>
                             @if($model->status == 1)
-                                <a href="{{ route('book.car', ['model_id' => $model->id]) }}" class="btn my-button p-1 px-3 w-50">Book now</a>
+                                <a href="{{ route('book.car', ['model_id' => $model->id]) }}" class="btn my-button p-1 px-3 w-75">Book now</a>
                             @else
-                                <button class="sold-button btn fs-14 float-end">
+                                <button class="sold-button btn p-1 px-3">
                                     Sold
                                 </button>
                             @endif

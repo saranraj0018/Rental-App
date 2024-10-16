@@ -7,10 +7,10 @@
                 <div class="item p-2 pb-2 pb-lg-3 coupon_info" data-title="{{ $item->title }}" data-description="{{ $item->description }}"
                 data-amount="{{ number_format($item->amount,0) }}"  data-type="{{  $item->type == 1 ? '%' : '₹' }}" data-prefix="{{ $item->prefix }}" data-code="{{ $item->code }}">
                     <div class="ms-2">
-                        <p class="text-primary fs-12 fs-mb-9 mb-1">
+                        <p class="text-primary fs-12 fs-mb-11 mb-1">
                             <i class="fa-solid fa-car"></i>{{ $item->title }}
                         </p>
-                        <p class="fs-12 fs-mb-9 mb-1 h-40px">
+                        <p class="fs-12 fs-mb-11 mb-1 h-40px">
                             {!! $item->description !!}
                         </p>
                         <div class="card blue-bg p-2 text-white d-flex">

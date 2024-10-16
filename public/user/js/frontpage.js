@@ -373,3 +373,10 @@ $(function () {
         });
     });
 });
+
+$(document).ready(function(){
+    $('.save-icon').click(function(){
+        $(this).toggleClass('save-icon save-icon-active');
+    });
+});
+

@@ -89,6 +89,8 @@ Route::group(['prefix'=> 'admin'],function (){
 
         // Map Section
         Route::get('/city-map', [MapController::class, 'show'])->name('city.map');
+        Route::post('/save-area', [MapController::class, 'store'])->name('area.store');
+
 
         // Front-end Car - Info Section
         Route::get('/ipr-info', [BannerController::class, 'iprInfo'])->name('ipr-info.view');

@@ -15,11 +15,11 @@
     <header>
         <section class="d-none d-lg-block">
             <div class="container-fluid p-3">
-                <div class="container bg-head-grey p-1">
+                <div class="container bg-white rounded-pill p-1">
                     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
                         <div class="container d-flex justify-content-between">
                             <div>
-                                <img src="{{ asset('user/img/Logo (4).png') }}" alt="Site-Logo" class="img-fluid d-block">
+                                <img src="{{ asset('user/img/Rectangle 77.png') }}" alt="Site-Logo" class="img-fluid d-block w-50">
                                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile_nav" aria-controls="mobile_nav" aria-expanded="false" aria-label="Toggle navigation">
                                     <span class="navbar-toggler-icon"></span>
                                 </button>
@@ -28,24 +28,24 @@
                             <div class="collapse navbar-collapse" id="mobile_nav">
                                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right">
                                 </ul>
-                                <ul class="navbar-nav navbar-light">
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">Home</a></li>
+                                <ul class="navbar-nav navbar-light w-100 ms-5 ps-5">
+                                    <li class="nav-item ms-5 pe-3"><a class="nav-link text-dark" href="#">Home</a></li>
                                     @if(!Auth::user())
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">FAQ</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" href="#">FAQ</a></li>
                                     @else
-                                        <li class="nav-item"><a class="nav-link text-white" href="{{ route('booking.history') }}">Booking</a></li>
+                                        <li class="nav-item"><a class="nav-link text-dark" href="{{ route('booking.history') }}">Booking</a></li>
                                     @endif
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">Blog</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">Contact-us</a></li>
-                                    <li class="nav-item">
+                                    <li class="nav-item"><a class="nav-link text-dark" href="#">Blog</a></li>
+                                    <li class="nav-item me-5 pe-2"><a class="nav-link text-dark me-5" href="#">Contact-us</a></li>
+                                    <li class="nav-item ms-3 ps-5">
                                         @if(!Auth::user())
-                                        <button type="button" class="btn btn-primary" id="login_user">Sign-In</button>
-                                        <button type="button" class="btn btn-primary" id="register_user">Sign-Up</button>
+                                        <button type="button" class="btn border border-dark rounded-pill me-1" id="login_user">Sign-In</button>
+                                        <button type="button" class="btn bg-blue text-white rounded-pill" id="register_user">Sign-Up</button>
                                         @else
                                             <p class="fw-500 f-16 text-white">{{ \Illuminate\Support\Facades\Auth::user()->name ?? ''  }}</p>
                                             <a href="{{ route('user.profile') }}">View profile</a>
                                         @endif
-                                           </li>
+                                       </li>
                                 </ul>
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                     <span class="input-group-text" id="basic-addon1">
                         <i class=" text-white fa-solid fa-location-dot"></i>
                     </span>
-                    <input type="text" class="form-control" placeholder="Coimbatore, Tamilnadu" aria-label="Username" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control" placeholder="Coimbatore, Tamilnadu" aria-label="Username" aria-describedby="basic-addon1" disabled>
                 </div>
             </div>
             <div class="col-12 col-lg-3 my-1 mt-2 my-lg-0">

@@ -78,11 +78,21 @@
     color: white;
     border-radius: 30px;
 }
+.my-button:hover {
+    background-color: #135deb;
+    color: white;
+}
+
 
 .sold-button {
     background-color: #000000;
     color: white;
     border-radius: 30px;
+}
+.sold-button:hover{
+    background-color: #7f7f7f;
+    color: white;
+
 }
 
 .owl-dots {
@@ -298,7 +308,7 @@ span#basic-addon1 {
     background-repeat: no-repeat;
     background-size: cover;
     fill: #FFF;
-    filter: drop-shadow(0px 2.19px 4.38px rgba(62, 113, 225, 0.10)) drop-shadow(0px 8.03px 8.03px rgba(62, 113, 225, 0.09)) drop-shadow(0px 17.519px 10.95px rgba(62, 113, 225, 0.05)) drop-shadow(0px 31.389px 12.409px rgba(62, 113, 225, 0.01)) drop-shadow(0px 49.638px 13.869px rgba(62, 113, 225, 0.00));
+    filter:drop-shadow(0px 2.19px 4.38px rgba(62, 113, 225, 0.10)) drop-shadow(0px 8.03px 8.03px rgba(62, 113, 225, 0.09)) drop-shadow(0px -3.481px 1.95px rgba(62, 113, 225, 0.05)) drop-shadow(0px 31.389px 12.409px rgba(62, 113, 225, 0.01)) drop-shadow(0px 49.638px 13.869px rgba(62, 113, 225, 0.00));
 }
 
 .home-demo h2 {
@@ -387,6 +397,16 @@ span#basic-addon1 {
     background: white;
     padding: 5px 10px 2px 10px;
     border-radius: 30px;
+}
+
+.save-icon-active{
+    background: #123984;
+    padding: 5px 10px 2px 10px;
+    border-radius: 30px;
+    color:white !important;
+}
+.save-icon-active *{
+    color:white !important;
 }
 
 /*--------------HOME-SECTION-3---------------*/
@@ -565,4 +585,11 @@ button.accordion-button.collapsed {
 }
 .m-minus-top-48{
 margin-top:-46px !important;
+}
+.bg-light-blue{
+    background-color:#A7CBFF;
+}
+.bg-lightblue {
+    background-color: #EEF7FF;
+    padding: 5px 15px 5px 8px;
 }

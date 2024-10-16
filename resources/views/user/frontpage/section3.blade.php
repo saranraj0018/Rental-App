@@ -1,4 +1,4 @@
-<section class="my-5">
+<section class="mt-3 mb-5">
     <div class="container">
         <div class="d-flex justify-content-between mb-3">
             <div class="my-auto">
@@ -18,9 +18,12 @@
                         <div class="item">
                             <div class="r2dc-card-bg p-3">
                                 <div class="d-flex justify-content-between">
-                                    <div>
-                                        <div class="bg-white rounded-pill w-fit px-1 fw-500 fs-15 my-auto">
+                                    <div class="d-flex">
+                                        <div class="bg-white rounded-pill w-fit px-2 py-1 fw-500 fs-15 my-auto">
                                             <i class="fas fa-star" style="color:#E66742;"></i> 4.5
+                                        </div>
+                                        <div class="bg-white rounded-pill w-fit px-2 py-1 fw-500 fs-15 my-auto ms-2">
+                                            Available Now
                                         </div>
                                     </div>
                                     <div>
@@ -36,8 +39,12 @@
                             <div class="r2dc-card-content-bg p-3">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <p class="fs-15 fw-600">
+                                        <p class="fs-15 fw-600 m-0">
                                            {{ $item->carModel->model_name ?? '' }}
+                                        </p>
+                                        <p class="fs-15 fw-600 my-2">
+                                            <i class="fas fa-map-marker-alt text-blue me-2"></i>
+                                            {{ $item->carModel->model_name ?? '' }}
                                         </p>
                                         <p class="d-flex text-secondary fs-12">
                                             <img src="{{ asset('user/img/iconTransmission.png') }}" alt="icon" class="img-fluid me-1"> {{ $item->carModel->transmission ?? ''}}
@@ -50,9 +57,9 @@
                                             ₹ {{ $item->carModel->price_per_hour ?? ''}} <span class="fw-500 fs-12">per hours</span>
                                         </p>
                                         @if($item->status == 1)
-                                        <a href="{{ route('book.car', ['model_id' => $item->id]) }}" class="my-button btn fs-14 float-end">Book now</a>
+                                        <a href="{{ route('book.car', ['model_id' => $item->id]) }}" class="my-button btn btn-lg fs-14 float-end">Book now</a>
                                         @else
-                                        <button class="sold-button btn fs-14 float-end">
+                                        <button class="sold-button btn btn-lg fs-14 float-end">
                                             Sold
                                         </button>
                                         @endif
