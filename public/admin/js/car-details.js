@@ -10,10 +10,25 @@ $(function () {
                 $(this).closest('.bootstrap-select').addClass('is-invalid');
             }
         });
-
+        function resetInput() {
+            // Clear form fields
+            $('#create_car').find('input, select,textarea').val('');
+            // Reset toggle button
+            $('#toggle-button').removeClass('on').css('background-color', 'red');
+            $('#toggle-button').find('.label.off').show();
+            $('#toggle-button').find('.label.on').hide();
+            $('#toggle-value').val(2);
+            // Remove Bootstrap validation classes
+            $('#create_car').find('.is-invalid').removeClass('is-invalid');
+            $('#create_car').find('.is-valid').removeClass('is-valid');
+            // Optionally reset other elements
+            $('#save_coupon').text('');
+        }
 
         // Add Cars
         $('#add_car').click(function() {
+            window.adminInitMap();
+            $('#car_location').focus();
             $('#car_form').trigger("reset");
             $('#car_label').text("Add New Car");
             $('#create_car').modal('show');
@@ -21,13 +36,7 @@ $(function () {
             $('select').selectpicker('refresh');
         });
 
-        // Add Car Models
-        $('#add_car_model').click(function() {
-            $('select').selectpicker();
-            $('#car_model_form').trigger("reset");
-            $('#car_modal_label').text("Add New Car");
-            $('#create_car_modal').modal('show');
-        });
+
 
         // Store Cars
         $('#car_form').on('submit', function(e) {
@@ -41,6 +50,10 @@ $(function () {
                 { id: '#register_number', wrapper: false, condition: (val) => val.trim() === '' },
                 { id: '#current_km', wrapper: false, condition: (val) => val.trim() === '' }
             ];
+            if ($('#car_location_option').is(':checked') ) {
+                fields.push({ id: '#car_location', wrapper: false,
+                    condition: (val) => val.trim() === '' });
+            }
 
             // Loop through the fields and apply the validation logic
             fields.forEach(field => {
@@ -110,7 +123,26 @@ $(function () {
                     tbody.append(`
                 <tr>
                     <td>${item.id}</td>
-                    <td>${item.car_model ? item.car_model.model_name : ''}</td>
+                    <td>${item.car_model ? item.car_model.model_name : ''} -
+                    <a href="javascript:void(0)" class="edit_model" data-id="${item.car_model ? item.car_model.id : 0}"
+                           data-producer="${item.car_model ? item.car_model.producer : ''}"
+                           data-model_name="${item.car_model ? item.car_model.model_name : ''}"
+                           data-seat="${item.car_model ? item.car_model.seat : ''}"
+                           data-fuel_type="${item.car_model ? item.car_model.fuel_type : ''}"
+                           data-transmission="${item.car_model ? item.car_model.transmission : ''}"
+                           data-engine_power="${item.car_model ? item.car_model.engine_power : ''}"
+                           data-price_per_hour="${item.car_model ? item.car_model.price_per_hour : ''}"
+                           data-dep_amount="${item.car_model ? item.car_model.days : ''}"
+                           data-extra_hours_charge="${item.car_model ? item.car_model.extra_hours_price : ''}"
+                           data-day_km="${item.car_model ? item.car_model.per_day_km : ''}"
+                           data-weekend_surge="${item.car_model ? item.car_model.weekend_surge : ''}"
+                           data-peak_reason_surge="${item.car_model ? item.car_model.peak_reason_surge : ''}"
+                           data-extra_km_charge="${item.car_model ? item.car_model.extra_km_charge : ''}">
+                                        <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                                        </svg>
+                                    </a>
+                    </td>
                     <td>${item.model_id}</td>
                     <td>${item.register_number}</td>
                     <td>${item.hub}</td>
@@ -121,6 +153,9 @@ $(function () {
                            data-hub="${item.hub_code}-${item.hub}"
                            data-model="${item.model_id}"
                            data-register_number="${item.register_number}"
+                           data-latitude ="${item.latitude}"
+                           data-longitude ="${item.longitude}"
+                           data-address ="${item.address}"
                            data-current_km="${item.current_km}">
                                         <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
@@ -138,8 +173,10 @@ $(function () {
             }
         }
 
+
         // Edit Car
         $('#car_table').on('click', '.btnEdit', function() {
+            resetInput();
             let modal = $('#create_car');
             $('#car_label').text("Edit Car");
             $('#submit_btn').text("Update");
@@ -149,7 +186,18 @@ $(function () {
             modal.find('#car_model').val($(this).data('model'));
             modal.find('#register_number').val($(this).data('register_number'));
             modal.find('#current_km').val($(this).data('current_km'));
+            modal.find('#car_latitude').val($(this).data('latitude'));
+            modal.find('#car_longitude').val($(this).data('longitude'));
+            modal.find('#car_location').val($(this).data('address'));
             modal.find('input[name=car_id]').val($(this).data('id'));
+            if ($(this).data('latitude') !== '') {
+                let lat = parseFloat($(this).data('latitude')) || 11.0168;  // Default latitude (Coimbatore)
+                let lng = parseFloat($(this).data('longitude')) || 76.9558;  // Default longitude (Coimbatore)
+                $('#car_location_option').prop('checked', true).trigger('change');
+                window.adminInitMap(lat, lng);  // Pass valid lat/lng values
+            } else {
+                $('#car_location_option').prop('checked', false).trigger('change');
+            }
             modal.modal('show');
             $('select.form-select, select.form-control').each(function() {
                 $(this).selectpicker('refresh');
@@ -157,7 +205,15 @@ $(function () {
         });
 
 
-        // Edit Car
+        // Add Car Models
+        $('#add_car_model').click(function() {
+            $('select').selectpicker();
+            $('#car_model_form').trigger("reset");
+            $('#car_modal_label').text("Add New Car");
+            $('#create_car_modal').modal('show');
+        });
+
+        // Edit Car model
         $('#car_table').on('click', '.edit_model', function() {
             let modal = $('#create_car_modal');
             $('#car_modal_label').text("Edit Model");
@@ -170,6 +226,9 @@ $(function () {
             modal.find('#transmission').val($(this).data('transmission'));
             modal.find('#engine_power').val($(this).data('engine_power'));
             modal.find('#price_per_hours').val($(this).data('price_per_hour'));
+            modal.find('#dep_amount').val($(this).data('dep_amount'));
+            modal.find('#extra_hours_charge').val($(this).data('extra_hours_charge'));
+            modal.find('#day_km').val($(this).data('day_km'));
             modal.find('#weekend_surge').val($(this).data('weekend_surge'));
             modal.find('#peak_season').val($(this).data('peak_reason_surge'));
             modal.find('#extra_km_charge').val($(this).data('extra_km_charge'));
@@ -208,11 +267,13 @@ $(function () {
                 { id: '#model_name' },
                 { id: '#seats'},
                 { id: '#fuel_type'},
-                { id: '#current_km'},
                 { id: '#transmission'},
                 { id: '#engine_power'},
                 { id: '#price_per_hours'},
                 { id: '#weekend_surge'},
+                { id: '#dep_amount'},
+                { id: '#extra_hours_charge'},
+                { id: '#day_km'},
                 { id: '#peak_season'},
                 { id: '#extra_km_charge'},
                 { id: '#car_image'},
@@ -220,8 +281,8 @@ $(function () {
             ];
 
             let isValid = true;
-
             // Loop through the fields and validate each one
+
             fieldsToValidate.forEach(function(field) {
                 let element = $(field.id);
                 if (element.val() === '') {
@@ -235,7 +296,7 @@ $(function () {
 
 
             if (isValid) {
-                $('#car_model_Submit').prop('disabled', true);  // Disable submit button during AJAX
+                // $('#car_model_Submit').prop('disabled', true);  // Disable submit button during AJAX
 
                 let formData = new FormData(this);
                 $.ajax({
@@ -247,6 +308,9 @@ $(function () {
                     success: function(response) {
                         $('#create_car_modal').modal('hide');
                         alertify.success(response.success);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1000);
                     },
                     error: function(response) {
                         let errors = response.responseJSON.errors;
@@ -261,7 +325,7 @@ $(function () {
                         });
                     },
                     complete: function() {
-                        $('#submitBtn').prop('disabled', false);  // Re-enable the submit button
+                      //  $('#car_model_Submit').prop('disabled', false);  // Re-enable the submit button
                     }
                 });
             }
@@ -288,5 +352,85 @@ $(function () {
                 }
             });
         });
+
+        $('#car_location_option').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('#show_map').removeClass('d-none');
+                window.adminInitMap();
+            } else {
+                $('#show_map').addClass('d-none');
+                $('#latitude').val('');
+                $('#longitude').val('');
+            }
+        });
+
+        let map, marker, searchBox;
+
+        window.adminInitMap = function(lat, lng) {
+
+            if (lat === undefined){
+                lat = parseFloat('11.0168');
+                lng = parseFloat('76.9558');
+            }
+            // Initialize the map, centered on a default location
+            map = new google.maps.Map(document.getElementById('car-location-map'), {
+                center: {lat: lat, lng: lng}, // Coimbatore
+                zoom: 12,
+            });
+
+            // Add a marker at the provided lat/lng (default is Coimbatore)
+            marker = new google.maps.Marker({
+                position: { lat: lat, lng: lng },
+                map: map,
+                title: "Selected Location",
+            });
+
+            // Create the search box and link it to the input element
+            const input = document.getElementById('car_location');
+            searchBox = new google.maps.places.SearchBox(input);
+
+            // Bias the SearchBox results towards the current map's viewport
+            map.addListener('bounds_changed', function () {
+                searchBox.setBounds(map.getBounds());
+            });
+
+            // Event listener for search results
+            searchBox.addListener('places_changed', function () {
+                const places = searchBox.getPlaces();
+
+                if (places.length === 0) {
+                    return;
+                }
+
+                // Get the first place (the searched city)
+                const city = places[0];
+
+                // Get latitude and longitude from the city geometry
+                const latitude = city.geometry.location.lat();
+                const longitude = city.geometry.location.lng();
+                const address = city.formatted_address; // Get the formatted address
+                // Store latitude and longitude in hidden input fields
+                $('#car_latitude').val(latitude);
+                $('#car_longitude').val(longitude);
+                $('#car_address').val(address);
+
+
+                // Zoom into the city
+                map.setCenter(city.geometry.location);
+                map.setZoom(14);
+
+                // Remove any existing marker
+                if (marker) {
+                    marker.setMap(null);
+                }
+
+                // Add a marker at the city location
+                marker = new google.maps.Marker({
+                    position: city.geometry.location,
+                    map: map,
+                    title: city.name,
+                });
+            });
+        };
     });
 });

@@ -123,13 +123,11 @@ $(function () {
             function radioField(reason,name) {
 
                 if (!reason || reason === 'false') {
-                    console.log(name)
                     if (name === 'reason') {
                         $('input[name="reason"]').addClass('is-invalid');
                         $('.maintenance_error').show();
                     }
                     else {
-                        console.log('fdfd');
                         $('input[name="reason_discretion"]').addClass('is-invalid');
                         $('.discretion_error').show();
                     }
@@ -373,11 +371,9 @@ $(function () {
                     register_number: registerNumber
                 },
                 success: function(response) {
-                    console.log(response)
                     updateBlockTable(response.data); // Populate table with new data
                 },
                 error: function(xhr) {
-                    console.error('An error occurred:', xhr.responseText);
                 }
             });
         }

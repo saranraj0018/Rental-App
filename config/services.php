@@ -30,5 +30,18 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'google_maps' => [
+        'key' => env('GOOGLE_MAPS_API_KEY'),
+    ],
+    'twilio_sms' => [
+        'sid' => env('TWILIO_SID'),
+        'token' => env('TWILIO_AUTH_TOKEN'),
+        'mobile_number' => env('TWILIO_PHONE_NUMBER'),
+    ],
+    'razorpay' => [
+        'key' => env('RAZORPAY_KEY'),
+        'secret_key' => env('RAZORPAY_SECRET'),
+    ],
+
 
 ];

@@ -11,6 +11,10 @@ function formDate($date, $format = 'Y-m-d')
 {
     return \Illuminate\Support\Carbon::parse($date)->format($format);
 }
+function formDateTime($date, $format = 'Y-m-d h:i')
+{
+    return \Illuminate\Support\Carbon::parse($date)->format($format);
+}
 
 function block_type(): array
 {
@@ -39,7 +43,12 @@ function getAdminPermissions()
     return $permissions;
 }
 
-function showDateTime($date, $format = 'd M, Y h:i A')
+function showDateTime($date, $format = 'm/d/Y h:i:s A')
 {
-    return Carbon::parse($date)->translatedFormat($format);
+    return Carbon::parse($date)->format($format);
+}
+
+function showDate($date, $format = 'm/d/Y')
+{
+    return Carbon::parse($date)->format($format);
 }

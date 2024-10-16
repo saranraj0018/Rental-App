@@ -36,7 +36,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="brands.html" class="nav-link">
+                    <a href="{{ route('city.map') }}" class="nav-link">
                         <i class="nav-icon fas fa fa-map"></i>
                         <p>Cities Map</p>
                     </a>
@@ -79,11 +79,78 @@
                 </li>
                 @endif
                 <li class="nav-item">
-                    <a href="pages.html" class="nav-link">
+                    <a href="{{ route('holidays.list') }}" class="nav-link">
                         <i class="nav-icon  far fa-file-alt"></i>
-                        <p>Swap panel</p>
+                        <p>Holidays</p>
                     </a>
                 </li>
+                <!-- Manage Section with Hide/Show Functionality -->
+                <li class="nav-item">
+                    <a href="#manageSection" class="nav-link" data-bs-toggle="collapse">
+                        <i class="nav-icon fas fa-cogs"></i>
+                        <p>
+                            Manage Section
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview collapse" id="manageSection">
+                        <!-- Hub Panel -->
+
+                        <li class="nav-item">
+                            <a href="{{ route('general.list') }}" class="nav-link">
+                                <i class="nav-icon fas fa-car"></i>
+                                <p>General Setting </p>
+                            </a>
+                        </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('banner.list') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-file-alt"></i>
+                                    <p>Banner Section</p>
+                                </a>
+                            </li>
+
+                        <!-- Car Listing -->
+
+                            <li class="nav-item">
+                                <a href="{{ route('coupon.list') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-car"></i>
+                                    <p>Coupon </p>
+                                </a>
+                            </li>
+
+
+
+                        <!-- Car Availability -->
+
+                            <li class="nav-item">
+                                <a href="{{ route('car-info.view') }}" class="nav-link">
+                                    <i class="fas fa-truck nav-icon"></i>
+                                    <p> Real Time Information</p>
+                                </a>
+                            </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('brand.view') }}" class="nav-link">
+                                <i class="fas fa-truck nav-icon"></i>
+                                <p>Brands And Vacation</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('faq.list') }}" class="nav-link">
+                                <i class="fas fa-truck nav-icon"></i>
+                                <p>FAQ</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('ipr-info.view') }}" class="nav-link">
+                                <i class="fas fa-truck nav-icon"></i>
+                                <p>Important Points</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

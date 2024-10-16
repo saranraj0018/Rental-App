@@ -1,0 +1,25 @@
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #007bff; /* Background color for selected items */
+    color: #ffffff; /* Text color for selected items */
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: #ffffff; /* Color of the remove button */
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+    background-color: #0056b3; /* Background color of remove button on hover */
+}
+/* Remove border from select2 search field when focused */
+.select2-container--default .select2-search--inline .select2-search__field:focus {
+    border: none; /* Remove the border */
+}
+
+/* Apply red border when there's a validation error */
+.is-invalid .select2-container--default .select2-selection--multiple {
+    border-color: #dc3545 !important; /* Red border */
+}
+
+.is-invalid .select2-container--default .select2-selection--single {
+    border-color: #dc3545 !important; /* Red border for single select */
+}

@@ -21,6 +21,9 @@ return new class extends Migration
             $table->string('transmission',50);
             $table->string('engine_power',80);
             $table->decimal('price_per_hour',18,2);
+            $table->decimal('extra_hours_price',18,2);
+            $table->smallInteger('dep_amount');
+            $table->mediumInteger('per_day_km')->default(0);
             $table->string('weekend_surge',144);
             $table->string('peak_reason_surge',144);
             $table->decimal('extra_km_charge',18,2);

@@ -70,8 +70,8 @@
                                 <tr>
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->carModel->model_name ?? '' }}
-                                        @if(in_array('car_list_model_edit',$permissions))
-                                        -  <a href="javascript:void(0)" class="edit_model" data-id="{{ $item->id }}"
+                                        @if(in_array('car_list_model_edit',$permissions) && !empty($item->carModel))
+                                        -  <a href="javascript:void(0)" class="edit_model" data-id="{{ $item->carModel->id}}"
                                                                                       data-producer="{{ $item->carModel->producer}}"
                                                                                       data-model_name="{{ $item->carModel->model_name}}"
                                                                                       data-seat="{{ $item->carModel->seat}}"
@@ -79,6 +79,9 @@
                                                                                       data-transmission="{{ $item->carModel->transmission}}"
                                                                                       data-engine_power="{{ $item->carModel->engine_power}}"
                                                                                       data-price_per_hour="{{ $item->carModel->price_per_hour}}"
+                                                                                      data-car_period="{{ $item->carModel->days}}"
+                                                                                      data-extra_hours_charge="{{ $item->carModel->extra_hours_price}}"
+                                                                                      data-day_km="{{ $item->carModel->per_day_km}}"
                                                                                       data-weekend_surge="{{ $item->carModel->weekend_surge}}"
                                                                                       data-peak_reason_surge="{{ $item->carModel->peak_reason_surge}}"
                                                                                       data-extra_km_charge="{{ $item->carModel->extra_km_charge}}">
@@ -99,6 +102,9 @@
                                            data-hub="{{$item->hub_code}}-{{$item->hub}}"
                                            data-model="{{$item->model_id}}"
                                            data-register_number="{{$item->register_number}}"
+                                           data-latitude="{{$item->latitude}}"
+                                           data-longitude="{{$item->longitude}}"
+                                           data-address="{{$item->address}}"
                                            data-current_km="{{$item->current_km}}">
                                             <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
@@ -137,4 +143,6 @@
 @endsection
 @section('customJs')
     <script src="{{asset("admin/js/car-details.js")}}"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&libraries=places,drawing&callback=adminInitMap">
+    </script>
 @endsection

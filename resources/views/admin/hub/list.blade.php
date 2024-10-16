@@ -9,9 +9,6 @@
                 <div class="col-sm-6">
                     <h1>Pickup/Delivery List</h1>
                 </div>
-                <div class="col-sm-6 text-right">
-                    <a href="" class="btn btn-primary">New Task</a>
-                </div>
             </div>
         </div>
         <!-- /.container-fluid -->
@@ -20,14 +17,8 @@
     <section class="content">
         <!-- Default box -->
         <div class="container-fluid">
-            @include('admin.message')
             <div class="card">
-                <form action="" method="get">
                     <div class="card-header">
-                        <div class="card-title">
-                            <button type="button" onclick="window.location.href=''"
-                                    class="btn btn-default btn-sm">Reset</button>
-                        </div>
                         <div class="card-tools">
                             <div class="input-group input-group" style="width: 250px;">
                                 <input type="text" value="{{ Request::get('keyword') }}" name="keyword" class="form-control float-right" placeholder="Search">
@@ -40,24 +31,56 @@
                             </div>
                         </div>
                     </div>
-                </form>
                 <div class="card-body table-responsive p-0">
-                    <table class="table table-hover text-nowrap">
+                    <table id="booking_table" class="table table-hover text-nowrap">
                         <thead>
                         <tr>
-                            <th>Time</th>
-                            <th>Address</th>
-                            <th>Name</th>
-                            <th>D/L No</th>
-                            <th>Pricing Plan</th>
-                            <th>Amount Collect</th>
+                            <th>Booking ID</th>
+                            <th>user Name</th>
+                            <th>Car Model</th>
+                            <th>R/N No</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Pricing</th>
+                            <th>Booking Status</th>
+                            <th>Order Received Date</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td colspan="5"> Record Not Found</td>
+                        @if(!empty($booking))
+                            @foreach($booking as $item)
+                                @php
+                                    $booking_details = !empty($item->car_details) ? json_decode($item->car_details) : [];
+                                    @endphp
+                                <tr>
+                                    <td>{{ $item->booking_id }}</td>
+                                    <td>{{ $item->user->name ?? ''}}</td>
+                                    <td>{{$booking_details->car_model->model_name ?? '' }}</td>
+                                    <td>{{ $item->car->register_number }}</td>
+                                    <td>{{ $item->start_date }}</td>
+                                    <td>{{ $item->end_date}}</td>
+                                    <td>{{ $item->total_price}}</td>
+                                    <td> @if($item->status == 1)
+                                            <span class="badge badge-secondary" style="background-color: green">Booking</span>
+                                        @else
+                                            <span class="badge badge-danger" style="background-color: red">Complete</span>
+                                        @endif</td>
+                                    <td>{{ $item->created_at}}</td>
+                                    <td>
+                                        <a href="javascript:void(0)" class="booking_edit">
+                                            <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr >
+                                <td colspan="9"> Record Not Found</td>
                             </tr>
+                        @endif
                         </tbody>
                     </table>
                 </div>
@@ -66,11 +89,11 @@
 {{--                </div>--}}
             </div>
         </div>
-        <!-- /.card -->
+        @include('admin.hub.model')
     </section>
     <!-- /.content -->
 @endsection
 
 @section('customJs')
-
+    <script src="{{asset("admin/js/booking.js")}}"></script>
 @endsection

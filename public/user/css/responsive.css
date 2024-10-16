@@ -1,0 +1,137 @@
+
+@media only screen and (max-width:768px) {
+    .sec-2 .item {
+        padding: 30px 30px !important;
+    }
+    .blue-bg{
+        width:35%;
+    }
+    .y-valam-card img {
+        width: 55px;
+    }
+    .y-valam-card {
+        background-color: #eef7ff;
+        border-radius: 18px;
+        height: 120px;
+    }
+    .bdr-ryt-grey{
+        border:none;
+    }
+    .ccr-img {
+        width: 100%;
+    }
+    .ltt-bg {
+        background-size: cover;
+        margin: 30px 0px;
+        padding: 0px 0;
+    }
+    .sign-up-icon {
+        width: 7%;
+        margin: -8px 0;
+    }
+}
+
+@media only screen and (max-width:400px) {
+    .fs-mb-9 {
+        font-size: 9px;
+        line-height: 11px;
+    }
+
+    .fs-mb-10 {
+        font-size: 10px;
+        line-height: 11px;
+    }
+
+    .fs-mb-11 {
+        font-size: 11px;
+        line-height: 15px;
+    }
+
+    .fs-mb-12 {
+        font-size: 12px;
+    }
+    .fs-mb-13 {
+        font-size: 13px;
+    }
+    .fs-mb-14 {
+        font-size: 14px;
+    }
+    .fs-mb-16 {
+        font-size: 16px;
+    }
+    .fs-mb-18 {
+        font-size: 18px;
+    }
+
+    .filter-input-bg {
+        border-radius: 50px;
+        border: 1px solid #123984;
+        margin-top: -50px;
+        width: 85%;
+    }
+
+    .filter-input-bg * {
+        font-size: 13px;
+    }
+
+    .blue-bg {
+        background-color: #123984;
+        border-radius: 15px;
+        width: 28%;
+    }
+
+    .badge-perc {
+        width: 28% !important;
+    }
+
+    .bdr-ryt-grey {
+        border: none;
+    }
+
+    .ccr-img {
+        width: 40%;
+    }
+
+    .y-valam-card {
+        height: 110px;
+    }
+
+    .y-valam-card img {
+        width: 35px;
+    }
+
+    .sec-2 .item {
+        padding: 30px 20px !important;
+    }
+    .bg-grey-sec-6 {
+        background-color: #F6F6F7;
+        border-radius: 20px;
+        height: 220px;
+        margin-top: 9px;
+    }
+    .ltt-bg {
+        background-size: contain;
+    }
+    .conf-icon{
+        height:14px;
+        width:14px;
+    }
+    .input-group.booking-inputs-2.my-auto.bdr-30.w-50.h-50 {
+        border-radius: 5px;
+    }
+    .modal-dialog.position-top-right {
+        position: absolute;
+        width: 94%;
+        top: 0px;
+        right: 9px;
+        margin: 0;
+    }
+    .car-fits {
+        height: 145px;
+        width: 385px;
+        margin-top: -35px;
+    }
+    .m-minus-top-48{
+        margin-top:0 !important;
+    }
+}

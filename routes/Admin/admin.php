@@ -7,6 +7,10 @@ use App\Http\Controllers\Admin\PickupDeliveryController;
 use App\Http\Controllers\Admin\CarDetailsController;
 use App\Http\Controllers\Admin\CarBlockController;
 Use App\Http\Controllers\Admin\RoleController;
+Use App\Http\Controllers\Admin\BannerController;
+Use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\MapController;
+use App\Http\Controllers\Admin\HolidayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,5 +61,48 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::put('/user-role/update', [RoleController::class, 'update'])->name('user-role.update');
         Route::delete('/user-role/{id?}/delete', [RoleController::class, 'delete'])->name('user-role.delete');
 
+
+        // Front-end Banner Section
+        Route::get('/banner', [BannerController::class, 'view'])->name('banner.list');
+        Route::post('/banner/save', [BannerController::class, 'save'])->name('banner.save');
+
+        //Coupon Section
+        Route::get('/coupon/list', [CouponController::class, 'list'])->name('coupon.list');
+        Route::post('/coupon/save', [CouponController::class, 'save'])->name('coupon.save');
+        Route::delete('/coupon/{id?}/delete', [CouponController::class, 'delete'])->name('coupon.delete');
+        Route::get('/coupon/search', [CouponController::class, 'search'])->name('coupon.search');
+
+        // Front-end Car - Info Section
+        Route::get('/car-info', [BannerController::class, 'carInfo'])->name('car-info.view');
+        Route::post('/car-info/save', [BannerController::class, 'carSave'])->name('car-info.save');
+
+        // Front-end Car - Brand Section
+        Route::get('/brand', [BannerController::class, 'brandList'])->name('brand.view');
+        Route::post('/brand/save', [BannerController::class, 'brandSave'])->name('brand.save');
+        Route::delete('/brand/{id?}/delete', [BannerController::class, 'delete'])->name('brand.delete');
+
+        // Faq list
+        Route::get('/faq/list', [BannerController::class, 'faqList'])->name('faq.list');
+        Route::post('/faq/save', [BannerController::class, 'faqSave'])->name('faq.save');
+        Route::delete('/faq/{id?}/delete', [BannerController::class, 'faqDelete'])->name('faq.delete');
+        Route::get('/faq/search', [BannerController::class, 'search'])->name('faq.search');
+
+        // Map Section
+        Route::get('/city-map', [MapController::class, 'show'])->name('city.map');
+
+        // Front-end Car - Info Section
+        Route::get('/ipr-info', [BannerController::class, 'iprInfo'])->name('ipr-info.view');
+        Route::post('/ipr-info/save', [BannerController::class, 'iprSave'])->name('ipr-info.save');
+
+
+        //Holidays Section
+        Route::get('/holiday/list', [HolidayController::class, 'list'])->name('holidays.list');
+        Route::post('/holiday/save', [HolidayController::class, 'save'])->name('holiday.save');
+        Route::delete('/holiday/{id?}/delete', [HolidayController::class, 'delete'])->name('holiday.delete');
+        Route::get('/holiday/search', [HolidayController::class, 'search'])->name('holiday.search');
+
+        // Front-end Banner Section
+        Route::get('/general', [BannerController::class, 'generalList'])->name('general.list');
+        Route::post('/general/save', [BannerController::class, 'generalSave'])->name('general.save');
     });
 });

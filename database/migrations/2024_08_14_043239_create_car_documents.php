@@ -15,7 +15,7 @@ return new class extends Migration
             $table->Integer('id')->autoIncrement();
             $table->Integer('model_id')->unsigned()->index();
             $table->string('name',144)->nullable();
-            $table->string('file_path')->nullable();
+            $table->string('slug',30)->nullable();
             $table->timestamps();
         });
     }
