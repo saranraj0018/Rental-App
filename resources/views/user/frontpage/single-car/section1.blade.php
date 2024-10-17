@@ -1,14 +1,19 @@
 <section class="other-heads-bg py-4">
     <header>
         <div class="container">
-            <div class="d-flex text-white">
-                <div class="mt-2">
-                    {{--                    <button class="border-2 rounded-pill px-3 py-2 me-3 back-btn"><i class="fa fa-angle-left text-white fs-18"></i></button>--}}
-                    <a href="{{ url()->previous() }}" class="border-2 rounded-pill px-3 py-2 me-3 back-btn">
-                        <i class="fa fa-angle-left text-white fs-18"></i>
-                    </a>
+            <div class="row">
+                <div class="col-12 col-md-7 d-flex justify-content-between">
+                    <div class="mt-2">
+                        {{--                    <button class="border-2 rounded-pill px-3 py-2 me-3 back-btn"><i class="fa fa-angle-left text-white fs-18"></i></button>--}}
+                        <a href="{{ url()->previous() }}" class="border-2 rounded-pill px-3 py-2 me-3 back-btn">
+                            <i class="fa fa-angle-left text-white fs-18"></i>
+                        </a>
+                    </div>
+                    <div class="text-white text-center my-auto fs-5">Car Booking</div>
                 </div>
-                <div class="my-auto">Car Booking</div>
+                <div class="col-12 col-md-5">
+
+                </div>
             </div>
         </div>
     </header>
@@ -57,7 +62,7 @@
                     <p class="fs-4 fw-600 my-3 m-0">
                         {{$car_model->carModel->model_name}}
                     </p>
-                    <p class="d-flex text-secondary fs-16">
+                    <p class="d-lg-flex text-secondary fs-16">
                         <img src="{{ asset('user/img/search-result/iconTransmission.png') }}" alt="icon" class="img-fluid me-2 conf-icon">{{ $car_model->carModel->transmission }}
                         <img src="{{ asset('user/img/search-result/iconSeat.png') }}" alt="icon" class="img-fluid mx-2 conf-icon ms-3"> {{ $car_model->carModel->seat.'Seats' }}
                         <img src="{{ asset('user/img/search-result/material-symbols-light_air.png') }}" alt="icon" class="img-fluid mx-2 conf-icon ms-3">AC
@@ -201,7 +206,12 @@
                                 @if(!empty(Auth::user()))
                                 <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" id="payment">Proceed Payment</button>
                                 @else
-                                    <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" id="login_payment">Login To Proceed Payment</button>
+                                    <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-3 fw-600 w-100 w-md-auto" id="login_payment">
+                                        Login To Proceed Payment
+                                        <div class="spinner-border spinner-border-sm text-blue ms-3" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </button>
                                 @endif
                             </div>
                         </div>
