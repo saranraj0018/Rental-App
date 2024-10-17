@@ -13,7 +13,7 @@ class CarBlockController extends BaseController
 {
     public function list(Request $request)
     {
-        $this->authorizePermission('car_av_tab');
+        $this->authorizePermission('car_bk_tab');
         $car_block = CarBlock::with('user')->orderBy('created_at', 'desc')->paginate(5);
         $car_models = CarModel::all(['car_model_id','model_name']);
         $car_details = CarDetails::where('status',1)->pluck('register_number');

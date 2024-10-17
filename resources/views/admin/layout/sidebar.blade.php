@@ -29,12 +29,12 @@
                     </a>
                 </li>
                 @endif
-                <li class="nav-item">
-                    <a href="" class="nav-link">
-                        <i class="nav-icon fas fa fa-cogs"></i>
-                        <p>Control panel</p>
-                    </a>
-                </li>
+{{--                <li class="nav-item">--}}
+{{--                    <a href="" class="nav-link">--}}
+{{--                        <i class="nav-icon fas fa fa-cogs"></i>--}}
+{{--                        <p>Control panel</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
                 <li class="nav-item">
                     <a href="{{ route('city.map') }}" class="nav-link">
                         <i class="nav-icon fas fa fa-map"></i>
@@ -49,27 +49,36 @@
                     </a>
                 </li>
                 @endif
-                @if(in_array('car_av_tab',$permissions))
+                @if(in_array('car_bk_tab',$permissions))
                 <li class="nav-item">
                     <a href="{{route('car-block.list')}}" class="nav-link">
                         <!-- <i class="nav-icon fas fa-tag"></i> -->
                         <i class="fas fa-truck nav-icon"></i>
-                        <p>Car Availability</p>
+                        <p>Car block</p>
                     </a>
                 </li>
                 @endif
-                <li class="nav-item">
-                    <a href="orders.html" class="nav-link">
-                        <i class="nav-icon fas fa fa-flag"></i>
-                        <p>Inspection Report</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="discount.html" class="nav-link">
-                        <i class="nav-icon fa fa-credit-card" aria-hidden="true"></i>
-                        <p>Payment Invoice</p>
-                    </a>
-                </li>
+                @if(in_array('car_av_tab',$permissions))
+                    <li class="nav-item">
+                        <a href="{{route('car-block.list')}}" class="nav-link">
+                            <!-- <i class="nav-icon fas fa-tag"></i> -->
+                            <i class="fas fa-truck nav-icon"></i>
+                            <p>Car Availability</p>
+                        </a>
+                    </li>
+                @endif
+{{--                <li class="nav-item">--}}
+{{--                    <a href="orders.html" class="nav-link">--}}
+{{--                        <i class="nav-icon fas fa fa-flag"></i>--}}
+{{--                        <p>Inspection Report</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a href="discount.html" class="nav-link">--}}
+{{--                        <i class="nav-icon fa fa-credit-card" aria-hidden="true"></i>--}}
+{{--                        <p>Payment Invoice</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
                 @if(in_array('role_tab',$permissions))
                 <li class="nav-item">
                     <a href="{{route('user-role.list')}}" class="nav-link">
@@ -115,7 +124,7 @@
                             <li class="nav-item">
                                 <a href="{{ route('coupon.list') }}" class="nav-link">
                                     <i class="nav-icon fas fa-car"></i>
-                                    <p>Coupon </p>
+                                    <p>Coupon</p>
                                 </a>
                             </li>
 

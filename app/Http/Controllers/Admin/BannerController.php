@@ -325,6 +325,9 @@ class BannerController extends Controller
             'minimum_hours' => $request['minimum_hours'],
             'maximum_hours' => $request['maximum_hours'],
             'delivery_fee' => $request['delivery_fee'],
+            'show_delivery' => $request['show_delivery'] ?? 0,
+            'minimum_duration_type' => $request['minimum_duration_type'],
+            'maximum_duration_type' => $request['maximum_duration_type'],
         ];
 
         $frontend = !empty($request['general_id'])  ? Frontend::find($request['general_id']) : new Frontend();

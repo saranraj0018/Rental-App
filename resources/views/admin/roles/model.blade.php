@@ -97,8 +97,8 @@
                             <div id="roles">
                                 <!-- Example checkboxes -->
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="car_av_tab" id="car_av_tab" name="role[]">
-                                    <label class="form-check-label" for="car_av_tab">
+                                    <input class="form-check-input" type="checkbox" value="car_bk_tab" id="car_bk_tab" name="role[]">
+                                    <label class="form-check-label" for="car_bk_tab">
                                         Car Availability Tab
                                     </label>
                                 </div>
