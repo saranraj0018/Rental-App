@@ -118,7 +118,7 @@
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Total base fare</p>
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{ $price_list['total_price'] ?? 0  }}</p>
                         </div>
-                        <div class="d-flex justify-content-between text-white mt-3 mb-1 border-bottom border-1 toggle">
+                        <div class="d-flex justify-content-between text-white mt-3 mb-1 border-bottom border-1 toggle {{empty($general_section['show_delivery']) ? 'show' : ''}}">
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Doorstep delivery & pickup</p>
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{ $general_section['delivery_fee'] ?? 0 }}</p>
                         </div>
@@ -129,10 +129,11 @@
                         @php
                             $total_price = !empty($price_list['total_price']) ? $price_list['total_price'] : 0 ;
                             $coupon = !empty(session('coupon')) ? session('coupon') : [] ;
-                            $delivery_fee = !empty(session('delivery_fee')) ? session('delivery_fee') : 0 ;
+                            $delivery_fee = empty($general_section['show_delivery']) && !empty( $general_section['delivery_fee'] ) ? $general_section['delivery_fee'] : session('delivery_fee') ;
                             $sub_total_price = $total_price + $delivery_fee + $car_model->carModel->dep_amount ?? 0;
+
                             $type = !empty($coupon['type']) ? $coupon['type'] : 0 ;
-                            $amount = !empty($type) && $type == 1 ? $coupon['discount'] : ($type == 2 ? ($sub_total_price * $coupon['discount']) / 100 : 0);
+                            $amount = !empty($type) && $type == 2 ? $coupon['discount'] : ($type == 1 ? ($total_price * $coupon['discount']) / 100 : 0);
                         @endphp
                         <div class="{{!empty(session('coupon')) ? 'd-flex' : 'd-none'}} justify-content-between text-white mb-2 border-bottom border-1" id="coupon_message" >
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Coupon Amount</p>
@@ -162,9 +163,10 @@
                                 @php
                                      $final_total = $sub_total_price - $amount ?? 0 ;
                                     @endphp
-                                <input type="hidden" id="coupon_before" value="{{$sub_total_price}}">
+                                <input type="hidden" id="final_coupon_amount" value="{{session('coupon_amount')}}">
                                 <input type="hidden" id="door_delivery" value="{{$general_section['delivery_fee'] ?? 0}}">
-                                <input type="hidden" id="final_amount" value="{{$final_total}}">
+                                <input type="hidden" id="final_amount" value="{{ session('booking_details.total_price') }}">
+                                <input type="hidden" id="additional_amount" value="{{ $delivery_fee + $car_model->carModel->dep_amount ?? 0 }}">
                                 <div class="text-white">
                                     <p class="fs-20 fs-mb-16 my-2 text-end">
                                         Total Price ₹<span id="total_price">{{ $final_total }}</span></p>
@@ -173,9 +175,8 @@
                         </div>
                         <div class="d-flex justify-content-between flex-column flex-md-row">
                             <div>
-
                                 <div class="m-minus-top my-auto">
-                                    <div class="d-flex mb-3">
+                                    <div class="mb-3 {{empty($general_section['show_delivery']) ? 'd-none' : 'd-flex'}}">
                                         <div>
                                             <label class="switch m-0">
                                                 <input type="checkbox" id="delivery_amount">
@@ -183,10 +184,14 @@
                                             </label>
                                         </div>
                                         <div>
-                                            <span class="fs-14 ms-2 text-white">Door Step Delievery</span>
+                                            <span class="fs-14 ms-2 text-white">Door Step Delivery</span>
                                         </div>
                                     </div>
                                     <div class="mb-3 mb-md-auto toggle">
+                                        <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#secondModal">
+                                            <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Your Location</button>
+                                    </div>
+                                    <div class="mb-3 mb-md-auto {{!empty($general_section['show_delivery']) ? 'd-none' : ''}}">
                                         <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#secondModal">
                                             <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Your Location</button>
                                     </div>
@@ -207,17 +212,18 @@
     </div>
 </section>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
     // When the payment button is clicked
-    document.getElementById('payment').onclick = function(e) {
+    $(document).on('click', '#payment', function(e) {
         e.preventDefault();
 
         let options = {
             "key": "{{ config('services.razorpay.key') }}", // Your Razorpay key
-            "amount": {{$final_total.'00' }}, // Amount in smallest currency unit (paise, for INR)
+            "amount": {{$total_price + session('coupon_amount') + $car_model->carModel->dep_amount + $delivery_fee .'00' }}, // Amount in smallest currency unit (paise, for INR)
             "currency": "INR",
-            "name": "saran",
+            "name": "{{ Auth::user()->name }}",
             "description": " {{$car_model->carModel->model_name}}",
             "image": "https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/razorpay-icon.png",
             "handler": function(response) {
@@ -240,7 +246,7 @@
                 });
             },
             "prefill": {
-                "name": "saran", // Prefilled customer name
+                "name": "{{ Auth::user()->name }}", // Prefilled customer name
                 "email": "saran@gmail.com"
             },
             "theme": {
@@ -250,7 +256,7 @@
 
         let rzp = new Razorpay(options);
         rzp.open(); // Opens Razorpay modal
-    }
+    });
 </script>
 
 <!-- Second Modal Structure -->

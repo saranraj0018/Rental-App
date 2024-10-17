@@ -18,11 +18,14 @@ class CouponController extends Controller
                 'type' => $coupon->type,
                 'discount' => $coupon->amount,
             ]);
+            $amount = !empty($coupon->type) && $coupon->type == 2 ? $coupon->amount : ($coupon->type == 1 ? (session('booking_details.total_price') * $coupon->amount) / 100 : 0);
+            session(['coupon_amount'=> $amount ]);
             return response()->json([
                 'valid' => true,
                 'code' => $request['coupon'],
                 'type' => $coupon->type,
                 'discount' => $coupon->amount,
+                'final_amount' => $amount,
             ]);
         } else {
             return response()->json([
@@ -35,6 +38,7 @@ class CouponController extends Controller
     {
         // Remove coupon from session
         Session::forget('coupon');
+        Session::forget('coupon_amount');
 
         return response()->json(['success' => true]);
     }

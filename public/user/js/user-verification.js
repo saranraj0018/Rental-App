@@ -26,7 +26,10 @@ $(function () {
     }
 
     $('#login_payment').on('click', function() {
-        $('#mobileModal').modal('show');
+        let text = $(this).text();
+       if (text === 'Login To Proceed Payment'){
+           $('#mobileModal').modal('show');
+       }
     });
 
     $('#login_user').on('click', function() {
