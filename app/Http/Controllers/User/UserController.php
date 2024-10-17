@@ -38,29 +38,25 @@ class UserController extends Controller
     public function updateLocation(Request $request)
     {
 
-        if (!empty($request['latitude']) && !empty($request['longitude'])) {
-            $latitude = $request['latitude'];
-            $longitude = $request['longitude'];
-
             if (!empty($request['start_date']) && !empty($request['end_date'])) {
                 $request->session()->put('start_date',  str_replace('|', '', $request['start_date']));
                 $request->session()->put('end_date', str_replace('|', '', $request['end_date']));
-            }
 
-            $client = new Client();
-            $response = $client->get('https://maps.googleapis.com/maps/api/geocode/json', [
-                'query' => [
-                    'latlng' => $latitude . ',' . $longitude,
-                    'key' => 'AIzaSyCgkUiA7zkxsdc8BwvCqVeSTDuJVncMmAY',
-                ]
-            ]);
 
-            $data = json_decode($response->getBody(), true);
-            $isWithinCoimbatore = $this->isWithinCoimbatore($data);
-
-            return response()->json(['isWithinCoimbatore' => $isWithinCoimbatore]);
+//            $client = new Client();
+//            $response = $client->get('https://maps.googleapis.com/maps/api/geocode/json', [
+//                'query' => [
+//                    'latlng' => $latitude . ',' . $longitude,
+//                    'key' => 'AIzaSyCgkUiA7zkxsdc8BwvCqVeSTDuJVncMmAY',
+//                ]
+//            ]);
+//
+//            $data = json_decode($response->getBody(), true);
+//            $isWithinCoimbatore = $this->isWithinCoimbatore($data);
+//
+//            return response()->json(['isWithinCoimbatore' => $isWithinCoimbatore]);
         }
-        return response()->json(['isWithinCoimbatore' => false]);
+        return response()->json(['isWithinCoimbatore' => true]);
     }
 
     private function isWithinCoimbatore($data)
@@ -106,6 +102,7 @@ class UserController extends Controller
                 'car_id' => $id,
                 'car_details' => $car_model,
                 'price_list' => $price_list,
+                'delivery_fee' => $general_section['delivery_fee'],
                 'total_price' => !empty($price_list['total_price']) ? $price_list['total_price'] : 0,
                 'car_model' => $car_images,
                 'start_date' => session('start_date'),

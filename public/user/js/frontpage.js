@@ -187,28 +187,24 @@ $(function () {
 
         $('#get_location').on('submit', function(e) {
             e.preventDefault();
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(sendPosition);
-            } else {
-                alert("Geolocation is not supported by this browser.");
-            }
-            function sendPosition(position) {
+            sendPosition();
+            // if (navigator.geolocation) {
+            //     navigator.geolocation.getCurrentPosition(sendPosition);
+            // } else {
+            //     alert("Geolocation is not supported by this browser.");
+            // }
+            function sendPosition() {
                 $.ajax({
                     url: '/update-location',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
                         start_date:$('#start_date_time').val(),
                         end_date:$('#end_date_time').val(),
                     }),
                     success: function(data) {
-                        if (data.isWithinCoimbatore) {
-                            // If the location is within Coimbatore, submit the form
+                        if (data) {
                             window.location.href = '/search-car/list';
-                        } else {
-                            $('#errorModal').modal('show');
                         }
                     },
                     error: function(xhr, status, error) {
@@ -224,26 +220,26 @@ $(function () {
             $(this).find('.sm-menu').first().stop(true, true).slideUp(105)
         });
 
-        // Get user's geolocation
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                // Send geolocation data to server
-                $.ajax({
-                    url: '/api/save-geolocation',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude
-                    }),
-                    error: function(xhr, status, error) {
-                        console.error('Error:', error);
-                    }
-                });
-            });
-        } else {
-            console.log("Geolocation is not supported by this browser.");
-        }
+        // // Get user's geolocation
+        // if (navigator.geolocation) {
+        //     navigator.geolocation.getCurrentPosition(function(position) {
+        //         // Send geolocation data to server
+        //         $.ajax({
+        //             url: '/api/save-geolocation',
+        //             type: 'POST',
+        //             contentType: 'application/json',
+        //             data: JSON.stringify({
+        //                 latitude: position.coords.latitude,
+        //                 longitude: position.coords.longitude
+        //             }),
+        //             error: function(xhr, status, error) {
+        //                 console.error('Error:', error);
+        //             }
+        //         });
+        //     });
+        // } else {
+        //     console.log("Geolocation is not supported by this browser.");
+        // }
         // document.querySelectorAll('.next-button').forEach(button => {
         //     button.addEventListener('click', function() {
         //         const currentSet = this.closest('.input-set');

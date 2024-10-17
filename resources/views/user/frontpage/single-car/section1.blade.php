@@ -227,14 +227,13 @@
 <script>
     // When the payment button is clicked
     $(document).on('click', '#payment', function(e) {
-        e.preventDefault();
-
+        let final_amount = Math.round({{ $final_total + $car_model->carModel->dep_amount + $delivery_fee.'00' }});
         let options = {
             "key": "{{ config('services.razorpay.key') }}", // Your Razorpay key
-            "amount": {{$total_price + session('coupon_amount') + $car_model->carModel->dep_amount + $delivery_fee .'00' }}, // Amount in smallest currency unit (paise, for INR)
+            "amount":  final_amount.toString(), // Amount in smallest currency unit (paise, for INR)
             "currency": "INR",
             "name": "{{ Auth::user()->name }}",
-            "description": " {{$car_model->carModel->model_name}}",
+            "description": "{{$car_model->carModel->model_name}}",
             "image": "https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/razorpay-icon.png",
             "handler": function(response) {
                 let paymentData = {
@@ -276,13 +275,35 @@
             <div class="modal-body">
                 <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
                 <div class="p-3">
-                    <p class="fs-16 fw-500">Select Location on Map</p>
-                    <div class="container">
-                        <div id="custom_map" style="height: 500px; width: 100%;"></div>
+                    <div id="pickup-section" class="slide-section">
+                        <p class="fs-16 fw-500">Select pickup Location</p>
+                        <div class="container">
+                            <div id="custom_map" style="height: 500px; width: 100%;"></div>
+                        </div>
+                        <p class="fs-16 fw-500 mt-2"> Enter manually</p>
+                        <input id="custom-city" type="text" placeholder="Search city" class="form-control">
+                        <p class="text-danger" id="outside_area"></p>
+                        <input type="hidden" id="pic_latitude" name="pic_latitude" >
+                        <input type="hidden" id="pic_longitude" name="pic_longitude" >
+                        <input type="hidden" id="pic_address" name="pic_address" >
+                        <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="same_address">Same Address for Delivery Location</button>
+                        <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="delivery_address">Choose Delivery Address</button>
+
                     </div>
-                    <p class="fs-16 fw-500 mt-2"> Enter manually</p>
-                    <input id="custom-city" type="text" placeholder="Search city" class="form-control">
-                    <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" data-bs-dismiss="modal">Submit</button>
+
+                    <div id="delivery-section" class="slide-section d-none">
+                        <p class="fs-16 fw-500">Select delivery Location</p>
+                        <div class="container">
+                            <div id="delivery_map" style="height: 500px; width: 100%;"></div>
+                        </div>
+                        <p class="fs-16 fw-500 mt-2"> Enter manually</p>
+                        <input id="delivery-city" type="text" placeholder="Search city" class="form-control">
+                        <input type="hidden" id="dly_latitude" name="dly_latitude">
+                        <input type="hidden" id="dly_longitude" name="dly_longitude">
+                        <input type="hidden" id="dly_address" name="dly_address">
+                        <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="conform_address">Conform address</button>
+                        <p class="text-danger" id="delivery_outside_area"></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -297,6 +318,6 @@
         z-index: 1050; /* Default z-index for modal content */
     }
 </style>
-{{--<script async src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&libraries=places&callback=initMarker"></script>--}}
+<script async src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&libraries=places&callback=initMarker"></script>
 
 

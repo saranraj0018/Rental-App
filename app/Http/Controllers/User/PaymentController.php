@@ -17,23 +17,40 @@ class PaymentController extends Controller
     public function orderBooking(Request $request)
     {
 
-     $id = rand(100000, 999999);
-      $booking = new Booking();
-      $booking->booking_id = $id;
-      $booking->user_id = Auth::id();
-      $booking->car_id = session('booking_details.car_id');
-      $booking->total_price = session('booking_details.total_price') + session('delivery_fee') ?? 0;
-      $booking->start_date = formDateTime(session('booking_details.start_date'));
-      $booking->end_date = formDateTime(session('booking_details.end_date'));
-      $booking->status = 1;
-      $booking->car_details = json_encode(session('booking_details.car_details'));
-      $booking->payment_id = $request['payment_id'] ?? 1;
-      $booking->save();
+        $id = rand(100000, 999999);
+        $booking = new Booking();
+        $booking->booking_id = $id;
+        $booking->user_id = Auth::id();
+        $booking->booking_type = 'pickup';
+        $booking->start_date = formDateTime(session('booking_details.start_date'));
+        $booking->latitude = !empty(session('pickup.lat')) ? session('pickup.lat') : session('pick-delivery.lat');
+        $booking->longitude = !empty(session('pickup.lng')) ? session('pickup.lng') : session('pick-delivery.lng');
+        $booking->address = !empty(session('pickup.address')) ? session('pickup.address') : session('pick-delivery.address');
+        $booking->delivery_fee = session('booking_details.delivery_fee') ?? session('delivery_fee');
+        $booking->status = 1;
+        $booking->payment_id = $request['payment_id'] ?? 1;
+        $booking->save();
 
-      $booking_details = new BookingDetail();
-      $booking_details->booking_id = $booking->id;
-      $booking_details->coupon = !empty(session('coupon')) ?  json_encode(session('coupon')) : null;
-      $booking_details->save();
+
+        $delivery_booking = new Booking();
+        $delivery_booking->booking_id = $booking->id;
+        $delivery_booking->user_id = Auth::id();
+        $delivery_booking->booking_type = 'delivery';
+        $delivery_booking->end_date = formDateTime(session('booking_details.end_date'));
+        $booking->latitude = !empty(session('delivery.lat')) ? session('delivery.lat') : session('pick-delivery.lat');
+        $booking->longitude = !empty(session('delivery.lng')) ? session('delivery.lng') : session('pick-delivery.lng');
+        $booking->address = !empty(session('delivery.address')) ? session('delivery.address') : session('pick-delivery.address');;
+        $delivery_booking->delivery_fee = session('booking_details.delivery_fee') ?? session('delivery_fee');
+        $delivery_booking->status = 1;
+        $delivery_booking->payment_id = $request['payment_id'] ?? 1;
+        $delivery_booking->save();
+
+        $booking_details = new BookingDetail();
+        $booking_details->booking_id = $booking->id;
+        $booking_details->coupon = !empty(session('coupon')) ?  json_encode(session('coupon')) : null;
+        $booking_details->payment_details = json_encode(session('booking_details.price_list'));
+        $booking_details->car_details = json_encode(session('booking_details.car_details'));
+        $booking_details->save();
 
         $car_status = CarDetails::find(session('booking_details.car_id'));
         $car_status->status = 2;

@@ -92,35 +92,81 @@ $(function () {
 
             // Event listener for dropdown city change
             $('#city-select').change(function() {
-                const selectedCity = $(this).val();
+                let selectedCity = $(this).val();
                 if (selectedCity === 'coimbatore') {
                     map.setCenter({ lat: 11.0168, lng: 76.9558 });
                 } else if (selectedCity === 'madurai') {
                     map.setCenter({ lat: 9.9252, lng: 78.1198 });
                 }
                 map.setZoom(12);
+                $.ajax({
+                    url: '/admin/get-city-coordinates', // Replace with your actual route or API endpoint
+                    method: 'GET',
+                    data: { city: selectedCity },
+                    success: function(response) {
+                        // If the response is a string, parse it into JSON
+                        if (typeof response === 'string') {
+                            response = JSON.parse(response);
+                        }
+
+                        // Make sure response is an array before mapping
+                        if (Array.isArray(response)) {
+                            let coordinates;
+                            coordinates = response.map(coord => {
+                                return { lat: parseFloat(coord.lat), lng: parseFloat(coord.lng) };
+                            });
+
+                            // Draw the polygon using the fetched coordinates
+                            if (coordinates.length > 0) {
+                                const cityPolygon = new google.maps.Polygon({
+                                    paths: coordinates,
+                                    strokeColor: '#FF0000',
+                                    strokeOpacity: 0.8,
+                                    strokeWeight: 2,
+                                    fillColor: '#FF0000',
+                                    fillOpacity: 0.35
+                                });
+
+                                // Remove any existing polygons on the map
+                                if (window.currentPolygon) {
+                                    window.currentPolygon.setMap(null);
+                                }
+
+                                // Set the new polygon on the map
+                                cityPolygon.setMap(map);
+                                window.currentPolygon = cityPolygon;
+                            }
+                        } else {
+                            console.error('Invalid data format: Expected an array');
+                        }
+                    },
+                    error: function(error) {
+                        console.error('Error fetching city coordinates:', error);
+                    }
+                });
             });
 
             // Save button click event
             $('#save-area').click(function() {
+                let selectedCity = $('#city-select').val();
                 if (saveData.coordinates && saveData.coordinates.length > 0) {
                     // Send data to the backend via AJAX
                     $.ajax({
                         url: '/admin/save-area',
                         method: 'POST',
                         data: {
-                            coordinates: saveData.coordinates
+                            coordinates: saveData.coordinates,
+                            hub:selectedCity
                         },
                         success: function(response) {
-                            alert('Area saved successfully!');
+                          window.location.reload();
                         },
                         error: function(error) {
-                            console.error(error);
-                            alert('Error saving area.');
+                            alertify.error('Error saving area.');
                         }
                     });
                 } else {
-                    alert('Please draw a polygon on the map.');
+                    alertify.error('Please draw a polygon on the map.');
                 }
             });
         };

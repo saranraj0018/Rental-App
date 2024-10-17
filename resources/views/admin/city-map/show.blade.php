@@ -4,6 +4,7 @@
     <div class="container">
         <label for="city-select">Choose a city:</label>
         <select id="city-select" class="form-control">
+            <option value="" selected disabled>Select City</option>
             <option value="coimbatore">Coimbatore</option>
             <option value="madurai">Madurai</option>
         </select>
