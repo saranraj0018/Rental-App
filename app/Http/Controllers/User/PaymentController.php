@@ -8,6 +8,9 @@ use App\Models\BookingDetail;
 use App\Models\CarDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\BookingConfirmed;
+use Illuminate\Support\Facades\Mail;
+use Twilio\Rest\Client;
 use Razorpay\Api\Api;
 
 class PaymentController extends Controller
@@ -33,13 +36,13 @@ class PaymentController extends Controller
 
 
         $delivery_booking = new Booking();
-        $delivery_booking->booking_id = $booking->id;
+        $delivery_booking->booking_id = $id;
         $delivery_booking->user_id = Auth::id();
         $delivery_booking->booking_type = 'delivery';
         $delivery_booking->end_date = formDateTime(session('booking_details.end_date'));
-        $booking->latitude = !empty(session('delivery.lat')) ? session('delivery.lat') : session('pick-delivery.lat');
-        $booking->longitude = !empty(session('delivery.lng')) ? session('delivery.lng') : session('pick-delivery.lng');
-        $booking->address = !empty(session('delivery.address')) ? session('delivery.address') : session('pick-delivery.address');;
+        $delivery_booking->latitude = !empty(session('delivery.lat')) ? session('delivery.lat') : session('pick-delivery.lat');
+        $delivery_booking->longitude = !empty(session('delivery.lng')) ? session('delivery.lng') : session('pick-delivery.lng');
+        $delivery_booking->address = !empty(session('delivery.address')) ? session('delivery.address') : session('pick-delivery.address');;
         $delivery_booking->delivery_fee = session('booking_details.delivery_fee') ?? session('delivery_fee');
         $delivery_booking->status = 1;
         $delivery_booking->payment_id = $request['payment_id'] ?? 1;
@@ -55,6 +58,13 @@ class PaymentController extends Controller
         $car_status = CarDetails::find(session('booking_details.car_id'));
         $car_status->status = 2;
         $car_status->save();
+
+        // Send booking confirmation email
+        Mail::to(Auth::user()->email)->send(new BookingConfirmed($delivery_booking));
+
+        // Send SMS via Twilio
+        $this->sendSMS(Auth::user()->mobile, $delivery_booking->booking_id);
+
         session(['booking_id' => $id]);
         return response()->json([
             'success' => true,
@@ -80,4 +90,19 @@ class PaymentController extends Controller
         }
     }
 
+
+    public function sendSMS($phone, $booking_id)
+    {
+
+        $client = new Client(config('services.twilio_sms.sid'), config('services.twilio_sms.token'));
+
+        // Send SMS
+        $client->messages->create(
+            '+91' . $phone,
+            [
+                'from' =>config('services.twilio_sms.mobile_number'),
+                'body' => "Your booking is confirmed! Booking ID: {$booking_id}."
+            ]
+        );
+    }
 }

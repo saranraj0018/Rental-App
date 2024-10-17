@@ -38,8 +38,7 @@ class CouponController extends Controller
     {
         // Remove coupon from session
         Session::forget('coupon');
-        Session::forget('coupon_amount');
-
+       session()->forget('coupon_amount');
         return response()->json(['success' => true]);
     }
 

@@ -27,6 +27,7 @@ $(function () {
 
     $('#login_payment').on('click', function() {
         let text = $(this).text();
+        console.log(text)
        if (text === 'Login To Proceed Payment'){
            $('#mobileModal').modal('show');
        }

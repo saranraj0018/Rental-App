@@ -20,6 +20,7 @@ $(function () {
                          $('#coupon_message').removeClass('d-none').addClass('d-flex');
                         $('#total_price').text(total_amount + additional_amount);
                         $('#coupon_amount').text(coupon_amount);
+                        $('#final_coupon_amount').val(coupon_amount);
                         $('#coupon_code').val(` `);
                     } else {
                         alert('Invalid coupon code.');
@@ -38,6 +39,7 @@ $(function () {
                 url: '/user/remove-coupon', // Define the route for removing the coupon
                 type: 'POST',
                 success: function () {
+                    $('#final_coupon_amount').val(0);
                     $('#discount_text').text(``);
                     $('#coupon_code').val(` `);
                     $('#coupon_message').addClass('d-none').removeClass('d-flex');

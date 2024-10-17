@@ -35,11 +35,11 @@ class LocationController extends Controller
                         session(['pick-delivery' => ['lat' => $lat, 'lng' => $lng, 'address' => $address]]);
                         session()->forget(['delivery_location', 'pickup_location']);
                     } elseif ($location == 'delivery_location') {
+                        session()->forget('pick-delivery');
                         session(['delivery' => ['lat' => $lat, 'lng' => $lng, 'address' => $address]]);
-                        session()->forget(['delivery_location', 'pickup_location']);
                     } elseif ($location == 'pickup_location') {
+                        session()->forget('pick-delivery');
                         session(['pickup' => ['lat' => $lat, 'lng' => $lng, 'address' => $address]]);
-                        session()->forget(['delivery_location', 'pickup_location']);
                     }
                 }
                 return response()->json(['inside' => $isInside]);

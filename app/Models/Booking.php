@@ -18,4 +18,9 @@ class Booking extends Model
     {
         return $this->belongsTo(CarDetails::class);
     }
+
+    public function details()
+    {
+        return $this->hasMany(BookingDetail::class);
+    }
 }

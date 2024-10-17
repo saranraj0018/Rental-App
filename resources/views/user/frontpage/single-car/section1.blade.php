@@ -206,12 +206,11 @@
                                 @if(!empty(Auth::user()))
                                 <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" id="payment">Proceed Payment</button>
                                 @else
-                                    <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-3 fw-600 w-100 w-md-auto" id="login_payment">
-                                        Login To Proceed Payment
-                                        <div class="spinner-border spinner-border-sm text-blue ms-3" role="status">
-                                            <span class="visually-hidden">Loading...</span>
-                                        </div>
-                                    </button>
+                                    <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-3 fw-600 w-100 w-md-auto" id="login_payment">Login To Proceed Payment</button>
+{{--                                        <div class="spinner-border spinner-border-sm text-blue ms-3" role="status">--}}
+{{--                                            <span class="visually-hidden">Loading...</span>--}}
+{{--                                        </div>--}}
+
                                 @endif
                             </div>
                         </div>
@@ -227,12 +226,15 @@
 <script>
     // When the payment button is clicked
     $(document).on('click', '#payment', function(e) {
-        let final_amount = Math.round({{ $final_total + $car_model->carModel->dep_amount + $delivery_fee.'00' }});
+        let coupon = $('#final_coupon_amount').val();
+        let final_amount = {{ $total_price + $car_model->carModel->dep_amount + $delivery_fee }};
+        let coupon_amount = coupon !== '' || coupon !== 0 ? coupon : 0;
+        let total = Math.round((final_amount - coupon_amount) * 100);
         let options = {
             "key": "{{ config('services.razorpay.key') }}", // Your Razorpay key
-            "amount":  final_amount.toString(), // Amount in smallest currency unit (paise, for INR)
+            "amount":  total.toString(), // Amount in smallest currency unit (paise, for INR)
             "currency": "INR",
-            "name": "{{ Auth::user()->name }}",
+            "name": "{{ Auth::user()->name ?? 'Customer' }}",
             "description": "{{$car_model->carModel->model_name}}",
             "image": "https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/razorpay-icon.png",
             "handler": function(response) {
@@ -255,7 +257,7 @@
                 });
             },
             "prefill": {
-                "name": "{{ Auth::user()->name }}", // Prefilled customer name
+                "name": "{{ Auth::user()->name ?? 'Customer' }}", // Prefilled customer name
                 "email": "saran@gmail.com"
             },
             "theme": {

@@ -35,32 +35,54 @@
                     <table id="booking_table" class="table table-hover text-nowrap">
                         <thead>
                         <tr>
-                            <th>Booking ID</th>
-                            <th>user Name</th>
-                            <th>Car Model</th>
-                            <th>R/N No</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Pricing</th>
-                            <th>Booking Status</th>
-                            <th>Order Received Date</th>
-                            <th>Action</th>
+                            <th>Booking Type</th>
+                            <th>Risk</th>
+                            <th>Done</th>
+                            <th>Time</th>
+                            <th>Name</th>
+                            <th>Modal</th>
+                            <th>Register Number</th>
+                            <th>Address</th>
+                            <th>User Details</th>
+                            <th>D/L Number</th>
+                            <th>Booking Id</th>
+                            <th>Reschedule</th>
+                            <th>Security Dep</th>
+                            <th>Amount</th>
                         </tr>
                         </thead>
                         <tbody>
                         @if(!empty($booking))
                             @foreach($booking as $item)
                                 @php
-                                    $booking_details = !empty($item->car_details) ? json_decode($item->car_details) : [];
-                                    @endphp
+                                    $booking_details = !empty($item->details[0]) ? json_decode($item->details[0]->car_details) : [];
+                                   $car_model = !empty($booking_details->car_model) ? $booking_details->car_model : [];
+                                @endphp
                                 <tr>
-                                    <td>{{ $item->booking_id }}</td>
-                                    <td>{{ $item->user->name ?? ''}}</td>
-                                    <td>{{$booking_details->car_model->model_name ?? '' }}</td>
-                                    <td>{{ $item->car->register_number }}</td>
+                                    <td> @if($item->booking_type == 'pickup')
+                                            <h2>P</h2>
+                                        @else
+                                            <h2>D</h2>
+                                        @endif</td>
+                                    <td>
+                                        <input type="checkbox" class="risk-checkbox" data-id="{{ $item->id }}">
+                                        <button class="btn btn-warning open-risk-modal" data-id="{{ $item->id }}">
+                                            Add Comment
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" class="done-checkbox" data-id="{{ $item->id }}">
+                                    </td>
                                     <td>{{ $item->start_date }}</td>
-                                    <td>{{ $item->end_date}}</td>
-                                    <td>{{ $item->total_price}}</td>
+                                    <td>{{ $item->user->name ?? ''}}</td>
+                                    <td>{{ $car_model->model_name }}</td>
+                                    <td>{{ $booking_details->register_number }}</td>
+                                    <td>{{ $item->address }}</td>
+                                    <td>{{ $item->user->name ?? ''}}</td>
+                                    <td>{{ $item->user->name ?? ''}}</td>
+                                    <td>{{ $item->booking_id }}</td>
+                                    <td>{{ $item->start_date }}</td>
+                                    <td>{{ $item->user->name ?? ''}}</td>
                                     <td> @if($item->status == 1)
                                             <span class="badge badge-secondary" style="background-color: green">Booking</span>
                                         @else
