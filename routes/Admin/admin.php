@@ -39,6 +39,10 @@ Route::group(['prefix'=> 'admin'],function (){
 
         // Pickup-delivery list
         Route::get('/pickup-delivery/list', [PickupDeliveryController::class, 'list'])->name('pickup-delivery.list');
+        Route::post('/reschedule/date', [PickupDeliveryController::class, 'rescheduleDate'])->name('pickup-delivery.reschedule');
+        Route::post('/risk-comment', [PickupDeliveryController::class, 'riskCommends'])->name('pickup-delivery.commends');
+        Route::post('/risk-status', [PickupDeliveryController::class, 'riskStatus'])->name('pickup-delivery.status');
+        Route::post('/booking/cancel', [PickupDeliveryController::class, 'bookingCancel'])->name('booking.cancel');
 
         // Cars list
         Route::get('/cars/list', [CarDetailsController::class, 'list'])->name('car.list');

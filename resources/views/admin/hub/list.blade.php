@@ -1,7 +1,16 @@
 @extends('admin.layout.app')
 
 @section('content')
-
+<style>
+    .bg-light-red {
+        background-color: #f8d7da !important; /* Light red background */
+        color: #721c24; /* Dark red text for contrast */
+    }
+    .bg-light-green {
+        background-color: #d4edda !important; /* Light green background */
+        color: #155724; /* Dark green text for contrast */
+    }
+</style>
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid my-2">
@@ -22,7 +31,6 @@
                         <div class="card-tools">
                             <div class="input-group input-group" style="width: 250px;">
                                 <input type="text" value="{{ Request::get('keyword') }}" name="keyword" class="form-control float-right" placeholder="Search">
-
                                 <div class="input-group-append">
                                     <button type="submit" class="btn btn-default">
                                         <i class="fas fa-search"></i>
@@ -35,10 +43,10 @@
                     <table id="booking_table" class="table table-hover text-nowrap">
                         <thead>
                         <tr>
-                            <th>Booking Type</th>
+                            <th>Booking<br> Type</th>
                             <th>Risk</th>
                             <th>Done</th>
-                            <th>Time</th>
+                            <th style="width:50px !important;">Time</th>
                             <th>Name</th>
                             <th>Modal</th>
                             <th>Register Number</th>
@@ -49,6 +57,7 @@
                             <th>Reschedule</th>
                             <th>Security Dep</th>
                             <th>Amount</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -56,46 +65,72 @@
                             @foreach($booking as $item)
                                 @php
                                     $booking_details = !empty($item->details[0]) ? json_decode($item->details[0]->car_details) : [];
-                                   $car_model = !empty($booking_details->car_model) ? $booking_details->car_model : [];
+                                    $booking_payment_details = !empty($item->details[0]) ? json_decode($item->details[0]->payment_details,true) : [];
+                                    $car_model = !empty($booking_details->car_model) ? $booking_details->car_model : [];
+                                    $commends = !empty($item->comments) ? $item->comments: [];
                                 @endphp
-                                <tr>
+                                <tr class="@if($item->risk == 1 && $item->status != 2) bg-light-red @elseif($item->status == 2) bg-light-green @endif">
                                     <td> @if($item->booking_type == 'pickup')
                                             <h2>P</h2>
                                         @else
                                             <h2>D</h2>
                                         @endif</td>
                                     <td>
-                                        <input type="checkbox" class="risk-checkbox" data-id="{{ $item->id }}">
-                                        <button class="btn btn-warning open-risk-modal" data-id="{{ $item->id }}">
-                                            Add Comment
+                                        <div class="d-flex justify-content-center">
+                                            <input type="checkbox" class="risk-checkbox" data-id="{{ $item->id }}"
+                                                   @if($item->risk == 1) checked @endif>
+                                        </div>
+                                        <br>
+                                        <button class="btn btn-warning open-risk-modal"
+                                                data-id="{{ $item->id }}"
+                                                data-commend="{{ json_encode($commends) }}">
+                                            <h5>i</h5>
                                         </button>
                                     </td>
-                                    <td>
-                                        <input type="checkbox" class="done-checkbox" data-id="{{ $item->id }}">
+                                    <td class="d-flex justify-content-center">
+                                        <input type="checkbox" class="done-checkbox" data-id="{{ $item->id }}"
+                                               @if($item->status == 2) checked @endif>
                                     </td>
-                                    <td>{{ $item->start_date }}</td>
+                                    <td>{{ showDateTime($item->start_date) }}</td>
                                     <td>{{ $item->user->name ?? ''}}</td>
-                                    <td>{{ $car_model->model_name }}</td>
-                                    <td>{{ $booking_details->register_number }}</td>
+                                    <td>{{ $car_model->model_name ?? ''}}</td>
+                                    <td>{{ $booking_details->register_number ?? '' }}</td>
                                     <td>{{ $item->address }}</td>
-                                    <td>{{ $item->user->name ?? ''}}</td>
-                                    <td>{{ $item->user->name ?? ''}}</td>
+                                    <td> <button class="btn btn-warning user-details-modal" data-id="{{ $item->user_id }}"
+                                                 data-mobile="{{ $item->user->mobile }}"
+                                                 data-booking="{{ !empty($item->user->bookings->count()) ? $item->user->bookings->count()/2 : 0 }}"
+                                                 data-aadhaar_number="{{ $item->user->aadhaar_number }}">
+                                            User details
+                                        </button></td>
+                                    <td>{{ $item->user->driving_licence ?? ''}}</td>
                                     <td>{{ $item->booking_id }}</td>
-                                    <td>{{ $item->start_date }}</td>
-                                    <td>{{ $item->user->name ?? ''}}</td>
-                                    <td> @if($item->status == 1)
-                                            <span class="badge badge-secondary" style="background-color: green">Booking</span>
-                                        @else
-                                            <span class="badge badge-danger" style="background-color: red">Complete</span>
-                                        @endif</td>
-                                    <td>{{ $item->created_at}}</td>
-                                    <td>
-                                        <a href="javascript:void(0)" class="booking_edit">
-                                            <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
-                                            </svg>
-                                        </a>
+                                    <td>{{ !empty($item->start_date) ? showDateTime($item->start_date) : showDateTime($item->end_date) }}
+                                        <button class="btn btn-warning edit-booking-date" data-id="{{ $item->id }}"
+                                                data-pickup_date="{{$item->start_date ?? 0}}"
+                                                data-delivery_date="{{ $item->end_date ?? 0}}">
+                                           Edit
+                                        </button>
                                     </td>
+                                    <td> {{$car_model->dep_amount ?? 0}}</td>
+                                    <td><button class="btn btn-warning amount-modal" data-id="{{ $item->booking_id}}"
+                                                data-week_days_amount="{{ $booking_payment_details['week_days_amount'] ?? 0}}"
+                                                data-week_end_amount="{{ $booking_payment_details['week_end_amount'] ?? 0 }}"
+                                                data-festival_amount="{{ $booking_payment_details['festival_amount'] ??0 }}"
+                                                data-delivery_fee="{{ $item->delivery_fee ??''}}"
+                                                data-dep_fee="{{ $car_model->dep_amount ??''}}"
+                                                data-coupon="{{ $booking_coupon->discount ??''}}"
+                                                data-type="{{ $booking_coupon->type ??''}}">
+                                           Amount Details
+                                        </button></td>
+                                    <td>
+                                        @if($item->booking_type == 'pickup')
+                                            <button class="btn btn-danger cancel_booking"
+                                                    data-id="{{ $item->id }}">
+                                                Cancel Order
+                                            </button>
+                                        @endif
+                                    </td>
+
                                 </tr>
                             @endforeach
                         @else

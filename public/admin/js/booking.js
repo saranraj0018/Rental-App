@@ -1,6 +1,21 @@
 $(function () {
     'use strict'
     $(document).ready(function() {
+
+        $('#datetimepicker').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm', // Customize the format as needed
+            icons: {
+                time: 'far fa-clock',
+                date: 'far fa-calendar',
+                up: 'fas fa-arrow-up',
+                down: 'fas fa-arrow-down',
+                previous: 'fas fa-chevron-left',
+                next: 'fas fa-chevron-right',
+                today: 'fas fa-calendar-check',
+                clear: 'fas fa-trash-alt',
+                close: 'fas fa-times'
+            }
+        });
         // Edit Pickup/delivery
         $('#booking_table').on('click', '.booking_edit', function() {
             let modal = $('#booking_model');
@@ -9,6 +24,191 @@ $(function () {
             modal.find('#description').val($(this).data('description'));
             modal.find('input[name=holiday_id]').val($(this).data('id'));
             modal.modal('show');
+        });
+
+        $('.cancel_booking').on('click', function() {
+            let booking_id = $(this).data('id');
+            $('#cancel-booking-id').val(booking_id);
+            $('#cancelModal').modal('show');
+        });
+
+        $('#cancel-booking-form').on('submit', function(e) {
+            e.preventDefault();
+            let bookingId = $('#cancel-booking-id').val();
+            let reason = $('#cancel-reason').val().trim();
+
+            // Validate the reason field
+            if (reason === '') {
+                $('#cancel-reason').addClass('is-invalid');
+                return; // Stop the form from submitting
+            } else {
+                $('#cancel-reason').removeClass('is-invalid');
+            }
+
+            $.ajax({
+                url: '/admin/booking/cancel',
+                type: 'POST',
+                data: {
+                    booking_id: bookingId,
+                    reason: reason,
+                },
+                success: function(response) {
+                    $('#cancelModal').modal('hide');
+                    alertify.success('Booking has been cancelled successfully.');
+                },
+                error: function(xhr) {
+                    alertify.error('Failed to cancel the booking. Please try again.');
+                }
+            });
+        });
+
+        $('.risk-checkbox').on('change', function() {
+            let booking_id = $(this).data('id');
+            let status = $(this).is(':checked') ? 1 : 2;
+            let note = 'risk'
+            updatetable(booking_id,status,note)
+        });
+        $('.done-checkbox').on('change', function() {
+            let booking_id = $(this).data('id');
+            let status = $(this).is(':checked') ? 2 : 1;
+            let note = 'complete'
+            updatetable(booking_id,status,note)
+        });
+
+        function updatetable(booking_id, status,note) {
+            $.ajax({
+                url: '/admin/risk-status', // Replace with your route URL
+                method: 'POST',
+                data: {
+                    booking_id: booking_id,
+                    status: status,
+                    note:note
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alertify.success(response.success);
+                    } else {
+                        alertify.error('Failed to update status.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alertify.error('AJAX error:', error);
+                }
+            });
+        }
+
+
+
+        $('.open-risk-modal').on('click', function() {
+            let bookingId = $(this).data('id');
+            let commend = $(this).data('commend');
+
+            // Parse the comments if they are not already an array
+            let comments = Array.isArray(commend) ? commend : JSON.parse(commend || '[]');
+            // Set the booking ID in the hidden input
+            $('#risk-booking-id').val(bookingId);
+
+            // Clear the previous comments list
+            $('#comments-list').empty();
+
+            // Loop through the comments and add them to the comments list
+            if (comments.length > 0) {
+                comments.forEach(function(comment, index) {
+                    // Convert the created_at string into a Date object
+                    let createdAt = new Date(comment.created_at);
+                    // Format the date as 'hour:minute AM/PM, month day'
+                    let formattedDate = createdAt.toLocaleString('en-US', {
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true,
+                        month: 'short',
+                        day: 'numeric'
+                    });
+
+                    $('#comments-list').append(
+                        `<div class="alert alert-secondary" role="alert">
+                <strong>Comment ${index + 1}:</strong> ${comment.commends} <br>
+                <small>Created at: ${formattedDate}</small>
+            </div>`
+                    );
+                });
+            } else {
+                $('#comments-list').append('<p class="text-muted">No comments available.</p>');
+            }
+
+            // Show the modal
+            $('#riskModal').modal('show');
+        });
+
+
+        $('.user-details-modal').on('click', function() {
+            $('#user_mobile').val($(this).data('mobile'));
+            $('#user_aadhaar').val($(this).data('aadhaar_number'));
+            $('#booking_count').text($(this).data('booking'));
+            $('#user_model').modal('show');
+        });
+
+        $('.edit-booking-date').on('click', function() {
+            $('#date_booking_id').val($(this).data('id'));
+            $('#date_model').modal('show');
+        });
+
+        $('.amount-modal').on('click', function() {
+            let total = $(this).data('week_days_amount') + $(this).data('week_end_amount') + $(this).data('festival_amount');
+            $('#booking_id').val($(this).data('id'));
+            $('#week_days_amount').text($(this).data('week_days_amount'));
+            $('#week_end_amount').text($(this).data('week_end_amount'));
+            $('#festival_amount').text($(this).data('festival_amount'));
+            $('#modal_base_fare').text(total ?? 0);
+            $('#delivery_fee').text($(this).data('delivery_fee'));
+            $('#dep_fee').text($(this).data('dep_fee'));
+            // $('#coupon').text($(this).data('coupon'));
+            // $('#type').val($(this).data('type'));
+            $('#amount_modal').modal('show');
+        });
+        // Handle risk comment form submission
+        $('#risk-form').on('submit', function(e) {
+            e.preventDefault();
+            let bookingId = $('#risk-booking-id').val();
+            let commends = $('#risk-comment').val();
+
+            $.ajax({
+                url: '/admin/risk-comment',
+                method: 'POST',
+                data: {
+                    booking_id: bookingId,
+                    commends: commends
+                },
+                success: function(response) {
+                    $('#riskModal').modal('hide');
+                    alertify.success('Comment saved successfully!');
+                },
+                error: function(xhr, status, error) {
+                    alertify.error(error);
+                }
+            });
+        });
+
+        $('#booking_date').on('submit', function(e) {
+            e.preventDefault();
+            let bookingId = $('#date_booking_id').val();
+            let date = $('#start_date').val();
+
+            $.ajax({
+                url: '/admin/reschedule/date',
+                method: 'POST',
+                data: {
+                    booking_id: bookingId,
+                    date: date
+                },
+                success: function(response) {
+                    $('#date_model').modal('hide');
+                    alertify.success(response.success);
+                },
+                error: function(xhr, status, error) {
+                    alertify.error(error);
+                }
+            });
         });
 
         // function updateHolidayTable(data) {

@@ -1,145 +1,155 @@
-<div class="modal fade" id="booking_model" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
+<div class="modal fade" id="riskModal" tabindex="-1" role="dialog" aria-labelledby="riskModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="booking_label">Booking Details</h5>
+                <h5 class="modal-title" id="riskModalLabel">Add Risk Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="risk-form">
+                    <input type="hidden" id="risk-booking-id" name="booking_id">
+                    <div id="comments-list" class="mb-3"></div> <!-- This div will hold the list of comments -->
+                    <div class="form-group">
+                        <label for="risk-comment">New Comment</label>
+                        <textarea class="form-control" id="risk-comment" name="comment" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="user_model" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userModalLabel">User Details</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="row g-3">
-                        <div class="col-12 col-lg-6">
-                            <div class="card shadow border border-0 rounded-3 p-3">
-                                <h5 class="fs-4">Car details</h5>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6 fw-bold">Car Modal</p>
-                                    </div>
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6" id="car_modal"></p>
-                                    </div>
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6 fw-bold">Register Number</p>
-                                    </div>
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6" id="register_number"></p>
-                                    </div>
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6 fw-bold">Address</p>
-                                    </div>
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6" id="address"></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="card shadow border border-0 rounded-3 p-3">
-                                <h5 class="fs-4">Booking details</h5>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6 fw-bold">Start Date</p>
-                                    </div>
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6" id="start_date"></p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6 fw-bold">End Date</p>
-                                    </div>
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6" id="end_date">End Date</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6 fw-bold">Total Days</p>
-                                    </div>
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6" id="days"></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-12">
-                            <div class="card shadow border border-0 rounded-3 p-3">
-                                <h5 class="fs-4">User details</h5>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-12 col-lg-4">
-                                        <div class="card border border-0 rounded-3 shadow p-3" style="background-color: #f5f5f5;">
-                                            <p class="fs-6 fw-bold">Car Modal</p>
-                                            <p class="fs-6" id="user_name">Swift</p>
-                                            <p class="fs-6" id="user_mobile">Swift</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-lg-4">
-                                        <div class="card border border-0 rounded-3 shadow p-3" style="background-color: #f5f5f5;">
-                                            <p class="fs-6 fw-bold">Car Modal</p>
-                                            <p class="fs-6">Swift</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-lg-4">
-                                        <div class="card border border-0 rounded-3 shadow p-3" style="background-color: #f5f5f5;">
-                                            <p class="fs-6 fw-bold">Car Modal</p>
-                                            <p class="fs-6">Swift</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="user_mobile">User Mobile</label>
+                        <input type="number" id="user_mobile" class="form-control" disabled>
                     </div>
-                    <div class="row mt-3 g-3">
-                        <div class="col-12 col-lg-6">
-                            <div class="card shadow border border-0 rounded-3 p-3">
-                                <h5 class="fs-4">Payment Details</h5>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6 fw-bold">Total Price</p>
-                                    </div>
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6" id="price"></p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6 fw-bold">Security Deposit</p>
-                                    </div>
-                                    <div class="col-12 col-lg-6">
-                                        <p class="fs-6" id="security_deposit"></p>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="card shadow border border-0 rounded-3 p-3">
-                                <h5 class="fs-4">Commend</h5>
-                                <hr>
-                                <textarea name="" id="" class="form-control"></textarea>
-                            </div>
-                            <div class="card mt-3 shadow border border-0 rounded-3 p-3">
-                                <h5 class="fs-4">User details</h5>
-                                <hr>
-                                <select name="" id="" class="form-select border border-0" style="background-color: #FFFFFF;">
-                                    <option value="3">Processing</option>
-                                    <option value="2">Completed</option>
-                                    <option value="1">Booking</option>
-                                </select>
-
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="user_aadhaar">User Aadhaar</label>
+                        <input type="text" id="user_aadhaar" class="form-control" disabled>
                     </div>
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary">Number Of Booking</button>
+                        <p id="booking_count"></p>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="date_model" tabindex="-1" role="dialog" aria-labelledby="dateModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dateModalLabel">Reschedule Date</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="booking_date">
+                    <div class="form-group">
+                        <input type="hidden" id="date_booking_id" name="booking_id">
+                        <label for="start_date">Choose Date & Time</label>
+                        <div class="input-group date datetimepicker" id="datetimepicker" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker" id="start_date" name="start_date" placeholder="Select date and time" />
+                            <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="amount_modal" tabindex="-1" role="dialog" aria-labelledby="amountModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="booking_id">Booking Id</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <strong>Total Normal Fare:</strong> ₹<span id="week_days_amount">0</span>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Total festival Fare:</strong> ₹<span id="festival_amount">0</span>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Total Weekend Fare:</strong> ₹<span id="week_end_amount">0</span>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Total Base Fare:</strong> ₹<span id="modal_base_fare">0</span>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Doorstep Delivery & Pickup:</strong> ₹<span id="delivery_fee">0</span>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Refundable Security Deposit:</strong> ₹<span id="dep_fee">0</span>
+                    </li>
+{{--                    <li class="list-group-item">--}}
+{{--                        <strong>Coupon Amount :</strong> ₹<span id="modal_security_deposit">0</span>--}}
+{{--                    </li>--}}
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelModalLabel">Cancel Booking</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="cancel-booking-form">
+                    <input type="hidden" id="cancel-booking-id" name="booking_id">
+                    <div class="form-group">
+                        <label for="cancel-reason">Reason for Cancellation</label>
+                        <textarea class="form-control" id="cancel-reason" name="reason" rows="3" placeholder="Enter reason..."></textarea>
+                        <div class="invalid-feedback">
+                            Please provide a reason for cancellation.
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,4 +1,4 @@
-<tbody>
+ <tbody>
 @if(!empty($booking))
     @foreach($booking as $item)
         @php

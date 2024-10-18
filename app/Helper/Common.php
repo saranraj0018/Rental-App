@@ -43,7 +43,7 @@ function getAdminPermissions()
     return $permissions;
 }
 
-function showDateTime($date, $format = 'm/d/Y h:i:s A')
+function showDateTime($date, $format = 'd/m/Y h:i:s A')
 {
     return Carbon::parse($date)->format($format);
 }

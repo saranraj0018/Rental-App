@@ -23,4 +23,9 @@ class Booking extends Model
     {
         return $this->hasMany(BookingDetail::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Commend::class);
+    }
 }
