@@ -112,7 +112,7 @@ class UserController extends Controller
         return view('user.frontpage.single-car.view',compact('car_model','ipr_data','image_list','price_list','general_section'));
     }
 
-    public function calculatePrice($prices, $from_date = null, $to_date = null)
+    public static function calculatePrice($prices, $from_date = null, $to_date = null)
     {
         $price = [];
         if (empty($from_date) && empty($to_date)) return $price;

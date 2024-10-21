@@ -3,7 +3,7 @@ $(function () {
     $(document).ready(function() {
         $('#car_model').on('change', function () {
             $.ajax({
-                url: '/admin/car-availability',
+                url: '/admin/check-available',
                 data: {
                     model_id: $('#car_model').val(),
                 },

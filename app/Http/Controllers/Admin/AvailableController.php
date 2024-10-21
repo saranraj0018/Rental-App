@@ -14,45 +14,32 @@ class AvailableController extends Controller
     public function availableList(Request $request)
     {
         $car_available = Available::all();
-        $car_model = CarModel::pluck('model_name');
+        $car_model = CarModel::pluck('model_name','car_model_id');
         return view('admin.car-available.show',compact('car_available','car_model'));
     }
 
-    public function getCarAvailability(Request $request)
+    public function available(Request $request)
     {
-        $modelId = $request->input('model_id');
+        $model_id = $request['model_id'];
 
-        $cars = CarDetails::where('model_id', $modelId)->get();
-        $bookings = Available::whereIn('car_id', $cars->pluck('id'))
+        $current_month = Carbon::now()->month;
+        $current_year = Carbon::now()->year;
+
+        $bookings = Available::where('model_id', $model_id)
+            ->whereYear('start_date', $current_year)
+            ->whereMonth('start_date', $current_month)
             ->get();
 
         $availability = [];
-
-        foreach ($cars as $car) {
-            $availability[$car->reg_no] = [];
-            for ($day = 0; $day < $date->daysInMonth; $day++) {
-                for ($hour = 0; $hour < 24; $hour++) {
-                    $availability[$car->reg_no][$day][$hour] = 'Available'; // Default status
-                }
-            }
-
-            foreach ($bookings as $booking) {
-                if ($booking->car_id == $car->id) {
-                    $start = Carbon::parse($booking->start_date);
-                    $end = Carbon::parse($booking->end_date);
-
-                    while ($start->lessThanOrEqualTo($end)) {
-                        $day = $start->day - 1; // Adjusting for zero-indexed array
-                        $hour = $start->hour;
-
-                        $availability[$car->reg_no][$day][$hour] = $booking->booking_type; // e.g., 'Booking', 'Maintenance'
-                        $start->addHour();
-                    }
-                }
-            }
+        foreach ($bookings as $booking) {
+            $day = Carbon::parse($booking->start_date)->dayOfWeek; // 0 for Sunday, 6 for Saturday
+            $availability[$day][] = [
+                'start_time' => Carbon::parse($booking->start_date)->format('H:i'),
+                'end_time' => Carbon::parse($booking->end_date)->format('H:i'),
+                'booking_type' => $booking->booking_type,
+            ];
         }
-
-        return view('admin.car-availability', compact('availability', 'date', 'modelId'));
+        return view('admin.car-available.model', compact('availability'));
     }
 
 

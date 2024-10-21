@@ -288,9 +288,10 @@
                         <input type="hidden" id="pic_latitude" name="pic_latitude" >
                         <input type="hidden" id="pic_longitude" name="pic_longitude" >
                         <input type="hidden" id="pic_address" name="pic_address" >
+                        <div class="d-flex">
                         <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="same_address">Same Address for Delivery Location</button>
                         <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="delivery_address">Choose Delivery Address</button>
-
+                        </div>
                     </div>
 
                     <div id="delivery-section" class="slide-section d-none">

@@ -32,9 +32,9 @@
             <div class="col-12 col-lg-2 d-flex justify-content-center d-lg-block my-auto">
                 <button type="submit" disabled id="find_car" class="btn my-button w-100 w-lg-auto p-2">
                     <i class=" text-white fa-solid fa-magnifying-glass"></i> Search
-                    <div class="spinner-border spinner-border-sm text-white" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
+{{--                    <div class="spinner-border spinner-border-sm text-white" role="status">--}}
+{{--                        <span class="visually-hidden">Loading...</span>--}}
+{{--                    </div>--}}
 
                 </button>
             </div>

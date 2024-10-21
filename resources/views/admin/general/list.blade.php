@@ -60,7 +60,18 @@
 
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label font-weight-bold" for="inputPassword4">Booking Duration </label>
+                                    <div>
+                                        <input type="text" class="form-control" id="booking_duration" name="booking_duration" placeholder="500" value="{{ $data['booking_duration'] ?? 0 }}">
+                                    </div>
+                                <div class="invalid-feedback">Please Enter Booking Duration</div>
+                            </div>
+                            <div class="form-group col-md-1">
 
+                            </div>
+                        </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary btn-block btn-lg">Update</button>
                         </div>

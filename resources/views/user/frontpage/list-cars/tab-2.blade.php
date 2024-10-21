@@ -39,27 +39,16 @@
                             </div>
                             <div>
                                 @php
-                                    $currentDate = \Carbon\Carbon::now();
-                                    $currentDay = !empty($currentDate) ? $currentDate->format('Y-m-d') : '';
-                                   if (!empty($festival_days) && !empty($currentDay) && in_array($currentDay, $festival_days)) {
-                                       $price = $model->carModel->peak_reason_surge ?? 0;
-                                   } elseif ($currentDate->isWeekend()) {
-                                       $price =  $model->carModel->weekend_surge ?? 0;
-                                   } else {
-                                       $price = $model->carModel->price_per_hour ?? 0;
-                                   }
+
+                                    $prices = ['festival' =>  $model->carModel->peak_reason_surge ?? 0,
+                'weekend' => $model->carModel->weekend_surge ?? 0,
+                'weekday' =>  $model->carModel->price_per_hour ?? 0];
+            $price_list = \App\Http\Controllers\User\UserController::calculatePrice($prices,session('start_date'),session('end_date'));
                                 @endphp
                                 <p class="fs-15 fw-600 mb-2">
-                                    ₹{{ $price * 24 ?? '' }} <span class="fw-500 fs-12">per day</span>
+                                    ₹{{ $price_list['total_price'] ?? '' }}
                                 </p>
-                                @if($model->status == 1)
                                     <a href="{{ route('book.car', ['model_id' => $model->id]) }}" class="btn my-button fs-14">Book now</a>
-                                @else
-                                    <button class="sold-button btn fs-14 float-end">
-                                        Sold
-                                    </button>
-                                @endif
-
                             </div>
                         </div>
                     </div>
