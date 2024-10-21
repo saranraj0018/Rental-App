@@ -11,6 +11,7 @@ Use App\Http\Controllers\Admin\BannerController;
 Use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\MapController;
 use App\Http\Controllers\Admin\HolidayController;
+use App\Http\Controllers\Admin\AvailableController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,7 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::post('/risk-comment', [PickupDeliveryController::class, 'riskCommends'])->name('pickup-delivery.commends');
         Route::post('/risk-status', [PickupDeliveryController::class, 'riskStatus'])->name('pickup-delivery.status');
         Route::post('/booking/cancel', [PickupDeliveryController::class, 'bookingCancel'])->name('booking.cancel');
+        Route::get('/booking/search', [PickupDeliveryController::class, 'fetchBookings'])->name('booking.search');
 
         // Cars list
         Route::get('/cars/list', [CarDetailsController::class, 'list'])->name('car.list');
@@ -111,5 +113,9 @@ Route::group(['prefix'=> 'admin'],function (){
         // Front-end Banner Section
         Route::get('/general', [BannerController::class, 'generalList'])->name('general.list');
         Route::post('/general/save', [BannerController::class, 'generalSave'])->name('general.save');
+
+        Route::get('/car-available', [AvailableController::class, 'availableList'])->name('car-available.list');
+        Route::get('/check-available', [AvailableController::class, 'available'])->name('available');
+
     });
 });

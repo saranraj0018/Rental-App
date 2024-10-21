@@ -58,15 +58,15 @@
                     </a>
                 </li>
 {{--                @endif--}}
-                @if(in_array('car_av_tab',$permissions))
+{{--                @if(in_array('car_av_tab',$permissions))--}}
                     <li class="nav-item">
-                        <a href="{{route('car-block.list')}}" class="nav-link">
+                        <a href="{{route('car-available.list')}}" class="nav-link">
                             <!-- <i class="nav-icon fas fa-tag"></i> -->
                             <i class="fas fa-truck nav-icon"></i>
                             <p>Car Availability</p>
                         </a>
                     </li>
-                @endif
+{{--                @endif--}}
 {{--                <li class="nav-item">--}}
 {{--                    <a href="orders.html" class="nav-link">--}}
 {{--                        <i class="nav-icon fas fa fa-flag"></i>--}}

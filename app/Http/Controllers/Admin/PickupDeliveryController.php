@@ -12,8 +12,8 @@ class PickupDeliveryController extends BaseController
     public function list(Request $request)
     {
         $this->authorizePermission('hub_list');
-        $booking = Booking::with(['user','details','comments','user.bookings'])->get();
-        return view('admin.hub.list',compact('booking'));
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->paginate(5);
+        return view('admin.hub.list',compact('bookings'));
     }
 
     public function rescheduleDate(Request $request)
@@ -26,7 +26,9 @@ class PickupDeliveryController extends BaseController
         $booking = Booking::find(request('booking_id'));
         $booking->reschedule_date = $request['date'];
         $booking->save();
-        return response()->json(['data'=> true,'success' => 'Reschedule date Update successfully']);
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->paginate(5);
+        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'success' => 'Reschedule date Update successfully']);
+
     }
 
     public function riskCommends(Request $request)
@@ -40,7 +42,8 @@ class PickupDeliveryController extends BaseController
         $commend->booking_id = $request['booking_id'];
         $commend->commends = $request['commends'];
         $commend->save();
-        return response()->json(['data'=> true,'success' => 'Commends Update successfully']);
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->paginate(5);
+        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Commends Update successfully']);
     }
 
     public function riskStatus(Request $request)
@@ -55,15 +58,17 @@ class PickupDeliveryController extends BaseController
             $booking->status = $request['status'];
             $booking->risk = 2;
             $booking->save();
-            return response()->json(['success' => true, 'message' => 'Booking Completed successfully']);
+            $bookings = Booking::with(['user','details','comments','user.bookings'])->paginate(5);
+            return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
         } elseif (!empty($booking) && !empty($request['note']) && $request['note'] == 'risk' ) {
             $booking->risk = $request['status'];
             $booking->save();
-            return response()->json(['success' => true, 'message' => 'Risk updated successfully']);
+            $bookings = Booking::with(['user','details','comments','user.bookings'])->paginate(5);
+            return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
 
         }
-
-        return response()->json(['success' => false, 'message' => 'Booking not found']);
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->paginate(5);
+        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Booking not found']);
     }
 
     public function bookingCancel(Request $request)
@@ -77,9 +82,40 @@ class PickupDeliveryController extends BaseController
         $booking->status = 3;
         $booking->notes = $request['reason'];
         $booking->save();
-
-        return response()->json(['message' => 'Booking cancelled successfully']);
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->paginate(5);
+        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Booking cancelled successfully']);
     }
 
+    public function fetchBookings(Request $request) {
+        // Set the number of items per page
+        $perPage = $request->input('per_page', 10); // Default to 10 items per page
 
+        $query = Booking::with(['user','details','comments','user.bookings']);
+
+        // Apply filters based on request parameters
+        if (!empty($request['car_model'])) {
+            $query->whereHas('details', function($query) use ($request) {
+                $query->where('car_details->car_model->model_name', 'like', '%' . $request->input('car_model') . '%');
+            });
+        }
+        if (!empty($request['register_number'])) {
+            $query->where('register_number', 'like', '%' . $request->input('register_number') . '%');
+        }
+        if (!empty($request['booking_id'])) {
+            $query->where('booking_id', $request->input('booking_id'));
+        }
+        if (!empty($request['customer_name'])) {
+            $query->whereHas('user', function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->input('customer_name') . '%');
+            });
+        }
+        if ($request->has('booking_type') && $request->input('booking_type') !== 'both') {
+            $query->where('booking_type', $request->input('booking_type'));
+        }
+
+        // Paginate the results
+        $bookings = $query->paginate($perPage);
+        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Data Fetch successfully']);
+
+    }
 }

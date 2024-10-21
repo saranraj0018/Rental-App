@@ -26,7 +26,7 @@ $(function () {
             modal.modal('show');
         });
 
-        $('.cancel_booking').on('click', function() {
+        $('#booking_table').on('click', '.cancel_booking', function() {
             let booking_id = $(this).data('id');
             $('#cancel-booking-id').val(booking_id);
             $('#cancelModal').modal('show');
@@ -53,22 +53,23 @@ $(function () {
                     reason: reason,
                 },
                 success: function(response) {
+                    console.log()
                     $('#cancelModal').modal('hide');
                     alertify.success('Booking has been cancelled successfully.');
+                    updateBookingTable(response.data);
                 },
                 error: function(xhr) {
                     alertify.error('Failed to cancel the booking. Please try again.');
                 }
             });
         });
-
-        $('.risk-checkbox').on('change', function() {
+        $('#booking_table').on('change', '.risk-checkbox', function() {
             let booking_id = $(this).data('id');
             let status = $(this).is(':checked') ? 1 : 2;
             let note = 'risk'
             updatetable(booking_id,status,note)
         });
-        $('.done-checkbox').on('change', function() {
+        $('#booking_table').on('change', '.done-checkbox', function() {
             let booking_id = $(this).data('id');
             let status = $(this).is(':checked') ? 2 : 1;
             let note = 'complete'
@@ -85,8 +86,9 @@ $(function () {
                     note:note
                 },
                 success: function(response) {
-                    if (response.success) {
-                        alertify.success(response.success);
+                    if (response.data) {
+                        alertify.success(response.message);
+                        updateBookingTable(response.data);
                     } else {
                         alertify.error('Failed to update status.');
                     }
@@ -98,11 +100,10 @@ $(function () {
         }
 
 
-
-        $('.open-risk-modal').on('click', function() {
+        $('#booking_table').on('click', '.open-risk-modal', function() {
             let bookingId = $(this).data('id');
             let commend = $(this).data('commend');
-
+            console.log(commend)
             // Parse the comments if they are not already an array
             let comments = Array.isArray(commend) ? commend : JSON.parse(commend || '[]');
             // Set the booking ID in the hidden input
@@ -140,20 +141,19 @@ $(function () {
             $('#riskModal').modal('show');
         });
 
-
-        $('.user-details-modal').on('click', function() {
+        $('#booking_table').on('click', '.user-details-modal', function() {
             $('#user_mobile').val($(this).data('mobile'));
             $('#user_aadhaar').val($(this).data('aadhaar_number'));
             $('#booking_count').text($(this).data('booking'));
             $('#user_model').modal('show');
         });
 
-        $('.edit-booking-date').on('click', function() {
+        $('#booking_table').on('click', '.edit-booking-date', function() {
             $('#date_booking_id').val($(this).data('id'));
             $('#date_model').modal('show');
         });
 
-        $('.amount-modal').on('click', function() {
+        $('#booking_table').on('click', '.amount-modal', function() {
             let total = $(this).data('week_days_amount') + $(this).data('week_end_amount') + $(this).data('festival_amount');
             $('#booking_id').val($(this).data('id'));
             $('#week_days_amount').text($(this).data('week_days_amount'));
@@ -182,6 +182,7 @@ $(function () {
                 success: function(response) {
                     $('#riskModal').modal('hide');
                     alertify.success('Comment saved successfully!');
+                    updateBookingTable(response.data);
                 },
                 error: function(xhr, status, error) {
                     alertify.error(error);
@@ -204,6 +205,7 @@ $(function () {
                 success: function(response) {
                     $('#date_model').modal('hide');
                     alertify.success(response.success);
+                    updateBookingTable(response.data);
                 },
                 error: function(xhr, status, error) {
                     alertify.error(error);
@@ -211,62 +213,120 @@ $(function () {
             });
         });
 
-        // function updateHolidayTable(data) {
-        //     let tbody = $('#holiday_table tbody');
-        //     tbody.empty(); // Clear existing rows
-        //
-        //     if (data.holiday.length === 0) {
-        //         tbody.append(`<tr><td colspan="10" class="text-center">Record Not Found</td></tr>`);
-        //     } else {
-        //         // Loop through the data and append rows
-        //         $.each(data.holiday, function(index, item) {
-        //             tbody.append(`
-        //         <tr>
-        //             <td>${item.id}</td>
-        //             <td>${item.event_name}</td>
-        //             <td>${formatDate(item.event_date)}</td>
-        //            <td>${item.user ? item.user.email : ''}</td>
-        //             <td>${formatDateTime(item.updated_at)}</td>
-        //             <td>
-        //                 <a href="javascript:void(0)" class="holiday_edit" data-id="${item.id}"
-        //                     data-event_name="${item.event_name}" data-description="${item.notes}"
-        //                     data-event_date="${formatDate(item.event_date)}" >
-        //                     <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-        //                         <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
-        //                     </svg>
-        //                 </a>
-        //                 <a href="#" class="holiday_delete text-danger w-4 h-4 mr-1" data-id="${item.id}">
-        //                     <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-        //                         <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-        //                     </svg>
-        //                 </a>
-        //             </td>
-        //         </tr>
-        //     `);
-        //         });
-        //     }
-        // }
+        function updateBookingTable(data) {
+            console.log(data);
+            let tbody = $('#booking_table tbody');
+            tbody.empty(); // Clear existing rows
+
+            if (data.bookings.length === 0) {
+                tbody.append(`<tr><td colspan="15" class="text-center">Record Not Found</td></tr>`);
+            } else {
+                $.each(data.bookings, function(index, item) {
+                    // Check if details exist and have at least one element
+                    let bookingDetails = (item.details && item.details.length > 0)
+                        ? JSON.parse(item.details[0].car_details || '{}')
+                        : {};
+                    let paymentDetails = (item.details && item.details.length > 0)
+                        ? JSON.parse(item.details[0].payment_details || '{}')
+                        : {};
+
+                    let carModel = bookingDetails.car_model || {};
+                    let commends = item.comments || [];
+
+                    let rescheduleDate = item.reschedule_date ? `<p class="text-danger">${formatDateTime(item.reschedule_date)}</p>` : '';
+
+                    tbody.append(`
+                <tr class="${item.risk === 1 ? 'bg-light-red' : item.status === 2 ? 'bg-light-green' : ''}">
+                    <td>${item.booking_type === 'pickup' ? '<h2>P</h2>' : '<h2>D</h2>'}</td>
+                    <td>
+                        <div class="d-flex justify-content-center">
+                            <input type="checkbox" class="risk-checkbox" data-id="${item.id}" ${item.risk === 1 ? 'checked' : ''}>
+                        </div>
+                        <br>
+                       <button class="btn btn-warning open-risk-modal" data-id="${item.id}" data-commend='${JSON.stringify(commends).replace(/'/g, "&apos;")}'>
+    <h5>i</h5>
+</button>
+
+                    </td>
+                    <td class="d-flex justify-content-center">
+                        <input type="checkbox" class="done-checkbox" data-id="${item.id}" ${item.status == 2 ? 'checked' : ''}>
+                    </td>
+                    <td>${formatDateTime(item.start_date)}<br>${rescheduleDate}</td>
+                    <td>${item.user ? item.user.name : ''}</td>
+                    <td>${carModel.model_name || ''}</td>
+                    <td>${bookingDetails.register_number || ''}</td>
+                    <td class="truncate-text" title="${item.address}">${item.address}</td>
+                    <td>
+                        <button class="btn btn-warning user-details-modal" data-id="${item.user_id}" data-mobile="${item.user.mobile}" data-booking="${item.user.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item.user.aadhaar_number}">
+                            User details
+                        </button>
+                    </td>
+                    <td>${item.user ? item.user.driving_licence : ''}</td>
+                    <td>${item.booking_id}</td>
+                    <td>${item.start_date ? formatDateTime(item.start_date) : formatDateTime(item.end_date)}<br>
+                        <button class="btn btn-warning edit-booking-date" data-id="${item.id}" data-pickup_date="${item.start_date || 0}" data-delivery_date="${item.end_date || 0}">
+                            Edit
+                        </button>
+                    </td>
+                    <td>${carModel.dep_amount || 0}</td>
+                    <td>
+                        <button class="btn btn-warning amount-modal" data-id="${item.booking_id}" data-week_days_amount="${paymentDetails.week_days_amount || 0}" data-week_end_amount="${paymentDetails.week_end_amount || 0}" data-festival_amount="${paymentDetails.festival_amount || 0}" data-delivery_fee="${item.delivery_fee || ''}" data-dep_fee="${carModel.dep_amount || ''}" data-coupon="${item.coupon ? item.coupon.discount : ''}" data-type="${item.coupon ? item.coupon.type : ''}">
+                            Amount Details
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger cancel_booking" data-id="${item.id}">
+                            Cancel Order
+                        </button>
+                    </td>
+                </tr>
+            `);
+                });
+            }
+        }
+
 
 // Helper function to format dates
         function formatDateTime(dateString) {
             let date = new Date(dateString);
-            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-        }
-        function formatDate(dateString) {
-            let date = new Date(dateString);
-            return date.toLocaleDateString();
+
+            // Get day, month, and year
+            let day = String(date.getDate()).padStart(2, '0'); // Ensure two digits
+            let month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+            let year = date.getFullYear();
+
+            // Get hours, minutes, and seconds
+            let hours = String(date.getHours()).padStart(2, '0');
+            let minutes = String(date.getMinutes()).padStart(2, '0');
+            let seconds = String(date.getSeconds()).padStart(2, '0');
+
+            // Format date and time
+            let formattedDate = `${day}/${month}/${year}`;
+            let formattedTime = `${hours}:${minutes}:${seconds}`;
+
+            return `${formattedDate} ${formattedTime}`;
         }
 
+
         function fetchData() {
-            let holiday_search = $('#holiday_search').val();
+            const carModel = $('#car_model').val();
+            const registerNumber = $('#register_number').val();
+            const bookingId = $('#booking_id').val();
+            const customerName = $('#customer_name').val();
+            const bookingType = $('#booking_type').val();
             $.ajax({
-                url: '/admin/holiday/search', // Define this route in your web.php
+                url: '/admin/booking/search', // Define this route in your web.php
                 type: 'GET',
                 data: {
-                    holiday_search: holiday_search
+                    car_model: carModel,
+                    register_number: registerNumber,
+                    booking_id: bookingId,
+                    customer_name: customerName,
+                    booking_type: bookingType, // Send the booking type
                 },
                 success: function(response) {
-                    updateHolidayTable(response.data) // Populate table with new data
+                    updateBookingTable(response.data) // Populate table with new data
+                    updatePagination(response);
                 },
                 error: function(xhr) {
                     alertify.error('Something Went Wrong');
@@ -274,6 +334,24 @@ $(function () {
             });
         }
 
-        $('#holiday_search').on('keyup', fetchData);
+        function updatePagination(data) {
+            const paginationContainer = $('#pagination');
+            paginationContainer.empty();
+
+            // Create pagination links
+            if (data.last_page > 1) {
+                for (let i = 1; i <= data.last_page; i++) {
+                    const activeClass = (i === data.current_page) ? 'active' : '';
+                    paginationContainer.append(`
+                    <li class="page-item ${activeClass}">
+                        <a class="page-link" href="#" onclick="fetchData(${i})">${i}</a>
+                    </li>
+                `);
+                }
+            }
+        }
+        $('#car_model, #register_number, #booking_id, #customer_name, #booking_type').on('input change', function() {
+            fetchData();
+        });
     });
 });

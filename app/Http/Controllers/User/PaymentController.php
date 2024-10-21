@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Available;
 use App\Models\Booking;
 use App\Models\BookingDetail;
 use App\Models\CarDetails;
@@ -55,9 +56,13 @@ class PaymentController extends Controller
         $booking_details->car_details = json_encode(session('booking_details.car_details'));
         $booking_details->save();
 
-        $car_status = CarDetails::find(session('booking_details.car_id'));
-        $car_status->status = 2;
-        $car_status->save();
+
+        $car_available = new Available();
+        $car_available->car_id = !empty(session('booking_details.car_id')) ?  session('booking_details.car_id') : 0;
+        $car_available->start_date = formDateTime(session('booking_details.start_date'));
+        $car_available->end_date =  formDateTime(session('booking_details.end_date'));
+        $car_available->booking_type = 'booking';
+        $car_available->save();
 
         // Send booking confirmation email
         Mail::to(Auth::user()->email)->send(new BookingConfirmed($delivery_booking));
