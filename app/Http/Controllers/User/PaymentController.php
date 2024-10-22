@@ -25,6 +25,7 @@ class PaymentController extends Controller
         $booking = new Booking();
         $booking->booking_id = $id;
         $booking->user_id = Auth::id();
+        $booking->car_id = !empty(session('booking_details.car_id')) ?  session('booking_details.car_id') : 0;
         $booking->booking_type = 'pickup';
         $booking->start_date = formDateTime(session('booking_details.start_date'));
         $booking->latitude = !empty(session('pickup.lat')) ? session('pickup.lat') : session('pick-delivery.lat');
@@ -39,6 +40,7 @@ class PaymentController extends Controller
         $delivery_booking = new Booking();
         $delivery_booking->booking_id = $id;
         $delivery_booking->user_id = Auth::id();
+        $delivery_booking->car_id = !empty(session('booking_details.car_id')) ?  session('booking_details.car_id') : 0;
         $delivery_booking->booking_type = 'delivery';
         $delivery_booking->end_date = formDateTime(session('booking_details.end_date'));
         $delivery_booking->latitude = !empty(session('delivery.lat')) ? session('delivery.lat') : session('pick-delivery.lat');
@@ -57,11 +59,14 @@ class PaymentController extends Controller
         $booking_details->save();
 
 
+        $model_id = !empty(session('booking_details.car_id')) ? CarDetails::find(session('booking_details.car_id'))->model_id : 0;
         $car_available = new Available();
         $car_available->car_id = !empty(session('booking_details.car_id')) ?  session('booking_details.car_id') : 0;
+        $car_available->model_id = !empty($model_id) ? $model_id: 0;
+        $car_available->booking_id = $id;
         $car_available->start_date = formDateTime(session('booking_details.start_date'));
-        $car_available->end_date =  formDateTime(session('booking_details.end_date'));
-        $car_available->booking_type = 'booking';
+        $car_available->end_date = formDateTime(session('booking_details.end_date'));
+        $car_available->booking_type = 1;
         $car_available->save();
 
         // Send booking confirmation email
@@ -78,7 +83,7 @@ class PaymentController extends Controller
     }
 
     public function bookingHistory() {
-        $booking = Booking::with(['user','car'])->get();
+        $booking = Booking::with(['user','car'])->where('user_id',Auth::id())->get();
         return view('user.frontpage.booking.list', compact('booking'));
     }
 

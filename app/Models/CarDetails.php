@@ -13,4 +13,11 @@ class CarDetails extends Model
     {
         return $this->belongsTo(CarModel::class, 'model_id', 'car_model_id');
     }
+
+    // In CarDetails.php model
+    public function availableBookings()
+    {
+        return $this->hasMany(Available::class, 'register_number', 'register_number');
+    }
+
 }

@@ -14,16 +14,12 @@
             <div class="owl-carousel owl-carousel-5 owl-theme">
                 @if(!empty($section3))
                     @foreach($section3 as $item)
-
                         <div class="item">
                             <div class="r2dc-card-bg p-3">
                                 <div class="d-flex justify-content-between">
                                     <div class="d-flex">
                                         <div class="bg-white rounded-pill w-fit px-2 py-1 fw-500 fs-15 my-auto">
                                             <i class="fas fa-star" style="color:#E66742;"></i> 4.5
-                                        </div>
-                                        <div class="bg-white rounded-pill w-fit px-2 py-1 fw-500 fs-15 my-auto ms-2">
-                                            Available Now
                                         </div>
                                     </div>
                                     <div>
@@ -56,18 +52,13 @@
                                         <p class="fs-15 fw-600 mb-2">
                                             ₹ {{ $item->carModel->price_per_hour ?? ''}} <span class="fw-500 fs-12">per hours</span>
                                         </p>
-                                        @if($item->status == 1)
                                         <a href="{{ route('book.car', ['model_id' => $item->id]) }}" class="my-button btn btn-lg fs-14 float-end">Book now</a>
-                                        @else
-                                        <button class="sold-button btn btn-lg fs-14 float-end">
-                                            Sold
-                                        </button>
-                                        @endif
                                     </div>
                                 </div>
                             </div>
                         </div>
                     @endforeach
+
                 @else
                     <div class="item">
                         <div class="r2dc-card-bg p-3">

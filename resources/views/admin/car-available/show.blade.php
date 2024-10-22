@@ -26,9 +26,39 @@
         </div>
         <!-- /.container-fluid -->
     </section>
-    <div id="availabilityDetails" class="mt-4">
-        <!-- Availability details will be loaded here via AJAX -->
+    <div id="car-details-table" style="display: none;">
+    <div style="overflow-x: auto; overflow-y: auto; max-height: 400px;">
+        <table class="table" id="dynamic-table">
+        <thead>
+        <tr id="date-header"></tr>
+        <tr id="hours-header"></tr>
+        </thead>
+        <tbody id="registration-numbers-body"></tbody>
+
+    </table>
     </div>
+        <button id="prev-week" class="btn btn-secondary">Previous Week</button>
+        <button id="next-week" class="btn btn-secondary">Next Week</button>
+    </div>
+    <style>
+        #car-details-table {
+            border-collapse: collapse; /* Ensures borders are collapsed */
+            width: 100%; /* Make the table full width */
+        }
+
+        #car-details-table th,
+        #car-details-table td {
+            border: 1px solid #000; /* Set a solid black border */
+            padding: 8px; /* Add some padding for better spacing */
+            text-align: center; /* Center align text */
+        }
+
+        #car-details-table th {
+            background-color: #f2f2f2; /* Optional: Set a light gray background for header */
+        }
+    </style>
+
+
 
 @endsection
 

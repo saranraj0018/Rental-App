@@ -23,7 +23,7 @@ class UserController extends Controller
     {
         $section1 = Frontend::with('frontendImage')->where('data_keys','section1-image-car')->first();
         $section2 = Coupon::all();
-        $section3 = CarDetails::with('carModel')->get();
+        $section3 = CarDetails::with('carModel','availableBookings')->get();
         $car_info = Frontend::with('frontendImage')->where('data_keys','car-info-section')->first();
         $section4 = !empty($car_info['data_values']) ? json_decode($car_info['data_values'],true) : [];
         $brand_info = Frontend::with('frontendImage')->where('data_keys','brand-section')->first();
@@ -31,8 +31,9 @@ class UserController extends Controller
         $brand_image = !empty($brand_info->frontendImage) ? $brand_info->frontendImage : null;
         $car_image = !empty($car_info->frontendImage) ? $car_info->frontendImage : null;
         $faq_items = Frontend::where('data_keys','faq-section')->orderBy('created_at', 'desc')->get();
+        $general_setting = Frontend::where('data_keys','faq-section')->orderBy('created_at', 'desc')->get();
         return view('user.frontpage.list-home',compact('section1','section2','section3','section4','car_image'
-            ,'brand_image','section8','faq_items'));
+            ,'brand_image','section8','faq_items','general_setting'));
     }
 
     public function updateLocation(Request $request)
