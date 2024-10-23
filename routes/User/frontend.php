@@ -27,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('user/documentation', [UserController::class, 'storeDocuments'])->name('store.documents');
     Route::post('user/payment', [PaymentController::class, 'orderBooking'])->name('order.booking');
     Route::view('booking/success', 'user.frontpage.booking.success')->name('booking.success');
+    Route::post('user/calculate-price', [PaymentController::class, 'calculatePrice'])->name('calculate.price');
 
     // upload documents
     Route::get('user/profile', [UserController::class, 'profile'])->name('user.profile');

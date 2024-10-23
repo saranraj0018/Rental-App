@@ -50,5 +50,75 @@ $(function () {
                 }
             });
         });
+
+        $('#user_booking').on('click', '.edit_date', function() {
+            $('#booking_id').val($(this).data('booking_id'));
+            $('#end_date').val($(this).data('end_date'));
+            $('#model_id').val($(this).data('model_id'));
+            $('#reschedule_model').modal('show');
+        });
+        flatpickr("#delivery_date", {
+            minDate: "today",
+            enableTime: true,
+            dateFormat: "d-m-Y | H:i",
+            time_24hr: true,
+            minuteIncrement: 30, // 30-minute intervals
+            allowInput: true,
+        });
+
+        $('#calculate_price').on('click', function () {
+            const bookingId = $('#booking_id').val();
+            const endDate = $('#end_date').val();
+            const model_id = $('#model_id').val();
+            const date = $('#delivery_date').val();
+            let deliveryDate = date.replace(/\|/g, '').trim();
+
+            if (!deliveryDate) {
+                $('#delivery_date').addClass('is-invalid');
+                return;
+            }
+
+            // Make an AJAX request to calculate the price
+            $.ajax({
+                url: '/user/calculate-price',
+                method: 'POST',
+                data: { booking_id: bookingId, end_date: endDate, delivery_date: deliveryDate, model_id:model_id },
+                success: function (data) {
+                    if (data.success) {
+                        const { festival_amount, week_end_amount, week_days_amount, total_price } = data;
+                        $('#price-details').html(`
+                        <p>Normal Days: ₹${week_days_amount}</p>
+                        <p>Festival Days: ₹${festival_amount}</p>
+                        <p>Weekend Days: ₹${week_end_amount}</p>
+                        <p>Total: ₹${total_price}</p>
+                    `);
+                        $('#reschedule_pay').removeClass('d-none');
+
+                    } else {
+                        alert('Error calculating price. Please try again.');
+                    }
+                },
+                error: function (response) {
+                    if (response.responseJSON && response.responseJSON.errors) {
+                        let errors = response.responseJSON.errors;
+                        $('.form-control').removeClass('is-invalid');
+                        $('.invalid-feedback').empty();
+                        $.each(errors, function (key, value) {
+                            let element = $('#' + key);
+                            // For other form controls
+                            element.addClass('is-invalid');
+                            // Display the error message
+                            element.siblings('.invalid-feedback').text(value[0]);
+                        });
+                    }
+                }
+            });
+        });
+
+        $('#risk-form').on('submit', function (event) {
+            event.preventDefault();
+
+            // Implement the payment logic here, such as initializing Razorpay.
+        });
     });
 });

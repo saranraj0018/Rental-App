@@ -7,6 +7,7 @@ use App\Models\Available;
 use App\Models\Booking;
 use App\Models\BookingDetail;
 use App\Models\CarDetails;
+use App\Models\CarModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\BookingConfirmed;
@@ -117,4 +118,32 @@ class PaymentController extends Controller
             ]
         );
     }
+
+    public function calculatePrice(Request $request)
+    {
+        $request->validate([
+            'delivery_date' => 'required|date_format:d-m-Y  H:i|after:end_date',
+        ]);
+
+        if (!empty($request['end_date']) && !empty($request['delivery_date']) && !empty($request['model_id'])) {
+            $car_model = CarModel::find($request['model_id']);
+            $prices = ['festival' =>  $car_model->peak_reason_surge ?? 0,
+                'weekend' => $car_model->weekend_surge ?? 0,
+                'weekday' =>  $car_model->price_per_hour ?? 0];
+            $result = UserController::calculatePrice($prices, $request['end_date'], $request['delivery_date']);
+            session(['reschedule_total_price' => $result['total_price']]);
+        }
+        return response()->json([
+            'success' => true,
+            'total_price' => $result['total_price'] ?? 0,
+            'festival_amount' => $result['festival_amount'] ?? 0,
+            'week_end_amount' => $result['week_end_amount'] ?? 0,
+            'week_days_amount' => $result['week_days_amount'] ?? 0,
+            'total_days' => $result['total_days'] ?? 0,
+            'total_hours' => $result['total_hours'] ?? 0,
+        ]);
+    }
+
+
+
 }

@@ -88,11 +88,10 @@
                 <section class="my-5">
                     <div class="container my-4">
                         <div class="table-responsive">
-                            <table class="table booking-table table-borderless">
+                            <table class="table booking-table table-borderless" id="user_booking">
                                 <tbody>
                                 @foreach($booking as $details)
                                     @php
-
                                         $car = !empty($details->details->first()) ? $details->details->first() : null;
                                         $model_details = !empty($car->car_details) ? json_decode($car->car_details) : [];
                                         $payment_details = !empty($car->payment_details) ? json_decode($car->payment_details) : [];
@@ -104,14 +103,6 @@
                                         </div>
                                         <div class="fs-5 my-1 my-lg-2 fw-500 fs-mb-12">
                                            {{ $model_details->car_model->model_name ?? '' }}
-                                        </div>
-                                        <div class="d-flex fs-12 fs-mb-9">
-                                            <div>
-                                                <i class="bg-blue rounded-circle p-1 p-lg-2 text-white fa-solid fa-location-dot fs-12"></i>
-                                            </div>
-                                            <div class="ms-1 fw-500 my-auto">
-                                                {{ '' }}
-                                            </div>
                                         </div>
                                     </td>
                                     <td class="pt-4">
@@ -147,7 +138,11 @@
                                         </div>
                                     </td>
                                     <td class="pt-4 pt-lg-5">
-                                        <a class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none">View Details</a>
+                                        <button class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none edit_date"
+                                                data-end_date="{{showDateformat($details->end_date) ?? ''}}" data-booking_id="{{$details->booking_id ?? ''}}"
+                                                data-model_id="{{ $model_details->car_model->id ?? '' }}">Edit</button>
+                                        <button class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none details">View Details</button>
+                                        <button class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none cancel_booking">Cancel</button>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -155,6 +150,7 @@
                             </table>
                         </div>
                     </div>
+                    @include('user.frontpage.booking.model')
                 </section>
 
             </div>
@@ -235,6 +231,8 @@
 @include('user.frontpage.footer')
 
     <!-- FOR TAB ELEMENT -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
 @endsection
+@section('customJs')
+    <script src="{{asset('user/js/booking.js')}}"></script>
+@endsection
+

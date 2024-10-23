@@ -119,7 +119,6 @@ class UserController extends Controller
         if (empty($from_date) && empty($to_date)) return $price;
         $start_date = str_replace('|', '', $from_date);
         $end_date = str_replace('|', '', $to_date);
-
         $start = Carbon::createFromFormat('d-m-Y H:i', $start_date);
         $end = Carbon::createFromFormat('d-m-Y H:i', $end_date);
         $festival_dates = Holiday::pluck('event_date')->toArray();
