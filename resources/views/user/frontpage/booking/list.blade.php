@@ -92,7 +92,10 @@
                                 <tbody>
                                 @foreach($booking as $details)
                                     @php
-                                        $car_details = !empty($details->car_details) ? json_decode($details->car_details) : null;
+
+                                        $car = !empty($details->details->first()) ? $details->details->first() : null;
+                                        $model_details = !empty($car->car_details) ? json_decode($car->car_details) : [];
+                                        $payment_details = !empty($car->payment_details) ? json_decode($car->payment_details) : [];
                                     @endphp
                                 <tr>
                                     <td>
@@ -100,7 +103,7 @@
                                             <i class="fa-solid fa-circle fs-12 fs-mb-9"></i> Booking Confirmed
                                         </div>
                                         <div class="fs-5 my-1 my-lg-2 fw-500 fs-mb-12">
-                                           {{ $car_details->car_model->model_name ?? '' }}
+                                           {{ $model_details->car_model->model_name ?? '' }}
                                         </div>
                                         <div class="d-flex fs-12 fs-mb-9">
                                             <div>
@@ -124,7 +127,7 @@
                                             Starting Date
                                         </div>
                                         <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            {{ $details->start_date ?? '' }}
+                                            {{ showDateTime($details->start_date) ?? '' }}
                                         </div>
                                     </td>
                                     <td class="pt-4">
@@ -132,7 +135,7 @@
                                             End Date
                                         </div>
                                         <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            {{ $details->end_date ?? '' }}
+                                            {{ showDateTime($details->end_date) ?? '' }}
                                         </div>
                                     </td>
                                     <td class="pt-4">
@@ -140,7 +143,7 @@
                                             Total Price
                                         </div>
                                         <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            ₹ {{ $details->total_price ?? '' }}
+                                            ₹ {{ $payment_details->total_price ?? '' }}
                                         </div>
                                     </td>
                                     <td class="pt-4 pt-lg-5">

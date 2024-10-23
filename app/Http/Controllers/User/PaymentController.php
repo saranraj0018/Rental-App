@@ -26,8 +26,9 @@ class PaymentController extends Controller
         $booking->booking_id = $id;
         $booking->user_id = Auth::id();
         $booking->car_id = !empty(session('booking_details.car_id')) ?  session('booking_details.car_id') : 0;
-        $booking->booking_type = 'pickup';
+        $booking->booking_type = 'delivery';
         $booking->start_date = formDateTime(session('booking_details.start_date'));
+        $booking->end_date = formDateTime(session('booking_details.end_date'));
         $booking->latitude = !empty(session('pickup.lat')) ? session('pickup.lat') : session('pick-delivery.lat');
         $booking->longitude = !empty(session('pickup.lng')) ? session('pickup.lng') : session('pick-delivery.lng');
         $booking->address = !empty(session('pickup.address')) ? session('pickup.address') : session('pick-delivery.address');
@@ -41,7 +42,8 @@ class PaymentController extends Controller
         $delivery_booking->booking_id = $id;
         $delivery_booking->user_id = Auth::id();
         $delivery_booking->car_id = !empty(session('booking_details.car_id')) ?  session('booking_details.car_id') : 0;
-        $delivery_booking->booking_type = 'delivery';
+        $delivery_booking->booking_type = 'pickup';
+        $delivery_booking->start_date = formDateTime(session('booking_details.start_date'));
         $delivery_booking->end_date = formDateTime(session('booking_details.end_date'));
         $delivery_booking->latitude = !empty(session('delivery.lat')) ? session('delivery.lat') : session('pick-delivery.lat');
         $delivery_booking->longitude = !empty(session('delivery.lng')) ? session('delivery.lng') : session('pick-delivery.lng');
@@ -52,7 +54,7 @@ class PaymentController extends Controller
         $delivery_booking->save();
 
         $booking_details = new BookingDetail();
-        $booking_details->booking_id = $booking->id;
+        $booking_details->booking_id = $id;
         $booking_details->coupon = !empty(session('coupon')) ?  json_encode(session('coupon')) : null;
         $booking_details->payment_details = json_encode(session('booking_details.price_list'));
         $booking_details->car_details = json_encode(session('booking_details.car_details'));
@@ -83,7 +85,7 @@ class PaymentController extends Controller
     }
 
     public function bookingHistory() {
-        $booking = Booking::with(['user','car'])->where('user_id',Auth::id())->get();
+        $booking = Booking::with(['user','car','details'])->where('user_id',Auth::id())->get()->unique('booking_id');
         return view('user.frontpage.booking.list', compact('booking'));
     }
 

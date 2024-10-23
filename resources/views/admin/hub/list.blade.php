@@ -176,7 +176,7 @@
                                     <td class="d-flex justify-content-center">
                                         <input type="checkbox" class="done-checkbox" data-id="{{ $item->id }}" @if($item->status == 2) checked @endif>
                                     </td>
-                                    <td>{{ showDateTime($item->start_date) }}<br>
+                                    <td>{{ $item->booking_type == 'pickup' ? showDateTime($item->end_date) :  showDateTime($item->start_date) }}<br>
                                         @if(!empty($item->reschedule_date))
                                             <p class="text-danger">{{ showDateTime($item->reschedule_date) }}</p>
                                         @endif</td>
@@ -191,7 +191,8 @@
                                     </td>
                                     <td>{{ $item->user->driving_licence ?? '' }}</td>
                                     <td>{{ $item->booking_id }}</td>
-                                    <td>{{ showDateTime($item->start_date) }}<br>
+                                    <td>{{ showDateTime($item->reschedule_date) ?? ($item->booking_type == 'pickup' ? showDateTime($item->end_date) : showDateTime($item->start_date)) }}
+                                        <br>
                                         <button class="btn btn-warning edit-booking-date" data-id="{{ $item->id }}" data-pickup_date="{{ $item->start_date ?? 0 }}" data-delivery_date="{{ $item->end_date ?? 0 }}">
                                             Edit
                                         </button>
