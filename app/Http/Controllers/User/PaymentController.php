@@ -8,6 +8,7 @@ use App\Models\Booking;
 use App\Models\BookingDetail;
 use App\Models\CarDetails;
 use App\Models\CarModel;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\BookingConfirmed;
@@ -86,7 +87,8 @@ class PaymentController extends Controller
     }
 
     public function bookingHistory() {
-        $booking = Booking::with(['user','car','details'])->where('user_id',Auth::id())->get()->unique('booking_id');
+        $booking = Booking::with(['user','car','details'])->
+        where('booking_type','pickup')->where('user_id',Auth::id())->get()->unique('booking_id');
         return view('user.frontpage.booking.list', compact('booking'));
     }
 
@@ -124,8 +126,9 @@ class PaymentController extends Controller
         $request->validate([
             'delivery_date' => 'required|date_format:d-m-Y  H:i|after:end_date',
         ]);
-
         if (!empty($request['end_date']) && !empty($request['delivery_date']) && !empty($request['model_id'])) {
+            session(['delivery_date' => $request['delivery_date']]);
+
             $car_model = CarModel::find($request['model_id']);
             $prices = ['festival' =>  $car_model->peak_reason_surge ?? 0,
                 'weekend' => $car_model->weekend_surge ?? 0,
@@ -144,6 +147,27 @@ class PaymentController extends Controller
         ]);
     }
 
+    public function completePayment(Request $request)
+    {
+        $booking_id = $request['booking_id'];
+        $payment_id = $request['payment_id'];
 
+
+        $payment = new Payment();
+        $payment->payment_id = $payment_id;
+        $payment->booking_id = $booking_id;
+        $payment->amount = session('reschedule_total_price');
+        $payment->currency = "INR";
+        $payment->customer_id = Auth::id();
+        $payment->payment_status = 'completed';
+        $payment->save();
+
+        $booking = Booking::where('booking_id',$booking_id)->where('booking_type','pickup')->first();
+        $booking->reschedule_date = !empty(session('delivery_date')) ? formDate(session('delivery_date')) : '';
+        $booking->save();
+
+        session()->forget(['reschedule_total_price','delivery_date']);
+            return response()->json(['success' => true]);
+        }
 
 }

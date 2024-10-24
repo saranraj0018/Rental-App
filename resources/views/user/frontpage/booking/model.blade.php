@@ -134,17 +134,19 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     $(document).on('click', '#reschedule_pay', function(e) {
-    let total_price = {{ session('reschedule_total_price') }}
+    let total_price = {{ session('reschedule_total_price') ?? 0 }};
+    let bookingId = $('#booking_id').val();
+
         // Initialize Razorpay payment
         const options = {
             "key": "{{ config('services.razorpay.key') }}", // Replace with your Razorpay API key
             "amount": total_price * 100, // Amount is in paise
             "currency": "INR",
-            "name": "Your Company Name",
+            "name": "{{Auth::user()->name}}",
             "description": "Reschedule Delivery",
             "handler": function (response) {
                 // On successful payment, make an AJAX request to update the booking
-                fetch(`/complete-payment`, {
+                fetch(`/user/complete-payment`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -157,7 +159,7 @@
                         if (data.success) {
                             alert('Payment successful!');
                             $('#reschedule_model').modal('hide');
-                            window.location.href = '/booking-page'; // Redirect to the booking page
+                            window.location.reload();
                         } else {
                             alert('Payment failed. Please try again.');
                         }

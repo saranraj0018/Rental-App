@@ -30,6 +30,18 @@
                 </li>
                 @endif
 {{--                <li class="nav-item">--}}
+{{--                    <a href="{{ route('complete.booking') }}" class="nav-link">--}}
+{{--                        <i class="nav-icon  far fa-file-alt"></i>--}}
+{{--                        <p>Complete Booking</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a href="{{ route('cancel.booking') }}" class="nav-link">--}}
+{{--                        <i class="nav-icon  far fa-file-alt"></i>--}}
+{{--                        <p>Cancel Booking</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+{{--                <li class="nav-item">--}}
 {{--                    <a href="" class="nav-link">--}}
 {{--                        <i class="nav-icon fas fa fa-cogs"></i>--}}
 {{--                        <p>Control panel</p>--}}
