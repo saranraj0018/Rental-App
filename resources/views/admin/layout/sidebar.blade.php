@@ -78,6 +78,12 @@
                             <p>Car Availability</p>
                         </a>
                     </li>
+                <li class="nav-item">
+                    <a href="{{ route('car-swap.list') }}" class="nav-link">
+                        <i class="nav-icon fas fa fa-map"></i>
+                        <p>Swap Cars</p>
+                    </a>
+                </li>
 {{--                @endif--}}3
 {{--                <li class="nav-item">--}}
 {{--                    <a href="orders.html" class="nav-link">--}}

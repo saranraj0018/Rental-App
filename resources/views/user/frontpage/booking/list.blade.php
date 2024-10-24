@@ -91,10 +91,13 @@
                             <table class="table booking-table table-borderless" id="user_booking">
                                 <tbody>
                                 @foreach($booking as $details)
-                                    @php
+                                    @if($details->status === 1)
+                                        @php
                                         $car = !empty($details->details->first()) ? $details->details->first() : null;
                                         $model_details = !empty($car->car_details) ? json_decode($car->car_details) : [];
                                         $payment_details = !empty($car->payment_details) ? json_decode($car->payment_details) : [];
+                                        $coupon_details = !empty($car->coupon) ? json_decode($car->coupon) : [];
+
                                     @endphp
                                 <tr>
                                     <td>
@@ -141,10 +144,20 @@
                                         <button class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none edit_date"
                                                 data-end_date="{{showDateformat($details->end_date) ?? ''}}" data-booking_id="{{$details->booking_id ?? ''}}"
                                                 data-model_id="{{ $model_details->car_model->id ?? '' }}">Edit</button>
-                                        <button class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none details">View Details</button>
-                                        <button class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none cancel_booking">Cancel</button>
+                                        <button class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none details"
+                                                data-total_days="{{ $payment_details->total_days ?? '' }}" data-total_hours="{{ $payment_details->total_hours ?? '' }}"
+                                                data-total_price="{{ $payment_details->total_price ?? '' }}"
+                                                data-model_name="{{  $model_details->car_model->model_name ?? ''}}"
+                                                data-register_number="{{ $model_details->register_number ?? '' }}"
+                                                data-code="{{ $coupon_details->code ?? '' }}"
+                                                data-discount="{{ $coupon_details->discount ?? '' }}"
+                                                data-week_end_amount="{{ $payment_details->week_end_amount ?? '' }}"
+                                                data-week_days_amount="{{ $payment_details->week_days_amount ?? '' }}"
+                                                data-festival_amount="{{ $payment_details->festival_amount ?? '' }}">View Details</button>
+                                        <button class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none cancel_booking"  data-booking_id="{{$details->booking_id ?? ''}}">Cancel</button>
                                     </td>
                                 </tr>
+                                    @endif
                                 @endforeach
                                 </tbody>
                             </table>
@@ -163,60 +176,77 @@
                         <div class="table-responsive">
                             <table class="table booking-table table-borderless">
                                 <tbody>
-{{--                                <tr>--}}
-{{--                                    <td>--}}
-{{--                                        <div class="text-danger fs-12 fs-mb-9">--}}
-{{--                                            <i class="fa-solid fa-circle fs-12 fs-mb-9"></i> Completed--}}
-{{--                                        </div>--}}
-{{--                                        <div class="fs-5 my-1 my-lg-2 fw-500 fs-mb-12">--}}
-{{--                                            Maruti Swift--}}
-{{--                                        </div>--}}
-{{--                                        <div class="d-flex fs-12 fs-mb-9">--}}
-{{--                                            <div>--}}
-{{--                                                <i class="bg-blue rounded-circle p-1 p-lg-2 text-white fa-solid fa-location-dot fs-12"></i>--}}
-{{--                                            </div>--}}
-{{--                                            <div class="ms-1 fw-500 my-auto">--}}
-{{--                                                RS Puram,Coimbatore.--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    </td>--}}
-{{--                                    <td class="pt-4">--}}
-{{--                                        <div class="fs-14 fw-500 fs-mb-12">--}}
-{{--                                            Booking ID--}}
-{{--                                        </div>--}}
-{{--                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">--}}
-{{--                                            59437584--}}
-{{--                                        </div>--}}
-{{--                                    </td>--}}
-{{--                                    <td class="pt-4">--}}
-{{--                                        <div class="fs-14 fw-500 fs-mb-12">--}}
-{{--                                            Starting Date--}}
-{{--                                        </div>--}}
-{{--                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">--}}
-{{--                                            12/08/2024 09:30AM--}}
-{{--                                        </div>--}}
-{{--                                    </td>--}}
-{{--                                    <td class="pt-4">--}}
-{{--                                        <div class="fs-14 fw-500 fs-mb-12">--}}
-{{--                                            End Date--}}
-{{--                                        </div>--}}
-{{--                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">--}}
-{{--                                            13/08/2024 01:30PM--}}
-{{--                                        </div>--}}
-{{--                                    </td>--}}
-{{--                                    <td class="pt-4">--}}
-{{--                                        <div class="fs-14 fw-500 fs-mb-12">--}}
-{{--                                            Total Price--}}
-{{--                                        </div>--}}
-{{--                                        <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">--}}
-{{--                                            ₹11,599--}}
-{{--                                        </div>--}}
-{{--                                    </td>--}}
-{{--                                    <td class="pt-4 pt-lg-5">--}}
-{{--                                        <a class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none">View Details</a>--}}
-{{--                                    </td>--}}
-{{--                                </tr>--}}
+                                @foreach($booking as $details)
+                                    @if($details->status !== 1)
+                                    @php
+                                        $car = !empty($details->details->first()) ? $details->details->first() : null;
+                                        $model_details = !empty($car->car_details) ? json_decode($car->car_details) : [];
+                                        $payment_details = !empty($car->payment_details) ? json_decode($car->payment_details) : [];
+                                        $coupon_details = !empty($car->coupon) ? json_decode($car->coupon) : [];
+                                    @endphp
+                                    <tr>
+                                        <td>
+                                            @if($details->status == 2)
+                                            <div class="text-success fs-12 fs-mb-9">
+                                            <i class="fa-solid fa-circle fs-12 fs-mb-9"></i> Completed
+                                            </div>
+                                                @else
+                                                    <div class="text-danger fs-12 fs-mb-9">
+                                                        <i class="fa-solid fa-circle fs-12 fs-mb-9"></i> Cancel
+                                                    </div>
+                                                @endif
 
+                                            <div class="fs-5 my-1 my-lg-2 fw-500 fs-mb-12">
+                                                {{ $model_details->car_model->model_name ?? '' }}
+                                            </div>
+                                        </td>
+                                        <td class="pt-4">
+                                            <div class="fs-14 fw-500 fs-mb-12">
+                                                Booking ID
+                                            </div>
+                                            <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
+                                                {{ $details->booking_id ?? '' }}
+                                            </div>
+                                        </td>
+                                        <td class="pt-4">
+                                            <div class="fs-14 fw-500 fs-mb-12">
+                                                Starting Date
+                                            </div>
+                                            <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
+                                                {{ showDateTime($details->start_date) ?? '' }}
+                                            </div>
+                                        </td>
+                                        <td class="pt-4">
+                                            <div class="fs-14 fw-500 fs-mb-12">
+                                                End Date
+                                            </div>
+                                            <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
+                                                {{ !empty($details->reschedule_date) ? showDateTime($details->reschedule_date) : showDateTime($details->end_date) ?? '' }}
+                                            </div>
+                                        </td>
+                                        <td class="pt-4">
+                                            <div class="fs-14 fw-500 fs-mb-12">
+                                                Total Price
+                                            </div>
+                                            <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
+                                                ₹ {{ $payment_details->total_price ?? '' }}
+                                            </div>
+                                        </td>
+                                        <td class="pt-4 pt-lg-5">
+                                            <button class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none details"
+                                                    data-total_days="{{ $payment_details->total_days ?? '' }}" data-total_hours="{{ $payment_details->total_hours ?? '' }}"
+                                                    data-total_price="{{ $payment_details->total_price ?? '' }}"
+                                                    data-model_name="{{  $model_details->car_model->model_name ?? ''}}"
+                                                    data-register_number="{{ $model_details->register_number ?? '' }}"
+                                                    data-code="{{ $coupon_details->code ?? '' }}"
+                                                    data-discount="{{ $coupon_details->discount ?? '' }}"
+                                                    data-week_end_amount="{{ $payment_details->week_end_amount ?? '' }}"
+                                                    data-week_days_amount="{{ $payment_details->week_days_amount ?? '' }}"
+                                                    data-festival_amount="{{ $payment_details->festival_amount ?? '' }}">View Details</button>
+                                        </td>
+                                    </tr>
+                                    @endif
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>

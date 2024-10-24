@@ -12,6 +12,7 @@ Use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\MapController;
 use App\Http\Controllers\Admin\HolidayController;
 use App\Http\Controllers\Admin\AvailableController;
+use App\Http\Controllers\Admin\SwapController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +61,13 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::post('/car-block/save', [CarBlockController::class, 'save'])->name('car-block.save');
         Route::put('/car-block/update', [CarBlockController::class, 'update'])->name('car-block.update');
         Route::get('/car-block/search', [CarBlockController::class, 'search'])->name('car-block.search');
+
+        // Car-Swap list
+        Route::get('/car-swap/list', [SwapController::class, 'list'])->name('car-swap.list');
+        Route::get('/get/booking_date', [SwapController::class, 'getBookingDate'])->name('fetch.booking.date');
+        Route::get('/available/cars', [SwapController::class, 'availableCars'])->name('available.cars');
+        Route::post('/swap/car', [SwapController::class, 'swapCar'])->name('swap.car');
+        Route::get('/calculate/swap/car', [SwapController::class, 'swapCarCalculate'])->name('calculate.swap.car');
 
         // User Role list
         Route::get('/user-role/list', [RoleController::class, 'list'])->name('user-role.list');

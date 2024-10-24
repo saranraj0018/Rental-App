@@ -168,6 +168,20 @@ class PaymentController extends Controller
 
         session()->forget(['reschedule_total_price','delivery_date']);
             return response()->json(['success' => true]);
-        }
+    }
 
+    public function bookingCancel(Request $request)
+    {
+        $booking_id = $request['cancel_booking_id'];
+
+        if (empty($booking_id)) {
+            return response()->json(['success' => false]);
+        }
+        $booking = Booking::where('booking_id',$booking_id)->get();
+        $booking->notes = $request['cancel_reason'];
+        $booking->status = 3;
+        $booking->save();
+
+        return response()->json(['success' => true]);
+    }
 }

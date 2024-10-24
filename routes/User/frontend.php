@@ -28,7 +28,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('user/payment', [PaymentController::class, 'orderBooking'])->name('order.booking');
     Route::view('booking/success', 'user.frontpage.booking.success')->name('booking.success');
     Route::post('user/calculate-price', [PaymentController::class, 'calculatePrice'])->name('calculate.price');
-    Route::post('user/complete-payment', [PaymentController::class, 'completePayment']);
+    Route::post('user/complete-payment', [PaymentController::class, 'completePayment'])->name('payment.complete');
+    Route::post('user/booking/cancel', [PaymentController::class, 'bookingCancel'])->name('user.booking.cancel');
 
     // upload documents
     Route::get('user/profile', [UserController::class, 'profile'])->name('user.profile');

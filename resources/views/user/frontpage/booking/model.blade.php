@@ -41,59 +41,73 @@
 
 
 
-<div class="modal fade" id="user_model" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
+<div class="modal fade" id="booking_model" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="userModalLabel">User Details</h5>
+                <h5 class="modal-title" id="userModalLabel">User Booking Details</h5>
+                <h7 id="booking_id"></h7>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="form-group">
-                        <label for="user_mobile">User Mobile</label>
-                        <input type="number" id="user_mobile" class="form-control" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="user_aadhaar">User Aadhaar</label>
-                        <input type="text" id="user_aadhaar" class="form-control" disabled>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary">Number Of Booking</button>
-                        <p id="booking_count"></p>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="date_model" tabindex="-1" role="dialog" aria-labelledby="dateModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="dateModalLabel">Reschedule Date</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="booking_date">
-                    <div class="form-group">
-                        <input type="hidden" id="date_booking_id" name="booking_id">
-                        <label for="start_date">Choose Date & Time</label>
-                        <div class="input-group date datetimepicker" id="datetimepicker" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker" id="start_date" name="start_date" placeholder="Select date and time" />
-                            <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
-                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                            </div>
+                    <!-- Payment Details -->
+                    <h6 class="mt-4 mb-3 font-weight-bold" >Payment Details</h6>
+                    <div class="form-row">
+                        <div class="col-md-4">
+                            <label>Total Days</label>
+                            <input type="text" id="total_days" class="form-control" disabled>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Total Hours</label>
+                            <input type="text" id="total_hours" class="form-control" disabled>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Total Price</label>
+                            <input type="text" id="total_price" class="form-control" disabled>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                    <div class="form-row mt-2">
+                        <div class="col-md-4">
+                            <label>Festival Amount</label>
+                            <input type="text" id="festival_amount" class="form-control" disabled>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Weekend Amount</label>
+                            <input type="text" id="weekend_amount" class="form-control" disabled>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Weekdays Amount</label>
+                            <input type="text" id="week_days_amount" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <!-- Car Details -->
+                    <h6 class="mt-4 mb-3 font-weight-bold">Car Details</h6>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <label>Model Name</label>
+                            <input type="text" id="model_name" class="form-control" disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Register Number</label>
+                            <input type="text" id="register_number" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <!-- Coupon Details -->
+                    <h6 class="mt-4 mb-3 font-weight-bold">Coupon Details</h6>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <label>Coupon Code</label>
+                            <input type="text" id="coupon_code" class="form-control" disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Discount</label>
+                            <input type="text" id="discount" class="form-control" disabled>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -101,10 +115,7 @@
     </div>
 </div>
 
-
-
-
-<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
+<div class="modal fade" id="cancel_booking" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -114,11 +125,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="cancel-booking-form">
-                    <input type="hidden" id="cancel-booking-id" name="booking_id">
+                <form id="cancel_booking_form">
+                    <input type="hidden" id="cancel_booking_id" name="cancel_booking_id">
                     <div class="form-group">
                         <label for="cancel-reason">Reason for Cancellation</label>
-                        <textarea class="form-control" id="cancel-reason" name="reason" rows="3" placeholder="Enter reason..."></textarea>
+                        <textarea class="form-control" id="cancel_reason" name="cancel_reason" rows="3" placeholder="Enter reason..."></textarea>
                         <div class="invalid-feedback">
                             Please provide a reason for cancellation.
                         </div>

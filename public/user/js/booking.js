@@ -115,10 +115,69 @@ $(function () {
             });
         });
 
-        $('#risk-form').on('submit', function (event) {
-            event.preventDefault();
+        $('#user_booking').on('click', '.details', function() {
+            $('#booking_id').text($(this).data('booking_id'));
+            $('#total_days').val($(this).data('total_days'));
+            $('#total_hours').val($(this).data('total_hours'));
+            $('#total_price').val($(this).data('total_price'));
+            $('#festival_amount').val($(this).data('festival_amount'));
+            $('#weekend_amount').val($(this).data('weekend_amount'));
+            $('#week_days_amount').val($(this).data('week_days_amount'));
+            $('#model_name').val($(this).data('model_name'));
+            $('#register_number').val($(this).data('register_number'));
+            $('#coupon_code').val($(this).data('code'));
+            $('#discount').val($(this).data('discount'));
+            $('#booking_model').modal('show');
+        });
 
-            // Implement the payment logic here, such as initializing Razorpay.
+        $('#user_booking').on('click', '.cancel_booking', function() {
+            $('#cancel_booking_id').val($(this).data('booking_id'));
+            $('#cancel_booking').modal('show');
+        });
+
+        $('#cancel_booking_form').on('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+            let fields = [
+                { id: '#cancel_reason', wrapper: true, condition: (val) => val === '' },
+            ];
+
+            fields.forEach(field => {
+                let element = $(field.id);
+                let value = element.val();
+                if (field.condition(value)) {
+                    element.addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    element.removeClass('is-invalid');
+                }
+            });
+
+            if (isValid) {
+                $.ajax({
+                    url: '/user/booking/cancel',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        $('#cancel_booking').modal('hide');
+                       // window.location.reload();
+                    },
+                    error: function(response) {
+                        if (response.responseJSON && response.responseJSON.errors) {
+                            let errors = response.responseJSON.errors;
+                            $('.form-control').removeClass('is-invalid');
+                            $('.invalid-feedback').empty();
+                            $.each(errors, function (key, value) {
+                                let element = $('#' + key);
+                                // For other form controls
+                                element.addClass('is-invalid');
+                                // Display the error message
+                                element.siblings('.invalid-feedback').text(value[0]);
+                            });
+                        }
+                    },
+                });
+            }
         });
     });
 });
