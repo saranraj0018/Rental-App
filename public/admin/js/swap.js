@@ -89,18 +89,50 @@ $(function () {
             let end_date = $('#end_date').val();
             $.ajax({
                 url: '/admin/calculate/swap/car',
-                type: 'GET',
+                type: 'POST',
                 data: {car_id : car_id, booking_id : booking_id,start_date : start_date, end_date:end_date},
                 success: function (data) {
                     if (data.success) {
-                        const { festival_amount, week_end_amount, week_days_amount, total_price } = data;
-                        $('#price-details').html(`
+                        const { festival_amount, week_end_amount, week_days_amount, total_price, booking_price,final_total_price } = data;
+                        $('#calculated-amount').html(`
                         <p>Normal Days: ₹${week_days_amount}</p>
                         <p>Festival Days: ₹${festival_amount}</p>
                         <p>Weekend Days: ₹${week_end_amount}</p>
-                        <p>Total: ₹${total_price}</p>
+                        <p>Total Booking Amount : ₹${booking_price}</p>
+                        <p>Total: ₹${final_total_price}</p>
                     `);
-                        $('#reschedule_pay').removeClass('d-none');
+                        $('#with-price-modal').modal('show');
+
+                    } else {
+                        alert('Error calculating price. Please try again.');
+                    }
+                },
+                error: function () {
+                    alertify.error('An error occurred while fetching the data.');
+                }
+            });
+        });
+
+        $(document).on('click', '#send_payment', function (e) {
+            e.preventDefault();
+            let booking_id = $('#booking_id').val();
+            let amount =
+
+            $.ajax({
+                url: '/admin/payment/link',
+                type: 'POST',
+                data: { booking_id : booking_id},
+                success: function (data) {
+                    if (data.success) {
+                        const { festival_amount, week_end_amount, week_days_amount, total_price, booking_price,final_total_price } = data;
+                        $('#calculated-amount').html(`
+                        <p>Normal Days: ₹${week_days_amount}</p>
+                        <p>Festival Days: ₹${festival_amount}</p>
+                        <p>Weekend Days: ₹${week_end_amount}</p>
+                        <p>Total Booking Amount : ₹${booking_price}</p>
+                        <p>Total: ₹${final_total_price}</p>
+                    `);
+                        $('#with-price-modal').modal('show');
 
                     } else {
                         alert('Error calculating price. Please try again.');

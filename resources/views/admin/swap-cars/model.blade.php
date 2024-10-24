@@ -28,11 +28,12 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <p id="calculated-amount">The total amount is: ₹0</p>
+            <div class="modal-body" id="calculated-amount">
+
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="send-payment">Send Payment Details</button>
+                <button type="button" class="btn btn-primary" id="send_payment">Send Payment Link</button>
+                <button type="button" class="btn btn-primary" id="swap_car">Swap Car</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>

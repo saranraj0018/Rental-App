@@ -67,7 +67,8 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::get('/get/booking_date', [SwapController::class, 'getBookingDate'])->name('fetch.booking.date');
         Route::get('/available/cars', [SwapController::class, 'availableCars'])->name('available.cars');
         Route::post('/swap/car', [SwapController::class, 'swapCar'])->name('swap.car');
-        Route::get('/calculate/swap/car', [SwapController::class, 'swapCarCalculate'])->name('calculate.swap.car');
+        Route::post('/calculate/swap/car', [SwapController::class, 'swapCarCalculate'])->name('calculate.swap.car');
+        Route::post('/payment/link', [SwapController::class, 'sendPayment'])->name('send.payment');
 
         // User Role list
         Route::get('/user-role/list', [RoleController::class, 'list'])->name('user-role.list');

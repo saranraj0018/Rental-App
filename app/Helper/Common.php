@@ -48,7 +48,7 @@ function showDateTime($date, $format = 'd/m/Y h:i:s A')
     return Carbon::parse($date)->format($format);
 }
 
-function showDateformat($date, $format = 'd-m-Y h:i')
+function showDateformat($date, $format = 'd-m-Y H:i')
 {
     return Carbon::parse($date)->format($format);
 }
