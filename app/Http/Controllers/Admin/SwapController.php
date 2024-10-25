@@ -6,13 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\UserController;
 use App\Models\Available;
 use App\Models\Booking;
-use App\Models\BookingDetail;
 use App\Models\CarDetails;
 use Illuminate\Support\Facades\Mail;
 use Razorpay\Api\Api;
 use App\Models\Payment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class SwapController extends Controller
 {

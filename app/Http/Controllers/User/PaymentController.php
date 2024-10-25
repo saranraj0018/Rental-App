@@ -63,10 +63,11 @@ class PaymentController extends Controller
         $booking_details->save();
 
 
-        $model_id = !empty(session('booking_details.car_id')) ? CarDetails::find(session('booking_details.car_id'))->model_id : 0;
+        $car_details = !empty(session('booking_details.car_id')) ? CarDetails::find(session('booking_details.car_id'))->get() : 0;
         $car_available = new Available();
         $car_available->car_id = !empty(session('booking_details.car_id')) ?  session('booking_details.car_id') : 0;
-        $car_available->model_id = !empty($model_id) ? $model_id: 0;
+        $car_available->model_id = !empty($car_details->model_id) ? $car_details->model_id: 0;
+        $car_available->register_number = !empty($car_details->register_number) ? $car_details->register_number: 0;
         $car_available->booking_id = $id;
         $car_available->start_date = formDateTime(session('booking_details.start_date'));
         $car_available->end_date = formDateTime(session('booking_details.end_date'));
