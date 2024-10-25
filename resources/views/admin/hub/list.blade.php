@@ -90,6 +90,11 @@
                 <div class="col-sm-6">
                     <h1>Pickup/Delivery List</h1>
                 </div>
+                <div class="col-sm-6 text-right">
+                    <button type="button" class="btn btn-primary" id="create_booking">
+                        Create Booking
+                    </button>
+                </div>
             </div>
         </div>
         <!-- /.container-fluid -->

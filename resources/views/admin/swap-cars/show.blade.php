@@ -55,7 +55,8 @@
     </div>
 
     <!-- Placeholder for Bootstrap cards for cars with the same model -->
-    <div id="car-card-container" class="d-flex flex-wrap"></div>
+    <div id="car-card-container" class="d-flex flex-wrap">
+    </div>
  @include('admin.swap-cars.model')
 @endsection
 

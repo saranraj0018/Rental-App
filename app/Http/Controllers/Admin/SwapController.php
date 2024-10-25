@@ -42,11 +42,12 @@ class SwapController extends Controller
         return response()->json(['data'=> $data,'success' => 'Data Found.']);
     }
 
-    public function availableCars(Request $request)
+    public static function availableCars(Request $request)
     {
         $data = [
             'available_cars' => [],
             'booked_cars' => [],
+            'all_available_cars' =>[]
         ];
 
         // Check if both start_date and end_date are provided
@@ -76,6 +77,7 @@ class SwapController extends Controller
                 } else {
                     $data['available_cars'][] = $car;
                 }
+                $data['all_available_cars'][] = $car;
             }
             return response()->json(['data' => $data, 'success' => 'Data Fetching Successfully.']);
         }
@@ -86,10 +88,10 @@ class SwapController extends Controller
     public function swapCar(Request $request)
     {
         if (!empty($request['booking_id']) && !empty($request['car_id'])){
-            Booking::where('booking_id',$request['booking_id'])->where('status',1)->update(['car_id' => $request['car_id']]);
+           // Booking::where('booking_id',$request['booking_id'])->where('status',1)->update(['car_id' => $request['car_id']]);
 
            $car_details = CarDetails::with('carModel')->find($request['car_id']);
-           BookingDetail::where('booking_id',$request['booking_id'])->update(['car_details' => json_encode($car_details)]);
+        //   BookingDetail::where('booking_id',$request['booking_id'])->update(['car_details' => json_encode($car_details)]);
 
            if (!empty($request['start_date']) && !empty($request['end_date'])) {
                $available = new Available();
@@ -148,41 +150,43 @@ class SwapController extends Controller
     }
     public function sendPayment(Request $request)
     {
-        if (!empty($request['booking_id'])){
-        $booking = Booking::with('user')->where('booking_id',$request['booking_id'])->first();
-        $booking->user->email;
-        $amount = session('final_total_price') * 100; // Amount in paise (e.g., ₹1000 = 100000)
-            dd($this->amount);
-        $email = $booking->user->email;
+        if (!empty($request['booking_id']) && !empty($request['amount'])) {
+            $booking = Booking::with('user')->where('booking_id', $request['booking_id'])->first();
+            $booking->user->email;
+            $amount = $request['amount'] * 100; // Amount in paise (e.g., ₹1000 = 100000)
+            $email = $booking->user->email;
 
-        $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
+            $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
 
-        try {
-            $response = $api->invoice->create([
-                'type' => 'link',
-                'amount' => $amount,
-                'currency' => 'INR',
-                'description' => 'Payment for Car Booking',
-                'customer' => [
-                    'email' => $email,
-                    'contact' => $request->input('contact') // Optionally include contact number
-                ],
-                'receipt' => 'rcptid_11', // A unique receipt ID
-                'reminder_enable' => true,
-                'sms_notify' => true,
-                'email_notify' => true
-            ]);
+            try {
+                $uniqueReceiptId = 'rcptid_' .  rand(100000, 999999); // Generate a unique receipt ID using the booking ID
 
-            $paymentLink = $response->short_url;
+                $response = $api->invoice->create([
+                    'type' => 'link',
+                    'amount' => $amount,
+                    'currency' => 'INR',
+                    'description' => 'Payment for Car Booking',
+                    'customer' => [
+                        'email' => $email,
+                        'contact' => $request->input('contact') // Optionally include contact number
+                    ],
+                    'receipt' => $uniqueReceiptId, // Use the unique receipt ID
+                    'reminder_enable' => true,
+                    'sms_notify' => true,
+                    'email_notify' => true
+                ]);
 
-            // Send email with the payment link
-           Mail::to($email)->send(new \App\Mail\PaymentDetails($amount, $paymentLink));
+                $paymentLink = $response->short_url;
 
-            return response()->json(['success' => 'Payment link created and sent successfully.']);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to create payment link: ' . $e->getMessage()], 500);
+                // Send email with the payment link
+                Mail::to($email)->send(new \App\Mail\PaymentDetails($amount, $paymentLink));
+
+                return response()->json(['success' => 'Payment link created and sent successfully.']);
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Failed to create payment link: ' . $e->getMessage()], 500);
+            }
         }
-        }
+
     }
 
 }

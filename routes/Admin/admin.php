@@ -46,6 +46,9 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::post('/risk-status', [PickupDeliveryController::class, 'riskStatus'])->name('pickup-delivery.status');
         Route::post('/booking/cancel', [PickupDeliveryController::class, 'bookingCancel'])->name('booking.cancel');
         Route::get('/booking/search', [PickupDeliveryController::class, 'fetchBookings'])->name('booking.search');
+        Route::get('/check-payment/models', [PickupDeliveryController::class, 'calculatePrice'])->name('model.price');
+        Route::post('/user-payment/link', [PickupDeliveryController::class, 'sendUserPayment'])->name('user.send.payment');
+        Route::post('/user/save', [PickupDeliveryController::class, 'createBooking'])->name('user.booking');
 
         // Cars list
         Route::get('/cars/list', [CarDetailsController::class, 'list'])->name('car.list');
@@ -67,7 +70,7 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::get('/get/booking_date', [SwapController::class, 'getBookingDate'])->name('fetch.booking.date');
         Route::get('/available/cars', [SwapController::class, 'availableCars'])->name('available.cars');
         Route::post('/swap/car', [SwapController::class, 'swapCar'])->name('swap.car');
-        Route::post('/calculate/swap/car', [SwapController::class, 'swapCarCalculate'])->name('calculate.swap.car');
+        Route::get('/calculate/swap/car', [SwapController::class, 'swapCarCalculate'])->name('calculate.swap.car');
         Route::post('/payment/link', [SwapController::class, 'sendPayment'])->name('send.payment');
 
         // User Role list

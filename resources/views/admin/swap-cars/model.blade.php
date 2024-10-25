@@ -28,12 +28,14 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <input type="hidden" id="amount" name="amount">
             <div class="modal-body" id="calculated-amount">
 
             </div>
+            <p id="payment_success" class="text-success"></p>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="send_payment">Send Payment Link</button>
-                <button type="button" class="btn btn-primary" id="swap_car">Swap Car</button>
+                <button type="button" class="btn btn-primary without_price" id="swap_car">Swap Car</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
