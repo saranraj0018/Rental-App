@@ -11,6 +11,8 @@ Use App\Http\Controllers\Admin\BannerController;
 Use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\MapController;
 use App\Http\Controllers\Admin\HolidayController;
+use App\Http\Controllers\Admin\AvailableController;
+use App\Http\Controllers\Admin\SwapController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +41,14 @@ Route::group(['prefix'=> 'admin'],function (){
 
         // Pickup-delivery list
         Route::get('/pickup-delivery/list', [PickupDeliveryController::class, 'list'])->name('pickup-delivery.list');
+        Route::post('/reschedule/date', [PickupDeliveryController::class, 'rescheduleDate'])->name('pickup-delivery.reschedule');
+        Route::post('/risk-comment', [PickupDeliveryController::class, 'riskCommends'])->name('pickup-delivery.commends');
+        Route::post('/risk-status', [PickupDeliveryController::class, 'riskStatus'])->name('pickup-delivery.status');
+        Route::post('/booking/cancel', [PickupDeliveryController::class, 'bookingCancel'])->name('booking.cancel');
+        Route::get('/booking/search', [PickupDeliveryController::class, 'fetchBookings'])->name('booking.search');
+        Route::get('/check-payment/models', [PickupDeliveryController::class, 'calculatePrice'])->name('model.price');
+        Route::post('/user-payment/link', [PickupDeliveryController::class, 'sendUserPayment'])->name('user.send.payment');
+        Route::post('/user/save', [PickupDeliveryController::class, 'createBooking'])->name('user.booking');
 
         // Cars list
         Route::get('/cars/list', [CarDetailsController::class, 'list'])->name('car.list');
@@ -54,6 +64,14 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::post('/car-block/save', [CarBlockController::class, 'save'])->name('car-block.save');
         Route::put('/car-block/update', [CarBlockController::class, 'update'])->name('car-block.update');
         Route::get('/car-block/search', [CarBlockController::class, 'search'])->name('car-block.search');
+
+        // Car-Swap list
+        Route::get('/car-swap/list', [SwapController::class, 'list'])->name('car-swap.list');
+        Route::get('/get/booking_date', [SwapController::class, 'getBookingDate'])->name('fetch.booking.date');
+        Route::get('/available/cars', [SwapController::class, 'availableCars'])->name('available.cars');
+        Route::post('/swap/car', [SwapController::class, 'swapCar'])->name('swap.car');
+        Route::get('/calculate/swap/car', [SwapController::class, 'swapCarCalculate'])->name('calculate.swap.car');
+        Route::post('/payment/link', [SwapController::class, 'sendPayment'])->name('send.payment');
 
         // User Role list
         Route::get('/user-role/list', [RoleController::class, 'list'])->name('user-role.list');
@@ -90,6 +108,7 @@ Route::group(['prefix'=> 'admin'],function (){
         // Map Section
         Route::get('/city-map', [MapController::class, 'show'])->name('city.map');
         Route::post('/save-area', [MapController::class, 'store'])->name('area.store');
+        Route::get('/get-city-coordinates', [MapController::class, 'getCityCoordinates'])->name('area.Coordinates');
 
 
         // Front-end Car - Info Section
@@ -106,5 +125,9 @@ Route::group(['prefix'=> 'admin'],function (){
         // Front-end Banner Section
         Route::get('/general', [BannerController::class, 'generalList'])->name('general.list');
         Route::post('/general/save', [BannerController::class, 'generalSave'])->name('general.save');
+
+        Route::get('/car-available', [AvailableController::class, 'availableList'])->name('car-available.list');
+        Route::get('/check-available', [AvailableController::class, 'available'])->name('available');
+
     });
 });

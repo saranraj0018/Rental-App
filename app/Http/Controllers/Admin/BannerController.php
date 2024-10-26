@@ -326,6 +326,7 @@ class BannerController extends Controller
             'maximum_hours' => $request['maximum_hours'],
             'delivery_fee' => $request['delivery_fee'],
             'show_delivery' => $request['show_delivery'] ?? 0,
+            'booking_duration' => $request['booking_duration'] ?? 0,
             'minimum_duration_type' => $request['minimum_duration_type'],
             'maximum_duration_type' => $request['maximum_duration_type'],
         ];

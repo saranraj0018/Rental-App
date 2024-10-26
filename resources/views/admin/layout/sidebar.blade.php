@@ -30,6 +30,18 @@
                 </li>
                 @endif
 {{--                <li class="nav-item">--}}
+{{--                    <a href="{{ route('complete.booking') }}" class="nav-link">--}}
+{{--                        <i class="nav-icon  far fa-file-alt"></i>--}}
+{{--                        <p>Complete Booking</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a href="{{ route('cancel.booking') }}" class="nav-link">--}}
+{{--                        <i class="nav-icon  far fa-file-alt"></i>--}}
+{{--                        <p>Cancel Booking</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+{{--                <li class="nav-item">--}}
 {{--                    <a href="" class="nav-link">--}}
 {{--                        <i class="nav-icon fas fa fa-cogs"></i>--}}
 {{--                        <p>Control panel</p>--}}
@@ -49,7 +61,7 @@
                     </a>
                 </li>
                 @endif
-                @if(in_array('car_bk_tab',$permissions))
+{{--                @if(in_array('car_bk_tab',$permissions))--}}
                 <li class="nav-item">
                     <a href="{{route('car-block.list')}}" class="nav-link">
                         <!-- <i class="nav-icon fas fa-tag"></i> -->
@@ -57,16 +69,22 @@
                         <p>Car block</p>
                     </a>
                 </li>
-                @endif
-                @if(in_array('car_av_tab',$permissions))
+{{--                @endif--}}
+{{--                @if(in_array('car_av_tab',$permissions))--}}
                     <li class="nav-item">
-                        <a href="{{route('car-block.list')}}" class="nav-link">
+                        <a href="{{route('car-available.list')}}" class="nav-link">
                             <!-- <i class="nav-icon fas fa-tag"></i> -->
                             <i class="fas fa-truck nav-icon"></i>
                             <p>Car Availability</p>
                         </a>
                     </li>
-                @endif
+                <li class="nav-item">
+                    <a href="{{ route('car-swap.list') }}" class="nav-link">
+                        <i class="nav-icon fas fa fa-map"></i>
+                        <p>Swap Cars</p>
+                    </a>
+                </li>
+{{--                @endif--}}3
 {{--                <li class="nav-item">--}}
 {{--                    <a href="orders.html" class="nav-link">--}}
 {{--                        <i class="nav-icon fas fa fa-flag"></i>--}}

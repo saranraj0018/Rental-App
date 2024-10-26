@@ -3,7 +3,8 @@ $(function () {
 
     $(document).ready(function() {
         loadDatePickers();
-        function loadDatePickers() {
+
+            window.loadDatePickers = function() {
             $('#datetimepicker').datetimepicker({
                 format: 'YYYY-MM-DD HH:mm', // Customize the format as needed
                 icons: {

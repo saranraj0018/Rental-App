@@ -1,27 +1,41 @@
 $(function () {
     'use strict';
     $(document).ready(function() {
-        let map, marker, searchBox, car_map, car_marker;
+        let c_map, d_map, marker, c_searchBox, d_searchBox, car_map, car_marker;
 
         window.initMarker = function() {
-            // Initialize the map, centered on a default location (optional)
-            map = new google.maps.Map(document.getElementById('custom_map'), {
+            // Initialize the pickup map
+            c_map = new google.maps.Map(document.getElementById('custom_map'), {
                 center: {lat: 11.0168, lng: 76.9558}, // Coimbatore, as an example
                 zoom: 12,
             });
 
-            // Create the search box and link it to the input element
-            const input = document.getElementById('custom-city');
-            searchBox = new google.maps.places.SearchBox(input);
-
-            // Bias the SearchBox results towards the current map's viewport
-            map.addListener('bounds_changed', function () {
-                searchBox.setBounds(map.getBounds());
+            // Initialize the delivery map
+            d_map = new google.maps.Map(document.getElementById('delivery_map'), {
+                center: {lat: 11.0168, lng: 76.9558}, // Coimbatore, as an example
+                zoom: 12,
             });
 
-            // Event listener for search results
-            searchBox.addListener('places_changed', function () {
-                const places = searchBox.getPlaces();
+            // Create the search box for pickup location
+            const pickupInput = document.getElementById('custom-city');
+            c_searchBox = new google.maps.places.SearchBox(pickupInput);
+
+            // Create the search box for delivery location
+            const deliveryInput = document.getElementById('delivery-city');
+            d_searchBox = new google.maps.places.SearchBox(deliveryInput);
+
+            // Bias the SearchBox results towards the current map's viewport
+            c_map.addListener('bounds_changed', function () {
+                c_searchBox.setBounds(c_map.getBounds());
+            });
+
+            d_map.addListener('bounds_changed', function () {
+                d_searchBox.setBounds(d_map.getBounds());
+            });
+
+            // Event listener for pickup search box results
+            c_searchBox.addListener('places_changed', function () {
+                const places = c_searchBox.getPlaces();
 
                 if (places.length === 0) {
                     return;
@@ -30,9 +44,16 @@ $(function () {
                 // Get the first place (the searched city)
                 const city = places[0];
 
+                let c_latitude = city.geometry.location.lat();
+                let c_longitude = city.geometry.location.lng();
+                let c_address = city.formatted_address;
+                $('#pic_latitude').val(c_latitude);
+                $('#pic_longitude').val(c_longitude);
+                $('#pic_address').val(c_address);
+
                 // Zoom into the city
-                map.setCenter(city.geometry.location);
-                map.setZoom(14);
+                c_map.setCenter(city.geometry.location);
+                c_map.setZoom(14);
 
                 // Remove any existing marker
                 if (marker) {
@@ -42,11 +63,47 @@ $(function () {
                 // Add a marker at the city location
                 marker = new google.maps.Marker({
                     position: city.geometry.location,
-                    map: map,
+                    map: c_map,
                     title: city.name,
                 });
             });
-        }
+
+
+            // Event listener for delivery search box results
+            d_searchBox.addListener('places_changed', function () {
+                const places = d_searchBox.getPlaces();
+
+                if (places.length === 0) {
+                    return;
+                }
+
+                // Get the first place (the searched city)
+                const city = places[0];
+
+                let d_latitude = city.geometry.location.lat();
+                let d_longitude = city.geometry.location.lng();
+                let d_address = city.formatted_address;
+                $('#dly_latitude').val(d_latitude);
+                $('#dly_longitude').val(d_longitude);
+                $('#dly_address').val(d_address);
+
+                // Zoom into the city
+                d_map.setCenter(city.geometry.location);
+                d_map.setZoom(14);
+
+                // Remove any existing marker
+                if (marker) {
+                    marker.setMap(null);
+                }
+
+                // Add a marker at the city location
+                marker = new google.maps.Marker({
+                    position: city.geometry.location,
+                    map: d_map,
+                    title: city.name,
+                });
+            });
+        };
 
         // Initialize the map when the modal is shown
         $('#secondModal').on('shown.bs.modal', function () {
@@ -54,24 +111,106 @@ $(function () {
             $('#custom-city').focus();
         });
 
+        // Example values for car location
         let car_latitude_current = parseFloat($('#car_latitude_current').val()) || 11.0168;
         let car_longitude_current = parseFloat($('#car_longitude_current').val()) || 76.9558;
+
         window.carMarker = function() {
             let lat = car_latitude_current;
             let lng = car_longitude_current;
-            // Initialize the map, centered on a default location (optional)
+
+            // Initialize the map centered on the car's location
             car_map = new google.maps.Map(document.getElementById('car_location_map'), {
-                center: {lat: lat, lng: lng}, // Coimbatore, as an example
+                center: {lat: lat, lng: lng},
                 zoom: 12,
             });
-             lat = car_latitude_current;
-             lng = car_longitude_current;
-            // Add a marker at the provided lat/lng (default is Coimbatore)
+
+            // Add a marker at the car's location
             car_marker = new google.maps.Marker({
                 position: { lat: lat, lng: lng },
                 map: car_map,
-                title: "Selected Location",
+                title: "Car Location",
+            });
+        };
+
+        $('#same_address').click(function() {
+
+            const pickupLat = $('#pic_latitude').val();
+            const pickupLng = $('#pic_longitude').val();
+            const pickup_address = $('#pic_address').val();
+            if (pickupLat && pickupLng) {
+                checkLocation('same_location',pickupLat, pickupLng,pickup_address, function(isInside) {
+                    if (isInside) {
+                        $('#secondModal').modal('hide');
+                    } else {
+                        $('#outside_area').text('Pickup location is outside the designated area. Please select a different location.');
+                    }
+                });
+            } else {
+                alert('Please enter a valid pickup location.');
+            }
+        });
+
+        $('#conform_address').click(function() {
+
+            const pickupLat = $('#dly_latitude').val();
+            const pickupLng = $('#dly_longitude').val();
+            const delivery_address = $('#dly_address').val();
+            if (pickupLat && pickupLng) {
+                checkLocation('delivery_location',pickupLat, pickupLng,delivery_address, function(isInside) {
+                    if (isInside) {
+                        $('#secondModal').modal('hide');
+                    } else {
+                        $('#delivery_outside_area').text('Pickup location is outside the designated area. Please select a different location.');
+                    }
+                });
+            } else {
+                alert('Please enter a valid pickup location.');
+            }
+        });
+
+        $('#delivery_address').click(function() {
+
+            const pickupLat = $('#pic_latitude').val();
+            const pickupLng = $('#pic_longitude').val();
+            const pickup_address = $('#pic_address').val();
+            if (pickupLat && pickupLng) {
+                checkLocation('pickup_location',pickupLat, pickupLng,pickup_address, function(isInside) {
+                    if (isInside) {
+                        $('#pickup-section').addClass('d-none');
+                        $('#delivery-section').removeClass('d-none');
+                    } else {
+                        alert('Pickup location is outside the designated area. Please select a different location.');
+                    }
+                });
+            } else {
+                alert('Please enter a valid pickup location.');
+            }
+        });
+        function checkLocation(type,pickupLat,pickupLng,address,callback) {
+            $.ajax({
+                url: '/user/check-location',
+                method: 'POST',
+                data: {
+                    lat: pickupLat,
+                    lng: pickupLng,
+                    type:type,
+                    address:address
+                },
+                success: function(response) {
+                    if (response.inside) {
+                        callback(true);
+                        // Proceed to the next steps or show the delivery section.
+                    } else {
+                        callback(false);
+                    }
+                },
+                error: function(error) {
+                    console.error('Error checking location:', error);
+                    callback(false);
+                }
             });
         }
+
     });
 });

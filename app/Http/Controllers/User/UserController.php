@@ -23,7 +23,7 @@ class UserController extends Controller
     {
         $section1 = Frontend::with('frontendImage')->where('data_keys','section1-image-car')->first();
         $section2 = Coupon::all();
-        $section3 = CarDetails::with('carModel')->get();
+        $section3 = CarDetails::with('carModel','availableBookings')->get();
         $car_info = Frontend::with('frontendImage')->where('data_keys','car-info-section')->first();
         $section4 = !empty($car_info['data_values']) ? json_decode($car_info['data_values'],true) : [];
         $brand_info = Frontend::with('frontendImage')->where('data_keys','brand-section')->first();
@@ -31,36 +31,33 @@ class UserController extends Controller
         $brand_image = !empty($brand_info->frontendImage) ? $brand_info->frontendImage : null;
         $car_image = !empty($car_info->frontendImage) ? $car_info->frontendImage : null;
         $faq_items = Frontend::where('data_keys','faq-section')->orderBy('created_at', 'desc')->get();
+        $general_setting = Frontend::where('data_keys','faq-section')->orderBy('created_at', 'desc')->get();
         return view('user.frontpage.list-home',compact('section1','section2','section3','section4','car_image'
-            ,'brand_image','section8','faq_items'));
+            ,'brand_image','section8','faq_items','general_setting'));
     }
 
     public function updateLocation(Request $request)
     {
 
-        if (!empty($request['latitude']) && !empty($request['longitude'])) {
-            $latitude = $request['latitude'];
-            $longitude = $request['longitude'];
-
             if (!empty($request['start_date']) && !empty($request['end_date'])) {
                 $request->session()->put('start_date',  str_replace('|', '', $request['start_date']));
                 $request->session()->put('end_date', str_replace('|', '', $request['end_date']));
-            }
 
-            $client = new Client();
-            $response = $client->get('https://maps.googleapis.com/maps/api/geocode/json', [
-                'query' => [
-                    'latlng' => $latitude . ',' . $longitude,
-                    'key' => 'AIzaSyCgkUiA7zkxsdc8BwvCqVeSTDuJVncMmAY',
-                ]
-            ]);
 
-            $data = json_decode($response->getBody(), true);
-            $isWithinCoimbatore = $this->isWithinCoimbatore($data);
-
-            return response()->json(['isWithinCoimbatore' => $isWithinCoimbatore]);
+//            $client = new Client();
+//            $response = $client->get('https://maps.googleapis.com/maps/api/geocode/json', [
+//                'query' => [
+//                    'latlng' => $latitude . ',' . $longitude,
+//                    'key' => 'AIzaSyCgkUiA7zkxsdc8BwvCqVeSTDuJVncMmAY',
+//                ]
+//            ]);
+//
+//            $data = json_decode($response->getBody(), true);
+//            $isWithinCoimbatore = $this->isWithinCoimbatore($data);
+//
+//            return response()->json(['isWithinCoimbatore' => $isWithinCoimbatore]);
         }
-        return response()->json(['isWithinCoimbatore' => false]);
+        return response()->json(['isWithinCoimbatore' => true]);
     }
 
     private function isWithinCoimbatore($data)
@@ -106,6 +103,7 @@ class UserController extends Controller
                 'car_id' => $id,
                 'car_details' => $car_model,
                 'price_list' => $price_list,
+                'delivery_fee' => $general_section['delivery_fee'],
                 'total_price' => !empty($price_list['total_price']) ? $price_list['total_price'] : 0,
                 'car_model' => $car_images,
                 'start_date' => session('start_date'),
@@ -115,13 +113,12 @@ class UserController extends Controller
         return view('user.frontpage.single-car.view',compact('car_model','ipr_data','image_list','price_list','general_section'));
     }
 
-    public function calculatePrice($prices, $from_date = null, $to_date = null)
+    public static function calculatePrice($prices, $from_date = null, $to_date = null)
     {
         $price = [];
         if (empty($from_date) && empty($to_date)) return $price;
         $start_date = str_replace('|', '', $from_date);
         $end_date = str_replace('|', '', $to_date);
-
         $start = Carbon::createFromFormat('d-m-Y H:i', $start_date);
         $end = Carbon::createFromFormat('d-m-Y H:i', $end_date);
         $festival_dates = Holiday::pluck('event_date')->toArray();
