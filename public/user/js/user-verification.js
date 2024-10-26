@@ -75,10 +75,9 @@ $(function () {
                 success: function(response) {
                     if (response.success) {
                         $('#otpModal').modal('hide');
-                        console.log(typeof response.documents)
-                        if (response.documents === 0){
-                            $('#user_document').modal('show');
-                        }
+
+                        $('#login_button').hide();
+                        $('#after_login_button').css('display', 'block');
                         $('#login_payment')
                             .attr('id', 'payment') // Change id to 'payment'
                             .text('Proceed Payment');

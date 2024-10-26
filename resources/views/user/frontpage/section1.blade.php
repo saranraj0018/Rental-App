@@ -31,21 +31,24 @@
                                 <ul class="navbar-nav navbar-light w-100 ms-5 ps-5">
                                     <li class="nav-item ms-5 pe-3"><a class="nav-link text-dark" href="#">Home</a></li>
                                     @if(!Auth::user())
-                                    <li class="nav-item"><a class="nav-link text-dark" href="#">FAQ</a></li>
+                                        <li class="nav-item"><a class="nav-link text-dark" href="#">FAQ</a></li>
                                     @else
                                         <li class="nav-item"><a class="nav-link text-dark" href="{{ route('booking.history') }}">Booking</a></li>
                                     @endif
                                     <li class="nav-item"><a class="nav-link text-dark" href="#">Blog</a></li>
                                     <li class="nav-item me-5 pe-2"><a class="nav-link text-dark me-5" href="#">Contact-us</a></li>
                                     <li class="nav-item ms-3 ps-5">
-                                        @if(!Auth::user())
-                                        <button type="button" class="btn border border-dark rounded-pill me-1" id="login_user">Sign-In</button>
-                                        <button type="button" class="btn bg-blue text-white rounded-pill" id="register_user">Sign-Up</button>
-                                        @else
-                                            <p class="fw-500 f-16 text-white">{{ \Illuminate\Support\Facades\Auth::user()->name ?? ''  }}</p>
+                                        <div id="login_button" style="display: {{ Auth::check() ? 'none' : 'block' }};">
+                                            <button type="button" class="btn border border-dark rounded-pill me-1" id="login_user">Sign-In</button>
+                                            <button type="button" class="btn bg-blue text-white rounded-pill" id="register_user">Sign-Up</button>
+                                        </div>
+
+                                        <div id="after_login_button" style="display: {{ Auth::check() ? 'block' : 'none' }};">
+                                            <p class="fw-500 f-16 text-white">{{ Auth::user()->name ?? '' }}</p>
                                             <a href="{{ route('user.profile') }}">View profile</a>
-                                        @endif
-                                       </li>
+                                        </div>
+
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -154,47 +157,48 @@
 
 <section>
     <form id="get_location">
-    <div class="container filter-input-bg bg-white p-4 d-flex align-items-center justify-content-center">
-        <div class="row">
-            <div class="col-12 col-lg-4 my-lg-0">
-                <label class="fs-16 fw-500">City</label>
-                <div class="input-group">
+        <div class="container filter-input-bg bg-white p-4 d-flex align-items-center justify-content-center">
+            <div class="row">
+                <div class="col-12 col-lg-4 my-lg-0">
+                    <label class="fs-16 fw-500">City</label>
+                    <div class="input-group">
                     <span class="input-group-text" id="basic-addon1">
                         <i class=" text-white fa-solid fa-location-dot"></i>
                     </span>
-                    <input type="text" class="form-control" placeholder="Coimbatore, Tamilnadu" aria-label="Username" aria-describedby="basic-addon1" disabled>
+                        <input type="text" class="form-control" placeholder="Coimbatore, Tamilnadu" aria-label="Username" aria-describedby="basic-addon1" disabled>
+                    </div>
                 </div>
-            </div>
-            <div class="col-12 col-lg-3 my-1 mt-2 my-lg-0">
-                <label class="fs-16 fw-500">Starting Date</label>
-                <div class="input-group">
+                <div class="col-12 col-lg-3 my-1 mt-2 my-lg-0">
+                    <label class="fs-16 fw-500">Starting Date</label>
+                    <div class="input-group">
                     <span class="input-group-text" id="basic-addon1">
                         <i class=" text-white fa-solid fa-calendar-days"></i>
                     </span>
-                    <input type="text" id="start_date_time" class="form-control w-25" placeholder="Start Date & Time" autocomplete="off">
+                        <input type="datetime-local" class="form-control mb-2" id="dateTimeInput1" placeholder="Select first date and time"
+                               data-bs-toggle="modal" data-bs-target="#dateTimeModal1" readonly>
+                    </div>
                 </div>
-            </div>
-            <div class="col-12 col-lg-3 mt-2 mb-2 my-lg-0">
-                <label class="fs-16 fw-500">Ending Date</label>
-                <div class="input-group">
+                <div class="col-12 col-lg-3 mt-2 mb-2 my-lg-0">
+                    <label class="fs-16 fw-500">Ending Date</label>
+                    <div class="input-group">
                     <span class="input-group-text" id="basic-addon1">
                         <i class=" text-white fa-solid fa-calendar-days"></i>
                     </span>
-                    <input type="text" id="end_date_time" class="form-control w-25" placeholder="End Date & Time" autocomplete="off">
+                        <input type="datetime-local" class="form-control" id="dateTimeInput2" placeholder="Select second date and time"
+                               data-bs-toggle="modal" data-bs-target="#dateTimeModal2" readonly>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-2 d-flex justify-content-center d-lg-block my-auto">
+                    <button type="submit" disabled id="find_car" class="btn my-button w-100 w-lg-auto p-2">
+                        <i class=" text-white fa-solid fa-magnifying-glass"></i> Search
+                    </button>
                 </div>
             </div>
-            <div class="col-12 col-lg-2 d-flex justify-content-center d-lg-block my-auto">
-                <button type="submit" disabled id="find_car" class="btn my-button w-100 w-lg-auto p-2">
-                    <i class=" text-white fa-solid fa-magnifying-glass"></i> Search
-                </button>
-            </div>
         </div>
-    </div>
-        <div class="container d-none d-lg-block text-secondary text-center my-3">
-            <p class="duration-display"></p>
-            <p class="duration-error text-danger"></p>
-        </div>
+        <div class="time-difference text-center mt-4">Duration <span class="date-value">0 </span> day <span class="time-value"> 0 </span> hrs.</div>
+        <p class="duration-error text-center text-danger"></p>
     </form>
+    @include('user.frontpage.date_model')
 </section>
 
 <!-- Error Modal -->

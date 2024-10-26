@@ -20,6 +20,8 @@ Route::post('user/verify-otp', [OTPController::class, 'verifyOtp'])->name('verif
 Route::post('user/register', [OTPController::class, 'register'])->name('register');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/user/verify-document', [OTPController::class,'verifyDocument'])->name('verify.document');
+
     Route::post('user/apply-coupon', [CouponController::class,'applyCoupon'])->name('apply.coupon');
     Route::post('user/remove-coupon', [CouponController::class, 'removeCoupon'])->name('remove.coupon');
 

@@ -225,7 +225,13 @@
 
 <script>
     // When the payment button is clicked
-    $(document).on('click', '#payment', function(e) {
+    $(document).on('click', '#payment', async function(e) {
+        let doc_verify = await verifyUserDocument();
+        if (!doc_verify) {
+            $('#user_document').modal('show');
+            return;
+        }
+
         let coupon = $('#final_coupon_amount').val();
         let final_amount = {{ $total_price + $car_model->carModel->dep_amount + $delivery_fee }};
         let coupon_amount = coupon !== '' || coupon !== 0 ? coupon : 0;
@@ -268,6 +274,28 @@
         let rzp = new Razorpay(options);
         rzp.open(); // Opens Razorpay modal
     });
+
+    async function verifyUserDocument() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: '/user/verify-document', // Update with your route.
+                method: 'GET',
+                success: function(response) {
+                    if (!response.success) {
+                        $('#otpModal').modal('hide');
+                        resolve(false);
+                    } else {
+                        resolve(true);
+                    }
+                },
+                error: function() {
+                    resolve(false);
+                }
+            });
+        });
+    }
+
+
 </script>
 
 <!-- Second Modal Structure -->
