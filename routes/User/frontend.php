@@ -43,3 +43,15 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::post('user/check-location', [LocationController::class, 'checkLocation']);
+
+
+Route::view('user/about', '.user.frontpage.others.about')->name('about');
+Route::view('user/contact', '.user.frontpage.others.contact')->name('contact');
+Route::view('user/cancellation', '.user.frontpage.others.cancellation')->name('cancellation');
+Route::view('user/pricing', '.user.frontpage.others.pricing')->name('pricing');
+Route::view('user/faq', '.user.frontpage.others.faq')->name('faq');
+Route::view('user/privacy-policy', '.user.frontpage.others.privacy-policy')->name('privacy-policy');
+Route::view('user/refund', '.user.frontpage.others.refund')->name('refund');
+Route::view('user/shipping', '.user.frontpage.others.shipping')->name('shipping');
+Route::view('user/terms-and-conditions', '.user.frontpage.others.terms-and-conditions')->name('terms-and-conditions');
+

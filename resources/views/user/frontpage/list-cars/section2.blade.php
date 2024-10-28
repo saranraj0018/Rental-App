@@ -8,7 +8,7 @@
                         <span class="input-group-text" id="basic-addon1">
                             <i class=" text-white fa-solid fa-location-dot"></i>
                         </span>
-                    <input type="text" class="form-control" placeholder="Coimbatore, Tamilnadu" aria-label="Username" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control my-hub" placeholder="Coimbatore, Tamilnadu" aria-label="Username" aria-describedby="basic-addon1">
                 </div>
             </div>
             <div class="col-12 col-lg-3 my-1 mt-2 my-lg-0">
@@ -17,7 +17,7 @@
                     <span class="input-group-text" id="basic-addon1">
                         <i class=" text-white fa-solid fa-calendar-days"></i>
                     </span>
-                    <input type="text" class="form-control mb-2" id="dateTimeInput1" placeholder="Select first date and time"
+                    <input type="text" class="form-control my-hub" id="dateTimeInput1" placeholder="Select first date and time"
                            data-bs-toggle="modal" data-bs-target="#dateTimeModal1" value="{{ session('start_date') }}" readonly>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                     <span class="input-group-text" id="basic-addon1">
                         <i class=" text-white fa-solid fa-calendar-days"></i>
                     </span>
-                    <input type="text" class="form-control" id="dateTimeInput2" placeholder="Select second date and time"
+                    <input type="text" class="form-control my-hub" id="dateTimeInput2" placeholder="Select second date and time"
                            data-bs-toggle="modal" data-bs-target="#dateTimeModal2" value="{{ session('end_date') }}" readonly>
                 </div>
             </div>

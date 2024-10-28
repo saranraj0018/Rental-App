@@ -25,7 +25,9 @@ class UserController extends Controller
     {
         $section1 = Frontend::with('frontendImage')->where('data_keys','section1-image-car')->first();
         $section2 = Coupon::all();
-        $section3 = CarDetails::with('carModel','availableBookings')->get();
+        $available_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date'));
+        $section3 = !empty($available_models['available_cars']) ? $available_models['available_cars'] : [];
+        $sold_cars =!empty($available_models['booked_cars']) ? $available_models['booked_cars'] : [];
         $car_info = Frontend::with('frontendImage')->where('data_keys','car-info-section')->first();
         $section4 = !empty($car_info['data_values']) ? json_decode($car_info['data_values'],true) : [];
         $brand_info = Frontend::with('frontendImage')->where('data_keys','brand-section')->first();
@@ -37,7 +39,7 @@ class UserController extends Controller
         $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
         $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
         return view('user.frontpage.list-home',compact('section1','section2','section3','section4','car_image'
-            ,'brand_image','section8','faq_items','general_setting','timing_setting'));
+            ,'brand_image','section8','faq_items','general_setting','timing_setting','sold_cars'));
     }
 
     public function updateLocation(Request $request)
@@ -75,23 +77,33 @@ class UserController extends Controller
 
     public function listCars() {
         $date = ['start_date' => Session::get('start_date'), 'end_date' =>  Session::get('end_date')];
-        $car_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date'));
+        $available_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date'));
+        $booking_models = !empty($available_models['available_cars']) ?
+            array_map(function($car) {
+                $car['booking_status'] = 'available'; // Add status as 'available'
+                return $car;
+            }, $available_models['available_cars']) : [];
+
+        $sold_cars = !empty($available_models['booked_cars']) ?
+            array_map(function($car) {
+                $car['booking_status'] = 'sold'; // Add status as 'sold'
+                return $car;
+            }, $available_models['booked_cars']) : [];
+
+        $car_models = array_merge($booking_models, $sold_cars);
         $festival_days = Holiday::pluck('event_date')->toArray();
         return view('user.frontpage.list-cars.list',compact('car_models','festival_days','date'));
     }
 
-    public static function showCarAvailable( $start_date, $end_date) {
+    public static function showCarAvailable($start_date, $end_date)
+    {
         if (!empty($start_date) && !empty($end_date)) {
-            $car_details = CarDetails::with('carModel')
-                ->whereIn('id', function($query) {
-                    $query->select(DB::raw('MIN(id)')) // Get the minimum id for each model_id
-                    ->from('car_details')
-                        ->groupBy('model_id');
-                })
-                ->get();
+            $car_details = CarDetails::with('carModel')->get();
             $start_date = Carbon::parse($start_date);
             $end_date = Carbon::parse($end_date);
-            $available_cars = [];
+
+            $available_cars = $booked_cars = [];
+
             foreach ($car_details as $car_detail) {
                 // Check if the car is booked during the given period
                 $isBooked = Available::where('car_id', $car_detail->id)
@@ -104,16 +116,27 @@ class UserController extends Controller
                             });
                     })
                     ->exists();
-
                 // If not booked, add to available cars list
                 if (!$isBooked) {
                     $available_cars[] = $car_detail;
+                } else {
+                    $booked_cars[] = $car_detail;
                 }
             }
-
-            return $available_cars;
+            // Ensure uniqueness based on 'model_id' for both lists
+            $unique_available_cars = collect($available_cars)->unique('model_id')->values()->all();
+            $unique_booking_cars = collect($booked_cars)->unique('model_id')->values()->all();
+            // Return both lists
+            return [
+                'available_cars' => $unique_available_cars,
+                'booking_cars' => $unique_booking_cars
+            ];
         }
-        return [];
+
+        return [
+            'available_cars' => [],
+            'booking_cars' => []
+        ];
     }
 
     public function bookingCar($id)
@@ -196,7 +219,8 @@ class UserController extends Controller
         $total_price = $festival_total + $week_end_total + $week_days_total;
         $diffInDays = $start->diffInDays($end);
         $diffInHours = $start->diffInHours($end) % 24;
-        return ['total_days'=> $diffInDays , 'total_hours'=> $diffInHours , 'total_price'=> $total_price,
+        $diff_hour = $start->diffInHours($end);
+        return ['total_days'=> $diffInDays , 'total_hours'=> $diffInHours ,'different_hours' =>$diff_hour, 'total_price'=> $total_price,
             'festival_amount' => $festival_amount , 'week_end_amount' => $week_end_amount, 'week_days_amount' => $week_days_amount];
     }
 

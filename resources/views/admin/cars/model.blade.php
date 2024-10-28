@@ -201,7 +201,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="day_km">Per Day Kms</label>
+                            <label for="day_km">Per Hours Kms</label>
                             <input type="number" class="form-control" id="day_km" name="day_km" placeholder="45 km">
                             <div class="invalid-feedback">
                                 Please enter the Extra Kms Charge.
