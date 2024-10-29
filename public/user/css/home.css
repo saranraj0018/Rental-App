@@ -28,7 +28,20 @@
 .text-blue {
     color: #123984;
 }
-
+.btn-blue-border{
+    border:1px solid #123984;
+    color:#123984;
+    transition: all 0.3s;
+}
+.btn-blue-border:hover{
+    background-color:#123984;
+    color:white;
+    transition: all 0.3s;
+}
+.btn-blue-border:focus {
+    background-color: #123984 !important;
+    color:white;
+}
 .fs-24 {
     font-size: 24px;
 }
@@ -72,18 +85,35 @@
     font-weight: 600;
 }
 
-
+input.form-control.my-hub{
+    background: white !important;
+}
 .my-button {
     background-color: #123984;
     color: white;
     border-radius: 30px;
 }
+.my-drop-button {
+    background-color: #E2ECFF;
+    color: #123984;
+    border-radius: 30px;
+}
+.my-current-button {
+    background-color: #f1f1f1;
+    color: #525252;
+    border-radius: 30px;
+}
 .my-button:hover {
-    background-color: #135deb;
+    background-color: #123984;
     color: white;
 }
 
-
+.dark-blue-bg{
+    background-color: #06183E;
+}
+.abt-os-blue {
+    background-color: #123984;
+}
 .sold-button {
     background-color: #000000;
     color: white;
@@ -147,13 +177,7 @@ button[type="button"][role="presentation"].owl-next {
     color: #2196f3;
 }
 
-.navbar-light .navbar-nav .nav-link:focus,
-.navbar-light .navbar-nav .nav-link:hover {
-    background: #2A90FF;
-    color: white;
-    border-radius: 30px;
-    transition: 0.3s;
-}
+
 
 .navbar-light .navbar-nav .nav-link {
     padding-top: 7px;
@@ -440,10 +464,11 @@ span#basic-addon1 {
 /*--------------HOME-SECTION-6---------------*/
 
 .ltt-bg {
-    background: url('../img/subtract.jpeg');
+    background: url('../img/subtract.png');
     background-position: center center;
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
+    padding:28px 0;
 }
 .ltt-bg *{
     padding-left:5px;
@@ -462,7 +487,7 @@ span#basic-addon1 {
 .car-fits{
     height:216px;
     width:394px;
-    margin-top:-35px;
+    margin-top:-20px;
 }
 /*--------------HOME-SECTION-6---------------*/
 
@@ -592,4 +617,7 @@ margin-top:-46px !important;
 .bg-lightblue {
     background-color: #EEF7FF;
     padding: 5px 15px 5px 8px;
+}
+.date-modal-width {
+    width: 20%;
 }

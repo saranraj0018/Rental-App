@@ -48,7 +48,11 @@
                                 <p class="fs-15 fw-600 mb-2">
                                     ₹{{ $price_list['total_price'] ?? '' }}
                                 </p>
+                                @if ($model['booking_status'] === 'available')
                                     <a href="{{ route('book.car', ['model_id' => $model->id]) }}" class="btn my-button fs-14">Book now</a>
+                                @elseif ($model['booking_status'] === 'sold')
+                                    <button type="button" class="my-button btn btn-lg fs-14 float-end">Sold</button>
+                                @endif
                             </div>
                         </div>
                     </div>

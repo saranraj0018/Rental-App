@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\MapController;
 use App\Http\Controllers\Admin\HolidayController;
 use App\Http\Controllers\Admin\AvailableController;
 use App\Http\Controllers\Admin\SwapController;
+use App\Http\Controllers\Admin\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,8 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::get('/check-payment/models', [PickupDeliveryController::class, 'calculatePrice'])->name('model.price');
         Route::post('/user-payment/link', [PickupDeliveryController::class, 'sendUserPayment'])->name('user.send.payment');
         Route::post('/user/save', [PickupDeliveryController::class, 'createBooking'])->name('user.booking');
+        Route::get('/booking/complete', [PickupDeliveryController::class, 'bookingComplete'])->name('complete.booking');
+        Route::get('/booking/cancel', [PickupDeliveryController::class, 'bookingCancelList'])->name('cancel.booking.list');
 
         // Cars list
         Route::get('/cars/list', [CarDetailsController::class, 'list'])->name('car.list');
@@ -128,6 +131,10 @@ Route::group(['prefix'=> 'admin'],function (){
 
         Route::get('/car-available', [AvailableController::class, 'availableList'])->name('car-available.list');
         Route::get('/check-available', [AvailableController::class, 'available'])->name('available');
+
+        // User List
+        Route::get('/user/list', [UserController::class, 'list'])->name('user.list');
+        Route::get('/user/search', [UserController::class, 'search'])->name('user.search');
 
     });
 });

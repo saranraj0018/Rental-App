@@ -321,14 +321,28 @@ class BannerController extends Controller
         ], [
             'maximum_hours.gt' => 'The maximum hours must be greater than the minimum hours.',
         ]);
+        $minimum_hours = $maximum_hours = 0;
+         if ( $request['minimum_duration_type'] == 'hours') {
+             $minimum_hours = (int)$request['minimum_hours'];
+         } elseif ($request['minimum_duration_type'] == 'days') {
+             $minimum_hours = (int)$request['minimum_days'] * 24;
+         }
+
+        if ( $request['maximum_duration_type'] == 'hours') {
+            $maximum_hours = (int)$request['maximum_hours'];
+        } elseif ($request['maximum_duration_type'] == 'days') {
+            $maximum_hours = (int)$request['maximum_hours'] * 24;
+        }
+
+
         $data = [
             'minimum_hours' => $request['minimum_hours'],
             'maximum_hours' => $request['maximum_hours'],
             'delivery_fee' => $request['delivery_fee'],
             'show_delivery' => $request['show_delivery'] ?? 0,
             'booking_duration' => $request['booking_duration'] ?? 0,
-            'minimum_duration_type' => $request['minimum_duration_type'],
-            'maximum_duration_type' => $request['maximum_duration_type'],
+            'total_minimum_hours' => $minimum_hours,
+            'total_maximum_hours' => $maximum_hours,
         ];
 
         $frontend = !empty($request['general_id'])  ? Frontend::find($request['general_id']) : new Frontend();

@@ -50,6 +50,7 @@ class OTPController extends Controller
         $session_otp = session('verification_code');
         $session_phone = session('phone');
         $user = User::with('userDoc')->where('mobile', $session_phone)->first();
+        session(['document_verification' => !empty(!$user->userDoc->isEmpty()) ? 1 : 0]);
         if (empty($user)) {
             return response()->json([
                 'success' => 'false',
@@ -60,7 +61,6 @@ class OTPController extends Controller
                 Auth::login($user); // Log the user in
                 return response()->json([
                     'success' => 'true',
-                    'documents' => !empty(!$user->userDoc->isEmpty()) ? 1 : 0,
                     'message' => 'Login successful.',
                 ]);
         } else {
@@ -85,4 +85,24 @@ class OTPController extends Controller
 
         return response()->json(['success' => 'true','message' => 'Registration successful!']);
     }
+    public function verifyDocument(Request $request)
+    {
+       // session()->forget(['pick-delivery','delivery','pickup']);
+        $user = User::with('userDoc')->find(Auth::id());
+       if ($user->userDoc->isEmpty()) {
+           return response()->json(['success' => false,'message' => 'Document not found.']);
+       }
+
+        return response()->json(['success' => true,'message' => 'Document is Already Verify successful!']);
+    }
+
+    public function verifyLocation()
+    {
+        if (empty(Auth::user()->pick_location) || empty(Auth::user()->pick_location) || empty(Auth::user()->drop_location)) {
+            return response()->json(['success' => false,'message' => 'Location not found.']);
+        }
+
+        return response()->json(['success' => true,'message' => 'Location Added']);
+    }
+
 }

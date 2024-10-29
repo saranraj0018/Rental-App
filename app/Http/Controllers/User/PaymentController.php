@@ -9,6 +9,7 @@ use App\Models\BookingDetail;
 use App\Models\CarDetails;
 use App\Models\CarModel;
 use App\Models\Payment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\BookingConfirmed;
@@ -55,6 +56,24 @@ class PaymentController extends Controller
         $delivery_booking->payment_id = $request['payment_id'] ?? 1;
         $delivery_booking->save();
 
+        $paymentDetails = $this->getPaymentDetails($request['payment_id']);
+
+// Decode JSON response if necessary
+        if ($paymentDetails instanceof \Illuminate\Http\JsonResponse) {
+            $data = $paymentDetails->getData(true); // Get as array
+        } else {
+            $data = $paymentDetails;
+        }
+
+        $payment = new Payment();
+        $payment->payment_id = $request['payment_id'];
+        $payment->booking_id = $id;
+        $payment->amount = $data['amount'];
+        $payment->currency = $data['currency'];
+        $payment->customer_id = Auth::id();
+        $payment->payment_status =  $data['status'];
+        $payment->save();
+
         $booking_details = new BookingDetail();
         $booking_details->booking_id = $id;
         $booking_details->coupon = !empty(session('coupon')) ?  json_encode(session('coupon')) : null;
@@ -63,7 +82,7 @@ class PaymentController extends Controller
         $booking_details->save();
 
 
-        $car_details = !empty(session('booking_details.car_id')) ? CarDetails::find(session('booking_details.car_id'))->get() : 0;
+        $car_details = !empty(session('booking_details.car_id')) ? CarDetails::find(session('booking_details.car_id')) : 0;
         $car_available = new Available();
         $car_available->car_id = !empty(session('booking_details.car_id')) ?  session('booking_details.car_id') : 0;
         $car_available->model_id = !empty($car_details->model_id) ? $car_details->model_id: 0;
@@ -71,6 +90,7 @@ class PaymentController extends Controller
         $car_available->booking_id = $id;
         $car_available->start_date = formDateTime(session('booking_details.start_date'));
         $car_available->end_date = formDateTime(session('booking_details.end_date'));
+        $car_available->next_booking = Carbon::parse(formDateTime(session('booking_details.end_date')))->addHours(3);
         $car_available->booking_type = 1;
         $car_available->save();
 
@@ -86,6 +106,36 @@ class PaymentController extends Controller
             'message' => 'Payment successful',
         ]);
     }
+
+
+
+    public function getPaymentDetails($payment_id)
+    {
+
+        $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
+
+
+        try {
+            // Fetch payment details from Razorpay
+            $payment = $api->payment->fetch($payment_id);
+
+            // Extract the amount (it's in paise, so divide by 100 for the actual amount)
+            $amount = $payment->amount / 100;
+            $currency = $payment->currency;
+            $status = $payment->status;
+
+            return response()->json([
+                'amount' => $amount,
+                'currency' => $currency,
+                'status' => $status,
+                'payment_id' => $payment_id,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
 
     public function bookingHistory() {
         $booking = Booking::with(['user','car','details'])->

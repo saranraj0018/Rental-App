@@ -1,6 +1,7 @@
 $(function () {
     'use strict'
     $(document).ready(function() {
+
         $('.navbar-light .dmenu').hover(function () {
             $(this).find('.sm-menu').first().stop(true, true).slideDown(150);
         }, function () {
@@ -188,19 +189,14 @@ $(function () {
         $('#get_location').on('submit', function(e) {
             e.preventDefault();
             sendPosition();
-            // if (navigator.geolocation) {
-            //     navigator.geolocation.getCurrentPosition(sendPosition);
-            // } else {
-            //     alert("Geolocation is not supported by this browser.");
-            // }
             function sendPosition() {
                 $.ajax({
                     url: '/update-location',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({
-                        start_date:$('#start_date_time').val(),
-                        end_date:$('#end_date_time').val(),
+                        start_date:$('#dateTimeInput1').val(),
+                        end_date:$('#dateTimeInput2').val(),
                     }),
                     success: function(data) {
                         if (data) {
@@ -213,70 +209,12 @@ $(function () {
                 });
             }
         });
-        calculateDuration();
         $('.navbar-light .dmenu').hover(function() {
             $(this).find('.sm-menu').first().stop(true, true).slideDown(150);
         }, function() {
             $(this).find('.sm-menu').first().stop(true, true).slideUp(105)
         });
 
-        // // Get user's geolocation
-        // if (navigator.geolocation) {
-        //     navigator.geolocation.getCurrentPosition(function(position) {
-        //         // Send geolocation data to server
-        //         $.ajax({
-        //             url: '/api/save-geolocation',
-        //             type: 'POST',
-        //             contentType: 'application/json',
-        //             data: JSON.stringify({
-        //                 latitude: position.coords.latitude,
-        //                 longitude: position.coords.longitude
-        //             }),
-        //             error: function(xhr, status, error) {
-        //                 console.error('Error:', error);
-        //             }
-        //         });
-        //     });
-        // } else {
-        //     console.log("Geolocation is not supported by this browser.");
-        // }
-        // document.querySelectorAll('.next-button').forEach(button => {
-        //     button.addEventListener('click', function() {
-        //         const currentSet = this.closest('.input-set');
-        //         const nextSetNumber = this.getAttribute('data-next');
-        //         const nextSet = document.querySelector(`.input-set[data-set="${nextSetNumber}"]`);
-        //
-        //         // Fade out the current set
-        //         currentSet.classList.remove('show');
-        //         currentSet.addEventListener('transitionend', function() {
-        //             currentSet.style.display = 'none'; // Hide it after fading out
-        //             // Fade in the next set
-        //             nextSet.style.display = 'block'; // Ensure it's display is block for transition
-        //             nextSet.classList.add('show');
-        //         }, {
-        //             once: true
-        //         });
-        //     });
-        // });
-
-        // document.querySelectorAll('.back-button').forEach(button => {
-        //     button.addEventListener('click', function() {
-        //         const currentSet = this.closest('.input-set');
-        //         const prevSetNumber = this.getAttribute('data-prev');
-        //         const prevSet = document.querySelector(`.input-set[data-set="${prevSetNumber}"]`);
-        //
-        //         // Fade out the current set
-        //         currentSet.classList.remove('show');
-        //         currentSet.addEventListener('transitionend', function() {
-        //             currentSet.style.display = 'none'; // Hide it after fading out
-        //             // Fade in the previous set
-        //             prevSet.style.display = 'block'; // Ensure it's display is block for transition
-        //             prevSet.classList.add('show');
-        //         }, {
-        //             once: true
-        //         });
-        //     });
-        // });
         $('#delivery_amount').on('change', function() {
             const isChecked = $(this).is(':checked');
             const deliveryFee = isChecked ? parseFloat($('#door_delivery').val()) : 0;
@@ -310,63 +248,6 @@ $(function () {
                 }
             });
         });
-
-
-        $('#start_date_time').on('change', calculateDuration);
-        $('#end_date_time').on('change', calculateDuration);
-
-        function calculateDuration() {
-            let startDate = $('#start_date_time').val();
-            let endDate = $('#end_date_time').val();
-
-            if (startDate && endDate) {
-                // Parse the dates using the correct format
-                let start = moment(startDate, 'DD-MM-YYYY HH:mm'); // Adjust to the input date format
-                let end = moment(endDate, 'DD-MM-YYYY HH:mm');
-
-                // Validate dates
-                if (!start.isValid() || !end.isValid()) {
-                    $('.duration-display').text('Invalid date format');
-                    return;
-                }
-
-                // Calculate the exact difference between dates
-                let diff = moment.duration(end.diff(start));
-
-                // Extract days and hours
-                let days = Math.floor(diff.asDays()); // Use asDays() directly for correct day calculation
-                let hours = diff.hours();
-
-                // Handle pluralization correctly
-                let durationText = `${days} day${days !== 1 ? 's' : ''}, ${hours} hr${hours !== 1 ? 's' : ''}.`;
-
-                // Display the calculated duration
-                $('.duration-display').text(`Duration ${durationText}`);
-                if (diff.asHours() < 24) {
-                    $('#find_car').prop('disabled', true);
-                    $('.duration-error').text(`Minimum 1 day required`);
-                } else {
-                    $('#find_car').prop('disabled', false);
-                    $('.duration-error').text(``);
-                }
-            }
-        }
-        flatpickr("#start_date_time", {
-            minDate: "today",
-            enableTime: true,
-            dateFormat: "d-m-Y | H:i",
-            time_24hr: true,
-            minuteIncrement: 30, // 30-minute intervals
-            allowInput: true,
-        });
-        flatpickr("#end_date_time", {
-            minDate: "today",
-            enableTime: true,
-            dateFormat: "d-m-Y | H:i",
-            time_24hr: true,
-            minuteIncrement: 30, // 30-minute intervals
-            allowInput: true,
-        });
     });
 });
 
@@ -374,5 +255,184 @@ $(document).ready(function(){
     $('.save-icon').click(function(){
         $(this).toggleClass('save-icon save-icon-active');
     });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    let selectedDate1 = "";
+    let selectedTime1 = "";
+    let selectedDate2 = "";
+    let selectedTime2 = "";
+    calculateTimeDifference();
+    function formatDateTime(dateStr, timeStr) {
+        const dateParts = dateStr.split('-');
+        const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`; // Convert to YYYY-MM-DD
+        return `${formattedDate}T${timeStr}`; // Add 'T' between date and time
+    }
+
+
+    // Initialize Flatpickr for both calendars
+    flatpickr("#inlineDatePicker1", {
+        inline: true,
+        dateFormat: "d-m-Y",
+        disable: [
+            date => date < new Date().setHours(0, 0, 0, 0) // Disable past dates but allow today
+        ],
+        onChange: function (selectedDates, dateStr) {
+            selectedDate1 = dateStr;
+            if (dateStr) {
+                // Automatically switch to time tab after selecting date
+                let timeTab = new bootstrap.Tab(document.getElementById('time-tab1'));
+                timeTab.show();
+            }
+        }
+    });
+
+    flatpickr("#inlineDatePicker2", {
+        inline: true,
+        dateFormat: "d-m-Y",
+        disable: [
+            date => date < new Date().setHours(0, 0, 0, 0) // Disable past dates but allow today
+        ],
+        onChange: function (selectedDates, dateStr) {
+            selectedDate2 = dateStr;
+            if (dateStr) {
+                // Automatically switch to time tab after selecting date
+                let timeTab = new bootstrap.Tab(document.getElementById('time-tab2'));
+                timeTab.show();
+            }
+        }
+    });
+
+    // Handle time button click for first modal
+    document.querySelectorAll('#timeTabContent1 .time-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            selectedTime1 = this.getAttribute('data-time');
+            // Set active color for the selected button
+            document.querySelectorAll('#timeTabContent1 .time-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            this.classList.add('active');
+        });
+    });
+
+    // Handle submit for first modal
+    document.getElementById('submitDateTime1').addEventListener('click', function () {
+        if (!selectedDate1) {
+            alert("Please choose a date before submitting.");
+            return;
+        }
+        if (!selectedTime1) {
+            alert("Please choose a time before submitting.");
+            return;
+        }
+
+        const combinedDateTime1 = formatDateTime(selectedDate1, selectedTime1);
+        document.getElementById('dateTimeInput1').value = combinedDateTime1;
+
+        // Hide the modal using jQuery for Bootstrap 4
+        $('#dateTimeModal1').modal('hide');
+
+
+
+        calculateTimeDifference(); // Call function to calculate time difference
+    });
+
+
+
+
+    // Handle time button click for second modal
+    document.querySelectorAll('#timeTabContent2 .time-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            selectedTime2 = this.getAttribute('data-time');
+            // Set active color for the selected button
+            document.querySelectorAll('#timeTabContent2 .time-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            this.classList.add('active');
+        });
+    });
+
+    // Handle submit for second modal
+    document.getElementById('submitDateTime2').addEventListener('click', function () {
+        if (!selectedDate2) {
+            alert("Please choose a date before submitting.");
+            return;
+        }
+        if (!selectedTime2) {
+            alert("Please choose a time before submitting.");
+            return;
+        }
+
+        const combinedDateTime2 = formatDateTime(selectedDate2, selectedTime2);
+        document.getElementById('dateTimeInput2').value = combinedDateTime2;
+
+        // Hide the modal using jQuery for Bootstrap 4
+        $('#dateTimeModal2').modal('hide');
+
+
+        calculateTimeDifference(); // Call function to calculate time difference
+    });
+
+    // Function to calculate time difference
+    function calculateTimeDifference() {
+        const dateTime1 = $('#dateTimeInput1').val(); // Get the value of the first date-time input
+        const dateTime2 = $('#dateTimeInput2').val(); // Get the value of the second date-time input
+
+        if (dateTime1 && dateTime2) {
+            // Reformat date strings from "DD-MM-YYYY HH:mm" to "YYYY-MM-DDTHH:mm:ss"
+            const formattedDate1 = dateTime1.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:00');
+            const formattedDate2 = dateTime2.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:00');
+
+            const date1 = new Date(formattedDate1);
+            const date2 = new Date(formattedDate2);
+
+            if (isNaN(date1) || isNaN(date2)) {
+                console.error('Invalid date format');
+                return;
+            }
+
+            // Calculate the difference in milliseconds
+            const diffMs = Math.abs(date2 - date1);
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const diffHrs = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const totalHours = diffDays * 24 + diffHrs; // Total hours
+
+            // Display the difference using jQuery
+            $('.date-value').text(diffDays); // Set the number of days
+            $('.time-value').text(diffHrs); // Set the number of hours
+
+            // Get minimum and maximum limits from hidden inputs
+            const minHours = parseInt($('#minimum_days').val());
+            const maxHours = parseInt($('#maximum_days').val());
+
+            // Enable/disable the button based on the total hours
+            if (totalHours < minHours) {
+                $('#find_car').prop('disabled', true);
+                $('.duration-error').text(`Minimum ${minHours} hours required`);
+            } else if (totalHours > maxHours) {
+                $('#find_car').prop('disabled', true);
+                $('.duration-error').text(`Maximum ${maxHours} hours exceeded`);
+            } else {
+                $('#find_car').prop('disabled', false);
+                $('.duration-error').text(''); // Clear any error message
+            }
+        }
+    }
+
+
+    $('.book_now').on('click', function () {
+        let start_date = $('#dateTimeInput1').val();
+        let end_date = $('#dateTimeInput2').val();
+
+        if (start_date === '' && end_date === '') {
+            $('#alert_booking').modal('show');
+        } else {
+            let booking_id = $('#car_book_id').val();
+
+            window.location.href = '/book/'+booking_id;
+        }
+    });
+
+
 });
 

@@ -20,6 +20,11 @@ Route::post('user/verify-otp', [OTPController::class, 'verifyOtp'])->name('verif
 Route::post('user/register', [OTPController::class, 'register'])->name('register');
 
 Route::middleware(['auth'])->group(function () {
+
+    Route::post('user/check-location', [LocationController::class, 'checkLocation']);
+    Route::get('/user/verify-document', [OTPController::class,'verifyDocument'])->name('verify.document');
+    Route::get('/user/verify-location', [OTPController::class,'verifyLocation'])->name('verify.location');
+
     Route::post('user/apply-coupon', [CouponController::class,'applyCoupon'])->name('apply.coupon');
     Route::post('user/remove-coupon', [CouponController::class, 'removeCoupon'])->name('remove.coupon');
 
@@ -40,4 +45,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('user/update-delivery-fee', [PaymentController::class, 'updateDeliveryFee'])->name('update.fee');
 });
 
-Route::post('user/check-location', [LocationController::class, 'checkLocation']);
+
+
+Route::view('user/about', '.user.frontpage.others.about')->name('about');
+Route::view('user/contact', '.user.frontpage.others.contact')->name('contact');
+Route::view('user/cancellation', '.user.frontpage.others.cancellation')->name('cancellation');
+Route::view('user/pricing', '.user.frontpage.others.pricing')->name('pricing');
+Route::view('user/faq', '.user.frontpage.others.faq')->name('faq');
+Route::view('user/privacy-policy', '.user.frontpage.others.privacy-policy')->name('privacy-policy');
+Route::view('user/refund', '.user.frontpage.others.refund')->name('refund');
+Route::view('user/shipping', '.user.frontpage.others.shipping')->name('shipping');
+Route::view('user/terms-and-conditions', '.user.frontpage.others.terms-and-conditions')->name('terms-and-conditions');
+

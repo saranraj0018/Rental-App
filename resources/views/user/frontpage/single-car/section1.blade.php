@@ -70,7 +70,7 @@
                     </p>
                     <div class=" mt-2">
                         <ul class="fs-6 fw-500 ps-3">
-                            <li>Pricing Plan: Per day {{$car_model->carModel->per_day_km ?? ''}} kms, excludes fuel</li>
+                            <li>Pricing Plan: Total {{!empty($car_model->carModel->per_day_km) ? $car_model->carModel->per_day_km *  $price_list['different_hours'] : $car_model->carModel->per_day_km }} kms, excludes fuel</li>
                             <li>Extra Hour: ₹{{ $car_model->carModel->extra_hours_price ?? '' }} / per hour</li>
                             <li>Extra Km: ₹{{ $car_model->carModel->extra_km_charge }} / per KM</li>
                         </ul>
@@ -139,6 +139,7 @@
 
                             $type = !empty($coupon['type']) ? $coupon['type'] : 0 ;
                             $amount = !empty($type) && $type == 2 ? $coupon['discount'] : ($type == 1 ? ($total_price * $coupon['discount']) / 100 : 0);
+                            $final_total = $sub_total_price - $amount ?? 0 ;
                         @endphp
                         <div class="{{!empty(session('coupon')) ? 'd-flex' : 'd-none'}} justify-content-between text-white mb-2 border-bottom border-1" id="coupon_message" >
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Coupon Amount</p>
@@ -154,6 +155,10 @@
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Tolls, Parking & Inter-state taxes</p>
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">To be paid by you</p>
                         </div>
+                        <div class="d-flex justify-content-between text-white mt-3 border-bottom border-1">
+                            <p class="fs-20 fs-mb-16 my-2">Total Price</p>
+                            <span id="total_price">₹{{ $final_total }}</span>
+                        </div>
                         <div class="d-flex justify-content-between text-white mt-3">
                             <p class="fs-14 fs-mb-12 my-auto my-lg-2 w-100">Promo / Coupon Code</p>
                             <div class="input-group booking-inputs-2 my-auto w-100 h-50 border border-white rounded-pill">
@@ -165,16 +170,15 @@
                         <p id="discount_text" class="fs-14 fs-mb-12 mt-2 mb-3 text-success"></p>
                         <div class="mt-1 pt-2 mb-3">
                             <div class="mt-2 mt-lg-5">
-                                @php
-                                     $final_total = $sub_total_price - $amount ?? 0 ;
-                                    @endphp
                                 <input type="hidden" id="final_coupon_amount" value="{{session('coupon_amount')}}">
                                 <input type="hidden" id="door_delivery" value="{{$general_section['delivery_fee'] ?? 0}}">
                                 <input type="hidden" id="final_amount" value="{{ session('booking_details.total_price') }}">
                                 <input type="hidden" id="additional_amount" value="{{ $delivery_fee + $car_model->carModel->dep_amount ?? 0 }}">
                                 <div class="text-white">
                                     <p class="fs-20 fs-mb-16 my-2 text-end">
-                                        Total Price ₹<span id="total_price">{{ $final_total }}</span></p>
+                                        Pickup Address<span id="pickup_address">{{ session('pickup.address') ?? session('pick-delivery.address') ?? '' }}</span></p>
+                                    <p class="fs-20 fs-mb-16 my-2 text-end">
+                                        Drop Address<span id="drop_address">{{ session('delivery.address') ?? session('pick-delivery.address') ?? '' }}</span></p>
                                 </div>
                             </div>
                         </div>
@@ -194,11 +198,11 @@
                                     </div>
                                     <div class="mb-3 mb-md-auto toggle">
                                         <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#secondModal">
-                                            <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Your Location</button>
+                                            <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Pickup/Drop Location</button>
                                     </div>
-                                    <div class="mb-3 mb-md-auto {{!empty($general_section['show_delivery']) ? 'd-none' : ''}}">
+                                    <div class="mb-3 mb-md-auto me-3 {{!empty($general_section['show_delivery']) ? 'd-none' : ''}}">
                                         <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#secondModal">
-                                            <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Your Location</button>
+                                            <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Pickup/Drop Location</button>
                                     </div>
                                 </div>
                             </div>
@@ -225,7 +229,20 @@
 
 <script>
     // When the payment button is clicked
-    $(document).on('click', '#payment', function(e) {
+    $(document).on('click', '#payment', async function(e) {
+        let doc_verify = await verifyUserDocument();
+        if (!doc_verify) {
+            $('#user_document').modal('show');
+            return;
+        }
+        let map_verify = await verifyUserLocation();
+        if (!map_verify) {
+            $('#secondModal').modal('show');
+            window.initMarker();
+            $('#custom-city').focus();
+            return;
+        }
+
         let coupon = $('#final_coupon_amount').val();
         let final_amount = {{ $total_price + $car_model->carModel->dep_amount + $delivery_fee }};
         let coupon_amount = coupon !== '' || coupon !== 0 ? coupon : 0;
@@ -268,44 +285,94 @@
         let rzp = new Razorpay(options);
         rzp.open(); // Opens Razorpay modal
     });
+
+    async function verifyUserDocument() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: '/user/verify-document', // Update with your route.
+                method: 'GET',
+                success: function(response) {
+                    if (!response.success) {
+                        $('#otpModal').modal('hide');
+                        resolve(false);
+                    } else {
+                        resolve(true);
+                    }
+                },
+                error: function() {
+                    resolve(false);
+                }
+            });
+        });
+    }
+
+
+    async function verifyUserLocation() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: '/user/verify-location', // Update with your route.
+                method: 'GET',
+                success: function(response) {
+                    if (!response.success) {
+                        $('#otpModal').modal('hide');
+                        resolve(false);
+                    } else {
+                        resolve(true);
+                    }
+                },
+                error: function() {
+                    resolve(false);
+                }
+            });
+        });
+    }
+
+
 </script>
 
 <!-- Second Modal Structure -->
-<div class="modal fade m-0 m-md-auto" id="secondModal" tabindex="-1" aria-labelledby="secondModalLabel" aria-hidden="true">
+<div class="modal fade m-0 m-md-auto" id="secondModal" tabindex="-1" aria-labelledby="secondModalLabel" aria-hidden="true" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content bdr-20">
             <div class="modal-body">
                 <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
                 <div class="p-3">
                     <div id="pickup-section" class="slide-section">
-                        <p class="fs-16 fw-500">Select pickup Location</p>
+                        <p class="fs-16 fw-500">Select Pickup Location</p>
                         <div class="container">
                             <div id="custom_map" style="height: 500px; width: 100%;"></div>
                         </div>
                         <p class="fs-16 fw-500 mt-2"> Enter manually</p>
-                        <input id="custom-city" type="text" placeholder="Search city" class="form-control">
+                        <input id="custom-city" type="text" placeholder="Search city" class="form-control current_pickup_address">
                         <p class="text-danger" id="outside_area"></p>
                         <input type="hidden" id="pic_latitude" name="pic_latitude" >
                         <input type="hidden" id="pic_longitude" name="pic_longitude" >
                         <input type="hidden" id="pic_address" name="pic_address" >
+                        <p class="text-danger" id="pick_outside_area"></p>
                         <div class="d-flex">
-                        <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="same_address">Same Address for Delivery Location</button>
-                        <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="delivery_address">Choose Delivery Address</button>
+                            <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="delivery_address">Save Pickup Address</button>
+                            <button type="button" class="btn fs-16 my-drop-button mt-4 mx-2 w-50 w-lg-25" id="same_address">Same as Drop Location</button>
+                            <button type="button" class="btn fs-16 my-current-button rounded-pill mt-4 w-50 w-lg-25" id="use_current_location">Current Location</button>
                         </div>
                     </div>
 
                     <div id="delivery-section" class="slide-section d-none">
-                        <p class="fs-16 fw-500">Select delivery Location</p>
+                        <div class="d-flex">
+                        <p class="fs-16 fw-500">Select Drop Location</p>
+                        </div>
                         <div class="container">
                             <div id="delivery_map" style="height: 500px; width: 100%;"></div>
                         </div>
                         <p class="fs-16 fw-500 mt-2"> Enter manually</p>
-                        <input id="delivery-city" type="text" placeholder="Search city" class="form-control">
+                        <input id="delivery-city" type="text" placeholder="Search city" class="form-control current_delivery_address">
                         <input type="hidden" id="dly_latitude" name="dly_latitude">
                         <input type="hidden" id="dly_longitude" name="dly_longitude">
                         <input type="hidden" id="dly_address" name="dly_address">
-                        <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="conform_address">Conform address</button>
                         <p class="text-danger" id="delivery_outside_area"></p>
+                        <div class="d-flex">
+                        <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="conform_address">Conform address</button>
+                        <button type="button" class="btn fs-16 my-current-button rounded-pill mt-4 w-50 w-lg-25" id="drop_current_location">Current Location</button>
+                        </div>
                     </div>
                 </div>
             </div>

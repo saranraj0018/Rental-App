@@ -36,7 +36,7 @@
 
 
 {{--Opt Verification--}}
-<div class="modal left fade custom-modal m-0 overflow-hidden" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
+<div class="modal left fade custom-modal m-0 overflow-hidden" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true"  data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog position-top-right">
         <div class="modal-content bdr-20">
             <div class="modal-body h-600px p-0">
@@ -71,7 +71,7 @@
 </div>
 
 {{--Register model--}}
-<div class="modal left fade custom-modal m-0 overflow-hidden" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+<div class="modal left fade custom-modal m-0 overflow-hidden" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true"  data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog position-top-right">
         <div class="modal-content bdr-20">
             <div class="modal-body h-600px p-0">
@@ -114,7 +114,7 @@
 
 {{--User Document upload --}}
 
-<div class="modal fade" id="user_document" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="user_document" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"  data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content p-3">
             <div class="d-flex justify-content-end">

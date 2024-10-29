@@ -24,7 +24,7 @@ class PickupDeliveryController extends BaseController
     public function list(Request $request)
     {
         $this->authorizePermission('hub_list');
-        $bookings = Booking::with(['user','details','comments','user.bookings'])->paginate(5);
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)->paginate(5);
         return view('admin.hub.list',compact('bookings'));
     }
 
@@ -124,6 +124,8 @@ class PickupDeliveryController extends BaseController
         if ($request->has('booking_type') && $request->input('booking_type') !== 'both') {
             $query->where('booking_type', $request->input('booking_type'));
         }
+          $status = !empty($request->input('status')) ? $request->input('status') : 1;
+        $query->where('status', $status);
 
         // Paginate the results
         $bookings = $query->paginate($perPage);
@@ -315,6 +317,16 @@ class PickupDeliveryController extends BaseController
         }
         return [];
     }
+    public function bookingComplete(Request $request)
+    {
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',2)->paginate(5);
+        return view('admin.hub.complete_booking',compact('bookings'));
+    }
 
+    public function bookingCancelList(Request $request)
+    {
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',3)->paginate(5);
+        return view('admin.hub.cancel_booking',compact('bookings'));
+    }
 
 }

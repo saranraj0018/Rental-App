@@ -268,4 +268,4 @@
         </div>
     </div>
 </section>
-{{--<script async src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&libraries=places&callback=carMarker"></script>--}}
+<script async src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&libraries=places&callback=carMarker"></script>

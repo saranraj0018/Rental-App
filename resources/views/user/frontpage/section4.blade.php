@@ -154,7 +154,7 @@
             </div>
             <div class="col-12 col-lg-8">
                 <div class="ltt-bg">
-                    <div class="p-2 py-5">
+                    <div class="p-0 p-lg-2 py-5">
                         <div class="row gx-2">
                             <div class="col-5">
                                 <div class="d-flex flex-column justify-content-between ms-2">
@@ -162,13 +162,13 @@
                                         <p class="text-secondary fs-14 fs-mb-9 mb-1">
                                             <i class="fa-solid fa-car"></i> {{ $section['valam_ride'] ?? 'Ride Safe with Valam' }}
                                         </p>
-                                        <p class="fs-16 fs-mb-9 fw-600 my-0 my-lg-3">{!! $section4['description'] ?? '' !!}</p>
+                                        <p class="fs-16 fs-mb-9 fw-600 my-2 my-lg-3">{!! $section4['description'] ?? '' !!}</p>
                                         <div class="d-flex fs-14 fs-mb-9 my-0 my-md-3 my-lg-0 text-blue">
                                             <img src="{{ asset('user/img/bxs_offer.svg') }}" alt="Bagde Percentage" class="img-fluid d-block badge-perc-2 me-1 me-lg-2"> <span class="fs-18 fs-mb-9 fw-600 my-auto">  {{ $section4['discount'] ?? '' }}</span>
                                         </div>
                                     </div>
                                     <div>
-                                        <button class="my-button btn mt-0 mt-lg-3 fs-mb-9 p-1 p-auto">To Know More Offers</button>
+                                        <button class="my-button btn mt-2 mt-lg-0 mt-lg-3 fs-mb-9 p-1 p-auto">To Know More Offers</button>
                                     </div>
                                 </div>
                             </div>

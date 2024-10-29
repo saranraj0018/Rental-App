@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Available;
 use App\Models\CarDetails;
 use App\Models\Holiday;
 use App\Models\User;
@@ -14,6 +15,7 @@ use App\Models\Frontend;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
@@ -23,7 +25,20 @@ class UserController extends Controller
     {
         $section1 = Frontend::with('frontendImage')->where('data_keys','section1-image-car')->first();
         $section2 = Coupon::all();
-        $section3 = CarDetails::with('carModel','availableBookings')->get();
+        $available_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date')) ?? CarDetails::all();
+        $booking_models = !empty($available_models['available_cars']) ?
+            array_map(function($car) {
+                $car['booking_status'] = 'available'; // Add status as 'available'
+                return $car;
+            }, $available_models['available_cars']) : [];
+
+        $sold_cars = !empty($available_models['booked_cars']) ?
+            array_map(function($car) {
+                $car['booking_status'] = 'sold'; // Add status as 'sold'
+                return $car;
+            }, $available_models['booked_cars']) : [];
+
+        $section3 = !empty($booking_models) && !empty($sold_cars) ? array_merge($booking_models, $sold_cars) : CarDetails::all();
         $car_info = Frontend::with('frontendImage')->where('data_keys','car-info-section')->first();
         $section4 = !empty($car_info['data_values']) ? json_decode($car_info['data_values'],true) : [];
         $brand_info = Frontend::with('frontendImage')->where('data_keys','brand-section')->first();
@@ -32,32 +47,28 @@ class UserController extends Controller
         $car_image = !empty($car_info->frontendImage) ? $car_info->frontendImage : null;
         $faq_items = Frontend::where('data_keys','faq-section')->orderBy('created_at', 'desc')->get();
         $general_setting = Frontend::where('data_keys','faq-section')->orderBy('created_at', 'desc')->get();
+        $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
+        $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
         return view('user.frontpage.list-home',compact('section1','section2','section3','section4','car_image'
-            ,'brand_image','section8','faq_items','general_setting'));
+            ,'brand_image','section8','faq_items','general_setting','timing_setting','sold_cars'));
     }
 
     public function updateLocation(Request $request)
     {
 
             if (!empty($request['start_date']) && !empty($request['end_date'])) {
-                $request->session()->put('start_date',  str_replace('|', '', $request['start_date']));
-                $request->session()->put('end_date', str_replace('|', '', $request['end_date']));
+                $start_date = str_replace('T', '  ', $request['start_date']);
+                $end_date = str_replace('T', '  ', $request['end_date']);
+
+                // If the input does not have a space, manually format it
+                $start_date = preg_replace('/(\d{4}-\d{2}-\d{2})(\d{2}:\d{2})/', '$1 $2', showDateformat($start_date));
+                $end_date = preg_replace('/(\d{4}-\d{2}-\d{2})(\d{2}:\d{2})/', '$1 $2', showDateformat($end_date));
 
 
-//            $client = new Client();
-//            $response = $client->get('https://maps.googleapis.com/maps/api/geocode/json', [
-//                'query' => [
-//                    'latlng' => $latitude . ',' . $longitude,
-//                    'key' => 'AIzaSyCgkUiA7zkxsdc8BwvCqVeSTDuJVncMmAY',
-//                ]
-//            ]);
-//
-//            $data = json_decode($response->getBody(), true);
-//            $isWithinCoimbatore = $this->isWithinCoimbatore($data);
-//
-//            return response()->json(['isWithinCoimbatore' => $isWithinCoimbatore]);
+                $request->session()->put('start_date',   $start_date);
+                $request->session()->put('end_date', $end_date);
         }
-        return response()->json(['isWithinCoimbatore' => true]);
+        return response()->json(['success' => true]);
     }
 
     private function isWithinCoimbatore($data)
@@ -77,9 +88,66 @@ class UserController extends Controller
 
     public function listCars() {
         $date = ['start_date' => Session::get('start_date'), 'end_date' =>  Session::get('end_date')];
-        $car_models = CarDetails::with('carModel')->get();
+        $available_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date'));
+        $booking_models = !empty($available_models['available_cars']) ?
+            array_map(function($car) {
+                $car['booking_status'] = 'available'; // Add status as 'available'
+                return $car;
+            }, $available_models['available_cars']) : [];
+
+        $sold_cars = !empty($available_models['booked_cars']) ?
+            array_map(function($car) {
+                $car['booking_status'] = 'sold'; // Add status as 'sold'
+                return $car;
+            }, $available_models['booked_cars']) : [];
+
+        $car_models = array_merge($booking_models, $sold_cars);
         $festival_days = Holiday::pluck('event_date')->toArray();
         return view('user.frontpage.list-cars.list',compact('car_models','festival_days','date'));
+    }
+
+    public static function showCarAvailable($start_date, $end_date)
+    {
+        if (!empty($start_date) && !empty($end_date)) {
+            $car_details = CarDetails::with('carModel')->get();
+            $start_date = Carbon::parse($start_date);
+            $end_date = Carbon::parse($end_date);
+
+            $available_cars = $booked_cars = [];
+
+            foreach ($car_details as $car_detail) {
+                // Check if the car is booked during the given period
+                $isBooked = Available::where('car_id', $car_detail->id)
+                    ->where(function ($query) use ($start_date, $end_date) {
+                        $query->whereBetween('start_date', [$start_date, $end_date])
+                            ->orWhereBetween('end_date', [$start_date, $end_date])
+                            ->orWhere(function ($query) use ($start_date, $end_date) {
+                                $query->where('start_date', '<=', $start_date)
+                                    ->where('end_date', '>=', $end_date);
+                            });
+                    })
+                    ->exists();
+                // If not booked, add to available cars list
+                if (!$isBooked) {
+                    $available_cars[] = $car_detail;
+                } else {
+                    $booked_cars[] = $car_detail;
+                }
+            }
+            // Ensure uniqueness based on 'model_id' for both lists
+            $unique_available_cars = collect($available_cars)->unique('model_id')->values()->all();
+            $unique_booking_cars = collect($booked_cars)->unique('model_id')->values()->all();
+            // Return both lists
+            return [
+                'available_cars' => $unique_available_cars,
+                'booking_cars' => $unique_booking_cars
+            ];
+        }
+
+        return [
+            'available_cars' => [],
+            'booking_cars' => []
+        ];
     }
 
     public function bookingCar($id)
@@ -117,10 +185,17 @@ class UserController extends Controller
     {
         $price = [];
         if (empty($from_date) && empty($to_date)) return $price;
-        $start_date = str_replace('|', '', $from_date);
-        $end_date = str_replace('|', '', $to_date);
+        $start_date = str_replace('T', '  ', $from_date);
+        $end_date = str_replace('T', '  ', $to_date);
+
+        // If the input does not have a space, manually format it
+        $start_date = preg_replace('/(\d{4}-\d{2}-\d{2})(\d{2}:\d{2})/', '$1 $2', showDateformat($start_date));
+        $end_date = preg_replace('/(\d{4}-\d{2}-\d{2})(\d{2}:\d{2})/', '$1 $2', showDateformat($end_date));
+
+
         $start = Carbon::createFromFormat('d-m-Y H:i', $start_date);
         $end = Carbon::createFromFormat('d-m-Y H:i', $end_date);
+
         $festival_dates = Holiday::pluck('event_date')->toArray();
 
         $current = $start->copy();
@@ -155,7 +230,8 @@ class UserController extends Controller
         $total_price = $festival_total + $week_end_total + $week_days_total;
         $diffInDays = $start->diffInDays($end);
         $diffInHours = $start->diffInHours($end) % 24;
-        return ['total_days'=> $diffInDays , 'total_hours'=> $diffInHours , 'total_price'=> $total_price,
+        $diff_hour = $start->diffInHours($end);
+        return ['total_days'=> $diffInDays , 'total_hours'=> $diffInHours ,'different_hours' =>$diff_hour, 'total_price'=> $total_price,
             'festival_amount' => $festival_amount , 'week_end_amount' => $week_end_amount, 'week_days_amount' => $week_days_amount];
     }
 

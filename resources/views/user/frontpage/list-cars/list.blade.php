@@ -1,7 +1,7 @@
 @extends('user.frontpage.list-cars.main')
 
 @section('content')
-@include('user.frontpage.list-cars.section1')
+@include ('user.frontpage.header')
 @include('user.frontpage.list-cars.section2')
 <section class="my-5 d-none d-lg-block">
     <div class="container">

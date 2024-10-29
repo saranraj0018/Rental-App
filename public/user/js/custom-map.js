@@ -33,6 +33,102 @@ $(function () {
                 d_searchBox.setBounds(d_map.getBounds());
             });
 
+
+            // Event listener for the current location button click
+            $('#use_current_location').click(function () {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        // Update the latitude and longitude input fields
+                        $('#pic_latitude').val(lat);
+                        $('#pic_longitude').val(lng);
+
+                        // Use Geocoding API to get the address from the latitude and longitude
+                        const geocoder = new google.maps.Geocoder();
+                        const latlng = { lat: parseFloat(lat), lng: parseFloat(lng) };
+
+                        geocoder.geocode({ location: latlng }, function (results, status) {
+                            if (status === 'OK') {
+                                if (results[0]) {
+                                    const address = results[0].formatted_address;
+                                    $('.current_pickup_address').val(address);
+                                    $('#pic_address').val(address);
+                                    // Set the map center to the current location
+                                    c_map.setCenter(latlng);
+                                    c_map.setZoom(14);
+
+                                    // Place a marker on the current location
+                                    if (marker) {
+                                        marker.setMap(null);
+                                    }
+                                    marker = new google.maps.Marker({
+                                        position: latlng,
+                                        map: c_map,
+                                        title: "Current Location",
+                                    });
+                                } else {
+                                    alert('No address found for this location.');
+                                }
+                            } else {
+                                alert('Geocoder failed due to: ' + status);
+                            }
+                        });
+                    }, function () {
+                        alert('Geolocation failed. Please enable location services.');
+                    });
+                } else {
+                    alert('Geolocation is not supported by this browser.');
+                }
+            });
+
+            $('#drop_current_location').click(function () {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        // Update the latitude and longitude input fields
+                        $('#dly_latitude').val(lat);
+                        $('#dly_longitude').val(lng);
+
+                        // Use Geocoding API to get the address from the latitude and longitude
+                        const geocoder = new google.maps.Geocoder();
+                        const latlng = { lat: parseFloat(lat), lng: parseFloat(lng) };
+
+                        geocoder.geocode({ location: latlng }, function (results, status) {
+                            if (status === 'OK') {
+                                if (results[0]) {
+                                    const address = results[0].formatted_address;
+                                    $('.current_delivery_address').val(address);
+                                    $('#dly_address').val(address);
+                                    // Set the map center to the current location
+                                    c_map.setCenter(latlng);
+                                    c_map.setZoom(14);
+
+                                    // Place a marker on the current location
+                                    if (marker) {
+                                        marker.setMap(null);
+                                    }
+                                    marker = new google.maps.Marker({
+                                        position: latlng,
+                                        map: c_map,
+                                        title: "Current Location",
+                                    });
+                                } else {
+                                    alert('No address found for this location.');
+                                }
+                            } else {
+                                alert('Geocoder failed due to: ' + status);
+                            }
+                        });
+                    }, function () {
+                        alert('Geolocation failed. Please enable location services.');
+                    });
+                } else {
+                    alert('Geolocation is not supported by this browser.');
+                }
+            });
+
             // Event listener for pickup search box results
             c_searchBox.addListener('places_changed', function () {
                 const places = c_searchBox.getPlaces();
@@ -138,11 +234,20 @@ $(function () {
             const pickupLat = $('#pic_latitude').val();
             const pickupLng = $('#pic_longitude').val();
             const pickup_address = $('#pic_address').val();
+
+            if (pickupLat === '' && pickupLng === ''){
+                $('#pick_outside_area').text('Please Select the Pickup Location');
+                return;
+            }
+
             if (pickupLat && pickupLng) {
                 checkLocation('same_location',pickupLat, pickupLng,pickup_address, function(isInside) {
                     if (isInside) {
                         $('#secondModal').modal('hide');
+                        $('#pickup_address').text(pickup_address);
+                        $('#drop_address').text(pickup_address);
                     } else {
+                        $('#pick_outside_area').text(' ');
                         $('#outside_area').text('Pickup location is outside the designated area. Please select a different location.');
                     }
                 });
@@ -156,12 +261,19 @@ $(function () {
             const pickupLat = $('#dly_latitude').val();
             const pickupLng = $('#dly_longitude').val();
             const delivery_address = $('#dly_address').val();
+
+            if (pickupLat === '' && pickupLng === ''){
+                $('#delivery_outside_area').text('Please Select the Pickup Location');
+                return;
+            }
+
             if (pickupLat && pickupLng) {
                 checkLocation('delivery_location',pickupLat, pickupLng,delivery_address, function(isInside) {
                     if (isInside) {
                         $('#secondModal').modal('hide');
+                        $('#drop_address').text(delivery_address);
                     } else {
-                        $('#delivery_outside_area').text('Pickup location is outside the designated area. Please select a different location.');
+                        $('#delivery_outside_area').text('').text('Pickup location is outside the designated area. Please select a different location.');
                     }
                 });
             } else {
@@ -174,13 +286,20 @@ $(function () {
             const pickupLat = $('#pic_latitude').val();
             const pickupLng = $('#pic_longitude').val();
             const pickup_address = $('#pic_address').val();
+
+            if (pickupLat === '' && pickupLng === ''){
+                $('#pick_outside_area').text('Please Select the Pickup Location');
+                return;
+            }
+
             if (pickupLat && pickupLng) {
                 checkLocation('pickup_location',pickupLat, pickupLng,pickup_address, function(isInside) {
                     if (isInside) {
                         $('#pickup-section').addClass('d-none');
                         $('#delivery-section').removeClass('d-none');
+                        $('#drop_address').text(pickup_address);
                     } else {
-                        alert('Pickup location is outside the designated area. Please select a different location.');
+                        $('#pick_outside_area').text('').text('Pickup location is outside the designated area. Please select a different location.');
                     }
                 });
             } else {

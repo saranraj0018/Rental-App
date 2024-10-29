@@ -4,12 +4,18 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\HubArea;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LocationController extends Controller
 {
     public function checkLocation(Request $request)
     {
+
+        if (!Auth::id()){
+            return response()->json(['message' => 'Authentication Failed please login']);
+        }
         $lat = $request['lat'];
         $lng = $request['lng'];
         $location = $request['type'];
@@ -31,17 +37,32 @@ class LocationController extends Controller
                 // Check if the point is inside the polygon
                 $isInside = $this->pointInPolygon([$lat, $lng], $polygon);
                 if (!empty($isInside)) {
-                    if ($location == 'same_location') {
-                        session(['pick-delivery' => ['lat' => $lat, 'lng' => $lng, 'address' => $address]]);
-                        session()->forget(['delivery_location', 'pickup_location']);
-                    } elseif ($location == 'delivery_location') {
-                        session()->forget('pick-delivery');
-                        session(['delivery' => ['lat' => $lat, 'lng' => $lng, 'address' => $address]]);
-                    } elseif ($location == 'pickup_location') {
-                        session()->forget('pick-delivery');
-                        session(['pickup' => ['lat' => $lat, 'lng' => $lng, 'address' => $address]]);
+                    $user = User::find(Auth::id());
+
+                    switch ($location) {
+                        case 'same_location':
+                            session(['pick-delivery' => ['lat' => $lat, 'lng' => $lng, 'address' => $address]]);
+                            session()->forget(['delivery_location', 'pickup_location']);
+                            $user->drop_location = $address;
+                            $user->pick_location = $address;
+                            break;
+
+                        case 'delivery_location':
+                            session()->forget('pick-delivery');
+                            session(['delivery' => ['lat' => $lat, 'lng' => $lng, 'address' => $address]]);
+                            $user->drop_location = $address;
+                            break;
+
+                        case 'pickup_location':
+                            session()->forget('pick-delivery');
+                            session(['pickup' => ['lat' => $lat, 'lng' => $lng, 'address' => $address]]);
+                            $user->pick_location = $address;
+                            break;
                     }
+
+                    $user->save();
                 }
+
                 return response()->json(['inside' => $isInside]);
             }
         }

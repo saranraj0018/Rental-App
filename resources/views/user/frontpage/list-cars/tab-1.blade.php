@@ -49,14 +49,17 @@
                                 @php
 
                                 $prices = ['festival' =>  $model->carModel->peak_reason_surge ?? 0,
-            'weekend' => $model->carModel->weekend_surge ?? 0,
-            'weekday' =>  $model->carModel->price_per_hour ?? 0];
+                                            'weekend' => $model->carModel->weekend_surge ?? 0,
+                                            'weekday' =>  $model->carModel->price_per_hour ?? 0];
         $price_list = \App\Http\Controllers\User\UserController::calculatePrice($prices,session('start_date'),session('end_date'));
                                 @endphp
                                 <div class="fs-3 fw-600"> ₹{{ $price_list['total_price'] ?? '' }}</div>
                             </div>
+                            @if ($model['booking_status'] === 'available')
                                 <a href="{{ route('book.car', ['model_id' => $model->id]) }}" class="btn my-button p-1 px-3 w-75">Book now</a>
-
+                            @elseif ($model['booking_status'] === 'sold')
+                                <button type="button" class="my-button btn btn-lg fs-14 float-end">Sold</button>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -82,6 +85,5 @@
             @endif
         @endforeach
     @endif
-
 
 </section>

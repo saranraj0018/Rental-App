@@ -13,39 +13,44 @@
 
 <section class="section-1-bg pb-3">
     <header>
-        <section class="d-none d-lg-block">
+        <section>
             <div class="container-fluid p-3">
-                <div class="container bg-white rounded-pill p-1">
+                <div class="container bg-white rounded-pill p-1 rounded-sm-3 my-head-round">
                     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
                         <div class="container d-flex justify-content-between">
-                            <div>
-                                <img src="{{ asset('user/img/Rectangle 77.png') }}" alt="Site-Logo" class="img-fluid d-block w-50">
-                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile_nav" aria-controls="mobile_nav" aria-expanded="false" aria-label="Toggle navigation">
-                                    <span class="navbar-toggler-icon"></span>
-                                </button>
+                            <div class="d-flex justify-content-between mobile-head-width">
+                                <img src="{{ asset('user/img/Rectangle 77.png') }}" alt="Site-Logo" class="img-fluid d-block w-50 ">
+                                <div class="my-auto h-100">
+                                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile_nav" aria-controls="mobile_nav" aria-expanded="false" aria-label="Toggle navigation">
+                                        <span class="navbar-toggler-icon"></span>
+                                    </button>
+                                </div>
                             </div>
 
                             <div class="collapse navbar-collapse" id="mobile_nav">
                                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right">
                                 </ul>
-                                <ul class="navbar-nav navbar-light w-100 ms-5 ps-5">
-                                    <li class="nav-item ms-5 pe-3"><a class="nav-link text-dark" href="#">Home</a></li>
+                                <ul class="navbar-nav navbar-light w-100 ms-0 ms-lg-5 ps-0 ps-lg-5 text-end text-lg-start">
+                                    <li class="nav-item ms-0 ms-lg-5 pe-0 pe-lg-3"><a class="nav-link text-dark" href="#">Home</a></li>
                                     @if(!Auth::user())
-                                    <li class="nav-item"><a class="nav-link text-dark" href="#">FAQ</a></li>
+                                        <li class="nav-item"><a class="nav-link text-dark" href="#">FAQ</a></li>
                                     @else
                                         <li class="nav-item"><a class="nav-link text-dark" href="{{ route('booking.history') }}">Booking</a></li>
                                     @endif
                                     <li class="nav-item"><a class="nav-link text-dark" href="#">Blog</a></li>
-                                    <li class="nav-item me-5 pe-2"><a class="nav-link text-dark me-5" href="#">Contact-us</a></li>
-                                    <li class="nav-item ms-3 ps-5">
-                                        @if(!Auth::user())
-                                        <button type="button" class="btn border border-dark rounded-pill me-1" id="login_user">Sign-In</button>
-                                        <button type="button" class="btn bg-blue text-white rounded-pill" id="register_user">Sign-Up</button>
-                                        @else
-                                            <p class="fw-500 f-16 text-white">{{ \Illuminate\Support\Facades\Auth::user()->name ?? ''  }}</p>
-                                            <a href="{{ route('user.profile') }}">View profile</a>
-                                        @endif
-                                       </li>
+                                    <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2"><a class="nav-link text-dark me-0 me-lg-5" href="#">Contact-us</a></li>
+                                    <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0">
+
+                                        <div id="login_button" style="display: {{ Auth::check() ? 'none' : 'block' }};">
+                                            <button type="button" class="btn border border-dark rounded-pill me-1" id="login_user">Sign-In</button>
+                                            <button type="button" class="btn bg-blue text-white rounded-pill" id="register_user">Sign-Up</button>
+                                        </div>
+
+                                        <div id="after_login_button" class="d-flex justify-content-center justify-content-md-end mt-1 mb-2" style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
+                                            <div class="me-3"><p class="text-blue m-0 border-blue w-fit rounded-3 f-16 py-1 px-2">{{ Auth::user()->name ?? ''  }}</p></div>
+                                            <a href="{{ route('user.profile') }}" class="text-dark my-auto ms-2 text-decoration-none">View profile</a>
+                                        </div>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -54,35 +59,10 @@
             </div>
         </section>
 
-        {{--        Mobile view--}}
-        <section class="d-block d-lg-none">
-            <div class="container-fluid header-bg p-1">
-                <div class="container">
-                    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
-                        <div class="container">
-                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile_nav-1" aria-controls="mobile_nav-1" aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                            <div class="collapse navbar-collapse" id="mobile_nav-1">
-                                <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right">
-                                </ul>
-                                <ul class="navbar-nav navbar-light">
-                                    <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Home</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">FAQ</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Blog</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Contact-us</a></li>
-                                </ul>
-                            </div>
-                            <img src="{{ asset('user/img/Logo (4).png') }}" alt="Site-Logo" class="img-fluid d-block">
-                            <img src="{{ asset('user/img/Group 4 (1).png') }}" alt="Site-Logo" class="img-fluid d-block">
-                        </div>
-                    </nav>
 
-                </div>
-            </div>
-        </section>
-        {{--        Mobile view--}}
     </header>
+
+
     <div class="container py-5 d-none d-lg-block">
         <div class="row">
             <div class="col-12 col-lg-6">
@@ -154,64 +134,46 @@
 
 <section>
     <form id="get_location">
-    <div class="container filter-input-bg bg-white p-4 d-flex align-items-center justify-content-center">
-        <div class="row">
-            <div class="col-12 col-lg-4 my-lg-0">
-                <label class="fs-16 fw-500">City</label>
-                <div class="input-group">
+        <div class="container filter-input-bg bg-white p-4 d-flex align-items-center justify-content-center">
+            <div class="row">
+                <div class="col-12 col-lg-4 my-lg-0">
+                    <label class="fs-16 fw-500">City</label>
+                    <div class="input-group">
                     <span class="input-group-text" id="basic-addon1">
                         <i class=" text-white fa-solid fa-location-dot"></i>
                     </span>
-                    <input type="text" class="form-control" placeholder="Coimbatore, Tamilnadu" aria-label="Username" aria-describedby="basic-addon1" disabled>
+                        <input type="text" class="form-control my-hub" placeholder="Coimbatore, Tamilnadu" aria-label="Username" aria-describedby="basic-addon1" disabled>
+                    </div>
                 </div>
-            </div>
-            <div class="col-12 col-lg-3 my-1 mt-2 my-lg-0">
-                <label class="fs-16 fw-500">Starting Date</label>
-                <div class="input-group">
+                <div class="col-12 col-lg-3 my-1 mt-2 my-lg-0">
+                    <label class="fs-16 fw-500">Starting Date</label>
+                    <div class="input-group">
                     <span class="input-group-text" id="basic-addon1">
                         <i class=" text-white fa-solid fa-calendar-days"></i>
                     </span>
-                    <input type="text" id="start_date_time" class="form-control w-25" placeholder="Start Date & Time" autocomplete="off">
+                        <input type="text" class="form-control my-hub" id="dateTimeInput1" placeholder="Select first date and time"
+                               data-bs-toggle="modal"  value="{{ session('start_date') }}" data-bs-target="#dateTimeModal1" readonly>
+                    </div>
                 </div>
-            </div>
-            <div class="col-12 col-lg-3 mt-2 mb-2 my-lg-0">
-                <label class="fs-16 fw-500">Ending Date</label>
-                <div class="input-group">
+                <div class="col-12 col-lg-3 mt-2 mb-2 my-lg-0">
+                    <label class="fs-16 fw-500">Ending Date</label>
+                    <div class="input-group">
                     <span class="input-group-text" id="basic-addon1">
                         <i class=" text-white fa-solid fa-calendar-days"></i>
                     </span>
-                    <input type="text" id="end_date_time" class="form-control w-25" placeholder="End Date & Time" autocomplete="off">
+                        <input type="text" class="form-control my-hub" id="dateTimeInput2" placeholder="Select second date and time"
+                               data-bs-toggle="modal"  value="{{ session('end_date') }}" data-bs-target="#dateTimeModal2" readonly>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-2 d-flex justify-content-center d-lg-block my-auto">
+                    <button type="submit" disabled id="find_car" class="btn my-button w-100 w-lg-auto p-2">
+                        <i class=" text-white fa-solid fa-magnifying-glass"></i> Search
+                    </button>
                 </div>
             </div>
-            <div class="col-12 col-lg-2 d-flex justify-content-center d-lg-block my-auto">
-                <button type="submit" disabled id="find_car" class="btn my-button w-100 w-lg-auto p-2">
-                    <i class=" text-white fa-solid fa-magnifying-glass"></i> Search
-                </button>
-            </div>
         </div>
-    </div>
-        <div class="container d-none d-lg-block text-secondary text-center my-3">
-            <p class="duration-display"></p>
-            <p class="duration-error text-danger"></p>
-        </div>
+        <div class="time-difference text-center mt-4">Duration <span class="date-value">0 </span> day <span class="time-value"> 0 </span> hrs.</div>
+        <p class="duration-error text-center text-danger"></p>
     </form>
+    @include('user.frontpage.date_model')
 </section>
-
-<!-- Error Modal -->
-<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="errorModalLabel">Error</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                You are not in Coimbatore.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
