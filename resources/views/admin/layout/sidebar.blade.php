@@ -29,37 +29,24 @@
                     </a>
                 </li>
                 @endif
-
                 <li class="nav-item">
-                    <a href="{{ route('booking-complete.list') }}" class="nav-link">
+                    <a href="{{ route('complete.booking') }}" class="nav-link">
                         <i class="nav-icon fas fa-file-alt"></i>
                         <p>Booking Complete</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('booking-cancel.list') }}" class="nav-link">
+                    <a href="{{ route('cancel.booking.list') }}" class="nav-link">
                         <i class="nav-icon fas fa-file-alt"></i>
-                        <p>>Booking Cancel</p>
+                        <p>Booking Cancel</p>
                     </a>
                 </li>
-{{--                <li class="nav-item">--}}
-{{--                    <a href="{{ route('complete.booking') }}" class="nav-link">--}}
-{{--                        <i class="nav-icon  far fa-file-alt"></i>--}}
-{{--                        <p>Complete Booking</p>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
-{{--                <li class="nav-item">--}}
-{{--                    <a href="{{ route('cancel.booking') }}" class="nav-link">--}}
-{{--                        <i class="nav-icon  far fa-file-alt"></i>--}}
-{{--                        <p>Cancel Booking</p>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
-{{--                <li class="nav-item">--}}
-{{--                    <a href="" class="nav-link">--}}
-{{--                        <i class="nav-icon fas fa fa-cogs"></i>--}}
-{{--                        <p>Control panel</p>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
+                <li class="nav-item">
+                    <a href="{{ route('user.list') }}" class="nav-link">
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>User</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('city.map') }}" class="nav-link">
                         <i class="nav-icon fas fa fa-map"></i>

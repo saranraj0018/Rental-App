@@ -176,9 +176,9 @@
                                 <input type="hidden" id="additional_amount" value="{{ $delivery_fee + $car_model->carModel->dep_amount ?? 0 }}">
                                 <div class="text-white">
                                     <p class="fs-20 fs-mb-16 my-2 text-end">
-                                        Pickup Address<span id="pickup_address">{{ session('pickup.address') ?? session('pick-delivery.address') ?? 'No pickup address provided' }}</span></p>
+                                        Pickup Address<span id="pickup_address">{{ session('pickup.address') ?? session('pick-delivery.address') ?? '' }}</span></p>
                                     <p class="fs-20 fs-mb-16 my-2 text-end">
-                                        Drop Address<span id="drop_address">{{ session('delivery.address') ?? session('pick-delivery.address') ?? 'No pickup address provided' }}</span></p>
+                                        Drop Address<span id="drop_address">{{ session('delivery.address') ?? session('pick-delivery.address') ?? '' }}</span></p>
                                 </div>
                             </div>
                         </div>

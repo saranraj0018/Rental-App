@@ -102,13 +102,13 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <div class="input-group" style="width: 250px;">
-                            <select id="hub_type" class="form-control">
+                            <select id="cancel_hub_type" class="form-control">
                                 <option value="" selected disabled>Select Hub</option>
                                 <option value="629">Coimbatore</option>
                             </select>
                         </div>
                         <div class="input-group" style="width: 250px;">
-                            <select id="booking_type" class="form-control">
+                            <select id="cancel_booking_type" class="form-control">
                                 <option value="both">Delivery/Pickup</option>
                                 <option value="delivery">Delivery</option>
                                 <option value="pickup">Pickup</option>
@@ -116,29 +116,28 @@
                         </div>
 
                         <div class="input-group" style="width: 250px;">
-                            <input type="text" id="car_model" name="car_model" class="form-control" placeholder="Search Car Model">
+                            <input type="text" id="cancel_car_model" name="car_model" class="form-control" placeholder="Search Car Model">
                         </div>
                         <!-- Search for Registration Number -->
                         <div class="input-group" style="width: 250px;">
-                            <input type="text" id="register_number" name="register_number" class="form-control" placeholder="Search Registration Number">
+                            <input type="text" id="cancel_register_number" name="register_number" class="form-control" placeholder="Search Registration Number">
                         </div>
                         <!-- Search for Booking ID -->
                         <div class="input-group" style="width: 250px;">
-                            <input type="text" id="booking_id" name="booking_id" class="form-control" placeholder="Search Booking ID">
+                            <input type="text" id="cancel_booking_id" name="booking_id" class="form-control" placeholder="Search Booking ID">
                         </div>
                         <!-- Search for Customer Name -->
                         <div class="input-group" style="width: 250px;">
-                            <input type="text" id="customer_name" name="customer_name" class="form-control" placeholder="Search Customer Name">
+                            <input type="text" id="cancel_customer_name" name="customer_name" class="form-control" placeholder="Search Customer Name">
                         </div>
                     </div>
                 </div>
                 <div class="card-body table-responsive p-0">
-                    <table id="booking_table" class="table table-hover text-nowrap">
+                    <table id="cancel_booking_table" class="table table-hover text-nowrap">
                         <thead>
                         <tr>
                             <th>Booking<br>Type</th>
                             <th>Risk</th>
-                            <th>Done</th>
                             <th>Time</th>
                             <th>Name</th>
                             <th>Model</th>
@@ -150,7 +149,6 @@
                             <th>Reschedule</th>
                             <th>Security Dep</th>
                             <th>Amount</th>
-                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -162,19 +160,12 @@
                                     $car_model = !empty($booking_details->car_model) ? $booking_details->car_model : [];
                                     $comments = !empty($item->comments) ? $item->comments : [];
                                 @endphp
-                                <tr class="@if($item->risk == 1 && $item->status != 2) bg-light-red @elseif($item->status == 2) bg-light-green @endif">
+                                <tr class="bg-light-red">
                                     <td>  {!! $item->booking_type == 'pickup' ? '<h3>P</h3>' : '<h3>D</h3>' !!}</td>
                                     <td>
-                                        <div class="d-flex justify-content-center">
-                                            <input type="checkbox" class="risk-checkbox" data-id="{{ $item->id }}" @if($item->risk == 1) checked @endif>
-                                        </div>
-                                        <br>
                                         <button class="btn btn-warning open-risk-modal" data-id="{{ $item->id }}" data-commend="{{ json_encode($comments) }}">
                                             <h3>i</h3>
                                         </button>
-                                    </td>
-                                    <td class="d-flex justify-content-center">
-                                        <input type="checkbox" class="done-checkbox" data-id="{{ $item->id }}" @if($item->status == 2) checked @endif>
                                     </td>
                                     <td>{{ $item->booking_type == 'pickup' ? showDateTime($item->end_date) :  showDateTime($item->start_date) }}<br>
                                         @if(!empty($item->reschedule_date))
@@ -192,19 +183,13 @@
                                     <td>{{ $item->user->driving_licence ?? '' }}</td>
                                     <td>{{ $item->booking_id }}</td>
                                     <td>{{ showDateTime($item->reschedule_date) ?? ($item->booking_type == 'pickup' ? showDateTime($item->end_date) : showDateTime($item->start_date)) }}
-                                        <br>
-                                        <button class="btn btn-warning edit-booking-date" data-id="{{ $item->id }}" data-pickup_date="{{ $item->start_date ?? 0 }}" data-delivery_date="{{ $item->end_date ?? 0 }}">
-                                            Edit
-                                        </button>
+
                                     </td>
                                     <td>{{ $car_model->dep_amount ?? 0 }}</td>
                                     <td>
                                         <button class="btn btn-warning amount-modal" data-id="{{ $item->booking_id }}" data-week_days_amount="{{ $booking_payment_details['week_days_amount'] ?? 0 }}" data-week_end_amount="{{ $booking_payment_details['week_end_amount'] ?? 0 }}" data-festival_amount="{{ $booking_payment_details['festival_amount'] ?? 0 }}" data-delivery_fee="{{ $item->delivery_fee ?? '' }}" data-dep_fee="{{ $car_model->dep_amount ?? '' }}" data-coupon="{{ $booking_coupon->discount ?? '' }}" data-type="{{ $booking_coupon->type ?? '' }}">
                                             Amount Details
                                         </button>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-danger cancel_booking" data-id="{{ $item->id }}">Cancel Order</button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -230,5 +215,5 @@
 @endsection
 
 @section('customJs')
-    <script src="{{asset('admin/js/booking.js')}}"></script>
+    <script src="{{asset('admin/js/cancel_booking.js')}}"></script>
 @endsection
