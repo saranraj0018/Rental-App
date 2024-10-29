@@ -38,7 +38,7 @@ class PickupDeliveryController extends BaseController
         $booking = Booking::find(request('booking_id'));
         $booking->reschedule_date = $request['date'];
         $booking->save();
-        $bookings = Booking::with(['user','details','comments','user.bookings'])->paginate(5);
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)->paginate(5);
         return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'success' => 'Reschedule date Update successfully']);
 
     }
@@ -54,7 +54,7 @@ class PickupDeliveryController extends BaseController
         $commend->booking_id = $request['booking_id'];
         $commend->commends = $request['commends'];
         $commend->save();
-        $bookings = Booking::with(['user','details','comments','user.bookings'])->paginate(5);
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)->paginate(5);
         return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Commends Update successfully']);
     }
 
@@ -70,16 +70,16 @@ class PickupDeliveryController extends BaseController
             $booking->status = $request['status'];
             $booking->risk = 2;
             $booking->save();
-            $bookings = Booking::with(['user','details','comments','user.bookings'])->paginate(5);
+            $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)->paginate(5);
             return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
         } elseif (!empty($booking) && !empty($request['note']) && $request['note'] == 'risk' ) {
             $booking->risk = $request['status'];
             $booking->save();
-            $bookings = Booking::with(['user','details','comments','user.bookings'])->paginate(5);
+            $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)->paginate(5);
             return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
 
         }
-        $bookings = Booking::with(['user','details','comments','user.bookings'])->paginate(5);
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)->paginate(5);
         return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Booking not found']);
     }
 
@@ -94,7 +94,7 @@ class PickupDeliveryController extends BaseController
         $booking->status = 3;
         $booking->notes = $request['reason'];
         $booking->save();
-        $bookings = Booking::with(['user','details','comments','user.bookings'])->paginate(5);
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',3)->paginate(5);
         return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Booking cancelled successfully']);
     }
 

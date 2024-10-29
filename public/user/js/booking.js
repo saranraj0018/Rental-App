@@ -15,6 +15,10 @@ $(function () {
                 success: function (response) {
                     let coupon_amount = response.final_amount ?? 0;
                     let total_amount = final_amount - coupon_amount;
+                    if (response.message) {
+                        $('#login_alert').modal('show');
+                        return;
+                    }
                     if (response.valid) {
                         $('#discount_text').text(`Coupon Applied Successfully: ${response.code}%`);
                          $('#coupon_message').removeClass('d-none').addClass('d-flex');
@@ -26,8 +30,14 @@ $(function () {
                         alert('Invalid coupon code.');
                     }
                 },
-                error: function () {
-                    alert('An error occurred while applying the coupon.');
+                error: function (response) {
+
+                    if (response.responseJSON && response.responseJSON.message) {
+                        let errors = response.responseJSON.message;
+                        if (errors) {
+                            $('#login_alert').modal('show');
+                        }
+                    }
                 }
             });
         });

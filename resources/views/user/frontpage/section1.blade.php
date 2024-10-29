@@ -28,17 +28,14 @@
                             </div>
 
                             <div class="collapse navbar-collapse" id="mobile_nav">
-                                <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right">
-                                </ul>
+                                <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right"></ul>
                                 <ul class="navbar-nav navbar-light w-100 ms-0 ms-lg-5 ps-0 ps-lg-5 text-end text-lg-start">
-                                    <li class="nav-item ms-0 ms-lg-5 pe-0 pe-lg-3"><a class="nav-link text-dark" href="#">Home</a></li>
-                                    @if(!Auth::user())
-                                        <li class="nav-item"><a class="nav-link text-dark" href="#">FAQ</a></li>
-                                    @else
+                                    <li class="nav-item ms-0 ms-lg-5 pe-0 pe-lg-3"><a class="nav-link text-dark" href="{{ route('home') }}">Home</a></li>
+                                    <div id="booking_button" class="d-flex justify-content-center justify-content-md-end mt-1 mb-2" style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
                                         <li class="nav-item"><a class="nav-link text-dark" href="{{ route('booking.history') }}">Booking</a></li>
-                                    @endif
-                                    <li class="nav-item"><a class="nav-link text-dark" href="#">Blog</a></li>
-                                    <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2"><a class="nav-link text-dark me-0 me-lg-5" href="#">Contact-us</a></li>
+                                    </div>
+                                    <li class="nav-item"><a class="nav-link text-dark" href="{{ route('faq') }}">FAQ</a></li>
+                                    <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2"><a class="nav-link text-dark me-0 me-lg-5" href="{{ route('contact') }}">Contact-us</a></li>
                                     <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0">
 
                                         <div id="login_button" style="display: {{ Auth::check() ? 'none' : 'block' }};">
@@ -47,7 +44,7 @@
                                         </div>
 
                                         <div id="after_login_button" class="d-flex justify-content-center justify-content-md-end mt-1 mb-2" style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
-                                            <div class="me-3"><p class="text-blue m-0 border-blue w-fit rounded-3 f-16 py-1 px-2">{{ Auth::user()->name ?? ''  }}</p></div>
+                                            <div class="me-3"><p class="text-blue m-0 border-blue w-fit rounded-3 f-16 py-1 px-2" id="user_name">{{ Auth::user()->name ?? ''  }}</p></div>
                                             <a href="{{ route('user.profile') }}" class="text-dark my-auto ms-2 text-decoration-none">View profile</a>
                                         </div>
                                     </li>

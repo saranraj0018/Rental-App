@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
+use App\Models\Available;
 use App\Models\CarBlock;
 use App\Models\CarDetails;
 use App\Models\CarModel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -55,6 +57,16 @@ class CarBlockController extends BaseController
         $car_status = CarDetails::where('register_number', $request['block_car_register_number'])->first();
         $car_status->status = 2;
         $car_status->save();
+
+        $car_available = new Available();
+        $car_available->car_id = !empty($car_status->id) ?  $car_status->id : 0;
+        $car_available->model_id = !empty($request['car_model']) ? $request['car_model']: 0;
+        $car_available->register_number = !empty($request['block_car_register_number']) ? $request['block_car_register_number'] : 0;
+        $car_available->start_date = $request['start_date'];
+        $car_available->end_date = $request['end_date'];
+        $car_available->next_booking = Carbon::parse(formDateTime($request['end_date']))->addHours(3);
+        $car_available->booking_type = 2;
+        $car_available->save();
 
         $car_block_list = CarBlock::with('user')->orderBy('created_at', 'desc')->get();
         return response()->json(['data'=> $car_block_list,'success' => 'Car blocked saved successfully']);

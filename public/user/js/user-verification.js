@@ -75,12 +75,11 @@ $(function () {
                 success: function(response) {
                     if (response.success) {
                         $('#otpModal').modal('hide');
-
                         $('#login_button').hide();
+                        $('#user_name').text(response.name)
                         $('#after_login_button').css('display', 'block');
-                        $('#login_payment')
-                            .attr('id', 'payment') // Change id to 'payment'
-                            .text('Proceed Payment');
+                        $('#booking_button').css('display', 'block');
+                        $('#login_payment').attr('id', 'payment');
                         $('#otp_error').text('');
                     } else {
                         $('#otp_error').text('Invalid OTP');

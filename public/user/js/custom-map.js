@@ -248,7 +248,7 @@ $(function () {
                         $('#drop_address').text(pickup_address);
                     } else {
                         $('#pick_outside_area').text(' ');
-                        $('#outside_area').text('Pickup location is outside the designated area. Please select a different location.');
+                        $('#outside_area').text(' ').text('Pickup location is outside the designated area. Please select a different location.');
                     }
                 });
             } else {
@@ -317,6 +317,11 @@ $(function () {
                     address:address
                 },
                 success: function(response) {
+                    if (response.message) {
+                        $('#pick_outside_area').text('').text('response.message.');
+                        return;
+                    }
+
                     if (response.inside) {
                         callback(true);
                         // Proceed to the next steps or show the delivery section.
@@ -324,9 +329,13 @@ $(function () {
                         callback(false);
                     }
                 },
-                error: function(error) {
-                    console.error('Error checking location:', error);
-                    callback(false);
+                error: function(response) {
+                    if (response.responseJSON && response.responseJSON.message) {
+                        let errors = response.responseJSON.message;
+                        if (errors) {
+                            $('#pick_outside_area').text('').text('Please Login your Account');
+                        }
+                    }
                 }
             });
         }
