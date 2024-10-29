@@ -25,9 +25,20 @@ class UserController extends Controller
     {
         $section1 = Frontend::with('frontendImage')->where('data_keys','section1-image-car')->first();
         $section2 = Coupon::all();
-        $available_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date'));
-        $section3 = !empty($available_models['available_cars']) ? $available_models['available_cars'] : [];
-        $sold_cars =!empty($available_models['booked_cars']) ? $available_models['booked_cars'] : [];
+        $available_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date')) ?? CarDetails::all();
+        $booking_models = !empty($available_models['available_cars']) ?
+            array_map(function($car) {
+                $car['booking_status'] = 'available'; // Add status as 'available'
+                return $car;
+            }, $available_models['available_cars']) : [];
+
+        $sold_cars = !empty($available_models['booked_cars']) ?
+            array_map(function($car) {
+                $car['booking_status'] = 'sold'; // Add status as 'sold'
+                return $car;
+            }, $available_models['booked_cars']) : [];
+
+        $section3 = !empty($booking_models) && !empty($sold_cars) ? array_merge($booking_models, $sold_cars) : CarDetails::all();
         $car_info = Frontend::with('frontendImage')->where('data_keys','car-info-section')->first();
         $section4 = !empty($car_info['data_values']) ? json_decode($car_info['data_values'],true) : [];
         $brand_info = Frontend::with('frontendImage')->where('data_keys','brand-section')->first();

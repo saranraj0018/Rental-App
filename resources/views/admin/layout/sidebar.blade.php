@@ -29,6 +29,19 @@
                     </a>
                 </li>
                 @endif
+
+                <li class="nav-item">
+                    <a href="{{ route('booking-complete.list') }}" class="nav-link">
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>Booking Complete</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('booking-cancel.list') }}" class="nav-link">
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>>Booking Cancel</p>
+                    </a>
+                </li>
 {{--                <li class="nav-item">--}}
 {{--                    <a href="{{ route('complete.booking') }}" class="nav-link">--}}
 {{--                        <i class="nav-icon  far fa-file-alt"></i>--}}

@@ -41,12 +41,12 @@
                                     <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2"><a class="nav-link text-dark me-0 me-lg-5" href="#">Contact-us</a></li>
                                     <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0">
 
-                                        <div id="login_button" style="display: {{ Auth::check() ? 'none' : 'block' }};">--}}
+                                        <div id="login_button" style="display: {{ Auth::check() ? 'none' : 'block' }};">
                                             <button type="button" class="btn border border-dark rounded-pill me-1" id="login_user">Sign-In</button>
                                             <button type="button" class="btn bg-blue text-white rounded-pill" id="register_user">Sign-Up</button>
                                         </div>
 
-                                        <div id="after_login_button" class="d-flex justify-content-center justify-content-md-end mt-1 mb-2" style="display: {{ Auth::check() ? 'block' : 'none' }};">
+                                        <div id="after_login_button" class="d-flex justify-content-center justify-content-md-end mt-1 mb-2" style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
                                             <div class="me-3"><p class="text-blue m-0 border-blue w-fit rounded-3 f-16 py-1 px-2">{{ Auth::user()->name ?? ''  }}</p></div>
                                             <a href="{{ route('user.profile') }}" class="text-dark my-auto ms-2 text-decoration-none">View profile</a>
                                         </div>

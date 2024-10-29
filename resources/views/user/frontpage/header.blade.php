@@ -28,7 +28,7 @@
                                     <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2"><a class="nav-link text-dark me-0 me-lg-5" href="#">Contact-us</a></li>
                                     <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0">
 
-                                        <div id="login_button" style="display: {{ Auth::check() ? 'none' : 'block' }};">--}}
+                                        <div id="login_button" style="display: {{ Auth::check() ? 'none' : 'block' }};">
                                             <button type="button" class="btn border border-dark rounded-pill me-1" id="login_user">Sign-In</button>
                                             <button type="button" class="btn bg-blue text-white rounded-pill" id="register_user">Sign-Up</button>
                                         </div>

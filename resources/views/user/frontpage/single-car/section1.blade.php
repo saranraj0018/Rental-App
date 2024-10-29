@@ -176,9 +176,9 @@
                                 <input type="hidden" id="additional_amount" value="{{ $delivery_fee + $car_model->carModel->dep_amount ?? 0 }}">
                                 <div class="text-white">
                                     <p class="fs-20 fs-mb-16 my-2 text-end">
-                                        Pickup Address<span id="pickup_address"></span></p>
+                                        Pickup Address<span id="pickup_address">{{ session('pickup.address') ?? session('pick-delivery.address') ?? 'No pickup address provided' }}</span></p>
                                     <p class="fs-20 fs-mb-16 my-2 text-end">
-                                        Drop Address<span id="drop_address"></span></p>
+                                        Drop Address<span id="drop_address">{{ session('delivery.address') ?? session('pick-delivery.address') ?? 'No pickup address provided' }}</span></p>
                                 </div>
                             </div>
                         </div>
@@ -235,9 +235,11 @@
             $('#user_document').modal('show');
             return;
         }
-
-        if (!doc_verify) {
-            $('#user_document').modal('show');
+        let map_verify = await verifyUserLocation();
+        if (!map_verify) {
+            $('#secondModal').modal('show');
+            window.initMarker();
+            $('#custom-city').focus();
             return;
         }
 
@@ -305,6 +307,27 @@
     }
 
 
+    async function verifyUserLocation() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: '/user/verify-location', // Update with your route.
+                method: 'GET',
+                success: function(response) {
+                    if (!response.success) {
+                        $('#otpModal').modal('hide');
+                        resolve(false);
+                    } else {
+                        resolve(true);
+                    }
+                },
+                error: function() {
+                    resolve(false);
+                }
+            });
+        });
+    }
+
+
 </script>
 
 <!-- Second Modal Structure -->
@@ -335,7 +358,6 @@
 
                     <div id="delivery-section" class="slide-section d-none">
                         <div class="d-flex">
-                        <button type="button" class="btn fs-16 my-button mt-4 w-25" id="conform_address">Back</button>
                         <p class="fs-16 fw-500">Select Drop Location</p>
                         </div>
                         <div class="container">

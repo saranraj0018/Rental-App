@@ -50,6 +50,9 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::post('/user-payment/link', [PickupDeliveryController::class, 'sendUserPayment'])->name('user.send.payment');
         Route::post('/user/save', [PickupDeliveryController::class, 'createBooking'])->name('user.booking');
 
+        Route::get('/booking/list', [PickupDeliveryController::class, 'bookingComplete'])->name('complete.booking');
+
+
         // Cars list
         Route::get('/cars/list', [CarDetailsController::class, 'list'])->name('car.list');
         Route::post('/car/save', [CarDetailsController::class, 'save'])->name('car.save');

@@ -20,7 +20,10 @@ Route::post('user/verify-otp', [OTPController::class, 'verifyOtp'])->name('verif
 Route::post('user/register', [OTPController::class, 'register'])->name('register');
 
 Route::middleware(['auth'])->group(function () {
+
+    Route::post('user/check-location', [LocationController::class, 'checkLocation']);
     Route::get('/user/verify-document', [OTPController::class,'verifyDocument'])->name('verify.document');
+    Route::get('/user/verify-location', [OTPController::class,'verifyLocation'])->name('verify.location');
 
     Route::post('user/apply-coupon', [CouponController::class,'applyCoupon'])->name('apply.coupon');
     Route::post('user/remove-coupon', [CouponController::class, 'removeCoupon'])->name('remove.coupon');
@@ -42,7 +45,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('user/update-delivery-fee', [PaymentController::class, 'updateDeliveryFee'])->name('update.fee');
 });
 
-Route::post('user/check-location', [LocationController::class, 'checkLocation']);
 
 
 Route::view('user/about', '.user.frontpage.others.about')->name('about');

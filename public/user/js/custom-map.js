@@ -245,6 +245,7 @@ $(function () {
                     if (isInside) {
                         $('#secondModal').modal('hide');
                         $('#pickup_address').text(pickup_address);
+                        $('#drop_address').text(pickup_address);
                     } else {
                         $('#pick_outside_area').text(' ');
                         $('#outside_area').text('Pickup location is outside the designated area. Please select a different location.');
@@ -270,6 +271,7 @@ $(function () {
                 checkLocation('delivery_location',pickupLat, pickupLng,delivery_address, function(isInside) {
                     if (isInside) {
                         $('#secondModal').modal('hide');
+                        $('#drop_address').text(delivery_address);
                     } else {
                         $('#delivery_outside_area').text('').text('Pickup location is outside the designated area. Please select a different location.');
                     }
@@ -295,6 +297,7 @@ $(function () {
                     if (isInside) {
                         $('#pickup-section').addClass('d-none');
                         $('#delivery-section').removeClass('d-none');
+                        $('#drop_address').text(pickup_address);
                     } else {
                         $('#pick_outside_area').text('').text('Pickup location is outside the designated area. Please select a different location.');
                     }
