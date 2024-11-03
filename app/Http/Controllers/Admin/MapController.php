@@ -16,25 +16,34 @@ class MapController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the incoming data
         $validated = $request->validate([
-            'coordinates' => 'required|array',
+            'polygons' => 'required|array',
             'hub' => 'required',
-            'coordinates.*.lat' => 'required|numeric',
-            'coordinates.*.lng' => 'required|numeric',
+            'polygons.*' => 'required|array',
+            'polygons.*.*.lat' => 'required|numeric',
+            'polygons.*.*.lng' => 'required|numeric',
         ]);
-        $area = HubArea::where('hub',$validated['hub'])->first();
-        // Store the area in the database
-        $area = !empty($area) ? $area : new HubArea();
-        $area->coordinates = json_encode($validated['coordinates']); // Save as JSON
-        $area->hub = $validated['hub']; // Save as JSON
-        $area->save();
+
+        HubArea::where('hub', $validated['hub'])->delete();
+
+        foreach ($validated['polygons'] as $polygon) {
+            $area = new HubArea();
+            $area->coordinates = json_encode($polygon); // Save each polygon as JSON
+            $area->hub = $validated['hub'];
+            $area->save();
+        }
+        return response()->json(['message' => 'Area saved successfully']);
     }
 
     public function getCityCoordinates(Request $request)
     {
-        $city = $request['city'];
-        $coordinates = !empty($city) ? HubArea::where('hub',$city)->first()->coordinates : [];
+        $city = $request->input('city');
+        $areas = HubArea::where('hub', $city)->get(); // Get all polygons for the city
+        $coordinates = $areas->map(function($area) {
+            return json_decode($area->coordinates, true); // Decode each area’s coordinates
+        });
         return response()->json($coordinates);
     }
+
+
 }

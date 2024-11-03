@@ -65,9 +65,13 @@
                 <form id="booking_date">
                     <div class="form-group">
                         <input type="hidden" id="date_booking_id" name="booking_id">
+                        <input type="hidden" id="booking_type" name="booking_type">
+                        <input type="hidden" id="start_date" name="start_date">
+                        <input type="hidden" id="model_id" name="model_id">
+                        <input type="hidden" id="car_id" name="car_id">
                         <label for="start_date">Choose Date & Time</label>
                         <div class="input-group date datetimepicker" id="datetimepicker" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker" id="start_date" name="start_date" placeholder="Select date and time" />
+                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker" id="end_date" name="end_date" placeholder="Select date and time" />
                             <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>

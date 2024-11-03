@@ -61,6 +61,7 @@ class OTPController extends Controller
                 Auth::login($user); // Log the user in
                 return response()->json([
                     'success' => 'true',
+                    'name' => Auth::user()->name ?? '',
                     'message' => 'Login successful.',
                 ]);
         } else {

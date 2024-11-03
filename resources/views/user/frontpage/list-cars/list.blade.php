@@ -3,6 +3,7 @@
 @section('content')
 @include ('user.frontpage.header')
 @include('user.frontpage.list-cars.section2')
+@include('user.frontpage.single-car.verified-model')
 <section class="my-5 d-none d-lg-block">
     <div class="container">
         <div class="d-flex justify-content-between mb-3">

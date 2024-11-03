@@ -4,7 +4,7 @@ $(function () {
     $(document).ready(function() {
         loadDatePickers();
 
-            window.loadDatePickers = function() {
+        function loadDatePickers() {
             $('#datetimepicker').datetimepicker({
                 format: 'YYYY-MM-DD HH:mm', // Customize the format as needed
                 icons: {
