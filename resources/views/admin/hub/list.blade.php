@@ -186,7 +186,7 @@
                                             <p class="text-danger">{{ showDateTime($item->reschedule_date) }}</p>
                                         @endif</td>
                                     <td>{{ $item->user->name ?? '' }}</td>
-                                    <td>{{ $car_model->model_name ?? '' }}</td>
+                                    <td>{{ $car_model->model_name ?? 'Dummy Car' }}</td>
                                     <td>{{ $booking_details->register_number ?? '' }}</td>
                                     <td class="truncate-text" title="{{ $item->address }}">{{ $item->address }}</td>
                                     <td>
@@ -198,7 +198,9 @@
                                     <td>{{ $item->booking_id }}</td>
                                     <td>{{ showDateTime($item->reschedule_date) ?? ($item->booking_type == 'pickup' ? showDateTime($item->end_date) : showDateTime($item->start_date)) }}
                                         <br>
-                                        <button class="btn btn-warning edit-booking-date" data-id="{{ $item->id }}" data-pickup_date="{{ $item->start_date ?? 0 }}" data-delivery_date="{{ $item->end_date ?? 0 }}">
+                                        <button class="btn btn-warning edit-booking-date" data-id="{{ $item->id }}" data-booking_type="{{$item->booking_type}}"
+                                                data-model_id="{{ $car_model->car_model_id ?? 0 }}" data-delivery_date="{{ $item->end_date ?? 0 }}"
+                                                data-reschedule_date="{{ $item->reschedule_date ?? $item->end_date }}"  data-car_id="{{ $item->car_id ?? 0 }}">
                                             Edit
                                         </button>
                                     </td>

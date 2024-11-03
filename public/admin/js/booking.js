@@ -361,6 +361,10 @@ $(function () {
 
         $('#booking_table').on('click', '.edit-booking-date', function() {
             $('#date_booking_id').val($(this).data('id'));
+            $('#booking_type').val($(this).data('booking_type'));
+            $('#start_date').val($(this).data('reschedule_date'));
+            $('#model_id').val($(this).data('model_id'));
+            $('#car_id').val($(this).data('car_id'));
             $('#date_model').modal('show');
         });
 
@@ -404,14 +408,23 @@ $(function () {
         $('#booking_date').on('submit', function(e) {
             e.preventDefault();
             let bookingId = $('#date_booking_id').val();
-            let date = $('#start_date').val();
+            let start_date = $('#start_date').val();
+            let end_date = $('#end_date').val();
+            let booking_type = $('#booking_type').val();
+            let model_id = $('#model_id').val();
+            let car_id = $('#car_id').val();
 
             $.ajax({
                 url: '/admin/reschedule/date',
                 method: 'POST',
                 data: {
                     booking_id: bookingId,
-                    date: date
+                    start_date: start_date,
+                    end_date: end_date,
+                    booking_type: booking_type,
+                    model_id: model_id,
+                    car_id: car_id,
+
                 },
                 success: function(response) {
                     $('#date_model').modal('hide');

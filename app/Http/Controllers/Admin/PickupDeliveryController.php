@@ -24,7 +24,11 @@ class PickupDeliveryController extends BaseController
     public function list(Request $request)
     {
         $this->authorizePermission('hub_list');
-        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)->paginate(5);
+        $timeLimit = now()->subHours(48);
+        $bookings = Booking::with(['user','details','comments','user.bookings'])
+            ->where('status',1)
+            ->where('start_date', '>=', $timeLimit)
+            ->orderBy('risk','asc')->paginate(5);
         return view('admin.hub.list',compact('bookings'));
     }
 
@@ -32,16 +36,121 @@ class PickupDeliveryController extends BaseController
     {
         $request->validate([
             'booking_id' => 'required|numeric',
-            'date' => 'required|date',
+            'car_id' => 'required|numeric',
+            'model_id' => 'required',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
         ]);
 
-        $booking = Booking::find(request('booking_id'));
-        $booking->reschedule_date = $request['date'];
+        $booking = Booking::find($request['booking_id']);
+
+        $booking->reschedule_date = formDateTime($request['end_date']);
         $booking->save();
-        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)->paginate(5);
+        $timeLimit = now()->subHours(48);
+
+        $availableCars = self::checkAvailability($request['start_date'], $request['end_date'], $request['car_id'], $request['model_id']);
+
+
+        if (!empty($availableCars['booking_details'])) {
+            // Counter for available cars
+            $availableCarsIndex = 0;
+
+            foreach ($availableCars['booking_details'] as $booking) {
+                if (!empty($booking->booking_id)) {
+                    // Check if there is an available car in the "available_cars" array
+                    if (!empty($availableCars['available_cars'][$availableCarsIndex])) {
+                        $carId = $availableCars['available_cars'][$availableCarsIndex]['car_id'];
+
+                        // Update booking with the available car_id
+                        $bookingUpdate = Booking::where('booking_id', $booking->booking_id)
+                            ->update(['car_id' => $carId]);
+
+                        $car_available = new Available();
+                        $car_available->car_id = !empty($carId) ? $carId : 0;
+                        $car_available->model_id = !empty($request['model_id']) ? $request['model_id'] : 0;
+                        $car_available->register_number = !empty($car_details->register_number) ? $car_details->register_number: 0;
+                        $car_available->booking_id =  $booking->booking_id;
+                        $car_available->start_date = formDateTime($request['start_date']);
+                        $car_available->end_date = formDateTime($request['end_date']);
+                        $car_available->next_booking = Carbon::parse(formDateTime($request['end_date']))->addHours(3);
+                        $car_available->booking_type = 1;
+                        $car_available->save();
+
+                        if (!empty($bookingUpdate)) {
+                            // Move to the next available car
+                            $availableCarsIndex++;
+                        }
+                    } else {
+                        // No more available cars, set car_id to 0 for the remaining bookings
+                        Booking::where('booking_id', $booking->booking_id)
+                            ->update(['car_id' => 0]);
+                    }
+                }
+            }
+        }
+
+        $bookings = Booking::with(['user','details','comments','user.bookings'])
+            ->where('status',1)->where('start_date', '>=', $timeLimit)
+            ->orderBy('risk','asc')->paginate(5);
         return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'success' => 'Reschedule date Update successfully']);
 
     }
+
+    public static function checkAvailability($startDate, $endDate, $carId, $model_id)
+    {
+        $availableCars = [];
+
+        if (!empty($startDate) && !empty($endDate) && !empty($carId)) {
+            // Get booking details for the specified car_id
+            $bookingDetails = Available::where('car_id', $carId)
+                ->where(function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween('start_date', [$startDate, $endDate])
+                        ->orWhereBetween('next_booking', [$startDate, $endDate])
+                        ->orWhere(function ($q) use ($startDate, $endDate) {
+                            $q->where('start_date', '<=', $startDate)
+                                ->where('next_booking', '>=', $endDate);
+                        });
+                })->get();
+
+            // If bookings are found, retrieve the model_id
+            if ($bookingDetails) {
+                // Get other cars with the same model_id, excluding the current car
+                $otherCars = CarDetails::where('model_id', $model_id)->
+                    where('id','!=', $carId)->get();
+
+                // Check availability of other cars within the date range
+                foreach ($otherCars as $car) {
+                    $isAvailable = Available::where('car_id', $car->id)
+                        ->where(function ($query) use ($startDate, $endDate) {
+                            $query->whereBetween('start_date', [$startDate, $endDate])
+                                ->orWhereBetween('next_booking', [$startDate, $endDate])
+                                ->orWhere(function ($q) use ($startDate, $endDate) {
+                                    $q->where('start_date', '<=', $startDate)
+                                        ->where('next_booking', '>=', $endDate);
+                                });
+                        })->doesntExist();
+
+                    // Add the car to the availableCars list if it’s available
+                    if ($isAvailable) {
+                        $availableCars[] = [
+                            'car_id' => $car->id,
+                            'status' => 'available'
+                        ];
+                    }
+                }
+
+                return [
+                    'booking_details' => $bookingDetails,
+                    'available_cars' => $availableCars
+                ];
+            }
+        }
+
+        return [
+            'booking_details' => []
+        ];
+    }
+
 
     public function riskCommends(Request $request)
     {
@@ -54,7 +163,10 @@ class PickupDeliveryController extends BaseController
         $commend->booking_id = $request['booking_id'];
         $commend->commends = $request['commends'];
         $commend->save();
-        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)->paginate(5);
+        $timeLimit = now()->subHours(48);
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)
+            ->where('start_date', '>=', $timeLimit)
+            ->orderBy('risk','asc')->paginate(5);
         return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Commends Update successfully']);
     }
 
@@ -65,21 +177,27 @@ class PickupDeliveryController extends BaseController
             'status' => 'required',
         ]);
         $booking = Booking::find($request['booking_id']);
-
+        $timeLimit = now()->subHours(48);
         if (!empty($booking) && !empty($request['note']) && $request['note'] == 'complete' ) {
             $booking->status = $request['status'];
             $booking->risk = 2;
             $booking->save();
-            $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)->paginate(5);
+            $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)
+                ->where('start_date', '>=', $timeLimit)
+                ->orderBy('risk','asc')->paginate(5);
             return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
         } elseif (!empty($booking) && !empty($request['note']) && $request['note'] == 'risk' ) {
             $booking->risk = $request['status'];
             $booking->save();
-            $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)->paginate(5);
+            $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)
+                ->where('start_date', '>=', $timeLimit)
+                ->orderBy('risk','asc')->paginate(5);
             return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
 
         }
-        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)->paginate(5);
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',1)
+            ->where('start_date', '>=', $timeLimit)
+            ->orderBy('risk','asc') ->paginate(5);
         return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Booking not found']);
     }
 
