@@ -66,10 +66,12 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::get('/car-block/list', [CarBlockController::class, 'list'])->name('car-block.list');
         Route::post('/car-block/save', [CarBlockController::class, 'save'])->name('car-block.save');
         Route::put('/car-block/update', [CarBlockController::class, 'update'])->name('car-block.update');
+        Route::delete('/car-block/{id?}/delete', [CarBlockController::class, 'delete'])->name('car-block.delete');
         Route::get('/car-block/search', [CarBlockController::class, 'search'])->name('car-block.search');
 
         // Car-Swap list
         Route::get('/car-swap/list', [SwapController::class, 'list'])->name('car-swap.list');
+        Route::get('/car-swap/table', [SwapController::class, 'table'])->name('car-swap.table');
         Route::get('/get/booking_date', [SwapController::class, 'getBookingDate'])->name('fetch.booking.date');
         Route::get('/available/cars', [SwapController::class, 'availableCars'])->name('available.cars');
         Route::post('/swap/car', [SwapController::class, 'swapCar'])->name('swap.car');

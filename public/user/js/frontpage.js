@@ -258,30 +258,59 @@ $(document).ready(function(){
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    let selectedDate1 = "";
-    let selectedTime1 = "";
-    let selectedDate2 = "";
-    let selectedTime2 = "";
+    let selectedDate1 = "", selectedTime1 = "", selectedDate2 = "", selectedTime2 = "";
     calculateTimeDifference();
+
+    // Helper function for showing duration error messages
+    function setDurationError(message) {
+        $('.duration-error').text(message);
+    }
+
     function formatDateTime(dateStr, timeStr) {
         const dateParts = dateStr.split('-');
-        const formattedDate = `${dateParts[0]}-${dateParts[1]}-${dateParts[2]}`;
-        return `${formattedDate} ${timeStr}`;
+        return `${dateParts[0]}-${dateParts[1]}-${dateParts[2]} ${timeStr}`;
+    }
+
+    // Helper function to disable past times with a 3-hour buffer
+    function disablePastTimes(timeContainer, selectedDate) {
+        const today = new Date();
+        const bufferTime = new Date(today.getTime() + 3 * 60 * 60 * 1000); // Add 3 hours
+
+        const currentHour = bufferTime.getHours();
+        const currentMinute = bufferTime.getMinutes();
+
+        if (selectedDate === flatpickr.formatDate(today, "d-m-Y")) {
+            // Loop through each time button
+            timeContainer.querySelectorAll('.time-btn').forEach(button => {
+                const [hour, minute] = button.getAttribute('data-time').split(':').map(Number);
+                // Disable or hide if time is less than 3 hours ahead
+                if (hour < currentHour || (hour === currentHour && minute < currentMinute)) {
+                    button.classList.add('disabled'); // Add 'disabled' class or hide
+                    button.style.display = 'none'; // Hide past time options
+                } else {
+                    button.classList.remove('disabled');
+                    button.style.display = ''; // Show future time options
+                }
+            });
+        } else {
+            // If not today, ensure all time buttons are enabled
+            timeContainer.querySelectorAll('.time-btn').forEach(button => {
+                button.classList.remove('disabled');
+                button.style.display = '';
+            });
+        }
     }
 
 
-    // Initialize Flatpickr for both calendars
+    // Flatpickr setup
     flatpickr("#inlineDatePicker1", {
         inline: true,
         minDate: "today",
         dateFormat: "d-m-Y",
-        disable: [
-            date => date < new Date().setHours(0, 0, 0, 0) // Disable past dates but allow today
-        ],
         onChange: function (selectedDates, dateStr) {
             selectedDate1 = dateStr;
+            disablePastTimes(document.getElementById('timeTabContent1'), selectedDate1); // Disable past times
             if (dateStr) {
-                // Automatically switch to time tab after selecting date
                 let timeTab = new bootstrap.Tab(document.getElementById('time-tab1'));
                 timeTab.show();
             }
@@ -292,157 +321,103 @@ document.addEventListener("DOMContentLoaded", function () {
         inline: true,
         minDate: "today",
         dateFormat: "d-m-Y",
-        disable: [
-            date => date < new Date().setHours(0, 0, 0, 0) // Disable past dates but allow today
-        ],
         onChange: function (selectedDates, dateStr) {
             selectedDate2 = dateStr;
+            disablePastTimes(document.getElementById('timeTabContent2'), selectedDate2); // Disable past times
             if (dateStr) {
-                // Automatically switch to time tab after selecting date
                 let timeTab = new bootstrap.Tab(document.getElementById('time-tab2'));
                 timeTab.show();
             }
         }
     });
 
-    // Handle time button click for first modal
+    // Time button click handling for first and second modals
     document.querySelectorAll('#timeTabContent1 .time-btn').forEach(button => {
         button.addEventListener('click', function () {
             selectedTime1 = this.getAttribute('data-time');
-            // Set active color for the selected button
-            document.querySelectorAll('#timeTabContent1 .time-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            document.querySelectorAll('#timeTabContent1 .time-btn').forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
         });
     });
 
-    // Handle submit for first modal
-    document.getElementById('submitDateTime1').addEventListener('click', function () {
-        if (!selectedDate1) {
-            alert("Please choose a date before submitting.");
-            return;
-        }
-        if (!selectedTime1) {
-            alert("Please choose a time before submitting.");
-            return;
-        }
-
-        const combinedDateTime1 = formatDateTime(selectedDate1, selectedTime1);
-        document.getElementById('dateTimeInput1').value = combinedDateTime1;
-
-        // Hide the modal using jQuery for Bootstrap 4
-        $('#dateTimeModal1').modal('hide');
-
-
-
-        calculateTimeDifference(); // Call function to calculate time difference
-    });
-
-
-
-
-    // Handle time button click for second modal
     document.querySelectorAll('#timeTabContent2 .time-btn').forEach(button => {
         button.addEventListener('click', function () {
             selectedTime2 = this.getAttribute('data-time');
-            // Set active color for the selected button
-            document.querySelectorAll('#timeTabContent2 .time-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            document.querySelectorAll('#timeTabContent2 .time-btn').forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
         });
     });
 
-    // Handle submit for second modal
-    document.getElementById('submitDateTime2').addEventListener('click', function () {
-        if (!selectedDate2) {
-            alert("Please choose a date before submitting.");
+    // Submit button handling for both modals
+    document.getElementById('submitDateTime1').addEventListener('click', function () {
+        if (!selectedDate1 || !selectedTime1) {
+            alert("Please select both date and time before submitting.");
             return;
         }
-        if (!selectedTime2) {
-            alert("Please choose a time before submitting.");
-            return;
-        }
-
-        const combinedDateTime2 = formatDateTime(selectedDate2, selectedTime2);
-        document.getElementById('dateTimeInput2').value = combinedDateTime2;
-
-        // Hide the modal using jQuery for Bootstrap 4
-        $('#dateTimeModal2').modal('hide');
-
-
-        calculateTimeDifference(); // Call function to calculate time difference
+        $('#dateTimeInput1').val(formatDateTime(selectedDate1, selectedTime1));
+        $('#dateTimeModal1').modal('hide');
+        calculateTimeDifference();
     });
 
-    // Function to calculate time difference
+    document.getElementById('submitDateTime2').addEventListener('click', function () {
+        if (!selectedDate2 || !selectedTime2) {
+            alert("Please select both date and time before submitting.");
+            return;
+        }
+        $('#dateTimeInput2').val(formatDateTime(selectedDate2, selectedTime2));
+        $('#dateTimeModal2').modal('hide');
+        calculateTimeDifference();
+    });
+
     function calculateTimeDifference() {
-        const dateTime1 = $('#dateTimeInput1').val(); // Get the value of the first date-time input
-        const dateTime2 = $('#dateTimeInput2').val(); // Get the value of the second date-time input
+        const dateTime1 = $('#dateTimeInput1').val();
+        const dateTime2 = $('#dateTimeInput2').val();
 
-        if (dateTime1 && dateTime2) {
-            // Reformat date strings from "DD-MM-YYYY HH:mm" to "YYYY-MM-DDTHH:mm:ss"
-            const formattedDate1 = dateTime1.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:00');
-            const formattedDate2 = dateTime2.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:00');
+        if (!dateTime1 || !dateTime2) return;
 
-            const date1 = new Date(formattedDate1);
-            const date2 = new Date(formattedDate2);
+        const date1 = new Date(dateTime1.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:00'));
+        const date2 = new Date(dateTime2.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:00'));
 
-            if (isNaN(date1) || isNaN(date2)) {
-                console.error('Invalid date format');
-                return;
-            }
+        if (isNaN(date1) || isNaN(date2) || date1 >= date2) {
+            setDurationError('The start date and time must be earlier than the end date and time.');
+            $('#find_car').prop('disabled', true);
+            return;
+        }
 
-            if (date1 >= date2) {
-                $('.duration-error').text('The start date and time must be greater than the end date and time.');
-                $('#find_car').prop('disabled', true);
-                return;
-            } else {
-                $('.duration-error').text(''); // Clear any previous error message
-            }
+        const diffMs = date2 - date1;
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        const diffHrs = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const totalHours = diffDays * 24 + diffHrs;
 
-            // Calculate the difference in milliseconds
-            const diffMs = Math.abs(date2 - date1);
-            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-            const diffHrs = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const totalHours = diffDays * 24 + diffHrs; // Total hours
+        $('.date-value').text(diffDays);
+        $('.time-value').text(diffHrs);
 
-            // Display the difference using jQuery
-            $('.date-value').text(diffDays); // Set the number of days
-            $('.time-value').text(diffHrs); // Set the number of hours
+        const minHours = parseInt($('#minimum_days').val());
+        const maxHours = parseInt($('#maximum_days').val());
 
-            // Get minimum and maximum limits from hidden inputs
-            const minHours = parseInt($('#minimum_days').val());
-            const maxHours = parseInt($('#maximum_days').val());
-
-            // Enable/disable the button based on the total hours
-            if (totalHours < minHours) {
-                $('#find_car').prop('disabled', true);
-                $('.duration-error').text(`Minimum ${minHours} hours required`);
-            } else if (totalHours > maxHours) {
-                $('#find_car').prop('disabled', true);
-                $('.duration-error').text(`Maximum ${maxHours} hours exceeded`);
-            } else {
-                $('#find_car').prop('disabled', false);
-                $('.duration-error').text(''); // Clear any error message
-            }
+        if (totalHours < minHours) {
+            setDurationError(`Minimum ${minHours} hours required`);
+            $('#find_car').prop('disabled', true);
+        } else if (totalHours > maxHours) {
+            setDurationError(`Maximum ${maxHours} hours exceeded`);
+            $('#find_car').prop('disabled', true);
+        } else {
+            setDurationError('');
+            $('#find_car').prop('disabled', false);
         }
     }
 
-
     $('.book_now').on('click', function () {
-        let start_date = $('#dateTimeInput1').val();
-        let end_date = $('#dateTimeInput2').val();
+        const start_date = $('#dateTimeInput1').val();
+        const end_date = $('#dateTimeInput2').val();
 
-        if (start_date === '' && end_date === '') {
+        if (!start_date && !end_date) {
             $('#alert_booking').modal('show');
         } else {
-            let booking_id = $('#car_book_id').val();
-
-            window.location.href = '/book/'+booking_id;
+            const booking_id = $('#car_book_id').val();
+            window.location.href = `/book/${booking_id}`;
         }
     });
-
-
 });
+
 

@@ -6,6 +6,9 @@
                 <div class="col-sm-6">
                     <h1>Swap Cars </h1>
                 </div>
+                <div class="col-sm-6 text-right">
+                    <a href="{{ route('car-swap.table') }}" class="btn btn-primary mb-3" id="add_role" role="button">Swap History</a>
+                </div>
             </div>
         </div>
         <!-- /.container-fluid -->

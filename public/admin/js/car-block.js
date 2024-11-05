@@ -360,6 +360,29 @@ $(function () {
             }
         });
 
+        // Delete Car
+        let delete_id;
+        $('#car_block_table').on('click', '.delete_block_model', function() {
+            delete_id = $(this).data('id');  // Capture the ID of the item to delete
+            $('#deleteModal').modal('show');  // Show the modal
+        });
+
+        $('#confirmDelete').on('click', function() {
+            $.ajax({
+                url: `/admin/car-block/${delete_id}/delete`,
+                type: 'DELETE',
+                success: function(response) {
+                    $('#deleteModal').modal('hide');  // Hide the modal
+                    updateBlockTable(response.data);
+                    alertify.success(response.success);
+
+                },
+                error: function(response) {
+                    alertify.error('Internal server error');
+                }
+            });
+        });
+
 
         function fetchData() {
             let blockType = $('#block_type').val();

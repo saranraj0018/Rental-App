@@ -99,7 +99,7 @@ class PaymentController extends Controller
 
         // Send SMS via Twilio
         $this->sendSMS(Auth::user()->mobile, $delivery_booking->booking_id);
-
+        session()->flush();
         session(['booking_id' => $id]);
         return response()->json([
             'success' => true,

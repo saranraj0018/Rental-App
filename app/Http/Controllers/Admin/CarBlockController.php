@@ -61,6 +61,7 @@ class CarBlockController extends BaseController
         $car_available = new Available();
         $car_available->car_id = !empty($car_status->id) ?  $car_status->id : 0;
         $car_available->model_id = !empty($request['car_model']) ? $request['car_model']: 0;
+        $car_available->booking_id = !empty($car_block->id) ? $car_block->id: 0;
         $car_available->register_number = !empty($request['block_car_register_number']) ? $request['block_car_register_number'] : 0;
         $car_available->start_date = $request['start_date'];
         $car_available->end_date = $request['end_date'];
@@ -88,6 +89,15 @@ class CarBlockController extends BaseController
         $car_block->save();
         $car_block_list = CarBlock::with('user')->orderBy('created_at', 'desc')->get();
         return response()->json(['data'=> $car_block_list,'success' => 'Car blocked Update successfully']);
+    }
+
+    public function delete($id)
+    {
+        CarBlock::find($id)?->delete();
+        Available::where('booking_id', $id)->first()?->delete();
+
+        $car_block_list = CarBlock::with('user')->orderBy('created_at', 'desc')->get();
+        return response()->json(['data'=> $car_block_list,'success' => 'Car blocked Delete successfully']);
     }
 
     public function search(Request $request)

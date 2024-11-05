@@ -7,7 +7,7 @@
                 <div class="d-flex justify-content-between">
                     <div class="d-flex text-white">
                         <div>
-                            <button class="border-2 rounded-pill px-3 py-2 me-3 back-btn"><i class="fa fa-angle-left text-white fs-18"></i></button>
+                            <a href="{{ route('home') }}" class="border-2 rounded-pill px-3 py-2 me-3 back-btn" role="button"><i class="fa fa-angle-left text-white fs-18"></i></a>
                         </div>
                         <div class="my-auto">Profile</div>
                     </div>

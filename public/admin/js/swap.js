@@ -37,9 +37,10 @@ $(function () {
                             let card = `
                         <div class="card m-2" style="width: 18rem;">
                             <div class="card-body">
-                              <input type="hidden" name="car_id" id="car_id" value="${car.id}" >
+                              <input type="hidden" name="car_id" id="car_id" class="car_id" value="${car.id}" >
                                 <h5 class="card-title">${car.car_model.model_name ?? ''}</h5>
                                 <p class="card-text">Register Number: ${car.register_number}</p>
+                                <p class="card-text">car id Number: ${car.id}</p>
                                 <button type="button" class="btn btn-primary with_price">With Price</button>
                                 <button type="button" class="btn btn-secondary without_price">Without Price</button>
                             </div>
@@ -59,7 +60,7 @@ $(function () {
 
         $(document).on('click', '.without_price', function (e) {
             e.preventDefault();
-            let car_id = $('#car_id').val();
+            let car_id = $(this).closest('.card').find('.car_id').val();
             let booking_id = $('#booking_id').val();
             let start_date = $('#start_date').val();
             let end_date = $('#end_date').val();
@@ -84,7 +85,7 @@ $(function () {
 
         $(document).on('click', '.with_price', function (e) {
             e.preventDefault();
-            let car_id = $('#car_id').val();
+            let car_id = $(this).closest('.card').find('.car_id').val();
             let booking_id = $('#booking_id').val();
             let start_date = $('#start_date').val();
             let end_date = $('#end_date').val();
@@ -106,7 +107,7 @@ $(function () {
                         $('#with-price-modal').modal('show');
 
                     } else {
-                        alert('Error calculating price. Please try again.');
+                        alertify.error('Error calculating price. Please try again.');
                     }
                 },
                 error: function () {

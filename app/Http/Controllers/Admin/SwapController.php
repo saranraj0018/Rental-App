@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\UserController;
 use App\Models\Available;
 use App\Models\Booking;
+use App\Models\BookingDetail;
 use App\Models\CarDetails;
+use App\Models\SwapCar;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Razorpay\Api\Api;
 use App\Models\Payment;
@@ -16,10 +19,18 @@ class SwapController extends Controller
 {
 
     public int $amount = 0;
-    public function list(Request $request)
+    public function list()
     {
         return view('admin.swap-cars.show');
     }
+
+    public function table()
+    {
+        $swap_cars = SwapCar::with('user', 'car.carModel', 'swapCar.carModel')->paginate(10);
+        return view('admin.swap-cars.table', compact('swap_cars'));
+
+    }
+
 
     public function getBookingDate(Request $request)
     {
@@ -86,10 +97,12 @@ class SwapController extends Controller
     public function swapCar(Request $request)
     {
         if (!empty($request['booking_id']) && !empty($request['car_id'])){
-           // Booking::where('booking_id',$request['booking_id'])->where('status',1)->update(['car_id' => $request['car_id']]);
+            $old_booking = Booking::where('booking_id',$request['booking_id'])->first();
+
+            Booking::where('booking_id',$request['booking_id'])->where('status',1)->update(['car_id' => $request['car_id']]);
 
            $car_details = CarDetails::with('carModel')->find($request['car_id']);
-        //   BookingDetail::where('booking_id',$request['booking_id'])->update(['car_details' => json_encode($car_details)]);
+           BookingDetail::where('booking_id',$request['booking_id'])->update(['car_details' => json_encode($car_details)]);
 
            if (!empty($request['start_date']) && !empty($request['end_date'])) {
                $available = new Available();
@@ -100,6 +113,13 @@ class SwapController extends Controller
                $available->start_date = $request['start_date'];
                $available->end_date = $request['end_date'];
                $available->booking_type = 1;
+               $available->save();
+
+               $available = new SwapCar();
+               $available->booking_id = $request['booking_id'];
+               $available->user_id =  Auth::guard('admin')->id();
+               $available->car_id = !empty($old_booking->car_id) ? $old_booking->car_id : 0;
+               $available->swap_car_id = $request['car_id'];
                $available->save();
            }
 
