@@ -16,7 +16,7 @@ $(function () {
                     let coupon_amount = response.final_amount ?? 0;
                     let total_amount = final_amount - coupon_amount;
                     if (response.message) {
-                        $('#login_alert').modal('show');
+                        $('#mobileModal').modal('show');
                         return;
                     }
                     if (response.valid) {
@@ -27,15 +27,16 @@ $(function () {
                         $('#final_coupon_amount').val(coupon_amount);
                         $('#coupon_code').val(` `);
                     } else {
-                        alert('Invalid coupon code.');
+                        let error_message = 'Invalid coupon code';
+                        $('#error_message').text(error_message);
+                        $('#login_alert').modal('show');
                     }
                 },
                 error: function (response) {
-
                     if (response.responseJSON && response.responseJSON.message) {
                         let errors = response.responseJSON.message;
-                        if (errors) {
-                            $('#login_alert').modal('show');
+                        if (errors === 'Unauthenticated.') {
+                            $('#mobileModal').modal('show');
                         }
                     }
                 }

@@ -115,7 +115,8 @@ $(function () {
     $('#user_registration').on('submit', function(e) {
         e.preventDefault();
         const fields = [
-            { id: '#user_name', condition: (val) => val === '' },
+            { id: '#user_name_', condition: (val) => val === '' },
+            { id: '#user_email', condition: (val) => val === '' },
             { id: '#reg_mobile_number', condition: (val) => val === '' }
         ];
 
@@ -137,9 +138,22 @@ $(function () {
                         alert(response.message);
                     }
                 },
-                error: function() {
-                    alert('Error during registration'); // Replace alert if needed
-                }
+                error: function(response) {
+                    if (response.responseJSON && response.responseJSON.errors) {
+                        let errors = response.responseJSON.errors;
+                        $('.form-control').removeClass('is-invalid');
+                        $('.invalid-feedback').empty();
+                        $.each(errors, function (key, value) {
+                            let element = $('#' + key);
+                            // For other form controls
+                            element.addClass('is-invalid');
+                            console.log(value[0])
+                            console.log(key)
+                            // Display the error message
+                            element.siblings('.invalid-feedback').text(value[0]);
+                        });
+                    }
+                },
             });
         }
     });

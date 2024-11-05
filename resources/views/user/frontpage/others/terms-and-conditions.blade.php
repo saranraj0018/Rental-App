@@ -21,14 +21,14 @@
                                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right">
                                 </ul>
                                 <ul class="navbar-nav navbar-light w-100 ms-0 ms-lg-5 ps-0 ps-lg-5 text-end text-lg-start">
-                                    <li class="nav-item ms-0 ms-lg-5 pe-0 pe-lg-3"><a class="nav-link text-dark" href="#">Home</a></li>
+                                    <li class="nav-item ms-0 ms-lg-5 pe-0 pe-lg-3"><a class="nav-link text-dark" href="{{ route('home') }}">Home</a></li>
                                     @if(!Auth::user())
-                                    <li class="nav-item"><a class="nav-link text-dark" href="#">FAQ</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" href="{{ route('faq') }}">FAQ</a></li>
                                     @else
                                     <li class="nav-item"><a class="nav-link text-dark" href="{{ route('booking.history') }}">Booking</a></li>
                                     @endif
-                                    <li class="nav-item"><a class="nav-link text-dark" href="#">Blog</a></li>
-                                    <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2"><a class="nav-link text-dark me-0 me-lg-5" href="#">Contact-us</a></li>
+{{--                                    <li class="nav-item"><a class="nav-link text-dark" href="#">Blog</a></li>--}}
+                                    <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2"><a class="nav-link text-dark me-0 me-lg-5" href="{{ route('contact') }}">Contact-us</a></li>
                                     <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0">
                                         @if(!Auth::user())
                                         <button type="button" class="btn border border-dark rounded-pill me-1" id="login_user">Sign-In</button>
@@ -67,7 +67,7 @@
                                 <ul class="navbar-nav navbar-light">
                                     <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Home</a></li>
                                     <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Booking</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Blog</a></li>
+{{--                                    <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Blog</a></li>--}}
                                     <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Contact-us</a></li>
                                 </ul>
                             </div>
@@ -95,16 +95,16 @@
         </script>
 
     </header>
-    
-</section>
-    
 
-    
+</section>
+
+
+
     <section class="my-5">
         <div class="container">
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
-                    Terms and Conditions 
+                    Terms and Conditions
                 </h2>
                 <p class="fs-16 text-justify">
                     By accessing and using our services, you ("Customer", "You", "Your") agree to comply with and be bound by these Terms and Conditions ("Terms"). Please read them carefully.
@@ -112,11 +112,11 @@
             </div>
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
-                    1. Eligibility          
+                    1. Eligibility
                 </h2>
                 <p class="fs-16 text-justify">
                     To use Valam self-driving car rental services, you must:
-                </p>                                
+                </p>
                 <ul>
                     <li class="text-justify fs-16">Be at least 20 years old.</li>
                     <li class="text-justify fs-16">Hold a valid Indian driver's license for the appropriate vehicle category.</li>
@@ -127,21 +127,21 @@
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
                     2. Booking and Payment
-                </h2>                
+                </h2>
                 <ul>
                     <li class="text-justify fs-16">Booking: All bookings must be made through our website or webapp. You must provide accurate and up-to-date information when making a booking.</li>
                     <li class="text-justify fs-16">Payment: Full payment is required at the time of booking. We accept credit cards, debit cards, UPI, and other digital payment methods.</li>
                     <li class="text-justify fs-16">Cancellation Policy: If you cancel your booking, a cancellation fee of Rs 500/- will be deducted from the total amount paid. Refunds will be processed according to our refund policy.</li>
-                    <li class="text-justify fs-16">Booking Modifications: Any changes to your booking, such as extending or reducing the rental period, are subject to availability and may incur additional charges.</li>                
+                    <li class="text-justify fs-16">Booking Modifications: Any changes to your booking, such as extending or reducing the rental period, are subject to availability and may incur additional charges.</li>
                 </ul>
             </div>
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
                     3. Valam Cars’ Right to Cancel
-                </h2>               
+                </h2>
                 <p class="fs-16 text-justify">
                     Valam Cars reserves the right to cancel any booking without prior approval from the customer for reasons including but not limited to:
-                </p> 
+                </p>
 
                 <ul>
                     <li class="text-justify fs-16">Inaccurate or incomplete information provided at the time of booking.</li>
@@ -152,7 +152,7 @@
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
                     4. Refunds
-                </h2>                
+                </h2>
                 <ul>
                     <li class="text-justify fs-16">Refunds will be processed within 7 business days if a booking is cancelled by Valam Cars due to vehicle unavailability or other reasons beyond our control. Refunds will be made through UPI ID or bank transfer, depending on the payment method used at the time of booking.</li>
                     <li class="text-justify fs-16">Refunds related to customer-initiated cancellations will follow the cancellation fee policy.</li>
@@ -161,7 +161,7 @@
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
                     5. Pickup and Return
-                </h2>                
+                </h2>
                 <ul>
                     <li class="text-justify fs-16">Pickup: You are responsible for picking up the vehicle at the designated location at the scheduled time. A valid driver's license and booking confirmation must be presented.</li>
                     <li class="text-justify fs-16">Return: You must return the vehicle at the specified location and time. Late returns may incur additional charges. The vehicle must be returned in the same condition as when rented.</li>
@@ -170,7 +170,7 @@
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
                     6. Use of Vehicle
-                </h2>                
+                </h2>
                 <p class="fs-16 text-justify">
                     You agree to use the vehicle in accordance with the following terms:
                 </p>
@@ -183,7 +183,7 @@
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
                     7. Fuel Policy
-                </h2>                
+                </h2>
                 <p class="fs-16 text-justify">
                     The vehicle will be provided with a full tank of fuel. It must be returned with a same full tank. If the vehicle is returned with less fuel Rs 500/- will be charged extra apart from the refuelling amount based on the current fuel rates.
                 </p>
@@ -219,8 +219,8 @@
                     <li class="text-justify fs-16">If there is a misrepresentation of driving license or ID details provided by the customer.</li>
                     <li class="text-justify fs-16">If there is clear evidence of rash or negligent driving by the customer.</li>
                     <li class="text-justify fs-16">If the customer violates traffic rules or the Motor Vehicles Act.</li>
-                    
-                </ul>                
+
+                </ul>
             </div>
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
@@ -231,8 +231,8 @@
                 </p>
                 <ul>
                     <li class="text-justify fs-16">You must notify Valam Cars immediately.</li>
-                    <li class="text-justify fs-16">Valam Cars will arrange for roadside assistance or a replacement vehicle, if necessary, at no extra cost to you, provided the breakdown is not due to your negligence.</li>                    
-                </ul>                
+                    <li class="text-justify fs-16">Valam Cars will arrange for roadside assistance or a replacement vehicle, if necessary, at no extra cost to you, provided the breakdown is not due to your negligence.</li>
+                </ul>
             </div>
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
@@ -251,7 +251,7 @@
                     <li class="text-justify fs-16">Cleaning Required (Interiors): For minor cleaning, a charge of Rs. 1000 will apply. Major cleaning will incur a fee of Rs. 1500.</li>
                     <li class="text-justify fs-16">Vehicle Returned to Wrong Location: If the vehicle is returned to a location different from the one specified at the time of booking or modification, a fee of Rs. 500 will be charged, along with the base fare and any late penalties for the additional hours until the vehicle is returned.</li>
                     <li class="text-justify fs-16">Not Refueling: If the car is returned with a lower fuel level than when received, a refueling service charge of Rs. 500 will apply, plus the actual fuel cost required to restore the tank to its original level.</li>
-                </ul>                
+                </ul>
             </div>
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
@@ -264,7 +264,7 @@
                     <li class="text-justify fs-16">You provide false or misleading information.</li>
                     <li class="text-justify fs-16">You violate any terms of this agreement.</li>
                     <li class="text-justify fs-16">You misuse or damage the vehicle. In such cases, no refunds will be issued.</li>
-                </ul>                
+                </ul>
             </div>
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
@@ -308,11 +308,11 @@
                 <ul>
                     <li class="text-justify fs-16">Email: Care@valamcars.com</li>
                     <li class="text-justify fs-16">Phone: xxxxxxxxxxxxx</li>
-                    <li class="text-justify fs-16">Address: No: 593, Avinashi Road, Goldwins, Coimbatore – 641 014</li>                    
-                </ul> 
+                    <li class="text-justify fs-16">Address: No: 593, Avinashi Road, Goldwins, Coimbatore – 641 014</li>
+                </ul>
             </div>
         </div>
     </section>
     @include('user.frontpage.footer')
-    
+
 @endsection

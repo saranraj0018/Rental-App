@@ -58,7 +58,7 @@
                             @if ($model['booking_status'] === 'available')
                                 <a href="{{ route('book.car', ['model_id' => $model->id]) }}" class="btn my-button p-1 px-3 w-75">Book now</a>
                             @elseif ($model['booking_status'] === 'sold')
-                                <button type="button" class="my-button btn btn-lg fs-14 float-end">Sold</button>
+                                <button type="button" class="sold-button btn btn-lg fs-14 float-end">Sold</button>
                             @endif
                         </div>
                     </div>

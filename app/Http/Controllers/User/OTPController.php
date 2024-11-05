@@ -76,12 +76,14 @@ class OTPController extends Controller
     {
         $request->validate([
             'user_name' => 'required|string|max:255',
-            'mobile_number' => 'required|digits:10|unique:users,mobile',
+            'user_email' => 'required|email|unique:users,email',
+            'reg_mobile_number' => 'required|digits:10|unique:users,mobile',
         ]);
 
        $user = new User();
        $user->name = $request['user_name'];
-       $user->mobile = $request['mobile_number'];
+       $user->mobile = $request['reg_mobile_number'];
+       $user->email = $request['user_email'];
        $user->save();
 
         return response()->json(['success' => 'true','message' => 'Registration successful!']);

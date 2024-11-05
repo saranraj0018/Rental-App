@@ -55,7 +55,10 @@ class UserController extends Controller
 
     public function updateLocation(Request $request)
     {
-
+        $request->validate([
+            'start_date' => 'required|date|before:end_date',
+            'end_date' => 'required|date|after:start_date',
+        ]);
             if (!empty($request['start_date']) && !empty($request['end_date'])) {
                 $start_date = str_replace('T', '  ', $request['start_date']);
                 $end_date = str_replace('T', '  ', $request['end_date']);
@@ -71,21 +74,6 @@ class UserController extends Controller
         return response()->json(['success' => true]);
     }
 
-    private function isWithinCoimbatore($data)
-    {
-        if (empty($data)) {
-            return false;
-        }
-        foreach ($data['results'] as $result) {
-            foreach ($result['address_components'] as $component) {
-                if (in_array('administrative_area_level_3', $component['types']) && $component['long_name'] === 'Coimbatore') {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     public function listCars() {
         $date = ['start_date' => Session::get('start_date'), 'end_date' =>  Session::get('end_date')];
         $available_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date'));
@@ -95,12 +83,11 @@ class UserController extends Controller
                 return $car;
             }, $available_models['available_cars']) : [];
 
-        $sold_cars = !empty($available_models['booked_cars']) ?
+        $sold_cars = !empty($available_models['booking_cars']) ?
             array_map(function($car) {
                 $car['booking_status'] = 'sold'; // Add status as 'sold'
                 return $car;
-            }, $available_models['booked_cars']) : [];
-
+            }, $available_models['booking_cars']) : [];
         $car_models = array_merge($booking_models, $sold_cars);
         $festival_days = Holiday::pluck('event_date')->toArray();
         return view('user.frontpage.list-cars.list',compact('car_models','festival_days','date'));

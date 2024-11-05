@@ -90,15 +90,22 @@
                     <form id="user_registration">
                         <div class="py-3 px-2 px-lg-5">
                             <div class="mb-2">
-                                <label for="user_name" class="form-label fs-12 fw-500">Your Name</label>
-                                <input type="text" class="form-control bg-grey form-bdr" id="user_name" name="user_name" placeholder="Enter your name">
+                                <label for="user_name_" class="form-label fs-12 fw-500">Your Name</label>
+                                <input type="text" class="form-control bg-grey form-bdr" id="user_name_" name="user_name" placeholder="Enter your name">
                                 <div class="invalid-feedback">
                                     Please enter the User Name.
                                 </div>
                             </div>
+                            <div class="mb-2">
+                                <label for="user_email" class="form-label fs-12 fw-500">Your Email</label>
+                                <input type="email" class="form-control bg-grey form-bdr" id="user_email" name="user_email" placeholder="Enter your Email">
+                                <div class="invalid-feedback">
+                                    Please enter the User Email.
+                                </div>
+                            </div>
                             <div class="mb-3">
-                                <label for="mobile_number" class="form-label fs-12 fw-500">Enter Your Mobile Number</label>
-                                <input type="text" class="form-control bg-grey form-bdr" id="reg_mobile_number" name="mobile_number" placeholder="+91">
+                                <label for="reg_mobile_number" class="form-label fs-12 fw-500">Your Mobile Number</label>
+                                <input type="text" class="form-control bg-grey form-bdr" id="reg_mobile_number" name="reg_mobile_number" placeholder="+91">
                                 <div class="invalid-feedback">
                                     Please enter the Mobile Number.
                                 </div>
@@ -176,23 +183,21 @@
     </div>
 </div>
 
-<div class="modal fade" id="login_alert" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal" id="login_alert" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document"> <!-- Centering the modal -->
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="cancelModalLabel">Login</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="cancelModalLabel">Warning</h5>
             </div>
             <div class="modal-body">
-                    <div class="form-group">
-                        <label for="cancel-reason" class="text-danger">Please Login your Account</label>
-                    </div>
+                <div class="form-group d-grid">
+                    <label for="cancel-reason" class="text-danger text-center" id="error_message"></label>
+                </div>
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Ok</button>
             </div>
         </div>
     </div>
 </div>
+

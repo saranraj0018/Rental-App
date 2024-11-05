@@ -15,9 +15,9 @@
                             <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right">
                             </ul>
                             <ul class="navbar-nav navbar-light">
-                                <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Home</a></li>
+                                <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="{{ route('home') }}">Home</a></li>
                                 <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Booking</a></li>
-                                <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Blog</a></li>
+{{--                                <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Blog</a></li>--}}
                                 <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Contact-us</a></li>
                                 <li class="nav-item"><a class="text-white d-flex align-items-center justify-content-center " href="#">
                                         <img src="{{ asset('user/img/Group 4.svg') }}" alt="Site-Logo" class="img-fluid d-block"></a></li>
@@ -45,7 +45,7 @@
                             <ul class="navbar-nav navbar-light">
                                 <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Home</a></li>
                                 <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Booking</a></li>
-                                <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Blog</a></li>
+{{--                                <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Blog</a></li>--}}
                                 <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Contact-us</a></li>
                             </ul>
                         </div>

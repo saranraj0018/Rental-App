@@ -93,6 +93,7 @@ input.form-control.my-hub{
     color: white;
     border-radius: 30px;
 }
+
 .my-drop-button {
     background-color: #E2ECFF;
     color: #123984;
@@ -118,11 +119,6 @@ input.form-control.my-hub{
     background-color: #000000;
     color: white;
     border-radius: 30px;
-}
-.sold-button:hover{
-    background-color: #7f7f7f;
-    color: white;
-
 }
 
 .owl-dots {

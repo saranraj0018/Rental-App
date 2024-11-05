@@ -265,14 +265,15 @@ document.addEventListener("DOMContentLoaded", function () {
     calculateTimeDifference();
     function formatDateTime(dateStr, timeStr) {
         const dateParts = dateStr.split('-');
-        const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`; // Convert to YYYY-MM-DD
-        return `${formattedDate}T${timeStr}`; // Add 'T' between date and time
+        const formattedDate = `${dateParts[0]}-${dateParts[1]}-${dateParts[2]}`;
+        return `${formattedDate} ${timeStr}`;
     }
 
 
     // Initialize Flatpickr for both calendars
     flatpickr("#inlineDatePicker1", {
         inline: true,
+        minDate: "today",
         dateFormat: "d-m-Y",
         disable: [
             date => date < new Date().setHours(0, 0, 0, 0) // Disable past dates but allow today
@@ -289,6 +290,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     flatpickr("#inlineDatePicker2", {
         inline: true,
+        minDate: "today",
         dateFormat: "d-m-Y",
         disable: [
             date => date < new Date().setHours(0, 0, 0, 0) // Disable past dates but allow today
@@ -389,6 +391,14 @@ document.addEventListener("DOMContentLoaded", function () {
             if (isNaN(date1) || isNaN(date2)) {
                 console.error('Invalid date format');
                 return;
+            }
+
+            if (date1 >= date2) {
+                $('.duration-error').text('The start date and time must be greater than the end date and time.');
+                $('#find_car').prop('disabled', true);
+                return;
+            } else {
+                $('.duration-error').text(''); // Clear any previous error message
             }
 
             // Calculate the difference in milliseconds
