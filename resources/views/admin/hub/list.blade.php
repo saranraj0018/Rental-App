@@ -105,7 +105,8 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex text-center">
+                        <!-- Search for Booking ID -->
                         <div class="input-group" style="width: 250px;">
                             <select id="hub_type" class="form-control">
                                 <option value="" selected disabled>Select Hub</option>
@@ -119,22 +120,6 @@
                                 <option value="pickup">Pickup</option>
                             </select>
                         </div>
-
-                        <div class="input-group" style="width: 250px;">
-                            <input type="text" id="car_model" name="car_model" class="form-control" placeholder="Search Car Model">
-                        </div>
-                        <!-- Search for Registration Number -->
-                        <div class="input-group" style="width: 250px;">
-                            <input type="text" id="register_number" name="register_number" class="form-control" placeholder="Search Registration Number">
-                        </div>
-                        <!-- Search for Booking ID -->
-                        <div class="input-group" style="width: 250px;">
-                            <input type="text" id="booking_id" name="booking_id" class="form-control" placeholder="Search Booking ID">
-                        </div>
-                        <!-- Search for Customer Name -->
-                        <div class="input-group" style="width: 250px;">
-                            <input type="text" id="customer_name" name="customer_name" class="form-control" placeholder="Search Customer Name">
-                        </div>
                     </div>
                 </div>
                 <div class="card-body table-responsive p-0">
@@ -145,13 +130,15 @@
                             <th>Risk</th>
                             <th>Done</th>
                             <th>Time</th>
-                            <th>Name</th>
-                            <th>Model</th>
-                            <th>Register Number</th>
+                            <th>
+                                <input type="text" id="customer_name" name="customer_name" class="form-control" placeholder="Name">
+                            </th>
+                            <th> <input type="text" id="car_model" name="car_model" class="form-control" placeholder="Model" style="padding: 0%;"></th>
+                            <th><input type="text" id="register_number" name="register_number" class="form-control" placeholder="Registration Number"></th>
                             <th>Address</th>
                             <th>User Details</th>
                             <th>D/L Number</th>
-                            <th>Booking Id</th>
+                            <th><input type="text" id="booking_id" name="booking_id" class="form-control" style="padding: 0%    ;" placeholder="Booking ID"></th>
                             <th>Reschedule</th>
                             <th>Security Dep</th>
                             <th>Amount</th>
