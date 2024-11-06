@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\HolidayController;
 use App\Http\Controllers\Admin\AvailableController;
 use App\Http\Controllers\Admin\SwapController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\CityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -126,6 +127,12 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::post('/holiday/save', [HolidayController::class, 'save'])->name('holiday.save');
         Route::delete('/holiday/{id?}/delete', [HolidayController::class, 'delete'])->name('holiday.delete');
         Route::get('/holiday/search', [HolidayController::class, 'search'])->name('holiday.search');
+
+        //City Section
+        Route::get('/city/list', [CityController::class, 'list'])->name('city.list');
+//        Route::post('/holiday/save', [HolidayController::class, 'save'])->name('holiday.save');
+//        Route::delete('/holiday/{id?}/delete', [HolidayController::class, 'delete'])->name('holiday.delete');
+//        Route::get('/holiday/search', [HolidayController::class, 'search'])->name('holiday.search');
 
         // Front-end Banner Section
         Route::get('/general', [BannerController::class, 'generalList'])->name('general.list');

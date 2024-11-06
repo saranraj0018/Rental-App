@@ -48,6 +48,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('city.list') }}" class="nav-link">
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>City List</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('city.map') }}" class="nav-link">
                         <i class="nav-icon fas fa fa-map"></i>
                         <p>Cities Map</p>
