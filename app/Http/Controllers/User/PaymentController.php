@@ -228,10 +228,11 @@ class PaymentController extends Controller
         if (empty($booking_id)) {
             return response()->json(['success' => false]);
         }
-        $booking = Booking::where('booking_id',$booking_id)->get();
-        $booking->notes = $request['cancel_reason'];
-        $booking->status = 3;
-        $booking->save();
+        Booking::where('booking_id', $booking_id)
+            ->update([
+                'notes' => $request['cancel_reason'],
+                'status' => 3,
+            ]);
 
         return response()->json(['success' => true]);
     }

@@ -59,9 +59,19 @@ class UserController extends Controller
             'start_date' => 'required|date|before:end_date',
             'end_date' => 'required|date|after:start_date',
         ]);
+
             if (!empty($request['start_date']) && !empty($request['end_date'])) {
                 $start_date = str_replace('T', '  ', $request['start_date']);
                 $end_date = str_replace('T', '  ', $request['end_date']);
+
+                $start = Carbon::parse($start_date);
+                $end = Carbon::parse($end_date);
+                $setting = Frontend::where('data_keys','general-setting')->first();
+                $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
+                $totalHours = $start->diffInHours($end);
+                if ($totalHours < $timing_setting['total_minimum_hours'] || $totalHours > $timing_setting['total_maximum_hours']) {
+                    return redirect()->back();
+                }
 
                 // If the input does not have a space, manually format it
                 $start_date = preg_replace('/(\d{4}-\d{2}-\d{2})(\d{2}:\d{2})/', '$1 $2', showDateformat($start_date));

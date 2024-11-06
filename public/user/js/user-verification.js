@@ -79,7 +79,8 @@ $(function () {
                         $('#user_name').text(response.name)
                         $('#after_login_button').css('display', 'block');
                         $('#booking_button').css('display', 'block');
-                        $('#login_payment').attr('id', 'payment');
+                        $('#login_payment').hide();
+                        $('#payment').css('display', 'block');
                         $('#otp_error').text('');
                     } else {
                         $('#otp_error').text('Invalid OTP');

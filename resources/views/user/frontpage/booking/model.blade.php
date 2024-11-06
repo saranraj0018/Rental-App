@@ -128,7 +128,13 @@
                 <form id="cancel_booking_form">
                     <input type="hidden" id="cancel_booking_id" name="cancel_booking_id">
                     <div class="form-group">
+                        <h1>Cancel policy</h1>
+                        <p class="text-danger">
+                           1.Cancelling a booking within 24 hours incurs a fee of 500.
+                           2.Cancelling a booking after 24 hours incurs a fee of 3000.
+                        </p>
                         <label for="cancel-reason">Reason for Cancellation</label>
+
                         <textarea class="form-control" id="cancel_reason" name="cancel_reason" rows="3" placeholder="Enter reason..."></textarea>
                         <div class="invalid-feedback">
                             Please provide a reason for cancellation.

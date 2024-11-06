@@ -38,6 +38,19 @@
                                 </div>
                                 <div class="invalid-feedback">Please Enter Maximum booking days.</div>
                             </div>
+
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label font-weight-bold" for="show_duration">Show Booking Duration</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="show_duration" name="show_duration" placeholder="1" value="{{ $data['show_duration'] ?? 0 }}">
+                                    <select class="form-control" id="duration_type" name="duration_type">
+                                        <option value="year" {{ (isset($data['duration_type']) && $data['duration_type'] == 'year') ? 'selected' : '' }}>Year</option>
+                                        <option value="months" {{ (isset($data['duration_type']) && $data['duration_type'] == 'months') ? 'selected' : '' }}>Months</option>
+                                    </select>
+                                </div>
+                                <div class="invalid-feedback">Please Enter Show booking duration.</div>
+                            </div>
+
                             <div class="form-group col-md-3">
                                 <label class="form-control-label font-weight-bold" for="inputEmail4">Referral</label>
                                 <input type="text" class="form-control" id="referral" disabled value="{{ $referral_code ?? 0 }}">

@@ -176,9 +176,9 @@
                                 <input type="hidden" id="additional_amount" value="{{ $delivery_fee + $car_model->carModel->dep_amount ?? 0 }}">
                                 <div class="text-white">
                                     <p class="fs-20 fs-mb-16 my-2 text-end">
-                                        Pickup Address<span id="pickup_address">{{ session('pickup.address') ?? session('pick-delivery.address') ?? '' }}</span></p>
-                                    <p class="fs-20 fs-mb-16 my-2 text-end">
                                         Drop Address<span id="drop_address">{{ session('delivery.address') ?? session('pick-delivery.address') ?? '' }}</span></p>
+                                    <p class="fs-20 fs-mb-16 my-2 text-end">
+                                        Pickup Address<span id="pickup_address">{{ session('pickup.address') ?? session('pick-delivery.address') ?? '' }}</span></p>
                                 </div>
                             </div>
                         </div>
@@ -197,25 +197,20 @@
                                         </div>
                                     </div>
                                     <div class="mb-3 mb-md-auto toggle">
-                                        <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#secondModal">
-                                            <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Pickup/Drop Location</button>
+                                        <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto pickup_location">
+                                            <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Drop/Pickup Location
+                                        </button>
                                     </div>
-                                    <div class="mb-3 mb-md-auto me-3 {{!empty($general_section['show_delivery']) ? 'd-none' : ''}}">
-                                        <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#secondModal">
-                                            <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Pickup/Drop Location</button>
+                                    <div class="mb-3 mb-md-auto me-3 {{ !empty($general_section['show_delivery']) ? 'd-none' : '' }}">
+                                        <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto pickup_location">
+                                            <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Drop/Pickup Location
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                @if(!empty(Auth::user()))
-                                <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" id="payment">Proceed Payment</button>
-                                @else
-                                    <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-3 fw-600 w-100 w-md-auto" id="login_payment">Login To Proceed Payment</button>
-{{--                                        <div class="spinner-border spinner-border-sm text-blue ms-3" role="status">--}}
-{{--                                            <span class="visually-hidden">Loading...</span>--}}
-{{--                                        </div>--}}
-
-                                @endif
+                                    <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" style="display:{{ Auth::check() ? 'block' : 'none' }};" id="payment">Proceed Payment</button>
+                                    <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-3 fw-600 w-100 w-md-auto"  style="display: {{ Auth::check() ? 'none' : 'block !important' }};" id="login_payment">Login To Proceed Payment</button>
                             </div>
                         </div>
                     </form>
@@ -239,7 +234,14 @@
         if (!map_verify) {
             $('#secondModal').modal('show');
             window.initMarker();
-            $('#custom-city').focus();
+            return;
+        }
+
+        let user_booking = await verifyUserbooking();
+        if (!user_booking) {
+            let message = 'You have already booked for this date. Please select a different date.';
+            $('#error_message').text(message);
+            $('#login_alert').modal('show');
             return;
         }
 
@@ -314,7 +316,25 @@
                 method: 'GET',
                 success: function(response) {
                     if (!response.success) {
-                        $('#otpModal').modal('hide');
+                        resolve(false);
+                    } else {
+                        resolve(true);
+                    }
+                },
+                error: function() {
+                    resolve(false);
+                }
+            });
+        });
+    }
+
+    async function verifyUserbooking() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: '/user/verify-booking', // Update with your route.
+                method: 'GET',
+                success: function(response) {
+                    if (!response.success) {
                         resolve(false);
                     } else {
                         resolve(true);
@@ -337,41 +357,42 @@
             <div class="modal-body">
                 <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
                 <div class="p-3">
-                    <div id="pickup-section" class="slide-section">
-                        <p class="fs-16 fw-500">Select Pickup Location</p>
-                        <div class="container">
-                            <div id="custom_map" style="height: 500px; width: 100%;"></div>
-                        </div>
-                        <p class="fs-16 fw-500 mt-2"> Enter manually</p>
-                        <input id="custom-city" type="text" placeholder="Search city" class="form-control current_pickup_address">
-                        <p class="text-danger" id="outside_area"></p>
-                        <input type="hidden" id="pic_latitude" name="pic_latitude" >
-                        <input type="hidden" id="pic_longitude" name="pic_longitude" >
-                        <input type="hidden" id="pic_address" name="pic_address" >
-                        <p class="text-danger" id="pick_outside_area"></p>
-                        <div class="d-flex">
-                            <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="delivery_address">Save Pickup Address</button>
-                            <button type="button" class="btn fs-16 my-drop-button mt-4 mx-2 w-50 w-lg-25" id="same_address">Same as Drop Location</button>
-                            <button type="button" class="btn fs-16 my-current-button rounded-pill mt-4 w-50 w-lg-25" id="use_current_location">Current Location</button>
-                        </div>
-                    </div>
-
-                    <div id="delivery-section" class="slide-section d-none">
-                        <div class="d-flex">
+                    <div id="delivery-section" class="slide-section">
                         <p class="fs-16 fw-500">Select Drop Location</p>
-                        </div>
                         <div class="container">
                             <div id="delivery_map" style="height: 500px; width: 100%;"></div>
+
                         </div>
                         <p class="fs-16 fw-500 mt-2"> Enter manually</p>
                         <input id="delivery-city" type="text" placeholder="Search city" class="form-control current_delivery_address">
+                        <p class="text-danger" id="outside_area"></p>
                         <input type="hidden" id="dly_latitude" name="dly_latitude">
                         <input type="hidden" id="dly_longitude" name="dly_longitude">
                         <input type="hidden" id="dly_address" name="dly_address">
                         <p class="text-danger" id="delivery_outside_area"></p>
                         <div class="d-flex">
-                        <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="conform_address">Conform address</button>
-                        <button type="button" class="btn fs-16 my-current-button rounded-pill mt-4 w-50 w-lg-25" id="drop_current_location">Current Location</button>
+                            <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="delivery_address">Save Drop Address</button>
+                            <button type="button" class="btn fs-16 my-drop-button mt-4 mx-2 w-50 w-lg-25" id="same_address">Same as Pickup Location</button>
+                            <button type="button" class="btn fs-16 my-current-button rounded-pill mt-4 w-50 w-lg-25" id="drop_current_location">Current Location</button>
+                        </div>
+                    </div>
+
+                    <div id="pickup-section" class="slide-section d-none">
+                        <div class="d-flex">
+                            <p class="fs-16 fw-500">Select Pickup Location</p>
+                        </div>
+                        <div class="container">
+                            <div id="custom_map" style="height: 500px; width: 100%;"></div>
+                        </div>
+                        <p class="fs-16 fw-500 mt-2"> Enter manually</p>
+                        <input id="custom-city" type="text" placeholder="Search city" class="form-control current_pickup_address">
+                        <input type="hidden" id="pic_latitude" name="pic_latitude" >
+                        <input type="hidden" id="pic_longitude" name="pic_longitude" >
+                        <input type="hidden" id="pic_address" name="pic_address" >
+                        <p class="text-danger" id="pickup_outside_area"></p>
+                        <div class="d-flex">
+                            <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="conform_address">Conform address</button>
+                            <button type="button" class="btn fs-16 my-current-button rounded-pill mt-4 w-50 w-lg-25" id="pick_current_location">Current Location</button>
                         </div>
                     </div>
                 </div>

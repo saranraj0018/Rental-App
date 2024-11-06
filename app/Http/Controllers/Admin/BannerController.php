@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AdminDetail;
 use App\Models\Frontend;
 use App\Models\FrontendImage;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BannerController extends Controller
@@ -48,10 +49,6 @@ class BannerController extends Controller
         $frontend->save();
 
         if ($request->hasFile('image_car')) {
-            // Clear the existing files from the directory
-//            Storage::disk('public')->deleteDirectory('section1-image-car/');
-//            Storage::disk('public')->makeDirectory('section1-image-car/');
-
             foreach ($request['image_car'] as $key => $image) {
                 $img_name = $image->getClientOriginalName();
                 $img_name = uniqid() . '_' . $img_name;
@@ -318,10 +315,11 @@ class BannerController extends Controller
             'minimum_hours' => 'required|numeric',
             'maximum_hours' => 'required|numeric|gt:minimum_hours',
             'delivery_fee' => 'required|numeric',
+            'show_duration' => 'required|numeric',
         ], [
             'maximum_hours.gt' => 'The maximum hours must be greater than the minimum hours.',
         ]);
-        $minimum_hours = $maximum_hours = 0;
+        $minimum_hours = $maximum_hours = $duration = 0;
          if ( $request['minimum_duration_type'] == 'hours') {
              $minimum_hours = (int)$request['minimum_hours'];
          } elseif ($request['minimum_duration_type'] == 'days') {
@@ -334,6 +332,14 @@ class BannerController extends Controller
             $maximum_hours = (int)$request['maximum_hours'] * 24;
         }
 
+        if ( $request['duration_type'] == 'year') {
+            $year = (int)$request['show_duration'];
+            $duration = Carbon::now()->addYears($year)->format('d-m-Y');
+        } elseif ($request['duration_type'] == 'months') {
+            $month = (int)$request['show_duration'];
+            $duration = Carbon::now()->addMonths($month)->format('d-m-Y');;
+        }
+
 
         $data = [
             'minimum_hours' => $request['minimum_hours'],
@@ -341,6 +347,9 @@ class BannerController extends Controller
             'delivery_fee' => $request['delivery_fee'],
             'show_delivery' => $request['show_delivery'] ?? 0,
             'booking_duration' => $request['booking_duration'] ?? 0,
+            'show_duration' => $request['show_duration'] ?? 0,
+            'front_duration' => $duration,
+            'duration_type' => $request['duration_type'] ?? 0,
             'total_minimum_hours' => $minimum_hours,
             'total_maximum_hours' => $maximum_hours,
         ];

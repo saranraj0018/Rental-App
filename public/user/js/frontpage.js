@@ -300,13 +300,15 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
     }
-
-
+let max_duration = $('#front_duration').val();
+    let [day, month, year] = max_duration.split("-").map(Number); // Parse the date parts
+    let maxDate = new Date(year, month - 1, day);
     // Flatpickr setup
     flatpickr("#inlineDatePicker1", {
         inline: true,
         minDate: "today",
         dateFormat: "d-m-Y",
+        maxDate: maxDate,
         onChange: function (selectedDates, dateStr) {
             selectedDate1 = dateStr;
             disablePastTimes(document.getElementById('timeTabContent1'), selectedDate1); // Disable past times
@@ -320,6 +322,7 @@ document.addEventListener("DOMContentLoaded", function () {
     flatpickr("#inlineDatePicker2", {
         inline: true,
         minDate: "today",
+        maxDate: max_duration,
         dateFormat: "d-m-Y",
         onChange: function (selectedDates, dateStr) {
             selectedDate2 = dateStr;

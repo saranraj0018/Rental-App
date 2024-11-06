@@ -14,15 +14,28 @@
                         <div class="collapse navbar-collapse" id="mobile_nav">
                             <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right">
                             </ul>
-                            <ul class="navbar-nav navbar-light">
-                                <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="{{ route('home') }}">Home</a></li>
-                                <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Booking</a></li>
-{{--                                <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Blog</a></li>--}}
-                                <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Contact-us</a></li>
-                                <li class="nav-item"><a class="text-white d-flex align-items-center justify-content-center " href="#">
-                                        <img src="{{ asset('user/img/Group 4.svg') }}" alt="Site-Logo" class="img-fluid d-block"></a></li>
-                                <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">
-                                        <img src="{{ asset('user/img/Group 4 (1).png') }}" alt="Site-Logo" class="img-fluid d-block sign-up-icon px-2">Sign In / Sign Up</a></li>
+                            <ul class="navbar-nav navbar-light w-100 ms-0 ms-lg-5 ps-0 ps-lg-5 text-end text-lg-start">
+                                <li class="nav-item ms-0 ms-lg-5 pe-0 pe-lg-3"><a class="nav-link text-dark" href="{{ route('home') }}">Home</a></li>
+                                @if(!Auth::user())
+                                    <li class="nav-item"><a class="nav-link text-dark" href="{{ route('faq') }}">FAQ</a></li>
+                                @else
+                                    <li class="nav-item"><a class="nav-link text-dark" href="{{ route('booking.history') }}">Booking</a></li>
+                                @endif
+                                {{--                                    <li class="nav-item"><a class="nav-link text-dark" href="#">Blog</a></li>--}}
+                                <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2"><a class="nav-link text-dark me-0 me-lg-5" href="{{ route('contact') }}">Contact-us</a></li>
+                                <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0">
+                                    @if(!Auth::user())
+                                        <button type="button" class="btn border border-dark rounded-pill me-1" id="login_user">Sign-In</button>
+                                        <button type="button" class="btn bg-blue text-white rounded-pill" id="register_user">Sign-Up</button>
+                                    @else
+                                        <div class="d-flex justify-content-center justify-content-md-end mt-1 mb-2">
+                                            <div class="me-3">
+                                                <p class="text-blue m-0 border-blue w-fit rounded-3 f-16 py-1 px-2">{{ Auth::user()->name ?? ''  }}</p>
+                                            </div>
+                                            <a href="{{ route('user.profile') }}" class="text-dark my-auto ms-2 text-decoration-none">View profile</a>
+                                        </div>
+                                    @endif
+                                </li>
                             </ul>
                         </div>
                     </div>

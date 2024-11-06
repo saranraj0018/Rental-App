@@ -286,11 +286,11 @@
     </div>
     <input type="hidden" name="minimum_days" id="minimum_days" value="{{ $timing_setting['total_minimum_hours'] ?? ''}}">
     <input type="hidden" name="maximum_days" id="maximum_days" value="{{ $timing_setting['total_maximum_hours'] ?? ''}} ">
+    <input type="hidden" name="front_duration" id="front_duration" value="{{ $timing_setting['front_duration'] ?? ''}} ">
 </div>
 
 
 {{--Alert Pop date select --}}
-
 
 <div class="modal fade" id="alert_booking" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
