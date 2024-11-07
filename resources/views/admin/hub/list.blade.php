@@ -183,7 +183,7 @@
                                     </td>
                                     <td>{{ $item->user->driving_licence ?? '' }}</td>
                                     <td>{{ $item->booking_id }}</td>
-                                    <td>{{ showDateTime($item->reschedule_date) ?? ($item->booking_type == 'pickup' ? showDateTime($item->end_date) : showDateTime($item->start_date)) }}
+                                    <td>{{ showDateTime($item->reschedule_date ?? ($item->booking_type == 'pickup' ? $item->end_date : $item->start_date)) }}
                                         <br>
                                         <button class="btn btn-warning edit-booking-date" data-id="{{ $item->id }}" data-booking_type="{{$item->booking_type}}"
                                                 data-model_id="{{ $car_model->car_model_id ?? 0 }}" data-delivery_date="{{ $item->end_date ?? 0 }}"
@@ -198,7 +198,7 @@
                                         </button>
                                     </td>
                                     <td>
-                                        <button class="btn btn-danger cancel_booking" data-id="{{ $item->id }}">Cancel Order</button>
+                                        <button class="btn btn-danger cancel_booking" data-id="{{ $item->booking_id }}">Cancel Order</button>
                                     </td>
                                 </tr>
                             @endforeach

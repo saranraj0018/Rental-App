@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Available;
 use App\Models\CarDetails;
+use App\Models\City;
 use App\Models\Holiday;
 use App\Models\User;
 use App\Models\UserDocument;
@@ -25,7 +26,8 @@ class UserController extends Controller
     {
         $section1 = Frontend::with('frontendImage')->where('data_keys','section1-image-car')->first();
         $section2 = Coupon::all();
-        $available_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date')) ?? CarDetails::all();
+        $city_list = City::where('city_status', 1)->pluck('name', 'code');
+        $available_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date'),Session::get('city_id')) ?? CarDetails::all();
         $booking_models = !empty($available_models['available_cars']) ?
             array_map(function($car) {
                 $car['booking_status'] = 'available'; // Add status as 'available'
@@ -50,7 +52,7 @@ class UserController extends Controller
         $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
         $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
         return view('user.frontpage.list-home',compact('section1','section2','section3','section4','car_image'
-            ,'brand_image','section8','faq_items','general_setting','timing_setting','sold_cars'));
+            ,'brand_image','section8','faq_items','general_setting','timing_setting','sold_cars','city_list'));
     }
 
     public function updateLocation(Request $request)
@@ -58,6 +60,7 @@ class UserController extends Controller
         $request->validate([
             'start_date' => 'required|date|before:end_date',
             'end_date' => 'required|date|after:start_date',
+            'city_id' => 'required',
         ]);
 
             if (!empty($request['start_date']) && !empty($request['end_date'])) {
@@ -80,13 +83,15 @@ class UserController extends Controller
 
                 $request->session()->put('start_date',   $start_date);
                 $request->session()->put('end_date', $end_date);
+                $request->session()->put('city_id', $request['city_id']);
         }
         return response()->json(['success' => true]);
     }
 
     public function listCars() {
         $date = ['start_date' => Session::get('start_date'), 'end_date' =>  Session::get('end_date')];
-        $available_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date'));
+        $city_list = City::where('city_status', 1)->pluck('name', 'code');
+        $available_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date'),Session::get('city_id'));
         $booking_models = !empty($available_models['available_cars']) ?
             array_map(function($car) {
                 $car['booking_status'] = 'available'; // Add status as 'available'
@@ -100,13 +105,13 @@ class UserController extends Controller
             }, $available_models['booking_cars']) : [];
         $car_models = array_merge($booking_models, $sold_cars);
         $festival_days = Holiday::pluck('event_date')->toArray();
-        return view('user.frontpage.list-cars.list',compact('car_models','festival_days','date'));
+        return view('user.frontpage.list-cars.list',compact('car_models','festival_days','date','city_list'));
     }
 
-    public static function showCarAvailable($start_date, $end_date)
+    public static function showCarAvailable($start_date, $end_date, $city_id=null)
     {
-        if (!empty($start_date) && !empty($end_date)) {
-            $car_details = CarDetails::with('carModel')->get();
+        if (!empty($start_date) && !empty($end_date) && !empty($city_id)) {
+            $car_details = CarDetails::with('carModel')->where('city_code',$city_id)->get();
             $start_date = Carbon::parse($start_date);
             $end_date = Carbon::parse($end_date);
 
@@ -166,6 +171,7 @@ class UserController extends Controller
         session([
             'booking_details' => [
                 'car_id' => $id,
+                'city_id' => session('city_id'),
                 'car_details' => $car_model,
                 'price_list' => $price_list,
                 'delivery_fee' => $general_section['delivery_fee'],

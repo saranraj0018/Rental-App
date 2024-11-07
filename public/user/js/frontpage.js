@@ -197,6 +197,7 @@ $(function () {
                     data: JSON.stringify({
                         start_date:$('#dateTimeInput1').val(),
                         end_date:$('#dateTimeInput2').val(),
+                        city_id:$('#city_id').val(),
                     }),
                     success: function(data) {
                         if (data) {
@@ -420,6 +421,19 @@ let max_duration = $('#front_duration').val();
             const booking_id = $('#car_book_id').val();
             window.location.href = `/book/${booking_id}`;
         }
+    });
+
+    $('#cityInput').on('click', function () {
+        $('#cityModal').modal('show');
+    });
+
+
+    $('.city-option').on('click', function () {
+        let selectedCity = $(this).text();
+        let city_id = $(this).data('id');
+        $('#cityInput').val(selectedCity);
+        $('#city_id').val(city_id);
+        $('#cityModal').modal('hide');
     });
 });
 

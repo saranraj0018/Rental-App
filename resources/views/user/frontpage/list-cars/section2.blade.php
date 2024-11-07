@@ -8,7 +8,9 @@
                         <span class="input-group-text" id="basic-addon1">
                             <i class=" text-white fa-solid fa-location-dot"></i>
                         </span>
-                    <input type="text" class="form-control my-hub" placeholder="Coimbatore, Tamilnadu" aria-label="Username" aria-describedby="basic-addon1">
+                    <!-- Input field -->
+                    <input type="text" class="form-control my-hub" id="cityInput" placeholder="Choose City" aria-label="City" aria-describedby="basic-addon1" readonly>
+                    <input type="hidden" id="city_id" name="city_id">
                 </div>
             </div>
             <div class="col-12 col-lg-3 my-1 mt-2 my-lg-0">

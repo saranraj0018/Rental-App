@@ -67,7 +67,6 @@
                     </a>
                 </li>
                 @endif
-{{--                @if(in_array('car_bk_tab',$permissions))--}}
                 <li class="nav-item">
                     <a href="{{route('car-block.list')}}" class="nav-link">
                         <!-- <i class="nav-icon fas fa-tag"></i> -->
@@ -75,8 +74,6 @@
                         <p>Car block</p>
                     </a>
                 </li>
-{{--                @endif--}}
-{{--                @if(in_array('car_av_tab',$permissions))--}}
                     <li class="nav-item">
                         <a href="{{route('car-available.list')}}" class="nav-link">
                             <!-- <i class="nav-icon fas fa-tag"></i> -->
@@ -90,19 +87,6 @@
                         <p>Swap Cars</p>
                     </a>
                 </li>
-{{--                @endif--}}3
-{{--                <li class="nav-item">--}}
-{{--                    <a href="orders.html" class="nav-link">--}}
-{{--                        <i class="nav-icon fas fa fa-flag"></i>--}}
-{{--                        <p>Inspection Report</p>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
-{{--                <li class="nav-item">--}}
-{{--                    <a href="discount.html" class="nav-link">--}}
-{{--                        <i class="nav-icon fa fa-credit-card" aria-hidden="true"></i>--}}
-{{--                        <p>Payment Invoice</p>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
                 @if(in_array('role_tab',$permissions))
                 <li class="nav-item">
                     <a href="{{route('user-role.list')}}" class="nav-link">

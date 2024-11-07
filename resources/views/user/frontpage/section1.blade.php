@@ -27,36 +27,34 @@
                                 </div>
                             </div>
 
-                            <div class="collapse navbar-collapse" id="mobile_nav">
-                                <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right"></ul>
-                                <ul class="navbar-nav navbar-light w-100 ms-0 ms-lg-5 ps-0 ps-lg-5 text-end text-lg-start">
-                                    <li class="nav-item ms-0 ms-lg-5 pe-0 pe-lg-3"><a class="nav-link text-dark" href="{{ route('home') }}">Home</a></li>
-                                    <div id="booking_button" class="d-flex justify-content-center justify-content-md-end mt-1 mb-2" style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
-                                        <li class="nav-item"><a class="nav-link text-dark" href="{{ route('booking.history') }}">Booking</a></li>
-                                    </div>
-                                    <li class="nav-item"><a class="nav-link text-dark" href="{{ route('faq') }}">FAQ</a></li>
-                                    <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2"><a class="nav-link text-dark me-0 me-lg-5" href="{{ route('contact') }}">Contact-us</a></li>
-                                    <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0">
-
-                                        <div id="login_button" style="display: {{ Auth::check() ? 'none' : 'block' }};">
-                                            <button type="button" class="btn border border-dark rounded-pill me-1" id="login_user">Sign-In</button>
-                                            <button type="button" class="btn bg-blue text-white rounded-pill" id="register_user">Sign-Up</button>
+                                <div class="collapse navbar-collapse" id="mobile_nav">
+                                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right"></ul>
+                                    <ul class="navbar-nav navbar-light w-100 ms-0 ms-lg-5 ps-0 ps-lg-5 text-end text-lg-start">
+                                        <li class="nav-item ms-0 ms-lg-5 pe-0 pe-lg-3"><a class="nav-link text-dark" href="{{ route('home') }}">Home</a></li>
+                                        <div id="booking_button" class="d-flex justify-content-center justify-content-md-end mt-1 mb-2" style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
+                                            <li class="nav-item"><a class="nav-link text-dark" href="{{ route('booking.history') }}">Booking</a></li>
                                         </div>
+                                        <li class="nav-item"><a class="nav-link text-dark" href="{{ route('faq') }}">FAQ</a></li>
+                                        <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2"><a class="nav-link text-dark me-0 me-lg-5" href="{{ route('contact') }}">Contact-us</a></li>
+                                        <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0">
 
-                                        <div id="after_login_button" class="d-flex justify-content-center justify-content-md-end mt-1 mb-2" style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
-                                            <div class="me-3"><p class="text-blue m-0 border-blue w-fit rounded-3 f-16 py-1 px-2" id="user_name">{{ Auth::user()->name ?? ''  }}</p></div>
-                                            <a href="{{ route('user.profile') }}" class="text-dark my-auto ms-2 text-decoration-none">View profile</a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
+                                            <div id="login_button" style="display: {{ Auth::check() ? 'none' : 'block' }};">
+                                                <button type="button" class="btn border border-dark rounded-pill me-1" id="login_user">Sign-In</button>
+                                                <button type="button" class="btn bg-blue text-white rounded-pill" id="register_user">Sign-Up</button>
+                                            </div>
+
+                                            <div id="after_login_button" class="d-flex justify-content-center justify-content-md-end mt-1 mb-2" style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
+                                                <div class="me-3"><p class="text-blue m-0 border-blue w-fit rounded-3 f-16 py-1 px-2" id="user_name">{{ Auth::user()->name ?? ''  }}</p></div>
+                                                <a href="{{ route('user.profile') }}" class="text-dark my-auto ms-2 text-decoration-none">View profile</a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
                         </div>
                     </nav>
                 </div>
             </div>
         </section>
-
-
     </header>
 
 
@@ -139,7 +137,9 @@
                     <span class="input-group-text" id="basic-addon1">
                         <i class=" text-white fa-solid fa-location-dot"></i>
                     </span>
-                        <input type="text" class="form-control my-hub" placeholder="Coimbatore, Tamilnadu" aria-label="Username" aria-describedby="basic-addon1" disabled>
+                        <!-- Input field -->
+                        <input type="text" class="form-control my-hub" id="cityInput" placeholder="Choose City" aria-label="City" aria-describedby="basic-addon1" readonly>
+                        <input type="hidden" id="city_id" name="city_id">
                     </div>
                 </div>
                 <div class="col-12 col-lg-3 my-1 mt-2 my-lg-0">

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('car_id');
-            $table->smallIncrements('code');
+            $table->unsignedBigInteger('user_id');
+            $table->smallInteger('code');
             $table->string('name',80);
             $table->tinyInteger('city_status')->nullable()->comment('1-active, 2-deactivate');
             $table->timestamps();

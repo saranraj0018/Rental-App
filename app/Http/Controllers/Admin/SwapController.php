@@ -9,6 +9,7 @@ use App\Models\Booking;
 use App\Models\BookingDetail;
 use App\Models\CarDetails;
 use App\Models\SwapCar;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Razorpay\Api\Api;
@@ -56,39 +57,35 @@ class SwapController extends Controller
         $data = [
             'available_cars' => [],
             'booked_cars' => [],
-            'all_available_cars' =>[]
         ];
 
         // Check if both start_date and end_date are provided
-        if (!empty($request['start_date']) && !empty($request['end_date'])) {
-            $start_date = $request['start_date'];
-            $end_date = $request['end_date'];
+        if (!empty($request['start_date']) && !empty($request['end_date']) && !empty($request['hub_list'])) {
+            $start_date = Carbon::createFromFormat('d-m-Y H:i', $request['start_date']);
+            $end_date = Carbon::createFromFormat('d-m-Y H:i', $request['end_date']);
 
-            // Fetch all cars
-            $car_list = CarDetails::with('carModel')->get();
-
+            $car_list = CarDetails::with('carModel')->where('city_code',$request['hub_list'])->get();
             foreach ($car_list as $car) {
                 // Check if the car is booked during the requested period
                 $isBooked = Available::where('car_id', $car->id)
                     ->where(function ($query) use ($start_date, $end_date) {
                         $query->whereBetween('start_date', [$start_date, $end_date])
-                            ->orWhereBetween('end_date', [$start_date, $end_date])
+                            ->orWhereBetween('next_booking', [$start_date, $end_date])
                             ->orWhere(function ($q) use ($start_date, $end_date) {
                                 $q->where('start_date', '<=', $start_date)
-                                    ->where('end_date', '>=', $end_date);
+                                    ->where('next_booking', '>=', $end_date);
                             });
                     })
-                    ->exists();
-
+                ->exists();
                 // Add car to the respective list based on its availability
                 if ($isBooked) {
                     $data['booked_cars'][] = $car;
                 } else {
                     $data['available_cars'][] = $car;
                 }
-                $data['all_available_cars'][] = $car;
             }
-            return response()->json(['data' => $data, 'success' => 'Data Fetching Successfully.']);
+            $result = !empty($data['available_cars']) ? collect($data['available_cars'])->unique('model_id')->values()->all() : [];
+            return response()->json(['data' => $result, 'success' => 'Data Fetching Successfully.']);
         }
 
         return response()->json(['data' => $data, 'success' => 'Data Found.']);

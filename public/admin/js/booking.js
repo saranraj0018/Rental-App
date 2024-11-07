@@ -11,7 +11,7 @@ $(function () {
 
 
         $('#datetimepicker').datetimepicker({
-            format: 'YYYY-MM-DD HH:mm', // Customize the format as needed
+            format: 'DD-MM-YYYY HH:mm', // Customize the format as needed
             icons: {
                 time: 'far fa-clock',
                 date: 'far fa-calendar',
@@ -26,7 +26,7 @@ $(function () {
         });
 
         $('#start_date_time_picker').datetimepicker({
-            format: 'YYYY-MM-DD HH:mm', // Customize the format as needed
+            format: 'DD-MM-YYYY HH:mm', // Customize the format as needed
             icons: {
                 time: 'far fa-clock',
                 date: 'far fa-calendar',
@@ -42,7 +42,7 @@ $(function () {
 
 
         $('#end_date_time_picker').datetimepicker({
-            format: 'YYYY-MM-DD HH:mm',
+            format: 'DD-MM-YYYY HH:mm',
             icons: {
                 time: 'far fa-clock',
                 date: 'far fa-calendar',
@@ -104,6 +104,7 @@ $(function () {
 
 
         $('#create_booking').click(function() {
+            $('#hub_list').selectpicker('refresh');
             $('#create_user_booking').modal('show');
         });
 
@@ -112,6 +113,16 @@ $(function () {
 
             let start_date = $('#user_start_date').val();
             let end_date = $('#user_end_date').val();
+            let hub_list = $('#hub_list').val();
+
+            if (!start_date && !end_date){
+                alertify.warning('please Choose Start and End Date');
+                return;
+            }
+            if (!hub_list){
+                alertify.warning('please Choose City');
+                return;
+            }
 
             if (start_date && end_date) {
                 $.ajax({
@@ -120,17 +131,16 @@ $(function () {
                     data: {
                         start_date: start_date,
                         end_date: end_date,
+                        hub_list: hub_list,
                     },
                     success: function(response) {
-                        if (response.success && response.data.all_available_cars.length > 0) {
+                        if (response.success && response.data.length > 0) {
                             let carSelect = $('#user_car_model');
                             carSelect.empty(); // Clear existing options
                             carSelect.append('<option value="">Select Car Model</option>');
-                            $.each(response.data.all_available_cars, function(index, car) {
+                            $.each(response.data, function(index, car) {
                                     carSelect.append('<option value="' + car.car_model.car_model_id + '">' + car.car_model.model_name + '</option>');
                             });
-
-                            // Refresh the selectpicker after adding new options
                             carSelect.selectpicker('refresh');
 
                             $('#car_availability_section').show();
@@ -201,6 +211,7 @@ $(function () {
                 return;
             }
             let amount = $('#user_amount').val();
+            $('#user_payment_link').prop('disabled', true);
             $.ajax({
                 url: '/admin/user-payment/link',
                 type: 'POST',
@@ -208,12 +219,16 @@ $(function () {
                 success: function (data) {
                     if (data.success) {
                         $('#payment_success').text(data.success);
+                        alertify.success(data.success);
                     } else {
                         alertify.error('Error calculating price. Please try again.');
                     }
                 },
                 error: function () {
                     alertify.error('An error occurred while fetching the data.');
+                },
+                complete: function() {
+                    $('#user_payment_link').prop('disabled', false);
                 }
             });
         });

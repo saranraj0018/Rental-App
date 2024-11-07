@@ -8,7 +8,9 @@ use App\Models\Booking;
 use App\Models\BookingDetail;
 use App\Models\CarDetails;
 use App\Models\CarModel;
+use App\Models\Frontend;
 use App\Models\Payment;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +31,7 @@ class PaymentController extends Controller
         $booking->booking_id = $id;
         $booking->user_id = Auth::id();
         $booking->car_id = !empty(session('booking_details.car_id')) ?  session('booking_details.car_id') : 0;
+        $booking->city_code =  !empty(session('booking_details.city_id')) ?  session('booking_details.city_id') : 0;
         $booking->booking_type = 'delivery';
         $booking->start_date = formDateTime(session('booking_details.start_date'));
         $booking->end_date = formDateTime(session('booking_details.end_date'));
@@ -45,6 +48,7 @@ class PaymentController extends Controller
         $delivery_booking->booking_id = $id;
         $delivery_booking->user_id = Auth::id();
         $delivery_booking->car_id = !empty(session('booking_details.car_id')) ?  session('booking_details.car_id') : 0;
+        $delivery_booking->city_code =  !empty(session('booking_details.city_id')) ?  session('booking_details.city_id') : 0;
         $delivery_booking->booking_type = 'pickup';
         $delivery_booking->start_date = formDateTime(session('booking_details.start_date'));
         $delivery_booking->end_date = formDateTime(session('booking_details.end_date'));
@@ -81,7 +85,8 @@ class PaymentController extends Controller
         $booking_details->car_details = json_encode(session('booking_details.car_details'));
         $booking_details->save();
 
-
+        $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
+        $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
         $car_details = !empty(session('booking_details.car_id')) ? CarDetails::find(session('booking_details.car_id')) : 0;
         $car_available = new Available();
         $car_available->car_id = !empty(session('booking_details.car_id')) ?  session('booking_details.car_id') : 0;
@@ -90,15 +95,21 @@ class PaymentController extends Controller
         $car_available->booking_id = $id;
         $car_available->start_date = formDateTime(session('booking_details.start_date'));
         $car_available->end_date = formDateTime(session('booking_details.end_date'));
-        $car_available->next_booking = Carbon::parse(formDateTime(session('booking_details.end_date')))->addHours(3);
+        $car_available->next_booking = Carbon::parse(formDateTime(session('booking_details.end_date')))->addHours($timing_setting['booking_duration'] ?? 3);
         $car_available->booking_type = 1;
         $car_available->save();
+
+        $user = User::find(Auth::id());
+        $user->drop_location = null;
+        $user->pick_location = null;
+        $user->save();
 
         // Send booking confirmation email
         Mail::to(Auth::user()->email)->send(new BookingConfirmed($delivery_booking));
 
         // Send SMS via Twilio
-        $this->sendSMS(Auth::user()->mobile, $delivery_booking->booking_id);
+        self::sendSMS(Auth::user()->mobile, $delivery_booking->booking_id);
+
         session()->flush();
         session(['booking_id' => $id]);
         return response()->json([
@@ -157,11 +168,9 @@ class PaymentController extends Controller
     }
 
 
-    public function sendSMS($phone, $booking_id)
+    public static function sendSMS($phone, $booking_id)
     {
-
         $client = new Client(config('services.twilio_sms.sid'), config('services.twilio_sms.token'));
-
         // Send SMS
         $client->messages->create(
             '+91' . $phone,
