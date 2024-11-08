@@ -95,6 +95,7 @@
                             <th>Aadhaar Number</th>
                             <th>Driving Licence</th>
                             <th>Update At</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -107,6 +108,7 @@
                                     <td>{{ $item->email ?? ''}}</td>
                                     <td>{{ $item->aadhaar_number ?? ''}}</td>
                                     <td>{{ $item->driving_licence ?? '' }}</td>
+                                    <td>{{ showDateTime($item->updated_at) }}</td>
                                     <td>{{ showDateTime($item->updated_at) }}</td>
                                 </tr>
                             @endforeach

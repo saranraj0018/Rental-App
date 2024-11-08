@@ -27,9 +27,9 @@ class PickupDeliveryController extends BaseController
     public function list(Request $request)
     {
         $this->authorizePermission('hub_list');
-        $bookings = self::getBooking();
+       // $bookings = self::getBooking();
         $city_list = City::where('city_status',1)->pluck('name','code');
-        return view('admin.hub.list',compact('bookings','city_list'));
+        return view('admin.hub.list',compact('city_list'));
     }
 
     public static function getBooking()
@@ -231,10 +231,33 @@ class PickupDeliveryController extends BaseController
 
     public function fetchBookings(Request $request) {
         // Set the number of items per page
-        $perPage = $request->input('per_page', 10); // Default to 10 items per page
+        $perPage = $request->input('per_page', 20);
+        $timeLimit = now()->addHours(48);
+        $query = Booking::with(['user','details','comments','user.bookings'])->where('status', 1)
+            ->where(function ($query) use ($timeLimit) {
+                $query->where('risk', 1)
+                    ->where(function ($query) use ($timeLimit) {
+                        $query->where(function ($query) use ($timeLimit) {
+                            $query->where('booking_type', 'delivery')
+                                ->whereBetween('start_date', [now(), $timeLimit]);
+                        })->orWhere(function ($query) use ($timeLimit) {
+                            $query->where('booking_type', 'pickup')
+                                ->whereBetween('end_date', [now(), $timeLimit]);
+                        });
+                    })
+                    ->orWhere(function ($query) {
+                        $query->where('risk', 1);
+                    });
+            })
+            ->orWhere(function ($query) {
+                $query->where('risk', 2)
+                    ->where('status', 1);
+            })
+         ;
 
-        $query = Booking::with(['user','details','comments','user.bookings']);
-
+        if ($request->has('hub_type')) {
+            $query->where('city_id', $request->input('hub_type'));
+        }
         // Apply filters based on request parameters
         if (!empty($request['car_model'])) {
             $query->whereHas('details', function($query) use ($request) {

@@ -108,9 +108,14 @@
                     <div class="d-flex text-center">
                         <!-- Search for Booking ID -->
                         <div class="input-group" style="width: 250px;">
+                            <label for="hub_type"></label>
                             <select id="hub_type" class="form-control">
-                                <option value="" selected disabled>Select Hub</option>
-                                <option value="629">Coimbatore</option>
+                                <option selected disabled>Select Hub</option>
+                                @if(!empty($city_list))
+                                    @foreach($city_list as $id => $list)
+                                        <option value="{{$id}}" >{{ $list }}</option>
+                                    @endforeach
+                                @endif
                             </select>
                         </div>
                         <div class="input-group" style="width: 250px;">
@@ -146,7 +151,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @if($bookings->isNotEmpty())
+                        @if(!empty($bookings) && $bookings->isNotEmpty())
                             @foreach($bookings as $item)
                                 @php
                                     $booking_details = !empty($item->details[0]) ? json_decode($item->details[0]->car_details) : [];
@@ -215,7 +220,7 @@
 
             </div>
             <div class="d-flex justify-content-center">
-                {{ $bookings->links() }}
+                {{ !empty($bookings) ? $bookings->links() : '' }}
             </div>
         </div>
         @include('admin.hub.model')

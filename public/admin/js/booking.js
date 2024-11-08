@@ -552,18 +552,20 @@ $(function () {
             const bookingId = $('#booking_id').val();
             const customerName = $('#customer_name').val();
             const bookingType = $('#booking_type').val();
+            const hub_type = $('#hub_type').val();
             $.ajax({
-                url: '/admin/booking/search', // Define this route in your web.php
+                url: '/admin/booking/search',
                 type: 'GET',
                 data: {
                     car_model: carModel,
                     register_number: registerNumber,
                     booking_id: bookingId,
                     customer_name: customerName,
-                    booking_type: bookingType, // Send the booking type
+                    booking_type: bookingType,
+                    hub_type: hub_type,
                 },
                 success: function(response) {
-                    updateBookingTable(response.data) // Populate table with new data
+                    updateBookingTable(response.data)
                     updatePagination(response);
                 },
                 error: function(xhr) {
@@ -588,7 +590,7 @@ $(function () {
                 }
             }
         }
-        $('#car_model, #register_number, #booking_id, #customer_name, #booking_type').on('input change', function() {
+        $('#car_model, #register_number, #booking_id, #customer_name, #booking_type, #hub_type').on('input change', function() {
             fetchData();
         });
     });
