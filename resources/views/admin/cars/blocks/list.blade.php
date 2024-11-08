@@ -71,7 +71,7 @@
                         @if(filled($car_block))
                             @foreach($car_block as $item)
                                 <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ block_type()[$item->block_type] ?? '' }}</td>
                                     <td>{{ reason_type()[$item->reason] ?? '' }}</td>
                                     <td>{{ $item->user->email ?? '' }}</td>

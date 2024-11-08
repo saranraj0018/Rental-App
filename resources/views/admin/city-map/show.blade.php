@@ -5,8 +5,11 @@
         <label for="city-select">Choose a city:</label>
         <select id="city-select" class="form-control">
             <option value="" selected disabled>Select City</option>
-            <option value="coimbatore">Coimbatore</option>
-            <option value="madurai">Madurai</option>
+           @if(!empty($city_list))
+            @foreach($city_list as $id => $list)
+                    <option value="{{$id}}">{{$list}}</option>
+            @endforeach
+            @endif
         </select>
 
         <!-- Search bar for city -->

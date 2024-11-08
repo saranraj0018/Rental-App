@@ -10,23 +10,28 @@
             <!-- Success Alert -->
             <div class="modal-body">
                 <form id="car_form">
+                    <input type="hidden" id="car_id"  name="car_id">
                     <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label for="service_city" class="form-label">Choose Service City</label>
-                            <select id="service_city" name="service_city" class="form-select" data-live-search="true">
-                                <option selected disabled>City</option>
-                                <option value="632-Coimbatore">Coimbatore</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Please choose a service city.
-                            </div>
-                        </div>
+{{--                        <div class="form-group col-md-4">--}}
+{{--                            <label for="service_city" class="form-label">Choose Service City</label>--}}
+{{--                            <select id="service_city" name="service_city" class="form-select" data-live-search="true">--}}
+{{--                                <option selected disabled>City</option>--}}
+{{--                                <option value="632-Coimbatore">Coimbatore</option>--}}
+{{--                            </select>--}}
+{{--                            <div class="invalid-feedback">--}}
+{{--                                Please choose a service city.--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
                         <div class="form-group col-md-4">
                             <label for="hub_city">Choose a Hub</label>
                             <select id="hub_city" name="hub_city" class="form-control" data-live-search="true">
                                 <option selected disabled>Hub</option>
-                                <option value="632-Coimbatore">Coimbatore</option>
+                                @if(filled($city_list))
+                                    @foreach($city_list as $id => $list)
+                                        <option value="{{$id}}"> {{$list}}</option>
+                                    @endforeach
+                                @endif
                             </select>
                             <div class="invalid-feedback">
                                 Please choose a hub.
@@ -63,30 +68,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" value="1" id="car_location_option" name="car_location_option">
-                                <label class="form-check-label" for="car_location_option">Set Car Location</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row d-none" id="show_map">
-                        <div class="form-group col-md-12">
-                            <div>
-                                <input id="car_location" type="text" name="car_location" placeholder="Search city" class="form-control" autocomplete="off">
-                                <div class="invalid-feedback">
-                                    Please enter your address.
-                                </div>
-                            </div>
-
-                            <div id="car-location-map" style="height: 500px; width: 100%;"></div>
-                        </div>
-                    </div>
-                    <input type="hidden" value="" id="car_id"  name="car_id">
-                    <input type="hidden" id="car_latitude" name="car_latitude" value="">
-                    <input type="hidden" id="car_longitude" name="car_longitude" value="">
-                    <input type="hidden" id="car_address" name="car_address" value="">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <button type="submit" id="submit_btn" class="btn btn-primary mb-2">Submit</button>
@@ -231,6 +212,10 @@
                             <div class="invalid-feedback">
                                 Please upload your car image.
                             </div>
+                            <div class="form-group col-md-12">
+                                <label>Car Single Images</label>
+                                <div id="singleImageContainer" class="d-flex flex-wrap"></div>
+                            </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="form-label" for="car_other_image">Other Images (Minimum 2)</label>
@@ -240,7 +225,12 @@
                             <div class="invalid-feedback">
                                 Please upload your car image (Minimum Two Images).
                             </div>
+                            <div class="form-group col-md-12">
+                                <label>Car Other Images</label>
+                                <div id="car_other_images_preview" class="d-flex flex-wrap"></div>
+                            </div>
                         </div>
+
                     </div>
                     <input type="hidden" id="model_id"  name="model_id">
                     <div class="col-auto my-1">

@@ -6,6 +6,7 @@ use App\Http\Controllers\BaseController;
 use App\Models\CarDetails;
 use App\Models\CarDocument;
 use App\Models\CarModel;
+use App\Models\City;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -17,9 +18,10 @@ class CarDetailsController extends BaseController
     {
         $this->authorizePermission('car_list_tab');
         $permissions = getAdminPermissions();
-        $car_list =  CarDetails::with('carModel')->orderBy('created_at', 'desc')->paginate(10);
+        $car_list =  CarDetails::with('carModel','city','carModel.carDoc')->orderBy('created_at', 'desc')->paginate(20);
         $car_models = CarModel::all(['car_model_id','model_name']);
-        return view('admin.cars.list',compact('car_list','car_models','permissions'));
+        $city_list = City::where('city_status',1)->pluck('name','code');
+        return view('admin.cars.list',compact('car_list','car_models','permissions','city_list'));
     }
 
     public function save(Request $request)
@@ -29,45 +31,26 @@ class CarDetailsController extends BaseController
         if (!empty($request['car_id'])) {
             $this->authorizePermission('car_list_edit');
         }
-        if (!empty($request['car_location_option']) && empty($request['car_latitude'])) {
-            $request->merge(['car_location' => '']);
-            $request->validate([
-                'car_location' => 'required',
-            ]);
-        }
-
-
-
-         $request->validate([
-            'service_city' => 'required',
+        $request->validate([
             'hub_city' => 'required',
             'car_model' => 'required',
-            'register_number' => 'required|string|max:50|unique:car_details,register_number',
+            'register_number' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('car_details', 'register_number')->ignore($request['car_id']),
+            ],
             'current_km' => 'required|numeric',
         ]);
 
          $car_details = !empty($request['car_id']) ? CarDetails::find($request['car_id']) :  new CarDetails();
-        $service_city = $request['service_city'];
-        $hub_city = $request['hub_city'];
-        $hub = explode('-', $hub_city);
-        $city = explode('-', $service_city);
-        $hub_code = current($hub);
-        $hub_city = end($hub);
-        $city_code = current($city);
-        $city_name = end($city);
-        $car_details->city_name = $city_name;
-        $car_details->city_code = $city_code;
-        $car_details->hub = $hub_city;
-        $car_details->hub_code = $hub_code;
+        $car_details->city_code = $request['hub_city'];
         $car_details->model_id = $request['car_model'];
         $car_details->register_number = $request['register_number'];
         $car_details->current_km = $request['current_km'];
-        $car_details->latitude = $request['car_latitude'];
-        $car_details->longitude = $request['car_longitude'];
-        $car_details->address = $request['car_address'];
         $car_details->save();
 
-        $cars = CarDetails::with('carModel')->orderBy('created_at', 'desc')->get();
+        $cars = CarDetails::with('carModel','city')->orderBy('created_at', 'desc')->get();
         return response()->json(['data'=> $cars,'success' => 'Car details saved successfully']);
     }
 
@@ -99,8 +82,17 @@ class CarDetailsController extends BaseController
             'dep_amount' => 'required|numeric',
             'extra_hours_charge' => 'required',
             'day_km' => 'required',
-            'car_image' => 'required|mimes:jpg,png',
-            'car_other_image' => 'required|array|min:2',
+            'car_image' => [
+                'nullable', // Allow null for editing
+                'required_without:model_id', // If model_id is missing, car_image is required
+                'mimes:jpg,png'  // Validate image type
+            ],
+            'car_other_image' => [
+                'nullable', // Allow null for editing
+                'required_without:model_id', // If model_id is missing, car_other_image is required
+                'array', // Ensure it's an array of images
+                'min:2', // At least 2 images
+            ],
             'car_other_image.*' => 'mimes:jpg,png',
         ]);
         $uniq_id =  Str::random(15);
@@ -154,16 +146,14 @@ class CarDetailsController extends BaseController
         $this->authorizePermission('car_list_delete');
         $delete_car = CarDetails::find($id);
         $delete_car->delete();
-        $cars = CarDetails::with('carModel')->orderBy('created_at', 'desc')->get();
+        $cars = CarDetails::with('carModel','city')->orderBy('created_at', 'desc')->get();
         return response()->json(['data'=> $cars,'success' => 'Car details saved successfully']);
     }
 
     public function search(Request $request)
     {
         $keyword = $request->get('keyword');
-
-        $query = CarDetails::with('carModel');
-
+        $query = CarDetails::with('carModel','city');
         if (!empty($keyword)) {
             // Concatenate search conditions if keyword is provided
             $query->where(function($q) use ($keyword) {

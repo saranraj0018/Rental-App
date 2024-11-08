@@ -460,7 +460,7 @@ $(function () {
                 tbody.append(`<tr><td colspan="15" class="text-center">Record Not Found</td></tr>`);
             } else {
                 $.each(data.bookings, function(index, item) {
-                    // Check if details exist and have at least one element
+                    // Parse booking details and payment details if they exist
                     let bookingDetails = (item.details && item.details.length > 0)
                         ? JSON.parse(item.details[0].car_details || '{}')
                         : {};
@@ -470,8 +470,12 @@ $(function () {
 
                     let carModel = bookingDetails.car_model || {};
                     let commends = item.comments || [];
-
                     let rescheduleDate = item.reschedule_date ? `<p class="text-danger">${formatDateTime(item.reschedule_date)}</p>` : '';
+
+                    // Conditionally set the main date based on booking_type
+                    let mainDate = item.booking_type === 'pickup'
+                        ? formatDateTime(item.end_date)
+                        : formatDateTime(item.start_date);
 
                     tbody.append(`
                 <tr class="${item.risk === 1 ? 'bg-light-red' : item.status === 2 ? 'bg-light-green' : ''}">
@@ -481,15 +485,14 @@ $(function () {
                             <input type="checkbox" class="risk-checkbox" data-id="${item.id}" ${item.risk === 1 ? 'checked' : ''}>
                         </div>
                         <br>
-                       <button class="btn btn-warning open-risk-modal" data-id="${item.id}" data-commend='${JSON.stringify(commends).replace(/'/g, "&apos;")}'>
-    <h5>i</h5>
-</button>
-
+                        <button class="btn btn-warning open-risk-modal" data-id="${item.id}" data-commend='${JSON.stringify(commends).replace(/'/g, "&apos;")}'>
+                            <h5>i</h5>
+                        </button>
                     </td>
                     <td class="d-flex justify-content-center">
                         <input type="checkbox" class="done-checkbox" data-id="${item.id}" ${item.status == 2 ? 'checked' : ''}>
                     </td>
-                    <td>${formatDateTime(item.start_date)}<br>${rescheduleDate}</td>
+                    <td>${mainDate}<br>${rescheduleDate}</td>
                     <td>${item.user ? item.user.name : ''}</td>
                     <td>${carModel.model_name || ''}</td>
                     <td>${bookingDetails.register_number || ''}</td>
@@ -501,7 +504,7 @@ $(function () {
                     </td>
                     <td>${item.user ? item.user.driving_licence : ''}</td>
                     <td>${item.booking_id}</td>
-                    <td>${item.start_date ? formatDateTime(item.start_date) : formatDateTime(item.end_date)}<br>
+                    <td>${mainDate}<br>
                         <button class="btn btn-warning edit-booking-date" data-id="${item.id}" data-pickup_date="${item.start_date || 0}" data-delivery_date="${item.end_date || 0}">
                             Edit
                         </button>
@@ -522,6 +525,7 @@ $(function () {
                 });
             }
         }
+
 
 
 // Helper function to format dates

@@ -57,3 +57,5 @@ function showDate($date, $format = 'd/m/Y')
 {
     return Carbon::parse($date)->format($format);
 }
+
+

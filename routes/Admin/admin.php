@@ -69,6 +69,9 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::put('/car-block/update', [CarBlockController::class, 'update'])->name('car-block.update');
         Route::delete('/car-block/{id?}/delete', [CarBlockController::class, 'delete'])->name('car-block.delete');
         Route::get('/car-block/search', [CarBlockController::class, 'search'])->name('car-block.search');
+        Route::get('/get-car-models', [CarBlockController::class, 'getCarModelsByHub'])->name('car-model.hub');
+        Route::get('/get-car-registration-numbers', [CarBlockController::class, 'getCarRegistrationNumbersByModel'])->name('car-model.register_number');
+
 
         // Car-Swap list
         Route::get('/car-swap/list', [SwapController::class, 'list'])->name('car-swap.list');

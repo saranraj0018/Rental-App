@@ -19,7 +19,8 @@
                     <option value="{{$id}}">{{$model}}</option>
                 @endforeach
             </select>
-            <label for="booking_type"></label><select id="booking_type" class="form-control">
+            <label for="booking_type"></label>
+            <select id="booking_type" class="form-control">
                 <option selected disabled>Select Hub</option>
                 <option value="603">Coimbatore</option>
             </select>
