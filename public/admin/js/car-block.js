@@ -430,6 +430,7 @@ $(function () {
             let modelId = $(this).val();  // Get selected car model ID
             let start_date = $('#start_date').val();
             let end_date = $('#end_date').val();
+            let hubId = $('#hub_city').val();
 
             if (start_date === '' && end_date === ''){
                 alertify.error('Choose First Start and End dates')
@@ -440,10 +441,11 @@ $(function () {
                 $.ajax({
                     url: '/admin/get-car-registration-numbers', // Laravel route to get registration numbers by model
                     method: 'GET',
-                    data: { model_id: modelId,start_date:start_date,end_date:end_date },
+                    data: { model_id: modelId,start_date:start_date,end_date:end_date, hub_id: hubId  },
                     success: function(response) {
                         let carModelSelect = $('#block_car_register_number');
                         carModelSelect.empty().append('<option selected disabled>Registration Number</option>'); // Clear register number options
+                        carModelSelect.selectpicker('refresh');
                         if (response.register_number.length > 0) {
                             response.register_number.forEach(function(register_number) {
                                 carModelSelect.append('<option value="' + register_number + '">' + register_number + '</option>');

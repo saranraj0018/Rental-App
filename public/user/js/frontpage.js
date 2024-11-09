@@ -411,15 +411,16 @@ let max_duration = $('#front_duration').val();
         }
     }
 
-    $('.book_now').on('click', function () {
+    $(document).on('click', '.book_now', function () {
         const start_date = $('#dateTimeInput1').val();
         const end_date = $('#dateTimeInput2').val();
+        console.log(start_date, end_date); // Add both for debugging
 
-        if (!start_date && !end_date) {
+        if (start_date === '' || end_date === '') {
             $('#alert_booking').modal('show');
         } else {
             const booking_id = $('#car_book_id').val();
-            window.location.href = `/book/${booking_id}`;
+             window.location.href = `/book/${booking_id}`;
         }
     });
 

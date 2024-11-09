@@ -3,7 +3,7 @@ $(function () {
     $(document).ready(function() {
         let currentWeekOffset = 0; // Track the current week offset
 
-        $('#car_model').on('change', function () {
+        $('#car_available_model').on('change', function () {
             loadWeekData();
         });
 
@@ -24,11 +24,11 @@ $(function () {
                 url: '/admin/check-available',
                 method: 'GET',
                 data: {
-                    model_id: $('#car_model').val(),
+                    model_id: $('#car_available_model').val(),
+                    city_code: $('#hub_available').val(),
                     week_offset: currentWeekOffset // Send the current week offset
                 },
                 success: function(response) {
-                    console.log(response); // Check this for the actual structure
                     const $tbody = $('#registration-numbers-body');
                     $tbody.empty(); // Clear previous data
                     generateTableHeaders(); // Generate table headers when data is fetched
@@ -54,7 +54,7 @@ $(function () {
                         }
 
                         // Determine color based on booking type
-                        const color = (bookingType === '1') ? 'red' : (bookingType === '2') ? 'blue' : 'green';
+                        const color = (bookingType === '0') ? 'red' : (bookingType === '2') ? 'blue' : 'green';
 
                         for (let d = 0; d < 7; d++) {
                             const currentDate = new Date();
@@ -86,7 +86,9 @@ $(function () {
                         $tbody.append(rowHtml);
                     }
 
-                    $('#car-details-table').show(); // Show the table
+                    $('#car-details-table').show();
+
+
                 },
 
                 error: function(xhr) {
@@ -130,5 +132,29 @@ $(function () {
             $('#date-header').html(dateHeaderRow);
             $('#hours-header').html(hoursHeaderRow);
         }
+
+        $('#hub_available').change(function() {
+            let hub_id = $(this).val();
+            if (hub_id) {
+                $.ajax({
+                    url: '/admin/get-car-models',
+                    method: 'GET',
+                    data: { hub_id: hub_id },
+                    success: function(response) {
+                        let carModelSelect = $('#car_available_model');
+                        carModelSelect.empty(); // Clear current options
+                        carModelSelect.append('<option selected disabled>Choose a Car Model</option>');
+                        if (response.carModels.length > 0) {
+                            response.carModels.forEach(function(model) {
+                                carModelSelect.append('<option value="' + model.id + '">' + model.name + '</option>');
+                            });
+                        }
+                    },
+                    error: function() {
+                        alertify.error('Error fetching car models.');
+                    }
+                });
+            }
+        });
     });
 });

@@ -13,19 +13,20 @@
 
     <section class="content-header">
         <div class="d-flex w-25">
-            <label for="car_model"></label><select id="car_model" class="form-control">
-                <option selected disabled>Select Model</option>
-                @foreach ($car_model as $id => $model)
-                    <option value="{{$id}}">{{$model}}</option>
-                @endforeach
-            </select>
             <label for="booking_type"></label>
-            <select id="booking_type" class="form-control">
+            <select id="hub_available" class="form-control">
                 <option selected disabled>Select Hub</option>
-                <option value="603">Coimbatore</option>
+                @if(!empty($city_list))
+                    @foreach($city_list as $id => $list)
+                        <option value="{{$id}}">{{$list}}</option>
+                    @endforeach
+                @endif
+            </select>
+            <label for="car_model"></label>
+            <select id="car_available_model" class="form-control">
+                <option selected disabled>Select Model</option>
             </select>
         </div>
-        <!-- /.container-fluid -->
     </section>
     <div id="car-details-table" style="display: none;">
     <div style="overflow-x: auto; overflow-y: auto; max-height: 400px;">

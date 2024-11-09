@@ -56,10 +56,12 @@ class CarBlockController extends BaseController
         $car_block->user_id = Auth::guard('admin')->id();
         $car_block->save();
 
+        $car_details = CarDetails::where('register_number',$request['block_car_register_number'])->first();
+
         $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
         $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
         $car_available = new Available();
-        $car_available->car_id = !empty($car_status->id) ?  $car_status->id : 0;
+        $car_available->car_id = !empty($car_details->id) ? $car_details->id : 0;
         $car_available->model_id = !empty($request['car_model']) ? $request['car_model']: 0;
         $car_available->booking_id = !empty($car_block->id) ? $car_block->id: 0;
         $car_available->register_number = !empty($request['block_car_register_number']) ? $request['block_car_register_number'] : 0;
@@ -146,13 +148,13 @@ class CarBlockController extends BaseController
 
     public function getCarRegistrationNumbersByModel(Request $request)
     {
-        if (!$request->filled('model_id') && !$request->filled('start_date') && !$request->filled('end_date')) {
+        if (!$request->filled('model_id') || !$request->filled('start_date') || !$request->filled('end_date') || !$request->filled('hub_id')) {
             return response()->json([
                 'cars' => []
             ]);
         }
         $register_number = [];
-        $available_cars = PickupDeliveryController::carAvailablity($request['model_id'],$request['start_date'],$request['end_date']);
+        $available_cars = PickupDeliveryController::carAvailablity($request['model_id'],$request['start_date'],$request['end_date'],$request['hub_id']);
         if (!empty($available_cars)) {
             foreach ($available_cars as $available_car) {
                 $register_number[] = $available_car['register_number'];

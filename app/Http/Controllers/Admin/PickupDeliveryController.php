@@ -474,9 +474,13 @@ class PickupDeliveryController extends BaseController
     }
 
 
-    public static function carAvailablity($model_id ,$start_date, $end_date) {
+    public static function carAvailablity($model_id ,$start_date, $end_date,$hub_id = 0) {
         if (!empty($model_id)) {
-            $car_details = CarDetails::where('model_id', $model_id)->get();
+            $details = CarDetails::where('model_id', $model_id);
+            if (!empty($hub_id)) {
+                $details->where('city_code', $hub_id);
+            }
+            $car_details = $details->get();
             $start_date = Carbon::parse($start_date);
             $end_date = Carbon::parse($end_date);
             $available_cars = [];

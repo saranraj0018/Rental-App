@@ -70,7 +70,7 @@
                     </p>
                     <div class=" mt-2">
                         <ul class="fs-6 fw-500 ps-3">
-                            <li>Pricing Plan: Total {{!empty($car_model->carModel->per_day_km) ? $car_model->carModel->per_day_km *  $price_list['different_hours'] : $car_model->carModel->per_day_km }} kms, excludes fuel</li>
+                            <li>Pricing Plan: Total {{!empty($car_model->carModel->per_day_km) ? $car_model->carModel->per_day_km *  !empty($price_list['different_hours']) ? $price_list['different_hours'] : 0 : $car_model->carModel->per_day_km }} kms, excludes fuel</li>
                             <li>Extra Hour: ₹{{ $car_model->carModel->extra_hours_price ?? '' }} / per hour</li>
                             <li>Extra Km: ₹{{ $car_model->carModel->extra_km_charge }} / per KM</li>
                         </ul>
