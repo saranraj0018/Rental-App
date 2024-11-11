@@ -153,6 +153,7 @@
                         <tbody>
                         @if(!empty($bookings) && $bookings->isNotEmpty())
                             @foreach($bookings as $item)
+
                                 @php
                                     $booking_details = !empty($item->details[0]) ? json_decode($item->details[0]->car_details) : [];
                                     $booking_payment_details = !empty($item->details[0]) ? json_decode($item->details[0]->payment_details, true) : [];
@@ -191,8 +192,9 @@
                                     <td>{{ showDateTime($item->reschedule_date ?? ($item->booking_type == 'pickup' ? $item->end_date : $item->start_date)) }}
                                         <br>
                                         <button class="btn btn-warning edit-booking-date" data-id="{{ $item->id }}" data-booking_type="{{$item->booking_type}}"
-                                                data-model_id="{{ $car_model->car_model_id ?? 0 }}" data-delivery_date="{{ $item->end_date ?? 0 }}"
-                                                data-reschedule_date="{{ $item->reschedule_date ?? $item->end_date }}"  data-car_id="{{ $item->car_id ?? 0 }}">
+                                                data-model_id="{{ $car_model->car_model_id ?? 0 }}"
+                                                data-start_date="{{ showDateTime($item->reschedule_date ?? ($item->booking_type == 'pickup' ? $item->end_date : $item->start_date))  }}"
+                                                 data-car_id="{{ $item->car_id ?? 0 }}">
                                             Edit
                                         </button>
                                     </td>

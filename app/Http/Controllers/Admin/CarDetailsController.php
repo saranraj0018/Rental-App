@@ -64,6 +64,14 @@ class CarDetailsController extends BaseController
             $this->authorizePermission('car_list_model_edit');
         }
 
+        if (empty($request['model_id'])) {
+            $request->validate([
+                'car_image' => 'required|mimes:jpg,png',
+                'car_other_image' => 'required|array|min:2',
+                'car_other_image.*' => 'mimes:jpg,png',
+            ]);
+        }
+
         $request->validate([
             'producer' => 'required|max:144',
             'model_name' => [
@@ -82,18 +90,7 @@ class CarDetailsController extends BaseController
             'dep_amount' => 'required|numeric',
             'extra_hours_charge' => 'required',
             'day_km' => 'required',
-            'car_image' => [
-                'nullable', // Allow null for editing
-                'required_without:model_id', // If model_id is missing, car_image is required
-                'mimes:jpg,png'  // Validate image type
-            ],
-            'car_other_image' => [
-                'nullable', // Allow null for editing
-                'required_without:model_id', // If model_id is missing, car_other_image is required
-                'array', // Ensure it's an array of images
-                'min:2', // At least 2 images
-            ],
-            'car_other_image.*' => 'mimes:jpg,png',
+
         ]);
         $uniq_id =  Str::random(15);
 

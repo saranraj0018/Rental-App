@@ -273,9 +273,11 @@ $(function () {
                 { id: '#day_km'},
                 { id: '#peak_season'},
                 { id: '#extra_km_charge'},
-                { id: '#car_image'},
-                { id: '#car_other_image'},
             ];
+            if ($('#model_id').val() === '') {
+                fieldsToValidate.push({ id: '#car_image'});
+                fieldsToValidate.push({ id: '#car_other_image'});
+            }
 
             let isValid = true;
             // Loop through the fields and validate each one

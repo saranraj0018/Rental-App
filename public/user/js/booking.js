@@ -171,7 +171,7 @@ $(function () {
                     data: $(this).serialize(),
                     success: function(response) {
                         $('#cancel_booking').modal('hide');
-                       // window.location.reload();
+                        window.location.reload();
                     },
                     error: function(response) {
                         if (response.responseJSON && response.responseJSON.errors) {

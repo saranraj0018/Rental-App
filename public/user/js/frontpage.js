@@ -189,6 +189,12 @@ $(function () {
         $('#get_location').on('submit', function(e) {
             e.preventDefault();
             sendPosition();
+            let city =  $('#city_id').val()
+            if(city === ''){
+                $('#cityModal').modal('show');
+            }
+
+
             function sendPosition() {
                 $.ajax({
                     url: '/update-location',

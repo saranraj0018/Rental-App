@@ -116,11 +116,11 @@ class OTPController extends Controller
         $endDateTime = Carbon::parse(session('booking_details.end_date')); //
         if (!empty($startDateTime) && !empty($endDateTime)) {
             $existingBooking = Booking::where('user_id', Auth::id())->where(function ($query) use ($startDateTime, $endDateTime) {
-                $query->whereBetween('start_date_time', [$startDateTime, $endDateTime]) // Check if start time is in the range
-                ->orWhereBetween('end_date_time', [$startDateTime, $endDateTime]) // Check if end time is in the range
+                $query->whereBetween('start_date', [$startDateTime, $endDateTime]) // Check if start time is in the range
+                ->orWhereBetween('end_date', [$startDateTime, $endDateTime]) // Check if end time is in the range
                 ->orWhere(function ($query) use ($startDateTime, $endDateTime) {
-                    $query->where('start_date_time', '<=', $startDateTime)
-                        ->where('end_date_time', '>=', $endDateTime);
+                    $query->where('start_date', '<=', $startDateTime)
+                        ->where('end_date', '>=', $endDateTime);
                 });
             })->exists();
 

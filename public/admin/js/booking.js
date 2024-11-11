@@ -376,8 +376,9 @@ $(function () {
 
         $('#booking_table').on('click', '.edit-booking-date', function() {
             $('#date_booking_id').val($(this).data('id'));
-            $('#booking_type').val($(this).data('booking_type'));
-            $('#start_date').val($(this).data('reschedule_date'));
+            $('#date_booking_type').val($(this).data('booking_type'));
+            $('#date_start_date').val($(this).data('start_date'));
+            $('#end_date').val($(this).data('start_date'));
             $('#model_id').val($(this).data('model_id'));
             $('#car_id').val($(this).data('car_id'));
             $('#date_model').modal('show');
@@ -423,9 +424,9 @@ $(function () {
         $('#booking_date').on('submit', function(e) {
             e.preventDefault();
             let bookingId = $('#date_booking_id').val();
-            let start_date = $('#start_date').val();
+            let start_date = $('#date_start_date').val();
             let end_date = $('#end_date').val();
-            let booking_type = $('#booking_type').val();
+            let booking_type = $('#date_booking_type').val();
             let model_id = $('#model_id').val();
             let car_id = $('#car_id').val();
 
@@ -504,8 +505,13 @@ $(function () {
                     </td>
                     <td>${item.user ? item.user.driving_licence : ''}</td>
                     <td>${item.booking_id}</td>
+
                     <td>${mainDate}<br>
-                        <button class="btn btn-warning edit-booking-date" data-id="${item.id}" data-pickup_date="${item.start_date || 0}" data-delivery_date="${item.end_date || 0}">
+                        <button class="btn btn-warning edit-booking-date" data-id="${item.id}"
+                        data-booking_type="${item.booking_type}"
+                        data-model_id="${carModel.car_model_id || ''}"
+                        data-start_date="${mainDate || 0}"
+                        data-car_id="${item.car_id || 0}">
                             Edit
                         </button>
                     </td>

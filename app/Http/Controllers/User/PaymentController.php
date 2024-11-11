@@ -116,7 +116,10 @@ class PaymentController extends Controller
         // Send SMS via Twilio
         self::sendSMS(Auth::user()->mobile, $delivery_booking->booking_id);
 
-        session()->flush();
+        session()->forget(['booking_details.car_id','booking_details.city_id',
+            'booking_details.start_date','booking_details.end_date','delivery.lat',
+            'delivery.lng','delivery.address','booking_details.delivery_fee',
+            'booking_details.price_list','booking_details.car_details','coupon']);
         session(['booking_id' => $new_booking_id]);
         return response()->json([
             'success' => true,
