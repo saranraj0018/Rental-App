@@ -8,6 +8,7 @@ use App\Models\Available;
 use App\Models\Booking;
 use App\Models\BookingDetail;
 use App\Models\CarDetails;
+use App\Models\City;
 use App\Models\SwapCar;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,8 @@ class SwapController extends Controller
     public int $amount = 0;
     public function list()
     {
-        return view('admin.swap-cars.show');
+        $city_list = City::where('city_status',1)->pluck('name','code');
+        return view('admin.swap-cars.show',compact('city_list'));
     }
 
     public function table()
@@ -61,10 +63,12 @@ class SwapController extends Controller
 
         // Check if both start_date and end_date are provided
         if (!empty($request['start_date']) && !empty($request['end_date']) && !empty($request['hub_list'])) {
-            $start_date = Carbon::createFromFormat('d-m-Y H:i', $request['start_date']);
-            $end_date = Carbon::createFromFormat('d-m-Y H:i', $request['end_date']);
+            $start_date = Carbon::parse($request['start_date']);
+            $end_date = Carbon::parse($request['end_date']);
+
 
             $car_list = CarDetails::with('carModel')->where('city_code',$request['hub_list'])->get();
+
             foreach ($car_list as $car) {
                 // Check if the car is booked during the requested period
                 $isBooked = Available::where('car_id', $car->id)

@@ -23,17 +23,18 @@ $(function () {
         $('#search_cars').on('click', function () {
             let start_date = $('#start_date').val();
             let end_date = $('#end_date').val();
+            let hub_list = $('#hub_city').val();
 
             $.ajax({
                 url: '/admin/available/cars',
                 type: 'GET',
-                data: {start_date : start_date, end_date : end_date},
+                data: {start_date : start_date, end_date : end_date,hub_list : hub_list},
                 success: function (response) {
-                    if (response.data.available_cars && response.data.available_cars.length > 0) {
+                    if (response.data && response.data.length > 0) {
                         $('#car-list').empty();
                         $('#car-card-container').empty();
                         $('#car-swap-table').show();
-                        response.data.available_cars.forEach(function (car) {
+                        response.data.forEach(function (car) {
                             let card = `
                         <div class="card m-2" style="width: 18rem;">
                             <div class="card-body">
