@@ -32,8 +32,16 @@
         <!-- Default box -->
         <div class="container-fluid">
             <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <div class="input-group" style="width: 250px;">
+                            <label for="booking_id">
+                            </label><input type="text" id="booking_id" name="booking_id" class="form-control" placeholder="Booking ID....">
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body table-responsive p-0">
-                    <table id="role_table" class="table table-hover text-nowrap">
+                    <table id="swap_table" class="table table-hover text-nowrap">
                         <thead>
                         <tr>
                             <th>ID</th>
@@ -45,7 +53,6 @@
                         </tr>
                         </thead>
                         <tbody>
-
                         @if(filled($swap_cars))
                             @foreach($swap_cars as $item)
                                 <tr>
@@ -72,8 +79,8 @@
                 {{ $swap_cars->links() }}
             </div>
         </div>
-        @include('admin.roles.model')
-        <!-- /.card -->
     </section>
-    <!-- /.content -->
+@endsection
+@section('customJs')
+    <script src="{{ asset('admin/js/swap.js') }}"></script>
 @endsection

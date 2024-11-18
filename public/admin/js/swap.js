@@ -140,5 +140,54 @@ $(function () {
             });
         });
 
+        $('#booking_id').on('keyup', fetchData);
+
+        function fetchData() {
+            let booking_id = $('#booking_id').val();
+            $.ajax({
+                url: '/admin/swap/search', // Define this route in your web.php
+                type: 'GET',
+                data: {
+                    booking_id: booking_id
+                },
+                success: function (response) {
+                    updateSwapTable(response.data) // Populate table with new data
+                },
+                error: function (xhr) {
+                    alertify.error('Something Went Wrong');
+                }
+            });
+        }
+
+        function updateSwapTable(data) {
+            let tbody = $('#swap_table tbody');
+            tbody.empty(); // Clear existing rows
+
+            if (data.swap.length === 0) {
+                tbody.append(`<tr><td colspan="10" class="text-center">Record Not Found</td></tr>`);
+            } else {
+                // Loop through the data and append rows
+                let rowCount = 1;
+                $.each(data.swap, function(index, item) {
+                    tbody.append(`
+                <tr>
+                     <td>${rowCount++}</td>
+                    <td>${item.booking_id}</td>
+                   <td>${item.user ? item.user.email : ''}</td>
+                   <td>${item.car.car_model ? item.car.car_model.model_name : ''}</td>
+                    <td>${item.swap_car.car_model ? item.swap_car.car_model.model_name : ''}</td>
+                    <td>${formatDateTime(item.updated_at)}</td>
+
+                </tr>
+            `);
+                });
+            }
+        }
+
+        function formatDateTime(dateString) {
+            let date = new Date(dateString);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        }
+
     });
 });

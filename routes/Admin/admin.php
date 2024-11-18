@@ -78,6 +78,7 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::get('/car-swap/table', [SwapController::class, 'table'])->name('car-swap.table');
         Route::get('/get/booking_date', [SwapController::class, 'getBookingDate'])->name('fetch.booking.date');
         Route::get('/available/cars', [SwapController::class, 'availableCars'])->name('available.cars');
+        Route::get('/swap/search', [SwapController::class, 'searchHistory'])->name('history.cars');
         Route::post('/swap/car', [SwapController::class, 'swapCar'])->name('swap.car');
         Route::get('/calculate/swap/car', [SwapController::class, 'swapCarCalculate'])->name('calculate.swap.car');
         Route::post('/payment/link', [SwapController::class, 'sendPayment'])->name('send.payment');

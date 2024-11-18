@@ -205,6 +205,18 @@ class SwapController extends Controller
                 return response()->json(['error' => 'Failed to create payment link: ' . $e->getMessage()], 500);
             }
         }
+        return response()->json(['error' => 'Failed to create payment link: '], 500);
+    }
+
+    public function searchHistory(Request $request)
+    {
+        $query = SwapCar::with('user', 'car.carModel', 'swapCar.carModel');
+
+        if (!empty($request['booking_id'])) {
+            $query->where('booking_id', 'like', '%' .  $request['booking_id']. '%');
+        }
+        $swap_list = $query->paginate(10);
+        return response()->json(['data'=> ['swap' => $swap_list->items(),'pagination' => $swap_list->links()->render()]]);
 
     }
 

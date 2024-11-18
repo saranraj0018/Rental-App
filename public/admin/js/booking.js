@@ -522,7 +522,7 @@ $(function () {
                         </button>
                     </td>
                     <td>
-                        <button class="btn btn-danger cancel_booking" data-id="${item.id}">
+                        <button class="btn btn-danger cancel_booking" data-id="${item.booking_id}">
                             Cancel Order
                         </button>
                     </td>
