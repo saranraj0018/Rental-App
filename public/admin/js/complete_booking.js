@@ -1,7 +1,7 @@
 $(function () {
     'use strict'
     $(document).ready(function() {
-        $('#complete_car_model, #complete_register_number, #complete_booking_id, #complete_customer_name, #complete_booking_type').on('input change', function() {
+        $('#complete_car_model, #complete_register_number, #complete_booking_id, #complete_customer_name, #complete_booking_type, #complete_hub_type').on('input change', function() {
             fetchData();
         });
 
@@ -11,6 +11,7 @@ $(function () {
             const bookingId = $('#complete_booking_id').val();
             const customerName = $('#complete_customer_name').val();
             const bookingType = $('#complete_booking_type').val();
+            const hub_type = $('#complete_hub_type').val();
             let status = 2;
             $.ajax({
                 url: '/admin/booking/search', // Define this route in your web.php
@@ -21,12 +22,13 @@ $(function () {
                     booking_id: bookingId,
                     customer_name: customerName,
                     booking_type: bookingType,
-                    status:status
+                    status:status,
+                    hub_type:hub_type
                 },
                 success: function(response) {
                     updateBookingTable(response.data) // Populate table with new data
                 },
-                error: function(xhr) {
+                error: function() {
                     alertify.error('Something Went Wrong');
                 }
             });
@@ -51,44 +53,27 @@ $(function () {
             $('#amount_modal').modal('show');
         });
 
-        $('#complete_booking_table').on('click', '.open-risk-modal', function() {
+        $('#complete_booking_table').on('click', '.revert', function() {
             let bookingId = $(this).data('id');
-            let commend = $(this).data('commend');
-            // Parse the comments if they are not already an array
-            let comments = Array.isArray(commend) ? commend : JSON.parse(commend || '[]');
-            // Set the booking ID in the hidden input
-            $('#risk-booking-id').val(bookingId);
 
-            // Clear the previous comments list
-            $('#comments-list').empty();
+            $.ajax({
+                url: '/admin/booking/revert',
+                type: 'POST',
+                data: {
+                    booking_id: bookingId,
+                },
+                success: function(response) {
+                    if (response.data){
+                        updateBookingTable(response.data)
+                    } else {
+                        alertify.error('Data Not Found');
+                    }
+                },
+                error: function(xhr) {
+                    alertify.error('Something Went Wrong');
+                }
+            });
 
-            // Loop through the comments and add them to the comments list
-            if (comments.length > 0) {
-                comments.forEach(function(comment, index) {
-                    // Convert the created_at string into a Date object
-                    let createdAt = new Date(comment.created_at);
-                    // Format the date as 'hour:minute AM/PM, month day'
-                    let formattedDate = createdAt.toLocaleString('en-US', {
-                        hour: 'numeric',
-                        minute: 'numeric',
-                        hour12: true,
-                        month: 'short',
-                        day: 'numeric'
-                    });
-
-                    $('#comments-list').append(
-                        `<div class="alert alert-secondary" role="alert">
-                <strong>Comment ${index + 1}:</strong> ${comment.commends} <br>
-                <small>Created at: ${formattedDate}</small>
-            </div>`
-                    );
-                });
-            } else {
-                $('#comments-list').append('<p class="text-muted">No comments available.</p>');
-            }
-
-            // Show the modal
-            $('#riskModal').modal('show');
         });
 
         function formatDateTime(dateString) {
@@ -136,8 +121,8 @@ $(function () {
                 <tr class="${item.risk === 1 ? 'bg-light-red' : item.status === 2 ? 'bg-light-green' : ''}">
                     <td>${item.booking_type === 'pickup' ? '<h2>P</h2>' : '<h2>D</h2>'}</td>
                     <td>
-                       <button class="btn btn-warning open-risk-modal" data-id="${item.id}" data-commend='${JSON.stringify(commends).replace(/'/g, "&apos;")}'>
-                         <h5>i</h5>
+                       <button class="btn btn-warning revert" data-id="${item.id}">
+                        Revert
                         </button>
                     </td>
                     <td>${formatDateTime(item.start_date)}<br>

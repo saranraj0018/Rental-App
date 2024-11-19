@@ -36,6 +36,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('pending.booking') }}" class="nav-link">
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>Booking Pending</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('cancel.booking.list') }}" class="nav-link">
                         <i class="nav-icon fas fa-file-alt"></i>
                         <p>Booking Cancel</p>
