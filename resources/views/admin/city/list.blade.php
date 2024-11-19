@@ -61,6 +61,11 @@
             right: 27px;
             color: black;
         }
+
+        .pac-container {
+            z-index: 1051 !important; /* Ensure it appears above the modal */
+        }
+
     </style>
     <section class="content-header">
         <div class="container-fluid my-2">
@@ -83,7 +88,6 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <div class="input-group" style="width: 250px;">
-{{--                            <input type="text" id="holiday_search" name="keyword" class="form-control" placeholder="Search Event ....">--}}
                         </div>
                     </div>
                 </div>
@@ -146,5 +150,6 @@
     </section>
 @endsection
 @section('customJs')
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&libraries=places"></script>
     <script src="{{asset("admin/js/city.js")}}"></script>
 @endsection

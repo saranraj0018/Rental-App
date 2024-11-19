@@ -2,12 +2,6 @@ $(function () {
     'use strict'
     $(document).ready(function() {
 
-        $('#add_city').click(function() {
-            $('#city_label').text("Create City");
-            $('#city_model').modal('show');
-            $('#save_city').text("Submit");
-        });
-
         $('#city_form').on('submit', function(e) {
             e.preventDefault();
             let isValid = true;
@@ -60,6 +54,7 @@ $(function () {
 
         // Edit Holiday
         $('#city_table').on('click', '.city_edit', function() {
+
             let modal = $('#city_model');
             $('#city_label').text("Edit Holiday");
             $('#save_city').text("Update");
@@ -131,23 +126,87 @@ $(function () {
             });
         });
 
-        // function fetchData() {
-        //     let holiday_search = $('#holiday_search').val();
-        //     $.ajax({
-        //         url: '/admin/holiday/search', // Define this route in your web.php
-        //         type: 'GET',
-        //         data: {
-        //             holiday_search: holiday_search
-        //         },
-        //         success: function(response) {
-        //             updateHolidayTable(response.data) // Populate table with new data
-        //         },
-        //         error: function(xhr) {
-        //             alertify.error('Something Went Wrong');
-        //         }
-        //     });
-        // }
-        //
-        // $('#holiday_search').on('keyup', fetchData);
+        let map, marker, autocomplete;
+        $(document).on('click', '#add_city', function () {
+            $('#city_label').text("Create City");
+            $('#city_model').modal('show');
+            $('#save_city').text("Submit");
+            setTimeout(() => {
+                $('#google_map').focus(); // Ensure the input is focused
+            }, 500); // Delay to ensure modal has rendered
+        });
+
+
+        $('#city_model').on('shown.bs.modal', function () {
+            initializeGoogleMap();
+            initializeAutocomplete();
+            setTimeout(() => {
+                if (!map) {
+                    initializeGoogleMap();
+                    initializeAutocomplete();
+                } else {
+                    google.maps.event.trigger(map, 'resize'); // Resize the map
+                    map.setCenter(marker.getPosition()); // Center the map on the marker
+                }
+            }, 300); // Delay to allow modal rendering
+        });
+
+        function initializeGoogleMap() {
+            console.log("Initializing Google Map");
+            const defaultLocation = { lat: 11.0168, lng: 76.9558};
+
+                map = new google.maps.Map(document.getElementById('map_canvas'), {
+                center: defaultLocation,
+                zoom: 10,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+            });
+
+            marker = new google.maps.Marker({
+                position: defaultLocation,
+                map: map,
+                draggable: true,
+            });
+
+            google.maps.event.addListener(marker, 'dragend', function () {
+                updateLatLng(marker.getPosition());
+            });
+        }
+
+        function initializeAutocomplete() {
+            const input = document.getElementById('google_map');
+            autocomplete = new google.maps.places.Autocomplete(input);
+
+            autocomplete.setOptions({
+                componentRestrictions: { country: "in" }, // Replace "us" with your country code
+            });
+
+            autocomplete.bindTo('bounds', map);
+
+            input.addEventListener('click', function () {
+                const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+                input.dispatchEvent(event);
+            });
+
+            // Handle place selection
+            autocomplete.addListener('place_changed', function () {
+                const place = autocomplete.getPlace();
+                if (!place.geometry || !place.geometry.location) {
+                    alert("No details available for the input: '" + input.value + "'");
+                    return;
+                }
+
+                const location = place.geometry.location;
+                map.setCenter(location);
+                map.setZoom(15);
+                marker.setPosition(location);
+                updateLatLng(location);
+            });
+
+        }
+        function updateLatLng(location) {
+            document.getElementById('latitude').value = location.lat();
+            document.getElementById('longitude').value = location.lng();
+        }
+
     });
 });
