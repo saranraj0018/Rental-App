@@ -60,8 +60,14 @@ $(function () {
             $('#save_city').text("Update");
             modal.find('#city_name').val($(this).data('name'));
             modal.find('#city_status').val($(this).data('status'));
+            modal.find('#latitude').val($(this).data('latitude'));
+            modal.find('#longitude').val($(this).data('longitude'));
             modal.find('input[name=city_id]').val($(this).data('id'));
             modal.modal('show');
+            initializeGoogleMap()
+            setTimeout(() => {
+                $('#city_name').focus(); // Ensure the input is focused
+            }, 500); // Delay to ensure modal has rendered
         });
 
         function updateHolidayTable(data) {
@@ -73,34 +79,56 @@ $(function () {
             } else {
                 // Loop through the data and append rows
                 $.each(data.city, function(index, item) {
+                    // Determine the status badge
+                    let statusBadge = item.city_status === 1
+                        ? `<span class="badge badge-secondary" style="background-color: green">Activate</span>`
+                        : `<span class="badge badge-danger" style="background-color: red">Deactivate</span>`;
+
+                    // Append the row
                     tbody.append(`
                 <tr>
                    <td>${index + 1}</td>
-                    <td>${item.name}</td>
+                   <td>${item.name}</td>
                    <td>${item.user ? item.user.email : ''}</td>
-                    <td>${item.city_status}</td>
-                    <td>${formatDateTime(item.updated_at)}</td>
-                    <td>
-                        <a href="javascript:void(0)" class="city_edit" data-id="${item.id}" data-name="${ item.name }" data-status="${ item.city_status }">
-                            <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
-                            </svg>
-                        </a>
-                        <a href="#" class="city_delete text-danger w-4 h-4 mr-1" data-id="${item.id}">
-                            <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                            </svg>
-                        </a>
-                    </td>
+                   <td>${statusBadge}</td>
+                   <td>${formatDateTime(item.updated_at)}</td>
+                   <td>
+                       <a href="javascript:void(0)" class="city_edit" data-id="${item.id}" data-name="${item.name}" data-status="${item.city_status}">
+                           <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                               <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                           </svg>
+                       </a>
+                       <a href="#" class="city_delete text-danger w-4 h-4 mr-1" data-id="${item.id}">
+                           <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                               <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                           </svg>
+                       </a>
+                   </td>
                 </tr>
             `);
                 });
             }
         }
 
+
         function formatDateTime(dateString) {
             let date = new Date(dateString);
-            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+
+            // Get day, month, and year
+            let day = String(date.getDate()).padStart(2, '0'); // Ensure two digits
+            let month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+            let year = date.getFullYear();
+
+            // Get hours, minutes, and seconds
+            let hours = String(date.getHours()).padStart(2, '0');
+            let minutes = String(date.getMinutes()).padStart(2, '0');
+            let seconds = String(date.getSeconds()).padStart(2, '0');
+
+            // Format date and time
+            let formattedDate = `${day}/${month}/${year}`;
+            let formattedTime = `${hours}:${minutes}:${seconds}`;
+
+            return `${formattedDate} ${formattedTime}`;
         }
 
         // Delete Car
@@ -128,11 +156,12 @@ $(function () {
 
         let map, marker, autocomplete;
         $(document).on('click', '#add_city', function () {
+            $('#city_name').val('');
             $('#city_label').text("Create City");
             $('#city_model').modal('show');
             $('#save_city').text("Submit");
             setTimeout(() => {
-                $('#google_map').focus(); // Ensure the input is focused
+                $('#city_name').focus(); // Ensure the input is focused
             }, 500); // Delay to ensure modal has rendered
         });
 
@@ -152,10 +181,11 @@ $(function () {
         });
 
         function initializeGoogleMap() {
-            console.log("Initializing Google Map");
-            const defaultLocation = { lat: 11.0168, lng: 76.9558};
+            let latitude = $('#latitude').val()  ? parseFloat($('#latitude').val()) : 11.0168 ;
+            let longitude = $('#longitude').val() ? parseFloat($('#longitude').val()) : 76.9558;
+            const defaultLocation = { lat: latitude, lng: longitude};
 
-                map = new google.maps.Map(document.getElementById('map_canvas'), {
+            map = new google.maps.Map(document.getElementById('map_canvas'), {
                 center: defaultLocation,
                 zoom: 10,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -173,7 +203,7 @@ $(function () {
         }
 
         function initializeAutocomplete() {
-            const input = document.getElementById('google_map');
+            const input = document.getElementById('city_name');
             autocomplete = new google.maps.places.Autocomplete(input);
 
             autocomplete.setOptions({

@@ -12,7 +12,7 @@ class MapController extends Controller
 {
     public function show()
     {
-        $city_list = City::where('city_status', 1)->pluck('name', 'code');
+        $city_list = City::where('city_status', 1)->get(['name', 'code', 'latitude', 'longitude']);
         return view('admin.city-map.show', compact('city_list'));
     }
 

@@ -21,8 +21,7 @@ class LocationController extends Controller
         $location = $request['type'];
         $address = $request['address'];
 
-        // Fetch all polygons for the specified hub
-        $hubAreas = HubArea::where('hub', 'coimbatore')->get();
+        $hubAreas = HubArea::where('hub', session('booking_details.city_id') ?? 632)->get();
 
         $isInside = false;
 
@@ -71,7 +70,6 @@ class LocationController extends Controller
 
             $user->save();
         }
-
         return response()->json(['inside' => $isInside]);
     }
 

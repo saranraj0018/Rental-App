@@ -12,11 +12,6 @@
                     <div class="form-row">
                         <input type="hidden" name="city_id">
                         <div class="form-group col-md-6">
-                            <label for="city_name">City Name</label>
-                            <input type="text" class="form-control" name="city_name" id="city_name" placeholder="City Name">
-                            <div class="invalid-feedback">Please enter the City.</div>
-                        </div>
-                        <div class="form-group col-md-6">
                             <label for="city_status">Status</label>
                             <select id="city_status" name="city_status" class="form-control">
                                 <option value="1">Active</option>
@@ -27,8 +22,9 @@
 
                     <div class="form-row mt-3">
                         <div class="form-group col-md-12">
-                            <label for="google_map">Location (Search and Select)</label>
-                            <input type="text" id="google_map" class="form-control" placeholder="Search for location">
+                            <label for="city_name">City Name (Search and Select)</label>
+                            <input type="text" id="city_name" name="city_name" class="form-control" placeholder="Search for location">
+                            <div class="invalid-feedback">Please enter the City.</div>
                             <div id="map_canvas" style="height: 300px; width: 100%;"></div>
                         </div>
                     </div>

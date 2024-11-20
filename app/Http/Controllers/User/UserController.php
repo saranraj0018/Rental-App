@@ -39,8 +39,12 @@ class UserController extends Controller
                 $car['booking_status'] = 'sold'; // Add status as 'sold'
                 return $car;
             }, $available_models['booked_cars']) : [];
+        $booking_model_ids = array_column($booking_models, 'model_id');
+        $result = array_filter($sold_cars, function ($item) use ($booking_model_ids) {
+            return !in_array($item['model_id'], $booking_model_ids);
+        });
 
-        $section3 = !empty($booking_models) && !empty($sold_cars) ? array_merge($booking_models, $sold_cars) : CarDetails::all();
+        $section3 = !empty($booking_models) && !empty($sold_cars) ? array_merge($booking_models, $result) : CarDetails::all();
         $car_info = Frontend::with('frontendImage')->where('data_keys','car-info-section')->first();
         $section4 = !empty($car_info['data_values']) ? json_decode($car_info['data_values'],true) : [];
         $brand_info = Frontend::with('frontendImage')->where('data_keys','brand-section')->first();
@@ -103,7 +107,11 @@ class UserController extends Controller
                 $car['booking_status'] = 'sold'; // Add status as 'sold'
                 return $car;
             }, $available_models['booking_cars']) : [];
-        $car_models = array_merge($booking_models, $sold_cars);
+        $booking_model_ids = array_column($booking_models, 'model_id');
+        $result = array_filter($sold_cars, function ($item) use ($booking_model_ids) {
+            return !in_array($item['model_id'], $booking_model_ids);
+        });
+        $car_models = array_merge($booking_models, $result);
         $festival_days = Holiday::pluck('event_date')->toArray();
         return view('user.frontpage.list-cars.list',compact('car_models','festival_days','date','city_list'));
     }

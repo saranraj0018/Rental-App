@@ -120,6 +120,12 @@
                                 <option value="pickup">Pickup</option>
                             </select>
                         </div>
+                        <div class="input-group" style="width: 250px;">
+                            <select id="booking_history" class="form-control">
+                                <option value="1">Current Booking</option>
+                                <option value="2">Upcoming Booking</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body table-responsive p-0">

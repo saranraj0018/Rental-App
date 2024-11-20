@@ -27,7 +27,7 @@ class PickupDeliveryController extends BaseController
     public function list(Request $request)
     {
         $this->authorizePermission('hub_list');
-      //  $bookings = self::getBooking();
+        //  $bookings = self::getBooking();
         $city_list = City::where('city_status',1)->pluck('name','code');
         return view('admin.hub.list',compact('city_list',));
     }
@@ -92,7 +92,7 @@ class PickupDeliveryController extends BaseController
 
                         if (!empty($carId)){
                             $car_details =  CarDetails::with('carModel')->find($carId);
-                             BookingDetail::where('booking_id', $booking->booking_id)
+                            BookingDetail::where('booking_id', $booking->booking_id)
                                 ->update(['car_details' => json_encode($car_details)]);
                         }
 
@@ -571,7 +571,7 @@ class PickupDeliveryController extends BaseController
     }
     public function bookingComplete()
     {
-       // $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',2)->paginate(20);
+        // $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',2)->paginate(20);
         $city_list = City::where('city_status',1)->pluck('name','code');
         return view('admin.hub.complete_booking',compact('city_list'));
     }
@@ -588,8 +588,19 @@ class PickupDeliveryController extends BaseController
         $perPage = $request->input('per_page', 20);
         $query = Booking::with(['user', 'details', 'comments', 'user.bookings'])
             ->where('status', 1) // Filter by status = 1
-            ->where('city_code', $request->input('hub_type', 632)) // Default city_code filter
-            ->where(function ($query) {
+            ->where('city_code', $request->input('hub_type', 632)); // Default city_code filter
+        if (!empty($request['booking_history']) && $request['booking_history'] === '2') {
+            $query->where(function ($query) {
+                $query->where(function ($subQuery) {
+                    $subQuery->where('booking_type', 'delivery')
+                        ->where('start_date', '>', Carbon::now()->addHours(48));
+                })->orWhere(function ($subQuery) {
+                    $subQuery->where('booking_type', 'pickup')
+                        ->where('end_date', '>', Carbon::now()->addHours(48));
+                });
+            });
+        } else {
+            $query->where(function ($query) {
                 $query->where(function ($subQuery) {
                     $subQuery->where('booking_type', 'delivery')
                         ->where('start_date', '<', now());
@@ -598,7 +609,7 @@ class PickupDeliveryController extends BaseController
                         ->where('end_date', '<', now());
                 });
             });
-
+        }
         // Apply filters based on request parameters
         if (!empty($request['car_model'])) {
             $query->whereHas('details', function($query) use ($request) {
@@ -642,7 +653,7 @@ class PickupDeliveryController extends BaseController
 
     public function bookingCancelList()
     {
-       // $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',3)->paginate(20);
+        // $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',3)->paginate(20);
         $city_list = City::where('city_status',1)->pluck('name','code');
         return view('admin.hub.cancel_booking',compact('city_list'));
     }

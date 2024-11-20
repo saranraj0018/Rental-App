@@ -19,10 +19,16 @@ class CityController extends Controller
     {
         $request->validate([
             'city_name' => 'required|string|max:144',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
         $city = !empty($request['city_id']) ? City::find($request['city_id']) : new City();
-        $city->name = $request['city_name'];
-        $city->code = rand(100, 999);
+        $city->name = strstr($request['city_name'], ',', true);
+        if (empty($request['city_id'])) {
+            $city->code = rand(100, 999);
+        }
+        $city->latitude = $request['latitude'];
+        $city->longitude = $request['longitude'];
         $city->city_status = $request['city_status'];
         $city->user_id = Auth::guard('admin')->id();
         $city->save();
