@@ -108,7 +108,11 @@ input.form-control.my-hub{
     background-color: #123984;
     color: white;
 }
-
+.image-card img {
+    object-fit: cover;
+    width: 100%;
+    height: 200px;
+}
 .dark-blue-bg{
     background-color: #06183E;
 }
@@ -390,6 +394,14 @@ span#basic-addon1 {
 }
 .h-40px{
     height: 40px;
+}
+.city-option{
+    transition: all 0.2s;
+}
+.city-option:hover{
+    background:#123984 !important; ;
+    color:white;
+    transition: all 0.2s;
 }
 /*--------------HOME-SECTION-2---------------*/
 

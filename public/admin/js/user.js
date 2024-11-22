@@ -56,39 +56,41 @@ $(function () {
 
         $('#name_search').on('keyup', fetchData);
 
-        $('#user_table').on('click', '.user_view', function() {
+        $('#user_table').on('click', '.user_view', function () {
             // Show the modal
             $('#document_model').modal('show');
 
             // Base path for images in storage
             let assetBasePath = "/storage/user-documents";
 
-            // Get image names from data attributes
-            let image1 = $(this).data('image1');
-            let image2 = $(this).data('image2');
+            // Get images array from data-images attribute
+            let images = $(this).data('images');
 
-            // Construct full URLs for images
-            let imageUrl1 = image1 ? `${assetBasePath}/${image1}` : null;
-            let imageUrl2 = image2 ? `${assetBasePath}/${image2}` : null;
+            // Clear any existing images in the modal
+            $('#image_gallery').empty();
 
-            // Update Image 1 or show "No Image" text
-            if (imageUrl1) {
-                $('#car_image_preview1').attr('src', imageUrl1).show();
-                $('#no_image_text1').hide();
+            if (images && images.length > 0) {
+                images.forEach((imageName, index) => {
+                    if (imageName) {
+                        let imageUrl = `${assetBasePath}/${imageName}`;
+                        $('#image_gallery').append(`
+                    <div class="col-md-4 mb-3 text-center">
+                        <label class="form-label">Document ${index + 1}</label>
+                        <img src="${imageUrl}" alt="Document Image" class="img-fluid border rounded" style="max-height: 200px; object-fit: cover;">
+                    </div>
+                `);
+                    }
+                });
             } else {
-                $('#car_image_preview1').hide();
-                $('#no_image_text1').show();
-            }
-
-            // Update Image 2 or show "No Image" text
-            if (imageUrl2) {
-                $('#car_image_preview2').attr('src', imageUrl2).show();
-                $('#no_image_text2').hide();
-            } else {
-                $('#car_image_preview2').hide();
-                $('#no_image_text2').show();
+                $('#image_gallery').append(`
+            <div class="col-12 text-center">
+                <p class="text-muted">No images available</p>
+            </div>
+        `);
             }
         });
+
+
 
 
 

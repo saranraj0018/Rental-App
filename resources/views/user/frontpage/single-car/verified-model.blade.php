@@ -18,7 +18,7 @@
                         <form id="user-otp">
                             <div class="mb-3">
                                 <label for="mobileNumber" class="form-label fs-12 fw-500">Enter your Mobile Number</label>
-                                <input type="number" class="form-control bg-grey form-bdr" id="mobile_number" name="mobile_number" placeholder="9329*****1">
+                                <input type="number" class="form-control bg-grey form-bdr" id="mobile_number" name="mobile_number" placeholder="">
                                 <div class="invalid-feedback">
                                     Please enter the Mobile Number.
                                 </div>
@@ -55,7 +55,7 @@
                         <form id="verification_otp">
                             <div class="mb-3">
                                 <p class="form-label fs-12 fw-500 text-secondary text-center">Enter the OTP sent to <span class="text-dark fw-500" id="userPhone">+91 - 8554569487</span></p>
-                                <input type="number" class="form-control bg-grey form-bdr" id="verification_code" name="verification_code" placeholder="4568">
+                                <input type="number" class="form-control bg-grey form-bdr" id="verification_code" name="verification_code" placeholder="">
                                 <div class="invalid-feedback">
                                     Please enter the Verification Code.
                                 </div>

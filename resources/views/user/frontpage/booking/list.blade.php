@@ -176,7 +176,6 @@
                             </table>
                         </div>
                     </div>
-                    @include('user.frontpage.booking.model')
                 </section>
 
             </div>
@@ -187,7 +186,7 @@
                 <section class="my-5">
                     <div class="container my-4">
                         <div class="table-responsive">
-                            <table class="table booking-table table-borderless">
+                            <table class="table booking-table table-borderless" id="booking_history">
                                 <tbody>
                                 @foreach($booking as $details)
                                     @if($details->status !== 1)
@@ -266,6 +265,7 @@
                     </div>
                 </section>
             </div>
+            @include('user.frontpage.booking.model')
             <!-- TAB CONTENT-2 ENDS-->
         </div>
     </div>

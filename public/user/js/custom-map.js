@@ -199,8 +199,6 @@ $(function () {
             });
         };
 
-        //Initialize the map when the modal is shown
-        // Attach click event to the button instead of the image
         $(document).on('click', '.pickup_location', function() {
             window.initMarker();
             $.ajax({
@@ -222,6 +220,10 @@ $(function () {
                     }
                 }
             });
+        });
+
+        $(document).on('click', '.pickup_location', function() {
+
         });
 
 

@@ -126,7 +126,7 @@ $(function () {
             });
         });
 
-        $('#user_booking').on('click', '.details', function() {
+        $('#pills-tabContent').on('click', '.details', function() {
             $('#booking_id').text($(this).data('booking_id'));
             $('#total_days').val($(this).data('total_days'));
             $('#total_hours').val($(this).data('total_hours'));
@@ -145,6 +145,21 @@ $(function () {
             $('#cancel_booking_id').val($(this).data('booking_id'));
             $('#cancel_booking').modal('show');
         });
+
+        $(document).on('click', '#close_pop', function () {
+            $('#reschedule_model').modal('hide');
+        });
+
+        $(document).on('click', '#details_close_pop', function () {
+            $('#booking_model').modal('hide');
+        });
+
+        $(document).on('click', '#cancel_close_pop', function () {
+            $('#cancel_booking').modal('hide');
+        });
+
+
+
 
         $('#cancel_booking_form').on('submit', function(e) {
             e.preventDefault();

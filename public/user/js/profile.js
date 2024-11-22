@@ -1,46 +1,6 @@
 $(function () {
     'use strict';
 
-    $(document).on('click', '#download-btn', function () {
-        let filename = $(this).data('filename');
-
-        // Make an AJAX request to check if the file exists on the server
-        $.ajax({
-            url: '/user/download/' + filename,
-            method: 'GET',
-            xhrFields: {
-                responseType: 'blob' // Important for downloading the file
-            },
-            success: function (data, status, xhr) {
-                // Create a temporary download link
-                let link = document.createElement('a');
-                let url = window.URL.createObjectURL(data);
-                link.href = url;
-
-                // Get the file name from Content-Disposition header (if available)
-                let contentDisposition = xhr.getResponseHeader('Content-Disposition');
-                let fileName = filename;
-
-                if (contentDisposition) {
-                    var matches = /"([^"]*)"/.exec(contentDisposition);
-                    if (matches !== null && matches[1]) fileName = matches[1];
-                }
-
-                // Set the filename
-                link.download = fileName;
-                document.body.appendChild(link);
-                link.click();
-
-                // Remove the temporary link
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(link);
-            },
-            error: function (xhr, status, error) {
-                alert('File download failed.');
-            }
-        });
-    });
-
     function validateField(field) {
         const element = $(field.id);
         const value = element.val();
@@ -76,8 +36,11 @@ $(function () {
                 processData: false, // Required for jQuery to send the data properly
                 contentType: false, // Required to handle file uploads correctly
                 success: function(response) {
-                    if (response.success()){
-                        window.location.reload();
+                    if (response.success){
+                        $('#profile_message').text(response.message)
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 3000);
                     }
                 },
                 error: function(response) {

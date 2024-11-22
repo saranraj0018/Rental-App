@@ -281,16 +281,6 @@ class UserController extends Controller
         return view('user.frontpage.profile.view',compact('user_details'));
     }
 
-    public function downloadFile($filename)
-    {
-        $filePath = storage_path('app/public/user-documents/' . $filename);
-        if (file_exists($filePath)) {
-            return response()->download($filePath);
-        } else {
-            abort(404);
-        }
-    }
-
     public function updateUser(Request $request)
     {
         $request->validate([
@@ -298,8 +288,7 @@ class UserController extends Controller
             'user_mobile' => 'required|numeric|digits:10',
             'aadhaar_number' => 'required|digits:12',
             'driving_licence' => 'required',
-            'driving_licence_doc' => 'nullable|mimes:jpg,png,pdf|max:2048',
-            'aadhaar_number_doc' => 'nullable|mimes:jpg,png,pdf|max:2048',
+            'other_documents' => 'nullable|mimes:jpg,png,pdf|max:2048',
         ]);
         $auth_id = Auth::id() ?? 0;
         $user = User::find($auth_id);
@@ -307,30 +296,20 @@ class UserController extends Controller
         $user->mobile = $request['user_mobile'];
         $user->aadhaar_number = $request['aadhaar_number'];
         $user->driving_licence = $request['driving_licence'];
-
         $user->save();
 
-
         $uniq_id =  Str::random(6);
-        if ($request->hasFile('driving_licence_doc') && !empty($request['driving_licence_id'])) {
-            $user_doc = UserDocument::find($request['driving_licence_id']);
-            $img_name = $request->file('driving_licence_doc')->getClientOriginalName();
-            $img_name = $uniq_id . '_' . $img_name;
-            $request->driving_licence_doc->storeAs('user-documents/', $img_name, 'public');
-            $user_doc->image_name =  $img_name;
-            $user_doc->user_id = Auth::id();
-            $user_doc->save();
-        }
 
-        if ($request->hasFile('aadhaar_number_doc') && !empty($request['aadhaar_number_id'])) {
-            $user_docs = UserDocument::find($request['aadhaar_number_id']);
-            $img_name = $request->file('aadhaar_number_doc')->getClientOriginalName();
+        if ($request->hasFile('other_documents') && !empty($request['other_documents'])) {
+            $user_docs = new UserDocument();
+            $img_name = $request->file('other_documents')->getClientOriginalName();
             $img_name = $uniq_id . '_' . $img_name;
-            $request->aadhaar_number_doc->storeAs('user-documents/', $img_name, 'public');
+            $request->other_documents->storeAs('user-documents/', $img_name, 'public');
             $user_docs->image_name =  $img_name;
             $user_docs->user_id = Auth::id();
             $user_docs->save();
         }
+        return response()->json(['success' => true, 'message' => 'User Profile updated successfully']);
 
     }
 

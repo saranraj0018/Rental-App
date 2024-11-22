@@ -3,9 +3,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="riskModalLabel">Reschedule Delivery Date</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
             <div class="modal-body">
                 <form id="risk-form" novalidate>
@@ -32,6 +29,7 @@
                     </div>
 
                     <button type="button" id="calculate_price" class="btn btn-info">Calculate Price</button>
+                    <button type="button" id="close_pop" class="btn btn-danger float-right">OK</button>
                     <button type="submit" class="btn btn-primary d-none" id="reschedule_pay">Pay</button>
                 </form>
             </div>
@@ -111,6 +109,7 @@
                     </div>
                 </form>
             </div>
+            <button type="button" id="details_close_pop" class="btn btn-danger float-right">OK</button>
         </div>
     </div>
 </div>
@@ -120,9 +119,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="cancelModalLabel">Cancel Booking</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
             <div class="modal-body">
                 <form id="cancel_booking_form">
@@ -141,6 +137,7 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
+                    <button type="button" id="cancel_close_pop" class="btn btn-danger float-right">OK</button>
                 </form>
             </div>
         </div>

@@ -49,7 +49,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('user.list') }}" class="nav-link">
-                        <i class="nav-icon fas fa-file-alt"></i>
+                        <i class="nav-icon fas fa fa-address-book"></i>
                         <p>User</p>
                     </a>
                 </li>

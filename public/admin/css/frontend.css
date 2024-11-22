@@ -23,3 +23,8 @@
 .is-invalid .select2-container--default .select2-selection--single {
     border-color: #dc3545 !important; /* Red border for single select */
 }
+#image_gallery .form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}

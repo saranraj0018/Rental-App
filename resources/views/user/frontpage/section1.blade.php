@@ -137,9 +137,14 @@
                     <span class="input-group-text" id="basic-addon1">
                         <i class=" text-white fa-solid fa-location-dot"></i>
                     </span>
+                        @php
+                            $city = !empty($city_list) ? $city_list->toArray() : [];
+                        @endphp
                         <!-- Input field -->
-                        <input type="text" class="form-control my-hub" id="cityInput" placeholder="Choose City" aria-label="City" aria-describedby="basic-addon1" readonly>
-                        <input type="hidden" id="city_id" name="city_id">
+                        <input type="text" class="form-control my-hub" id="cityInput" placeholder="Choose City"
+                               aria-label="City" aria-describedby="basic-addon1"
+                               value="{{ array_key_exists(session('city_id'), $city) ? $city[session('city_id')] : '' }}" readonly>
+                        <input type="hidden" id="city_id" name="city_id" value="{{session('city_id')}}">
                     </div>
                 </div>
                 <div class="col-12 col-lg-3 my-1 mt-2 my-lg-0">

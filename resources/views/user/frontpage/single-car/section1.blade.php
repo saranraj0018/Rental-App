@@ -79,7 +79,19 @@
             </div>
             <div class="col-12 col-lg-6">
                 <div class="p-3 bg-blue bdr-30 p-3 h-100">
-                    <form action="">
+                    <form>
+                        @php
+                            $city_list = \App\Models\City::where('city_status',1)->pluck('name','code')->toArray();
+                            $city = !empty($city_list) ?  $city_list : [];
+                        @endphp
+                        <div class="me-0 me-lg-1 my-auto">
+                            <div class="text-white fs-14 mb-2 text-left">Selected Location</div>
+                            <div class="d-flex text-white py-2 px-4 date-pick">
+                                <div class="fs-14">
+                                    <i class="fa fa-map-marker me-2" aria-hidden="true"></i><span> {{ array_key_exists(session('city_id'), $city) ? $city[session('city_id')] : '' }}</span>
+                                </div>
+                            </div>
+                        </div>
                         <div class="d-none d-lg-block">
                             <div class="d-flex justify-content-evenly">
                                 <div class="me-0 me-lg-1 my-auto">

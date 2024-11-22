@@ -317,9 +317,8 @@
 <div class="modal fade" id="cityModal" tabindex="-1" aria-labelledby="cityModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="cityModalLabel">Select City</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header bg-blue">
+                <h5 class="modal-title text-white" id="cityModalLabel">Select City</h5>
             </div>
             <div class="modal-body">
                 <ul class="list-group" id="cityList">
