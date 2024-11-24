@@ -44,24 +44,29 @@ $(function () {
 
                     const bookingsMap = {}; // Map register numbers to their daily bookings
 
-                    bookings.forEach(function(booking) {
+                    bookings.forEach(function (booking) {
                         const registerNumber = booking.register_number;
                         const startDate = new Date(booking.start_date);
                         const endDate = new Date(booking.end_date);
                         const bookingType = booking.booking_type;
+                        const booking_id = booking.booking_id;
 
                         if (!bookingsMap[registerNumber]) {
                             bookingsMap[registerNumber] = new Array(7).fill().map(() => new Array(48).fill('green'));
                         }
 
-                        // Determine booking color based on type
-                        const color = (bookingType === '1') ? 'red' : (bookingType === '2') ? 'blue' : 'green';
+                        const color =
+                            (bookingType === '1') ? 'red' : (bookingType === '2') ? 'blue' :
+                                (bookingType === '3') ? 'yellow' :
+                                        (bookingType === '4') ? 'purple' :
+                                            (bookingType === '5') ? 'orange' :
+                                                (bookingType === '6') ? 'black' : 'green';
 
-                        let currentDate = new Date(startDate); // Start iterating from the start date
+                        let currentDate = new Date(startDate);
                         while (currentDate <= endDate) {
                             const dayIndex = calculateDayIndex(currentDate);
 
-                            if (dayIndex >= 0 && dayIndex < 7) { // Check if the day is within the current week
+                            if (dayIndex >= 0 && dayIndex < 7) {
                                 let hourStart = 0;
                                 let hourEnd = 48;
 
@@ -70,33 +75,32 @@ $(function () {
                                 }
                                 if (currentDate.toDateString() === endDate.toDateString()) {
                                     hourEnd = Math.ceil(endDate.getHours() * 2 + endDate.getMinutes() / 30) + 1;
-
                                 }
 
-                                // Update booking color for the relevant hours
                                 for (let h = hourStart; h < hourEnd; h++) {
                                     if (h < 48) {
-                                        bookingsMap[registerNumber][dayIndex][h] = color;
+                                        bookingsMap[registerNumber][dayIndex][h] = {color,booking_id};
                                     }
                                 }
-
-                                console.log(
-                                    `Register: ${registerNumber}, Day: ${dayIndex}, Current: ${currentDate.toDateString()}, Start: ${hourStart}, End: ${hourEnd}`
-                                );
                             }
-
-                            // Move to the next day
                             currentDate.setDate(currentDate.getDate() + 1);
                         }
                     });
 
+// Populate the table with booking data
                     // Populate the table with booking data
                     for (const registerNumber in bookingsMap) {
                         let rowHtml = `<tr style="border: 1px solid #000;"> <td style="border: 1px solid #000;">${registerNumber}</td>`;
                         for (let d = 0; d < 7; d++) {
                             for (let h = 0; h < 48; h++) {
-                                const color = bookingsMap[registerNumber][d][h];
-                                rowHtml += `<td style="background-color: ${color}; border: 1px solid #000;"></td>`;
+                                const colorData = bookingsMap[registerNumber][d][h];
+                                const cellColor = colorData?.color || 'green'; // Default to green if no color is set
+                                const bookingId = colorData?.booking_id || ''; // Default to empty if no booking_id is present
+
+                                rowHtml += `<td style="background-color: ${cellColor}; border: 1px solid #000;"
+                 title="${bookingId ? 'Booking ID: ' + bookingId : 'Default Green'}">
+                 ${bookingId || ''}
+            </td>`;
                             }
                         }
                         rowHtml += `</tr>`;

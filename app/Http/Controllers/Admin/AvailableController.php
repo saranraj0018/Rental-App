@@ -38,19 +38,17 @@ class AvailableController extends Controller
 
         $bookings = [];
         foreach ($carDetails as $carDetail) {
-            // Extract the register number
             $registerNumber = $carDetail->register_number;
-            // Map bookings for the current car detail and handle empty dates
             $carDetailBookings = $carDetail->availableBookings->map(function($booking) use ($registerNumber) {
-                // Check if start_date or end_date is empty
                 $startDate = $booking->start_date;
                 $endDate = $booking->end_date;
-                // Otherwise, return the booking with the register number
+
                 return [
                     'register_number' => $registerNumber, // Include register number here
                     'start_date' => $startDate,
                     'end_date' => $endDate,
                     'booking_type' => $booking->booking_type,
+                    'booking_id' => $booking->booking_id
                 ];
             })->toArray(); // Convert the collection to an array
            if (empty($carDetailBookings)) {
@@ -59,6 +57,7 @@ class AvailableController extends Controller
                    'start_date' => null,
                    'end_date' => null,
                    'booking_type' => null,
+                   'booking_id' => null,
                ];
            }
 

@@ -242,8 +242,15 @@
             $('#user_document').modal('show');
             return;
         }
-        let map_verify = await verifyUserLocation();
-        if (!map_verify) {
+
+        let drop_address = "{{ session('delivery.address') }}";
+        let pickup_address = "{{ session('pickup.address') }}";
+
+        // Convert empty strings to 0
+        drop_address = drop_address === "" ? 0 : drop_address;
+        pickup_address = pickup_address === "" ? 0 : pickup_address;
+        // Ensure both values are correctly processed
+        if ( drop_address === 0 || pickup_address === 0) {
             $('#secondModal').modal('show');
             window.initMarker();
             return;
@@ -308,26 +315,6 @@
                 success: function(response) {
                     if (!response.success) {
                         $('#otpModal').modal('hide');
-                        resolve(false);
-                    } else {
-                        resolve(true);
-                    }
-                },
-                error: function() {
-                    resolve(false);
-                }
-            });
-        });
-    }
-
-
-    async function verifyUserLocation() {
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url: '/user/verify-location', // Update with your route.
-                method: 'GET',
-                success: function(response) {
-                    if (!response.success) {
                         resolve(false);
                     } else {
                         resolve(true);

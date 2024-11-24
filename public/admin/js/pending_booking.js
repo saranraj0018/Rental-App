@@ -1,9 +1,15 @@
 $(function () {
     'use strict'
     $(document).ready(function() {
+        let debounceTimer;
         $('#pending_car_model, #pending_register_number, #pending_booking_id, #pending_customer_name, #pending_booking_type, #pending_hub_type, #booking_history').on('input change', function() {
-            fetchData();
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(function() {
+                fetchData();
+            }, 300); // 300ms delay
         });
+
+
 
         function fetchData() {
             const carModel = $('#pending_car_model').val();
@@ -13,7 +19,7 @@ $(function () {
             const bookingType = $('#pending_booking_type').val();
             const hub_type = $('#pending_hub_type').val();
             const booking_history = $('#booking_history').val();
-            let status = 3;
+
             $.ajax({
                 url: '/admin/booking/pending/search', // Define this route in your web.php
                 type: 'GET',
@@ -25,7 +31,7 @@ $(function () {
                     booking_type: bookingType,
                     hub_type: hub_type,
                     booking_history: booking_history,
-                    status:status
+
                 },
                 success: function(response) {
                     updateBookingTable(response.data) // Populate table with new data

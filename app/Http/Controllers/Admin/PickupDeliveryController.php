@@ -636,6 +636,7 @@ class PickupDeliveryController extends BaseController
         }
         // Paginate the results
         $bookings = $query->paginate($perPage);
+
         return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Data Fetch successfully']);
 
     }
