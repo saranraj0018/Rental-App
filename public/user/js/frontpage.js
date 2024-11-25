@@ -274,7 +274,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const date1 = new Date(dateTime1.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:00'));
         const date2 = new Date(dateTime2.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:00'));
-
         if (isNaN(date1) || isNaN(date2) || date1 >= date2) {
             setDurationError('The start date and time must be earlier than the end date and time.');
             $('#find_car').prop('disabled', true);
@@ -291,7 +290,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const minHours = parseInt($('#minimum_days').val());
         const maxHours = parseInt($('#maximum_days').val());
-
         if (totalHours < minHours) {
             setDurationError(`Minimum ${minHours} hours required`);
             $('#find_car').prop('disabled', true);
@@ -303,17 +301,16 @@ document.addEventListener("DOMContentLoaded", function () {
             $('#find_car').prop('disabled', false);
         }
     }
-    // Helper function for showing duration error messages
+
     function setDurationError(message) {
         $('.duration-error').text(message);
     }
-
+    // Function to format date and time for datetime-local input
     function formatDateTime(dateStr, timeStr) {
         const dateParts = dateStr.split('-');
         return `${dateParts[0]}-${dateParts[1]}-${dateParts[2]} ${timeStr}`;
     }
 
-    // Helper function to disable past times with a 3-hour buffer
     function disablePastTimes(timeContainer, selectedDate) {
         const today = new Date();
         const bufferTime = new Date(today.getTime() + 3 * 60 * 60 * 1000); // Add 3 hours
@@ -342,87 +339,74 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
     }
-    let max_duration = $('#front_duration').val();
-    if (max_duration){
-        let [day, month, year] = max_duration.split("-").map(Number); // Parse the date parts
-        let maxDate = new Date(year, month - 1, day);
-        // Flatpickr setup
-        flatpickr("#inlineDatePicker1", {
-            inline: true,
-            minDate: "today",
-            dateFormat: "d-m-Y",
-            maxDate: maxDate,
-            onChange: function (selectedDates, dateStr) {
-                selectedDate1 = dateStr;
-                disablePastTimes(document.getElementById('timeTabContent1'), selectedDate1); // Disable past times
-                if (dateStr) {
-                    let timeTab = new bootstrap.Tab(document.getElementById('time-tab1'));
-                    timeTab.show();
-                }
+
+    // Initialize Flatpickr for both date pickers
+    flatpickr("#inlineDatePicker1", {
+        inline: true,
+        dateFormat: "d-m-Y",
+        disable: [
+            date => date < new Date().setHours(0, 0, 0, 0)
+        ],
+
+        onChange: function (selectedDates, dateStr) {
+            selectedDate1 = dateStr;
+            disablePastTimes(document.getElementById('timeTabContent1'), selectedDate1); // Disable past times
+            if (dateStr) {
+                let timeTab = new bootstrap.Tab(document.getElementById('time-tab1'));
+                timeTab.show();
             }
-        });
+        }
+    });
 
-        flatpickr("#inlineDatePicker2", {
-            inline: true,
-            minDate: "today",
-            maxDate: max_duration,
-            dateFormat: "d-m-Y",
-            onChange: function (selectedDates, dateStr) {
-                selectedDate2 = dateStr;
-                disablePastTimes(document.getElementById('timeTabContent2'), selectedDate2); // Disable past times
-                if (dateStr) {
-                    let timeTab = new bootstrap.Tab(document.getElementById('time-tab2'));
-                    timeTab.show();
-                }
+    flatpickr("#inlineDatePicker2", {
+        inline: true,
+        dateFormat: "d-m-Y",
+        disable: [
+            date => date < new Date().setHours(0, 0, 0, 0)
+        ],
+        onChange: function (selectedDates, dateStr) {
+            selectedDate2 = dateStr;
+            disablePastTimes(document.getElementById('timeTabContent2'), selectedDate2); // Disable past times
+            if (dateStr) {
+                let timeTab = new bootstrap.Tab(document.getElementById('time-tab2'));
+                timeTab.show();
             }
-        });
+        }
+    });
 
-
-        // Time button click handling for first and second modals
-        document.querySelectorAll('#timeTabContent1 .time-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                selectedTime1 = this.getAttribute('data-time');
-                document.querySelectorAll('#timeTabContent1 .time-btn').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        document.querySelectorAll('#timeTabContent2 .time-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                selectedTime2 = this.getAttribute('data-time');
-                document.querySelectorAll('#timeTabContent2 .time-btn').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        // Submit button handling for both modals
-        document.getElementById('submitDateTime1').addEventListener('click', function () {
-            if (!selectedDate1 || !selectedTime1) {
-                alert("Please select both date and time before submitting.");
+    // Event listener for time buttons in the first modal
+    document.querySelectorAll('.submitDateTime1').forEach(button => {
+        button.addEventListener('click', function () {
+            selectedTime1 = this.getAttribute('data-time');
+            if (!selectedDate1) {
+                alert("Please choose a date before submitting.");
                 return;
             }
-            $('#dateTimeInput1').val(formatDateTime(selectedDate1, selectedTime1));
+            const combinedDateTime1 = formatDateTime(selectedDate1, selectedTime1);
+            document.getElementById('dateTimeInput1').value = combinedDateTime1;
             $('#dateTimeModal1').modal('hide');
             calculateTimeDifference();
         });
+    });
 
-        document.getElementById('submitDateTime2').addEventListener('click', function () {
-            if (!selectedDate2 || !selectedTime2) {
-                alert("Please select both date and time before submitting.");
+    // Event listener for time buttons in the second modal
+    document.querySelectorAll('.submitDateTime2').forEach(button => {
+        button.addEventListener('click', function () {
+            selectedTime2 = this.getAttribute('data-time');
+            if (!selectedDate2) {
+                alert("Please choose a date before submitting.");
                 return;
             }
-            $('#dateTimeInput2').val(formatDateTime(selectedDate2, selectedTime2));
+            const combinedDateTime2 = formatDateTime(selectedDate2, selectedTime2);
+            document.getElementById('dateTimeInput2').value = combinedDateTime2;
             $('#dateTimeModal2').modal('hide');
+
             calculateTimeDifference();
         });
-
-
-    }
+    });
     $(document).on('click', '.book_now', function () {
         const start_date = $('#dateTimeInput1').val();
         const end_date = $('#dateTimeInput2').val();
-        console.log(start_date, end_date); // Add both for debugging
-
         if (start_date === '' || end_date === '') {
             $('#alert_booking').modal('show');
         } else {
@@ -434,7 +418,6 @@ document.addEventListener("DOMContentLoaded", function () {
     $('#cityInput').on('click', function () {
         $('#cityModal').modal('show');
     });
-
 
     $('.city-option').on('click', function () {
         let selectedCity = $(this).text();

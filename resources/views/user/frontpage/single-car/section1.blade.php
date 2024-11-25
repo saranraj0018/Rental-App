@@ -187,6 +187,8 @@
                                 <input type="hidden" id="final_amount" value="{{ session('booking_details.total_price') }}">
                                 <input type="hidden" id="additional_amount" value="{{ $delivery_fee + $car_model->carModel->dep_amount ?? 0 }}">
                                 <div class="text-white">
+                                    <input type="hidden" id="drop_address_pine">
+                                    <input type="hidden" id="pickup_address_pine">
                                     <p class="fs-20 fs-mb-16 my-2 text-end">
                                         Drop Address<span id="drop_address">{{ session('delivery.address') ?? session('pick-delivery.address') ?? '' }}</span></p>
                                     <p class="fs-20 fs-mb-16 my-2 text-end">
@@ -243,18 +245,25 @@
             return;
         }
 
-        let drop_address = "{{ session('delivery.address') }}";
-        let pickup_address = "{{ session('pickup.address') }}";
+        let drop_address = "{{ session('delivery.address') ?? session('pick-delivery.address') ?? '' }}";
+        let pickup_address = "{{ session('pickup.address') ?? session('pick-delivery.address') ?? '' }}";
+        let drop_address_pine = $('#drop_address_pine').val();
+        let pickup_address_pine = $('#pickup_address_pine').val();
 
         // Convert empty strings to 0
         drop_address = drop_address === "" ? 0 : drop_address;
         pickup_address = pickup_address === "" ? 0 : pickup_address;
-        // Ensure both values are correctly processed
-        if ( drop_address === 0 || pickup_address === 0) {
-            $('#secondModal').modal('show');
-            window.initMarker();
-            return;
+
+        if (!drop_address_pine || !pickup_address_pine) {
+            if (drop_address === 0 || pickup_address === 0) {
+                $('#secondModal').modal('show');
+                window.initMarker();
+                return;
+            }
         }
+        // Ensure both values are correctly processed
+
+
 
         let user_booking = await verifyUserbooking();
         if (!user_booking) {

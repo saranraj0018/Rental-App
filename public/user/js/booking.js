@@ -68,14 +68,6 @@ $(function () {
             $('#model_id').val($(this).data('model_id'));
             $('#reschedule_model').modal('show');
         });
-        flatpickr("#delivery_date", {
-            minDate: "today",
-            enableTime: true,
-            dateFormat: "d-m-Y | H:i",
-            time_24hr: true,
-            minuteIncrement: 30, // 30-minute intervals
-            allowInput: true,
-        });
 
         $('#calculate_price').on('click', function () {
             const bookingId = $('#booking_id').val();
@@ -205,5 +197,76 @@ $(function () {
                 });
             }
         });
+
+        function initializeDateTimePicker(dateInputId, datePickerId, timeTabId, dateTabId, dateContentId, timeContentId, timeButtonClass, pickerClass) {
+            let selectedDate = "";
+            let selectedTime = "";
+
+            // Initialize Flatpickr in inline mode for calendar
+            flatpickr("#" + datePickerId, {
+                inline: true,
+                dateFormat: "d-m-Y",
+                onChange: function (selectedDates, dateStr) {
+                    selectedDate = dateStr;
+                    if (dateStr) {
+                        // Automatically switch to time tab after selecting date
+                        $('#' + timeTabId).trigger('click');
+                    }
+                }
+            });
+
+            // Toggle tabs on click
+            $('#' + dateTabId).on('click', function (e) {
+                e.preventDefault();
+                $(this).addClass('active').attr('aria-selected', 'true');
+                $('#' + timeTabId).removeClass('active').attr('aria-selected', 'false');
+                $('#' + dateContentId).addClass('show active');
+                $('#' + timeContentId).removeClass('show active');
+            });
+
+            $('#' + timeTabId).on('click', function (e) {
+                e.preventDefault();
+                $(this).addClass('active').attr('aria-selected', 'true');
+                $('#' + dateTabId).removeClass('active').attr('aria-selected', 'false');
+                $('#' + timeContentId).addClass('show active');
+                $('#' + dateContentId).removeClass('show active');
+            });
+
+            // Handle time button click event
+            $('.' + timeButtonClass).on('click', function () {
+                selectedTime = $(this).data('time');
+                $('.' + timeButtonClass).removeClass('active');
+                $(this).addClass('active');
+
+                // Check if both date and time are selected
+                if (selectedDate && selectedTime) {
+                    // Update the input field with selected date and time
+                    $("#" + dateInputId).val(selectedDate + ' ' + selectedTime);
+
+                    // Hide the picker
+                    $("." + pickerClass).slideUp();
+                } else {
+                    alert("Please select both date and time.");
+                }
+            });
+
+            // Toggle picker visibility when input is clicked
+            $("." + pickerClass).hide();
+            $("#" + dateInputId).click(function () {
+                $("." + pickerClass).slideToggle();
+            });
+        }
+
+        // Initialize the first date-time picker
+        initializeDateTimePicker(
+            "dateTimeInput",
+            "inlineDatePicker",
+            "time-tab",
+            "date-tab",
+            "dateTabContent",
+            "timeTabContent",
+            "time-btn",
+            "picker"
+        );
     });
 });
