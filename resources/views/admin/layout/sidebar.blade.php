@@ -141,11 +141,6 @@
                                     <p>Coupon</p>
                                 </a>
                             </li>
-
-
-
-                        <!-- Car Availability -->
-
                             <li class="nav-item">
                                 <a href="{{ route('car-info.view') }}" class="nav-link">
                                     <i class="fas fa-truck nav-icon"></i>
@@ -163,6 +158,42 @@
                             <a href="{{ route('faq.list') }}" class="nav-link">
                                 <i class="fas fa-truck nav-icon"></i>
                                 <p>FAQ</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('section.list', ['section' => 'policy']) }}" class="nav-link">
+                                <i class="fas fa-truck nav-icon"></i>
+                                <p>Privacy Policy</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('section.list', ['section' => 'terms']) }}" class="nav-link">
+                                <i class="fas fa-truck nav-icon"></i>
+                                <p>Terms & Conditions</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('section.list', ['section' => 'shipping']) }}" class="nav-link">
+                                <i class="fas fa-truck nav-icon"></i>
+                                <p>Shipping</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('section.list', ['section' => 'refunds']) }}" class="nav-link">
+                                <i class="fas fa-truck nav-icon"></i>
+                                <p>Refund</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('section.list', ['section' => 'pricing']) }}" class="nav-link">
+                                <i class="fas fa-truck nav-icon"></i>
+                                <p>Pricing</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('section.list', ['section' => 'cancel']) }}" class="nav-link">
+                                <i class="fas fa-truck nav-icon"></i>
+                                <p>Cancellation</p>
                             </a>
                         </li>
                         <li class="nav-item">

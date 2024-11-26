@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\AvailableController;
 use App\Http\Controllers\Admin\SwapController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CityController;
+use App\Http\Controllers\Admin\SettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -119,6 +120,9 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::post('/faq/save', [BannerController::class, 'faqSave'])->name('faq.save');
         Route::delete('/faq/{id?}/delete', [BannerController::class, 'faqDelete'])->name('faq.delete');
         Route::get('/faq/search', [BannerController::class, 'search'])->name('faq.search');
+
+        Route::get('/{section}/list', [SettingController::class, 'view'])->name('section.list');
+        Route::post('/{section}/editable', [SettingController::class, 'update'])->name('section.update');
 
         // Map Section
         Route::get('/city-map', [MapController::class, 'show'])->name('city.map');

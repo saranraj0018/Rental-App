@@ -97,18 +97,15 @@
     </header>
 
 </section>
-
-
-
-
+@php
+    $item = \App\Models\Frontend::where('data_keys', 'pricing')->first();
+@endphp
 <section class="my-5">
     <div class="container">
         <div>
-
-            <p class="fs-18 my-2 text-justify">
-                We offer multiple pricing plans to fit your requirements. Each pricing plan differs in terms of the "kilometer limit." The total kilometers limit for your booking is determined by multiplying the duration of your booking with the hourly "kilometers limit" of the pricing plan that you select. If you clock more kilometers than the total kilometers limit of your booking, the additional kilometers attract "extra km charges," which vary by the car model and the city kilometers.
-            </p>
-
+            <div>
+                {!! !empty($item['data_values']) ? json_decode($item['data_values']) : ''!!}
+            </div>
         </div>
 
     </div>

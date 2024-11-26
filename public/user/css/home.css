@@ -89,8 +89,8 @@ input.form-control.my-hub{
     background: white !important;
 }
 .my-button {
-    background-color: #123984;
-    color: white;
+    background-color: #123984 !important;
+    color: white !important;
     border-radius: 30px;
 }
 

@@ -99,17 +99,14 @@
 
 </section>
 
-
+@php
+    $item = \App\Models\Frontend::where('data_keys', 'refunds')->first();
+@endphp
 <section class="my-5">
     <div class="container">
         <div>
-
-            <p class="fs-18 my-2 text-justify">
-                A refundable security deposit of up to Rs 5,000 will be charged. During limited-period offers, this amount might be lower. It will be refunded within 10 days of the booking's end time. Please select the "Refund to Bank Account" or "Refund to Wallet" options while paying for fast refunds within 4 days of the booking's end time.
-            </p>
-
+            {!! !empty($item['data_values']) ? json_decode($item['data_values']) : ''!!}
         </div>
-
     </div>
 </section>
 @include('user.frontpage.footer')

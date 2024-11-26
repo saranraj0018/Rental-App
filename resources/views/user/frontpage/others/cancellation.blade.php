@@ -99,39 +99,14 @@
 
 </section>
 
-
+@php
+    $item = \App\Models\Frontend::where('data_keys', 'cancel')->first();
+ @endphp
 
 <section class="my-5">
     <div class="container">
         <div>
-
-            <div>
-                <h2 class="text-blue fs-5 fw-bold">
-                    More than 24 hours before start time:
-                </h2>
-                <p class="fs-16 text-justify">
-                    Rs. 500 cancellation charge. The rest of the amount will be refunded to you.
-                </p>
-            </div>
-
-            <div>
-                <h2 class="text-blue fs-5 fw-bold">
-                    Between 24 and 3 hours before start time:
-                </h2>
-                <p class="fs-16 text-justify">
-                    You will be charged 50% of the base fare paid. From a minimum of Rs. 500 to a maximum of Rs. 3500. Rest of the amount will be refunded to you.
-                </p>
-            </div>
-
-            <div>
-                <h2 class="text-blue fs-5 fw-bold">
-                    Within 3 hours of start time:
-                </h2>
-                <p class="fs-16 text-justify">
-                    You will be charged 100% of the base fare paid. From a minimum of Rs. 500 to a maximum of Rs. 5000, and also the doorstep delivery charges.
-                </p>
-            </div>
-
+            {!! !empty($item['data_values']) ? json_decode($item['data_values']) : ''!!}
         </div>
 
     </div>
