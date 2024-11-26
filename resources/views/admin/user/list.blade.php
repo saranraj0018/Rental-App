@@ -95,6 +95,7 @@
                             <th>Aadhaar Number</th>
                             <th>Driving Licence</th>
                             <th>Update At</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -108,6 +109,13 @@
                                     <td>{{ $item->aadhaar_number ?? ''}}</td>
                                     <td>{{ $item->driving_licence ?? '' }}</td>
                                     <td>{{ showDateTime($item->updated_at) }}</td>
+                                    <td><a href="#" class="user_view text-primary w-4 h-4 mr-1" data-id="{{ $item->id }}"
+                                           data-images="{{ json_encode($item->userDoc->pluck('image_name')) }}">
+                                            <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                                <path d="M12 4.5c4.636 0 8.604 3.094 10.314 7.5-1.71 4.406-5.678 7.5-10.314 7.5S3.396 16.406 1.686 12C3.396 7.594 7.364 4.5 12 4.5zm0 2.25a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5zM12 9a3 3 0 110 6 3 3 0 010-6z"/>
+                                            </svg>
+                                        </a>
+                                    </td>
                                 </tr>
                             @endforeach
                         @else
@@ -125,6 +133,7 @@
                 {{ $user->links() }}
             </div>
         </div>
+        @include('admin.user.model')
     </section>
 @endsection
 @section('customJs')

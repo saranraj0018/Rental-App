@@ -6,6 +6,9 @@
                 <div class="col-sm-6">
                     <h1>Swap Cars </h1>
                 </div>
+                <div class="col-sm-6 text-right">
+                    <a href="{{ route('car-swap.table') }}" class="btn btn-primary mb-3" id="add_role" role="button">Swap History</a>
+                </div>
             </div>
         </div>
         <!-- /.container-fluid -->
@@ -15,9 +18,13 @@
         <div class="d-flex mb-3">
             <div class="form-group w-25 mr-3">
                 <label for="booking_type">Select Hub</label>
-                <select id="booking_type" class="form-control">
-                    <option selected disabled>Select Hub</option>
-                    <option value="603">Coimbatore</option>
+                <select id="hub_city" name="hub_city" class="form-select w-100" data-live-search="true">
+                    <option selected disabled>Hub</option>
+                    @if(!empty($city_list))
+                        @foreach($city_list as $id => $list)
+                            <option value="{{$id}}"> {{$list}}</option>
+                        @endforeach
+                    @endif
                 </select>
             </div>
         </div>

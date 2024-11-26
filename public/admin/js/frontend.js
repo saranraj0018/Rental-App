@@ -363,6 +363,7 @@ $(function () {
                 {id: '#minimum_hours', condition: (val) => val.trim() === ''},
                 {id: '#maximum_hours', condition: (val) => val.trim() === ''},
                 {id: '#delivery_fee',condition: (val) => val.trim() === ''},
+                {id: '#show_duration',condition: (val) => val.trim() === ''},
             ];
 
             fields.forEach(field => {
@@ -377,8 +378,6 @@ $(function () {
             });
 
             if (isValid) {
-                // $('#banner_save').prop('disabled', true);  // Disable submit button during AJAX
-
                 $.ajax({
                     url: '/admin/general/save',
                     type: 'POST',

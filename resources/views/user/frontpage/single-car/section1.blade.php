@@ -70,7 +70,7 @@
                     </p>
                     <div class=" mt-2">
                         <ul class="fs-6 fw-500 ps-3">
-                            <li>Pricing Plan: Total {{!empty($car_model->carModel->per_day_km) ? $car_model->carModel->per_day_km *  $price_list['different_hours'] : $car_model->carModel->per_day_km }} kms, excludes fuel</li>
+                            <li>Pricing Plan: Total {{!empty($car_model->carModel->per_day_km) ? $car_model->carModel->per_day_km *  !empty($price_list['different_hours']) ? $price_list['different_hours'] : 0 : $car_model->carModel->per_day_km }} kms, excludes fuel</li>
                             <li>Extra Hour: ₹{{ $car_model->carModel->extra_hours_price ?? '' }} / per hour</li>
                             <li>Extra Km: ₹{{ $car_model->carModel->extra_km_charge }} / per KM</li>
                         </ul>
@@ -79,7 +79,19 @@
             </div>
             <div class="col-12 col-lg-6">
                 <div class="p-3 bg-blue bdr-30 p-3 h-100">
-                    <form action="">
+                    <form>
+                        @php
+                            $city_list = \App\Models\City::where('city_status',1)->pluck('name','code')->toArray();
+                            $city = !empty($city_list) ?  $city_list : [];
+                        @endphp
+                        <div class="me-0 me-lg-1 my-auto">
+                            <div class="text-white fs-14 mb-2 text-left">Selected Location</div>
+                            <div class="d-flex text-white py-2 px-4 date-pick">
+                                <div class="fs-14">
+                                    <i class="fa fa-map-marker me-2" aria-hidden="true"></i><span> {{ array_key_exists(session('city_id'), $city) ? $city[session('city_id')] : '' }}</span>
+                                </div>
+                            </div>
+                        </div>
                         <div class="d-none d-lg-block">
                             <div class="d-flex justify-content-evenly">
                                 <div class="me-0 me-lg-1 my-auto">
@@ -175,10 +187,12 @@
                                 <input type="hidden" id="final_amount" value="{{ session('booking_details.total_price') }}">
                                 <input type="hidden" id="additional_amount" value="{{ $delivery_fee + $car_model->carModel->dep_amount ?? 0 }}">
                                 <div class="text-white">
-                                    <p class="fs-20 fs-mb-16 my-2 text-end">
-                                        Pickup Address<span id="pickup_address">{{ session('pickup.address') ?? session('pick-delivery.address') ?? '' }}</span></p>
+                                    <input type="hidden" id="drop_address_pine">
+                                    <input type="hidden" id="pickup_address_pine">
                                     <p class="fs-20 fs-mb-16 my-2 text-end">
                                         Drop Address<span id="drop_address">{{ session('delivery.address') ?? session('pick-delivery.address') ?? '' }}</span></p>
+                                    <p class="fs-20 fs-mb-16 my-2 text-end">
+                                        Pickup Address<span id="pickup_address">{{ session('pickup.address') ?? session('pick-delivery.address') ?? '' }}</span></p>
                                 </div>
                             </div>
                         </div>
@@ -197,25 +211,20 @@
                                         </div>
                                     </div>
                                     <div class="mb-3 mb-md-auto toggle">
-                                        <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#secondModal">
-                                            <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Pickup/Drop Location</button>
+                                        <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto pickup_location">
+                                            <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Drop/Pickup Location
+                                        </button>
                                     </div>
-                                    <div class="mb-3 mb-md-auto me-3 {{!empty($general_section['show_delivery']) ? 'd-none' : ''}}">
-                                        <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#secondModal">
-                                            <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Pickup/Drop Location</button>
+                                    <div class="mb-3 mb-md-auto me-3 {{ !empty($general_section['show_delivery']) ? 'd-none' : '' }}">
+                                        <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto pickup_location">
+                                            <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Drop/Pickup Location
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                @if(!empty(Auth::user()))
-                                <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" id="payment">Proceed Payment</button>
-                                @else
-                                    <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-3 fw-600 w-100 w-md-auto" id="login_payment">Login To Proceed Payment</button>
-{{--                                        <div class="spinner-border spinner-border-sm text-blue ms-3" role="status">--}}
-{{--                                            <span class="visually-hidden">Loading...</span>--}}
-{{--                                        </div>--}}
-
-                                @endif
+                                    <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto" style="display:{{ Auth::check() ? 'block' : 'none' }};" id="payment">Proceed Payment</button>
+                                    <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-3 fw-600 w-100 w-md-auto"  style="display: {{ Auth::check() ? 'none' : 'block !important' }};" id="login_payment">Login To Proceed Payment</button>
                             </div>
                         </div>
                     </form>
@@ -235,11 +244,32 @@
             $('#user_document').modal('show');
             return;
         }
-        let map_verify = await verifyUserLocation();
-        if (!map_verify) {
-            $('#secondModal').modal('show');
-            window.initMarker();
-            $('#custom-city').focus();
+
+        let drop_address = "{{ session('delivery.address') ?? session('pick-delivery.address') ?? '' }}";
+        let pickup_address = "{{ session('pickup.address') ?? session('pick-delivery.address') ?? '' }}";
+        let drop_address_pine = $('#drop_address_pine').val();
+        let pickup_address_pine = $('#pickup_address_pine').val();
+
+        // Convert empty strings to 0
+        drop_address = drop_address === "" ? 0 : drop_address;
+        pickup_address = pickup_address === "" ? 0 : pickup_address;
+
+        if (!drop_address_pine || !pickup_address_pine) {
+            if (drop_address === 0 || pickup_address === 0) {
+                $('#secondModal').modal('show');
+                window.initMarker();
+                return;
+            }
+        }
+        // Ensure both values are correctly processed
+
+
+
+        let user_booking = await verifyUserbooking();
+        if (!user_booking) {
+            let message = 'You have already booked for this date. Please select a different date.';
+            $('#error_message').text(message);
+            $('#login_alert').modal('show');
             return;
         }
 
@@ -306,15 +336,13 @@
         });
     }
 
-
-    async function verifyUserLocation() {
+    async function verifyUserbooking() {
         return new Promise((resolve, reject) => {
             $.ajax({
-                url: '/user/verify-location', // Update with your route.
+                url: '/user/verify-booking', // Update with your route.
                 method: 'GET',
                 success: function(response) {
                     if (!response.success) {
-                        $('#otpModal').modal('hide');
                         resolve(false);
                     } else {
                         resolve(true);
@@ -337,41 +365,42 @@
             <div class="modal-body">
                 <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
                 <div class="p-3">
-                    <div id="pickup-section" class="slide-section">
-                        <p class="fs-16 fw-500">Select Pickup Location</p>
-                        <div class="container">
-                            <div id="custom_map" style="height: 500px; width: 100%;"></div>
-                        </div>
-                        <p class="fs-16 fw-500 mt-2"> Enter manually</p>
-                        <input id="custom-city" type="text" placeholder="Search city" class="form-control current_pickup_address">
-                        <p class="text-danger" id="outside_area"></p>
-                        <input type="hidden" id="pic_latitude" name="pic_latitude" >
-                        <input type="hidden" id="pic_longitude" name="pic_longitude" >
-                        <input type="hidden" id="pic_address" name="pic_address" >
-                        <p class="text-danger" id="pick_outside_area"></p>
-                        <div class="d-flex">
-                            <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="delivery_address">Save Pickup Address</button>
-                            <button type="button" class="btn fs-16 my-drop-button mt-4 mx-2 w-50 w-lg-25" id="same_address">Same as Drop Location</button>
-                            <button type="button" class="btn fs-16 my-current-button rounded-pill mt-4 w-50 w-lg-25" id="use_current_location">Current Location</button>
-                        </div>
-                    </div>
-
-                    <div id="delivery-section" class="slide-section d-none">
-                        <div class="d-flex">
+                    <div id="delivery-section" class="slide-section">
                         <p class="fs-16 fw-500">Select Drop Location</p>
-                        </div>
                         <div class="container">
                             <div id="delivery_map" style="height: 500px; width: 100%;"></div>
+
                         </div>
                         <p class="fs-16 fw-500 mt-2"> Enter manually</p>
                         <input id="delivery-city" type="text" placeholder="Search city" class="form-control current_delivery_address">
+                        <p class="text-danger" id="outside_area"></p>
                         <input type="hidden" id="dly_latitude" name="dly_latitude">
                         <input type="hidden" id="dly_longitude" name="dly_longitude">
                         <input type="hidden" id="dly_address" name="dly_address">
                         <p class="text-danger" id="delivery_outside_area"></p>
                         <div class="d-flex">
-                        <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="conform_address">Conform address</button>
-                        <button type="button" class="btn fs-16 my-current-button rounded-pill mt-4 w-50 w-lg-25" id="drop_current_location">Current Location</button>
+                            <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="delivery_address">Save Drop Address</button>
+                            <button type="button" class="btn fs-16 my-drop-button mt-4 mx-2 w-50 w-lg-25" id="same_address">Same as Pickup Location</button>
+                            <button type="button" class="btn fs-16 my-current-button rounded-pill mt-4 w-50 w-lg-25" id="drop_current_location">Current Location</button>
+                        </div>
+                    </div>
+
+                    <div id="pickup-section" class="slide-section d-none">
+                        <div class="d-flex">
+                            <p class="fs-16 fw-500">Select Pickup Location</p>
+                        </div>
+                        <div class="container">
+                            <div id="custom_map" style="height: 500px; width: 100%;"></div>
+                        </div>
+                        <p class="fs-16 fw-500 mt-2"> Enter manually</p>
+                        <input id="custom-city" type="text" placeholder="Search city" class="form-control current_pickup_address">
+                        <input type="hidden" id="pic_latitude" name="pic_latitude" >
+                        <input type="hidden" id="pic_longitude" name="pic_longitude" >
+                        <input type="hidden" id="pic_address" name="pic_address" >
+                        <p class="text-danger" id="pickup_outside_area"></p>
+                        <div class="d-flex">
+                            <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="conform_address">Conform address</button>
+                            <button type="button" class="btn fs-16 my-current-button rounded-pill mt-4 w-50 w-lg-25" id="pick_current_location">Current Location</button>
                         </div>
                     </div>
                 </div>

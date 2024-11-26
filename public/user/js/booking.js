@@ -16,7 +16,7 @@ $(function () {
                     let coupon_amount = response.final_amount ?? 0;
                     let total_amount = final_amount - coupon_amount;
                     if (response.message) {
-                        $('#login_alert').modal('show');
+                        $('#mobileModal').modal('show');
                         return;
                     }
                     if (response.valid) {
@@ -27,15 +27,16 @@ $(function () {
                         $('#final_coupon_amount').val(coupon_amount);
                         $('#coupon_code').val(` `);
                     } else {
-                        alert('Invalid coupon code.');
+                        let error_message = 'Invalid coupon code';
+                        $('#error_message').text(error_message);
+                        $('#login_alert').modal('show');
                     }
                 },
                 error: function (response) {
-
                     if (response.responseJSON && response.responseJSON.message) {
                         let errors = response.responseJSON.message;
-                        if (errors) {
-                            $('#login_alert').modal('show');
+                        if (errors === 'Unauthenticated.') {
+                            $('#mobileModal').modal('show');
                         }
                     }
                 }
@@ -66,14 +67,6 @@ $(function () {
             $('#end_date').val($(this).data('end_date'));
             $('#model_id').val($(this).data('model_id'));
             $('#reschedule_model').modal('show');
-        });
-        flatpickr("#delivery_date", {
-            minDate: "today",
-            enableTime: true,
-            dateFormat: "d-m-Y | H:i",
-            time_24hr: true,
-            minuteIncrement: 30, // 30-minute intervals
-            allowInput: true,
         });
 
         $('#calculate_price').on('click', function () {
@@ -125,7 +118,7 @@ $(function () {
             });
         });
 
-        $('#user_booking').on('click', '.details', function() {
+        $('#pills-tabContent').on('click', '.details', function() {
             $('#booking_id').text($(this).data('booking_id'));
             $('#total_days').val($(this).data('total_days'));
             $('#total_hours').val($(this).data('total_hours'));
@@ -144,6 +137,21 @@ $(function () {
             $('#cancel_booking_id').val($(this).data('booking_id'));
             $('#cancel_booking').modal('show');
         });
+
+        $(document).on('click', '#close_pop', function () {
+            $('#reschedule_model').modal('hide');
+        });
+
+        $(document).on('click', '#details_close_pop', function () {
+            $('#booking_model').modal('hide');
+        });
+
+        $(document).on('click', '#cancel_close_pop', function () {
+            $('#cancel_booking').modal('hide');
+        });
+
+
+
 
         $('#cancel_booking_form').on('submit', function(e) {
             e.preventDefault();
@@ -170,7 +178,7 @@ $(function () {
                     data: $(this).serialize(),
                     success: function(response) {
                         $('#cancel_booking').modal('hide');
-                       // window.location.reload();
+                        window.location.reload();
                     },
                     error: function(response) {
                         if (response.responseJSON && response.responseJSON.errors) {
@@ -189,5 +197,76 @@ $(function () {
                 });
             }
         });
+
+        function initializeDateTimePicker(dateInputId, datePickerId, timeTabId, dateTabId, dateContentId, timeContentId, timeButtonClass, pickerClass) {
+            let selectedDate = "";
+            let selectedTime = "";
+
+            // Initialize Flatpickr in inline mode for calendar
+            flatpickr("#" + datePickerId, {
+                inline: true,
+                dateFormat: "d-m-Y",
+                onChange: function (selectedDates, dateStr) {
+                    selectedDate = dateStr;
+                    if (dateStr) {
+                        // Automatically switch to time tab after selecting date
+                        $('#' + timeTabId).trigger('click');
+                    }
+                }
+            });
+
+            // Toggle tabs on click
+            $('#' + dateTabId).on('click', function (e) {
+                e.preventDefault();
+                $(this).addClass('active').attr('aria-selected', 'true');
+                $('#' + timeTabId).removeClass('active').attr('aria-selected', 'false');
+                $('#' + dateContentId).addClass('show active');
+                $('#' + timeContentId).removeClass('show active');
+            });
+
+            $('#' + timeTabId).on('click', function (e) {
+                e.preventDefault();
+                $(this).addClass('active').attr('aria-selected', 'true');
+                $('#' + dateTabId).removeClass('active').attr('aria-selected', 'false');
+                $('#' + timeContentId).addClass('show active');
+                $('#' + dateContentId).removeClass('show active');
+            });
+
+            // Handle time button click event
+            $('.' + timeButtonClass).on('click', function () {
+                selectedTime = $(this).data('time');
+                $('.' + timeButtonClass).removeClass('active');
+                $(this).addClass('active');
+
+                // Check if both date and time are selected
+                if (selectedDate && selectedTime) {
+                    // Update the input field with selected date and time
+                    $("#" + dateInputId).val(selectedDate + ' ' + selectedTime);
+
+                    // Hide the picker
+                    $("." + pickerClass).slideUp();
+                } else {
+                    alert("Please select both date and time.");
+                }
+            });
+
+            // Toggle picker visibility when input is clicked
+            $("." + pickerClass).hide();
+            $("#" + dateInputId).click(function () {
+                $("." + pickerClass).slideToggle();
+            });
+        }
+
+        // Initialize the first date-time picker
+        initializeDateTimePicker(
+            "dateTimeInput",
+            "inlineDatePicker",
+            "time-tab",
+            "date-tab",
+            "dateTabContent",
+            "timeTabContent",
+            "time-btn",
+            "picker"
+        );
     });
 });

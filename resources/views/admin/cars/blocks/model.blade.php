@@ -39,14 +39,41 @@
                             <label class="form-check-label" for="reserve">LT-RESERVE</label>
                         </div>
                     </div>
-
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="start_date"></label>
+                            <div class="input-group date datetimepicker" id="datetimepicker" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker" id="start_date" name="start_date" placeholder="Select date and time" />
+                                <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please select the start date.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="end_date"></label>
+                            <div class="input-group date" id="enddatetimepicker" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#enddatetimepicker" id="end_date" name="end_date" placeholder="Select end date and time" />
+                                <div class="input-group-append" data-target="#enddatetimepicker" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please select the end date.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-row gx-3">
                         <div class="form-group col-md-3 mt-3">
-                            <select id="hub" name="hub" class="form-select w-100" data-live-search="true">
+                            <select id="hub_city" name="hub_city" class="form-select w-100" data-live-search="true">
                                 <option selected disabled>Hub</option>
-                                @foreach(hubList() as $code => $list)
-                                    <option value="{{$code}}"> {{$list}}</option>
-                                @endforeach
+                                @if(filled($city_list))
+                                    @foreach($city_list as $id => $list)
+                                        <option value="{{$id}}"> {{$list}}</option>
+                                    @endforeach
+                                @endif
                             </select>
                             <div class="invalid-feedback">
                                 Please choose a hub.
@@ -56,11 +83,6 @@
                         <div class="form-group col-md-3 mt-3">
                             <select id="car_model" name="car_model" class="form-select w-100" data-live-search="true">
                                 <option selected disabled>Model</option>
-                                @if(filled($car_models))
-                                    @foreach($car_models as $model)
-                                        <option value="{{$model->car_model_id}}"> {{$model->model_name}}</option>
-                                    @endforeach
-                                @endif
                             </select>
                             <div class="invalid-feedback">
                                 Please choose a car model.
@@ -75,43 +97,13 @@
                         <div class="form-group col-md-3 mt-3">
                             <select id="block_car_register_number" name="block_car_register_number" class="form-select w-100" data-live-search="true">
                                 <option selected disabled>Car Register Number</option>
-                                @if(!empty($car_details))
-                                    @foreach($car_details as $detail)
-                                        <option value="{{$detail}}"> {{$detail}}</option>
-                                    @endforeach
-                                @endif
                             </select>
                             <div class="invalid-feedback">
                                 Please choose a register number.
                             </div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label for="start_date">Start Date & Time</label>
-                            <div class="input-group date datetimepicker" id="datetimepicker" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker" id="start_date" name="start_date" placeholder="Select date and time" />
-                                <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                                <div class="invalid-feedback">
-                                    Please select the start date.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="end_date">End Date and Time</label>
-                            <div class="input-group date" id="enddatetimepicker" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#enddatetimepicker" id="end_date" name="end_date" placeholder="Select end date and time" />
-                                <div class="input-group-append" data-target="#enddatetimepicker" data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                                <div class="invalid-feedback">
-                                    Please select the end date.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="form-row">
                         <label for="comment">Comments</label>
                         <input type="text" class="form-control" id="comment" name="comment" placeholder="Comments">
@@ -223,6 +215,27 @@
                         </div>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this item?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
             </div>
         </div>
     </div>

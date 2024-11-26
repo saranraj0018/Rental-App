@@ -27,9 +27,6 @@ $(function () {
 
         // Add Cars
         $('#add_car').click(function() {
-            window.adminInitMap();
-            $('#car_location').focus();
-            $('#car_form').trigger("reset");
             $('#car_label').text("Add New Car");
             $('#create_car').modal('show');
             $('#submit_btn').text("Submit");
@@ -44,7 +41,6 @@ $(function () {
             // Define the elements and their conditions in an array of objects
             let isValid = true;
             let fields = [
-                { id: '#service_city', wrapper: true, condition: (val) => val === null },
                 { id: '#hub_city', wrapper: true, condition: (val) => val === null || val === "Hub" },
                 { id: '#car_model', wrapper: true, condition: (val) => val === null || val === "Model" },
                 { id: '#register_number', wrapper: false, condition: (val) => val.trim() === '' },
@@ -145,17 +141,13 @@ $(function () {
                     </td>
                     <td>${item.model_id}</td>
                     <td>${item.register_number}</td>
-                    <td>${item.hub}</td>
+                    <td>${item.city ? item.city.name : ''}</td>
                     <td>${item.created_at}</td>
                     <td>
                                     <a href="javascript:void(0)" class="btnEdit" data-id="${item.id}"
-                            data-city="${item.city_code}-${item.city_name}"
-                           data-hub="${item.hub_code}-${item.hub}"
+                           data-hub="${item.city_code}"
                            data-model="${item.model_id}"
                            data-register_number="${item.register_number}"
-                           data-latitude ="${item.latitude}"
-                           data-longitude ="${item.longitude}"
-                           data-address ="${item.address}"
                            data-current_km="${item.current_km}">
                                         <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
@@ -181,23 +173,11 @@ $(function () {
             $('#car_label').text("Edit Car");
             $('#submit_btn').text("Update");
             $('#car_form').trigger("reset");
-            modal.find('#service_city').val($(this).data('city'));
             modal.find('#hub_city').val($(this).data('hub'));
             modal.find('#car_model').val($(this).data('model'));
             modal.find('#register_number').val($(this).data('register_number'));
             modal.find('#current_km').val($(this).data('current_km'));
-            modal.find('#car_latitude').val($(this).data('latitude'));
-            modal.find('#car_longitude').val($(this).data('longitude'));
-            modal.find('#car_location').val($(this).data('address'));
             modal.find('input[name=car_id]').val($(this).data('id'));
-            if ($(this).data('latitude') !== '') {
-                let lat = parseFloat($(this).data('latitude')) || 11.0168;  // Default latitude (Coimbatore)
-                let lng = parseFloat($(this).data('longitude')) || 76.9558;  // Default longitude (Coimbatore)
-                $('#car_location_option').prop('checked', true).trigger('change');
-                window.adminInitMap(lat, lng);  // Pass valid lat/lng values
-            } else {
-                $('#car_location_option').prop('checked', false).trigger('change');
-            }
             modal.modal('show');
             $('select.form-select, select.form-control').each(function() {
                 $(this).selectpicker('refresh');
@@ -215,6 +195,23 @@ $(function () {
 
         // Edit Car model
         $('#car_table').on('click', '.edit_model', function() {
+            const otherCarImages = $(this).data('other_car');
+            const singleImage = $(this).data('single_car');
+            $('#singleImageContainer').html(`<img src="/storage/car_image/${singleImage}" alt="Single Car Image" class="img-fluid">`);
+
+            const imageContainer = $('#car_other_images_preview');
+            imageContainer.empty();
+
+            if (otherCarImages && otherCarImages.length > 0) {
+                otherCarImages.forEach(image => {
+                    const imageUrl = `/storage/car_other_image/${image.name}`; // Adjust the path if needed
+                    const imgElement = `<img src="${imageUrl}" alt="Car Image" class="img-thumbnail m-2" style="width: 100px; height: auto;">`;
+                    imageContainer.append(imgElement);
+                });
+            } else {
+                imageContainer.append('<p>No images available</p>');
+            }
+
             let modal = $('#create_car_modal');
             $('#car_modal_label').text("Edit Model");
             $('#car_model_Submit').text("Update");
@@ -276,9 +273,11 @@ $(function () {
                 { id: '#day_km'},
                 { id: '#peak_season'},
                 { id: '#extra_km_charge'},
-                { id: '#car_image'},
-                { id: '#car_other_image'},
             ];
+            if ($('#model_id').val() === '') {
+                fieldsToValidate.push({ id: '#car_image'});
+                fieldsToValidate.push({ id: '#car_other_image'});
+            }
 
             let isValid = true;
             // Loop through the fields and validate each one
@@ -352,85 +351,5 @@ $(function () {
                 }
             });
         });
-
-        $('#car_location_option').on('change', function() {
-            if ($(this).is(':checked')) {
-                $('#show_map').removeClass('d-none');
-                window.adminInitMap();
-            } else {
-                $('#show_map').addClass('d-none');
-                $('#latitude').val('');
-                $('#longitude').val('');
-            }
-        });
-
-        let map, marker, searchBox;
-
-        window.adminInitMap = function(lat, lng) {
-
-            if (lat === undefined){
-                lat = parseFloat('11.0168');
-                lng = parseFloat('76.9558');
-            }
-            // Initialize the map, centered on a default location
-            map = new google.maps.Map(document.getElementById('car-location-map'), {
-                center: {lat: lat, lng: lng}, // Coimbatore
-                zoom: 12,
-            });
-
-            // Add a marker at the provided lat/lng (default is Coimbatore)
-            marker = new google.maps.Marker({
-                position: { lat: lat, lng: lng },
-                map: map,
-                title: "Selected Location",
-            });
-
-            // Create the search box and link it to the input element
-            const input = document.getElementById('car_location');
-            searchBox = new google.maps.places.SearchBox(input);
-
-            // Bias the SearchBox results towards the current map's viewport
-            map.addListener('bounds_changed', function () {
-                searchBox.setBounds(map.getBounds());
-            });
-
-            // Event listener for search results
-            searchBox.addListener('places_changed', function () {
-                const places = searchBox.getPlaces();
-
-                if (places.length === 0) {
-                    return;
-                }
-
-                // Get the first place (the searched city)
-                const city = places[0];
-
-                // Get latitude and longitude from the city geometry
-                const latitude = city.geometry.location.lat();
-                const longitude = city.geometry.location.lng();
-                const address = city.formatted_address; // Get the formatted address
-                // Store latitude and longitude in hidden input fields
-                $('#car_latitude').val(latitude);
-                $('#car_longitude').val(longitude);
-                $('#car_address').val(address);
-
-
-                // Zoom into the city
-                map.setCenter(city.geometry.location);
-                map.setZoom(14);
-
-                // Remove any existing marker
-                if (marker) {
-                    marker.setMap(null);
-                }
-
-                // Add a marker at the city location
-                marker = new google.maps.Marker({
-                    position: city.geometry.location,
-                    map: map,
-                    title: city.name,
-                });
-            });
-        };
     });
 });

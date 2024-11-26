@@ -113,9 +113,9 @@
                         <a href="https://www.youtube.com" target="_blank" class="text-white text-decoration-none mb-2">
                             Safety
                         </a>
-                        <a href="https://www.youtube.com" target="_blank" class="text-white text-decoration-none mb-2">
-                            Blog
-                        </a>
+{{--                        <a href="https://www.youtube.com" target="_blank" class="text-white text-decoration-none mb-2">--}}
+{{--                            Blog--}}
+{{--                        </a>--}}
                         <a href="https://www.youtube.com" target="_blank" class="text-white text-decoration-none mb-2">
                             Contact us
                         </a>

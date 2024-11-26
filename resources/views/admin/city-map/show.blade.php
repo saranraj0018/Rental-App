@@ -4,9 +4,12 @@
     <div class="container">
         <label for="city-select">Choose a city:</label>
         <select id="city-select" class="form-control">
-            <option value="" selected disabled>Select City</option>
-            <option value="coimbatore">Coimbatore</option>
-            <option value="madurai">Madurai</option>
+            <option selected disabled>Select City</option>
+           @if(!empty($city_list))
+            @foreach($city_list as $id => $list)
+                    <option value="{{$list['code']}}">{{$list['name']}}</option>
+            @endforeach
+            @endif
         </select>
 
         <!-- Search bar for city -->
@@ -99,17 +102,19 @@
 
                 polygon.coordinates = coordinates;
             });
-
+            const cityCoords = @json($city_list->mapWithKeys(function ($city) {
+        return [$city->code => ['name' => $city->name, 'lat' => (float)$city->latitude, 'lng' => (float)$city->longitude]];
+    }));
             // Dropdown to fetch and display saved polygons for a city
             $('#city-select').change(function() {
                 let selectedCity = $(this).val();
-                const cityCoords = {
-                    'coimbatore': { lat: 11.0168, lng: 76.9558 },
-                    'madurai': { lat: 9.9252, lng: 78.1198 }
-                };
                 if (cityCoords[selectedCity]) {
-                    map.setCenter(cityCoords[selectedCity]);
-                    map.setZoom(12);
+                    const coords = cityCoords[selectedCity];
+                    console.log(coords)
+                    if (Number.isFinite(coords.lat) && Number.isFinite(coords.lng)) {
+                        map.setCenter({lat: coords.lat, lng: coords.lng});
+                        map.setZoom(12);
+                    }
 
                     $.ajax({
                         url: '/admin/get-city-coordinates',

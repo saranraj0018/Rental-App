@@ -92,12 +92,6 @@ $(function () {
                 { id: '#end_date', wrapper: false, condition: (val) => val === '' },
             ];
 
-            if ($('#maintenance').is(':checked')) {
-                let reason = $('input[name="reason"]:checked').length > 0;
-                radioField(reason,'reason');
-                fields.push(  { id: '#booking_id', wrapper: false, condition: (val) => val === '' });
-            }
-
             if (!$('#discretionary').is(':checked')) {
                 fields.push({ id: '#comment', wrapper: false, condition: (val) => val === '' });
             }
@@ -197,11 +191,12 @@ $(function () {
             if (data.length === 0) {
                 tbody.append('<tr><td colspan="9" class="text-center">Record Not Found</td></tr>');
             } else {
+                let rowCount = 1;
                 // Loop through the data and append rows
                 data.forEach(item => {
                     tbody.append(`
                 <tr>
-                    <td>${item.id}</td>
+                    <td>${rowCount++}</td>
                     <td>${block_type()[item.block_type] || ''}</td>
                     <td>${reason_type()[item.reason] || ''}</td>
                     <td>${item.user ? item.user.email : ''}</td>
@@ -222,14 +217,14 @@ $(function () {
                             </svg>
                         </a>
                         <!-- Uncomment this block if you want to enable the delete button -->
-                        <!--
-                        <a href="#" class="delete_btn text-danger w-4 h-4 mr-1" data-id="${item.id}">
+
+                        <a href="#" class="delete_block_model text-danger w-4 h-4 mr-1" data-id="${item.id}">
                             <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                  viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                             </svg>
                         </a>
-                        -->
+
                     </td>
                 </tr>
             `);
@@ -360,6 +355,29 @@ $(function () {
             }
         });
 
+        // Delete Car
+        let delete_id;
+        $('#car_block_table').on('click', '.delete_block_model', function() {
+            delete_id = $(this).data('id');  // Capture the ID of the item to delete
+            $('#deleteModal').modal('show');  // Show the modal
+        });
+
+        $('#confirmDelete').on('click', function() {
+            $.ajax({
+                url: `/admin/car-block/${delete_id}/delete`,
+                type: 'DELETE',
+                success: function(response) {
+                    $('#deleteModal').modal('hide');  // Hide the modal
+                    updateBlockTable(response.data);
+                    alertify.success(response.success);
+
+                },
+                error: function(response) {
+                    alertify.error('Internal server error');
+                }
+            });
+        });
+
 
         function fetchData() {
             let blockType = $('#block_type').val();
@@ -381,5 +399,65 @@ $(function () {
 
         $('#block_type').on('change', fetchData);
         $('#register_number').on('keyup', fetchData);
+
+        $('#hub_city').change(function() {
+            let hubId = $(this).val();
+            if (hubId) {
+                $.ajax({
+                    url: '/admin/get-car-models',
+                    method: 'GET',
+                    data: { hub_id: hubId },
+                    success: function(response) {
+                        let carModelSelect = $('#car_model');
+                        carModelSelect.empty(); // Clear current options
+                        carModelSelect.append('<option selected disabled>Choose a Car Model</option>');
+                        if (response.carModels.length > 0) {
+                            response.carModels.forEach(function(model) {
+                                carModelSelect.append('<option value="' + model.id + '">' + model.name + '</option>');
+                            });
+                        }
+                        // Refresh the selectpicker to update UI
+                        carModelSelect.selectpicker('refresh');
+                    },
+                    error: function() {
+                        alertify.error('Error fetching car models.');
+                    }
+                });
+            }
+        });
+
+        $('#car_model').change(function() {
+            let modelId = $(this).val();  // Get selected car model ID
+            let start_date = $('#start_date').val();
+            let end_date = $('#end_date').val();
+            let hubId = $('#hub_city').val();
+
+            if (start_date === '' && end_date === ''){
+                alertify.error('Choose First Start and End dates')
+                return;
+            }
+
+            if (modelId) {
+                $.ajax({
+                    url: '/admin/get-car-registration-numbers', // Laravel route to get registration numbers by model
+                    method: 'GET',
+                    data: { model_id: modelId,start_date:start_date,end_date:end_date, hub_id: hubId  },
+                    success: function(response) {
+                        let carModelSelect = $('#block_car_register_number');
+                        carModelSelect.empty().append('<option selected disabled>Registration Number</option>'); // Clear register number options
+                        carModelSelect.selectpicker('refresh');
+                        if (response.register_number.length > 0) {
+                            response.register_number.forEach(function(register_number) {
+                                carModelSelect.append('<option value="' + register_number + '">' + register_number + '</option>');
+                            });
+                        }
+                        carModelSelect.selectpicker('refresh');
+                    },
+                    error: function() {
+                        alertify.error('Internal Error')
+                    }
+                });
+            }
+        });
     });
 });

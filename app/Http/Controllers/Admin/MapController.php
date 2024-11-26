@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\City;
 use App\Models\HubAera;
 use App\Models\HubArea;
 use Illuminate\Http\Request;
@@ -11,7 +12,8 @@ class MapController extends Controller
 {
     public function show()
     {
-        return view('admin.city-map.show');
+        $city_list = City::where('city_status', 1)->get(['name', 'code', 'latitude', 'longitude']);
+        return view('admin.city-map.show', compact('city_list'));
     }
 
     public function store(Request $request)

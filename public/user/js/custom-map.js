@@ -16,13 +16,11 @@ $(function () {
                 zoom: 12,
             });
 
-            // Create the search box for pickup location
+            // Pickup and Delivery SearchBoxes
             const pickupInput = document.getElementById('custom-city');
-            c_searchBox = new google.maps.places.SearchBox(pickupInput);
-
-            // Create the search box for delivery location
             const deliveryInput = document.getElementById('delivery-city');
-            d_searchBox = new google.maps.places.SearchBox(deliveryInput);
+            const c_searchBox = new google.maps.places.SearchBox(pickupInput);
+            const d_searchBox = new google.maps.places.SearchBox(deliveryInput);
 
             // Bias the SearchBox results towards the current map's viewport
             c_map.addListener('bounds_changed', function () {
@@ -35,14 +33,14 @@ $(function () {
 
 
             // Event listener for the current location button click
-            $('#use_current_location').click(function () {
+            $('#drop_current_location').click(function () {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function (position) {
                         const lat = position.coords.latitude;
                         const lng = position.coords.longitude;
                         // Update the latitude and longitude input fields
-                        $('#pic_latitude').val(lat);
-                        $('#pic_longitude').val(lng);
+                        $('#dly_latitude').val(lat);
+                        $('#dly_longitude').val(lng);
 
                         // Use Geocoding API to get the address from the latitude and longitude
                         const geocoder = new google.maps.Geocoder();
@@ -52,8 +50,8 @@ $(function () {
                             if (status === 'OK') {
                                 if (results[0]) {
                                     const address = results[0].formatted_address;
-                                    $('.current_pickup_address').val(address);
-                                    $('#pic_address').val(address);
+                                    $('.current_delivery_address').val(address);
+                                    $('#dly_address').val(address);
                                     // Set the map center to the current location
                                     c_map.setCenter(latlng);
                                     c_map.setZoom(14);
@@ -82,14 +80,14 @@ $(function () {
                 }
             });
 
-            $('#drop_current_location').click(function () {
+            $('#pick_current_location').click(function () {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function (position) {
                         const lat = position.coords.latitude;
                         const lng = position.coords.longitude;
                         // Update the latitude and longitude input fields
-                        $('#dly_latitude').val(lat);
-                        $('#dly_longitude').val(lng);
+                        $('#pic_latitude').val(lat);
+                        $('#pic_longitude').val(lng);
 
                         // Use Geocoding API to get the address from the latitude and longitude
                         const geocoder = new google.maps.Geocoder();
@@ -99,8 +97,8 @@ $(function () {
                             if (status === 'OK') {
                                 if (results[0]) {
                                     const address = results[0].formatted_address;
-                                    $('.current_delivery_address').val(address);
-                                    $('#dly_address').val(address);
+                                    $('.current_pickup_address').val(address);
+                                    $('#pic_address').val(address);
                                     // Set the map center to the current location
                                     c_map.setCenter(latlng);
                                     c_map.setZoom(14);
@@ -201,11 +199,33 @@ $(function () {
             });
         };
 
-        // Initialize the map when the modal is shown
-        $('#secondModal').on('shown.bs.modal', function () {
+        $(document).on('click', '.pickup_location', function() {
             window.initMarker();
-            $('#custom-city').focus();
+            $.ajax({
+                url: '/user/verify-location',
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        $('#secondModal').modal('show');
+                        window.initMarker();
+                        $('#custom-city').focus();
+                    }
+                },
+                error: function(response) {
+                    if (response.responseJSON && response.responseJSON.message) {
+                        let errors = response.responseJSON.message;
+                        if (errors === 'Unauthenticated.') {
+                            $('#mobileModal').modal('show');
+                        }
+                    }
+                }
+            });
         });
+
+        $(document).on('click', '.pickup_location', function() {
+
+        });
+
 
         // Example values for car location
         let car_latitude_current = parseFloat($('#car_latitude_current').val()) || 11.0168;
@@ -231,24 +251,26 @@ $(function () {
 
         $('#same_address').click(function() {
 
-            const pickupLat = $('#pic_latitude').val();
-            const pickupLng = $('#pic_longitude').val();
-            const pickup_address = $('#pic_address').val();
+            const pickupLat = $('#dly_latitude').val();
+            const pickupLng = $('#dly_longitude').val();
+            const delivery_address = $('#dly_address').val();
 
             if (pickupLat === '' && pickupLng === ''){
-                $('#pick_outside_area').text('Please Select the Pickup Location');
+                $('#delivery_outside_area').text('Please Select the Pickup Location');
                 return;
             }
 
             if (pickupLat && pickupLng) {
-                checkLocation('same_location',pickupLat, pickupLng,pickup_address, function(isInside) {
+                checkLocation('same_location',pickupLat, pickupLng,delivery_address, function(isInside) {
                     if (isInside) {
                         $('#secondModal').modal('hide');
-                        $('#pickup_address').text(pickup_address);
-                        $('#drop_address').text(pickup_address);
+                        $('#pickup_address').text(delivery_address);
+                        $('#drop_address').text(delivery_address);
+                        $('#drop_address_pine').val(true);
+                        $('#pickup_address_pine').val(true);
                     } else {
                         $('#pick_outside_area').text(' ');
-                        $('#outside_area').text(' ').text('Pickup location is outside the designated area. Please select a different location.');
+                        $('#delivery_outside_area').text(' ').text('Pickup location is outside the designated area. Please select a different location.');
                     }
                 });
             } else {
@@ -257,6 +279,31 @@ $(function () {
         });
 
         $('#conform_address').click(function() {
+
+            const pickupLat = $('#pic_latitude').val();
+            const pickupLng = $('#pic_longitude').val();
+            const pickup_address = $('#pic_address').val();
+            if (pickupLat === '' && pickupLng === ''){
+                $('#pickup_outside_area').text('Please Select the Pickup Location');
+                return;
+            }
+
+            if (pickupLat && pickupLng) {
+                checkLocation('delivery_location',pickupLat, pickupLng,pickup_address, function(isInside) {
+                    if (isInside) {
+                        $('#secondModal').modal('hide');
+                        $('#pickup_address').text(pickup_address);
+                        $('#pickup_address_pine').val(true);
+                    } else {
+                        $('#pickup_outside_area').text('').text('Pickup location is outside the designated area. Please select a different location.');
+                    }
+                });
+            } else {
+                alert('Please enter a valid pickup location.');
+            }
+        });
+
+        $('#delivery_address').click(function() {
 
             const pickupLat = $('#dly_latitude').val();
             const pickupLng = $('#dly_longitude').val();
@@ -268,38 +315,14 @@ $(function () {
             }
 
             if (pickupLat && pickupLng) {
-                checkLocation('delivery_location',pickupLat, pickupLng,delivery_address, function(isInside) {
+                checkLocation('pickup_location',pickupLat, pickupLng,delivery_address, function(isInside) {
                     if (isInside) {
-                        $('#secondModal').modal('hide');
+                        $('#delivery-section').addClass('d-none');
+                        $('#pickup-section').removeClass('d-none');
                         $('#drop_address').text(delivery_address);
+                        $('#drop_address_pine').val(true);
                     } else {
                         $('#delivery_outside_area').text('').text('Pickup location is outside the designated area. Please select a different location.');
-                    }
-                });
-            } else {
-                alert('Please enter a valid pickup location.');
-            }
-        });
-
-        $('#delivery_address').click(function() {
-
-            const pickupLat = $('#pic_latitude').val();
-            const pickupLng = $('#pic_longitude').val();
-            const pickup_address = $('#pic_address').val();
-
-            if (pickupLat === '' && pickupLng === ''){
-                $('#pick_outside_area').text('Please Select the Pickup Location');
-                return;
-            }
-
-            if (pickupLat && pickupLng) {
-                checkLocation('pickup_location',pickupLat, pickupLng,pickup_address, function(isInside) {
-                    if (isInside) {
-                        $('#pickup-section').addClass('d-none');
-                        $('#delivery-section').removeClass('d-none');
-                        $('#drop_address').text(pickup_address);
-                    } else {
-                        $('#pick_outside_area').text('').text('Pickup location is outside the designated area. Please select a different location.');
                     }
                 });
             } else {

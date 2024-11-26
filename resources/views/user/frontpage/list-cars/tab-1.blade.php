@@ -26,10 +26,7 @@
                                 <p class="fs-4 fw-600 my-3 m-0">
                                     {{ $model->carModel->model_name ?? '' }}
                                 </p>
-                                <p class="fs-5 fw-600 my-3 m-0">
-                                    <i class="fas fa-map-marker-alt text-blue me-2"></i>
-                                    R.S Puram
-                                </p>
+
                                 <div class="fs-14 fw-500 my-3 {{ $model->address ? '' : 'd-none' }}">
                                     <img src="{{ asset('user/img/Group 4.svg') }}" alt="location icon" class="img-fluid me-1">
                                     {{ $model->address ?? '' }}
@@ -58,7 +55,7 @@
                             @if ($model['booking_status'] === 'available')
                                 <a href="{{ route('book.car', ['model_id' => $model->id]) }}" class="btn my-button p-1 px-3 w-75">Book now</a>
                             @elseif ($model['booking_status'] === 'sold')
-                                <button type="button" class="my-button btn btn-lg fs-14 float-end">Sold</button>
+                                <button type="button" class="sold-button btn btn-lg fs-14 float-end">Sold</button>
                             @endif
                         </div>
                     </div>

@@ -20,4 +20,9 @@ class CarDetails extends Model
         return $this->hasMany(Available::class, 'register_number', 'register_number');
     }
 
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_code', 'code');
+    }
+
 }

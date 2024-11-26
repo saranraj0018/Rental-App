@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\HolidayController;
 use App\Http\Controllers\Admin\AvailableController;
 use App\Http\Controllers\Admin\SwapController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\CityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,12 +46,17 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::post('/reschedule/date', [PickupDeliveryController::class, 'rescheduleDate'])->name('pickup-delivery.reschedule');
         Route::post('/risk-comment', [PickupDeliveryController::class, 'riskCommends'])->name('pickup-delivery.commends');
         Route::post('/risk-status', [PickupDeliveryController::class, 'riskStatus'])->name('pickup-delivery.status');
+        Route::post('/risk-status/pending', [PickupDeliveryController::class, 'riskStatusPending'])->name('risk.status');
         Route::post('/booking/cancel', [PickupDeliveryController::class, 'bookingCancel'])->name('booking.cancel');
+        Route::post('/booking/pending/cancel', [PickupDeliveryController::class, 'bookingPendingCancel'])->name('pending.cancel');
         Route::get('/booking/search', [PickupDeliveryController::class, 'fetchBookings'])->name('booking.search');
         Route::get('/check-payment/models', [PickupDeliveryController::class, 'calculatePrice'])->name('model.price');
         Route::post('/user-payment/link', [PickupDeliveryController::class, 'sendUserPayment'])->name('user.send.payment');
         Route::post('/user/save', [PickupDeliveryController::class, 'createBooking'])->name('user.booking');
         Route::get('/booking/complete', [PickupDeliveryController::class, 'bookingComplete'])->name('complete.booking');
+        Route::get('/booking/pending', [PickupDeliveryController::class, 'bookingPending'])->name('pending.booking');
+        Route::get('/booking/pending/search', [PickupDeliveryController::class, 'fetchPendingBookings'])->name('pending.search');
+        Route::post('/booking/revert', [PickupDeliveryController::class, 'revertBooking'])->name('revert.booking');
         Route::get('/booking/cancel', [PickupDeliveryController::class, 'bookingCancelList'])->name('cancel.booking.list');
 
         // Cars list
@@ -66,12 +72,18 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::get('/car-block/list', [CarBlockController::class, 'list'])->name('car-block.list');
         Route::post('/car-block/save', [CarBlockController::class, 'save'])->name('car-block.save');
         Route::put('/car-block/update', [CarBlockController::class, 'update'])->name('car-block.update');
+        Route::delete('/car-block/{id?}/delete', [CarBlockController::class, 'delete'])->name('car-block.delete');
         Route::get('/car-block/search', [CarBlockController::class, 'search'])->name('car-block.search');
+        Route::get('/get-car-models', [CarBlockController::class, 'getCarModelsByHub'])->name('car-model.hub');
+        Route::get('/get-car-registration-numbers', [CarBlockController::class, 'getCarRegistrationNumbersByModel'])->name('car-model.register_number');
+
 
         // Car-Swap list
         Route::get('/car-swap/list', [SwapController::class, 'list'])->name('car-swap.list');
+        Route::get('/car-swap/table', [SwapController::class, 'table'])->name('car-swap.table');
         Route::get('/get/booking_date', [SwapController::class, 'getBookingDate'])->name('fetch.booking.date');
         Route::get('/available/cars', [SwapController::class, 'availableCars'])->name('available.cars');
+        Route::get('/swap/search', [SwapController::class, 'searchHistory'])->name('history.cars');
         Route::post('/swap/car', [SwapController::class, 'swapCar'])->name('swap.car');
         Route::get('/calculate/swap/car', [SwapController::class, 'swapCarCalculate'])->name('calculate.swap.car');
         Route::post('/payment/link', [SwapController::class, 'sendPayment'])->name('send.payment');
@@ -124,6 +136,12 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::post('/holiday/save', [HolidayController::class, 'save'])->name('holiday.save');
         Route::delete('/holiday/{id?}/delete', [HolidayController::class, 'delete'])->name('holiday.delete');
         Route::get('/holiday/search', [HolidayController::class, 'search'])->name('holiday.search');
+
+        //City Section
+        Route::get('/city/list', [CityController::class, 'list'])->name('city.list');
+        Route::post('/city/save', [CityController::class, 'save'])->name('city.save');
+        Route::delete('/city/{id?}/delete', [CityController::class, 'delete'])->name('city.delete');
+//        Route::get('/holiday/search', [HolidayController::class, 'search'])->name('holiday.search');
 
         // Front-end Banner Section
         Route::get('/general', [BannerController::class, 'generalList'])->name('general.list');

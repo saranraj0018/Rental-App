@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Available;
 use App\Models\CarDetails;
+use App\Models\City;
 use App\Models\Holiday;
 use App\Models\User;
 use App\Models\UserDocument;
@@ -25,7 +26,8 @@ class UserController extends Controller
     {
         $section1 = Frontend::with('frontendImage')->where('data_keys','section1-image-car')->first();
         $section2 = Coupon::all();
-        $available_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date')) ?? CarDetails::all();
+        $city_list = City::where('city_status', 1)->pluck('name', 'code');
+        $available_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date'),Session::get('city_id')) ?? CarDetails::all();
         $booking_models = !empty($available_models['available_cars']) ?
             array_map(function($car) {
                 $car['booking_status'] = 'available'; // Add status as 'available'
@@ -37,8 +39,12 @@ class UserController extends Controller
                 $car['booking_status'] = 'sold'; // Add status as 'sold'
                 return $car;
             }, $available_models['booked_cars']) : [];
+        $booking_model_ids = array_column($booking_models, 'model_id');
+        $result = array_filter($sold_cars, function ($item) use ($booking_model_ids) {
+            return !in_array($item['model_id'], $booking_model_ids);
+        });
 
-        $section3 = !empty($booking_models) && !empty($sold_cars) ? array_merge($booking_models, $sold_cars) : CarDetails::all();
+        $section3 = !empty($booking_models) && !empty($sold_cars) ? array_merge($booking_models, $result) : CarDetails::all();
         $car_info = Frontend::with('frontendImage')->where('data_keys','car-info-section')->first();
         $section4 = !empty($car_info['data_values']) ? json_decode($car_info['data_values'],true) : [];
         $brand_info = Frontend::with('frontendImage')->where('data_keys','brand-section')->first();
@@ -50,15 +56,29 @@ class UserController extends Controller
         $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
         $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
         return view('user.frontpage.list-home',compact('section1','section2','section3','section4','car_image'
-            ,'brand_image','section8','faq_items','general_setting','timing_setting','sold_cars'));
+            ,'brand_image','section8','faq_items','general_setting','timing_setting','sold_cars','city_list'));
     }
 
     public function updateLocation(Request $request)
     {
+        $request->validate([
+            'start_date' => 'required|date|before:end_date',
+            'end_date' => 'required|date|after:start_date',
+            'city_id' => 'required',
+        ]);
 
             if (!empty($request['start_date']) && !empty($request['end_date'])) {
                 $start_date = str_replace('T', '  ', $request['start_date']);
                 $end_date = str_replace('T', '  ', $request['end_date']);
+
+                $start = Carbon::parse($start_date);
+                $end = Carbon::parse($end_date);
+                $setting = Frontend::where('data_keys','general-setting')->first();
+                $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
+                $totalHours = $start->diffInHours($end);
+                if ($totalHours < $timing_setting['total_minimum_hours'] || $totalHours > $timing_setting['total_maximum_hours']) {
+                    return redirect()->back();
+                }
 
                 // If the input does not have a space, manually format it
                 $start_date = preg_replace('/(\d{4}-\d{2}-\d{2})(\d{2}:\d{2})/', '$1 $2', showDateformat($start_date));
@@ -67,49 +87,39 @@ class UserController extends Controller
 
                 $request->session()->put('start_date',   $start_date);
                 $request->session()->put('end_date', $end_date);
+                $request->session()->put('city_id', $request['city_id']);
         }
         return response()->json(['success' => true]);
     }
 
-    private function isWithinCoimbatore($data)
-    {
-        if (empty($data)) {
-            return false;
-        }
-        foreach ($data['results'] as $result) {
-            foreach ($result['address_components'] as $component) {
-                if (in_array('administrative_area_level_3', $component['types']) && $component['long_name'] === 'Coimbatore') {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     public function listCars() {
         $date = ['start_date' => Session::get('start_date'), 'end_date' =>  Session::get('end_date')];
-        $available_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date'));
+        $city_list = City::where('city_status', 1)->pluck('name', 'code');
+        $available_models = self::showCarAvailable( Session::get('start_date'),Session::get('end_date'),Session::get('city_id'));
         $booking_models = !empty($available_models['available_cars']) ?
             array_map(function($car) {
                 $car['booking_status'] = 'available'; // Add status as 'available'
                 return $car;
             }, $available_models['available_cars']) : [];
 
-        $sold_cars = !empty($available_models['booked_cars']) ?
+        $sold_cars = !empty($available_models['booking_cars']) ?
             array_map(function($car) {
                 $car['booking_status'] = 'sold'; // Add status as 'sold'
                 return $car;
-            }, $available_models['booked_cars']) : [];
-
-        $car_models = array_merge($booking_models, $sold_cars);
+            }, $available_models['booking_cars']) : [];
+        $booking_model_ids = array_column($booking_models, 'model_id');
+        $result = array_filter($sold_cars, function ($item) use ($booking_model_ids) {
+            return !in_array($item['model_id'], $booking_model_ids);
+        });
+        $car_models = array_merge($booking_models, $result);
         $festival_days = Holiday::pluck('event_date')->toArray();
-        return view('user.frontpage.list-cars.list',compact('car_models','festival_days','date'));
+        return view('user.frontpage.list-cars.list',compact('car_models','festival_days','date','city_list'));
     }
 
-    public static function showCarAvailable($start_date, $end_date)
+    public static function showCarAvailable($start_date, $end_date, $city_id=null)
     {
-        if (!empty($start_date) && !empty($end_date)) {
-            $car_details = CarDetails::with('carModel')->get();
+        if (!empty($start_date) && !empty($end_date) && !empty($city_id)) {
+            $car_details = CarDetails::with('carModel')->where('city_code',$city_id)->get();
             $start_date = Carbon::parse($start_date);
             $end_date = Carbon::parse($end_date);
 
@@ -169,6 +179,7 @@ class UserController extends Controller
         session([
             'booking_details' => [
                 'car_id' => $id,
+                'city_id' => session('city_id'),
                 'car_details' => $car_model,
                 'price_list' => $price_list,
                 'delivery_fee' => $general_section['delivery_fee'],
@@ -270,16 +281,6 @@ class UserController extends Controller
         return view('user.frontpage.profile.view',compact('user_details'));
     }
 
-    public function downloadFile($filename)
-    {
-        $filePath = storage_path('app/public/user-documents/' . $filename);
-        if (file_exists($filePath)) {
-            return response()->download($filePath);
-        } else {
-            abort(404);
-        }
-    }
-
     public function updateUser(Request $request)
     {
         $request->validate([
@@ -287,8 +288,7 @@ class UserController extends Controller
             'user_mobile' => 'required|numeric|digits:10',
             'aadhaar_number' => 'required|digits:12',
             'driving_licence' => 'required',
-            'driving_licence_doc' => 'nullable|mimes:jpg,png,pdf|max:2048',
-            'aadhaar_number_doc' => 'nullable|mimes:jpg,png,pdf|max:2048',
+            'other_documents' => 'nullable|mimes:jpg,png,pdf|max:2048',
         ]);
         $auth_id = Auth::id() ?? 0;
         $user = User::find($auth_id);
@@ -296,36 +296,27 @@ class UserController extends Controller
         $user->mobile = $request['user_mobile'];
         $user->aadhaar_number = $request['aadhaar_number'];
         $user->driving_licence = $request['driving_licence'];
-
         $user->save();
 
-
         $uniq_id =  Str::random(6);
-        if ($request->hasFile('driving_licence_doc') && !empty($request['driving_licence_id'])) {
-            $user_doc = UserDocument::find($request['driving_licence_id']);
-            $img_name = $request->file('driving_licence_doc')->getClientOriginalName();
-            $img_name = $uniq_id . '_' . $img_name;
-            $request->driving_licence_doc->storeAs('user-documents/', $img_name, 'public');
-            $user_doc->image_name =  $img_name;
-            $user_doc->user_id = Auth::id();
-            $user_doc->save();
-        }
 
-        if ($request->hasFile('aadhaar_number_doc') && !empty($request['aadhaar_number_id'])) {
-            $user_docs = UserDocument::find($request['aadhaar_number_id']);
-            $img_name = $request->file('aadhaar_number_doc')->getClientOriginalName();
+        if ($request->hasFile('other_documents') && !empty($request['other_documents'])) {
+            $user_docs = new UserDocument();
+            $img_name = $request->file('other_documents')->getClientOriginalName();
             $img_name = $uniq_id . '_' . $img_name;
-            $request->aadhaar_number_doc->storeAs('user-documents/', $img_name, 'public');
+            $request->other_documents->storeAs('user-documents/', $img_name, 'public');
             $user_docs->image_name =  $img_name;
             $user_docs->user_id = Auth::id();
             $user_docs->save();
         }
+        return response()->json(['success' => true, 'message' => 'User Profile updated successfully']);
 
     }
 
     public function logout()
     {
        Auth::logout();
+       session()->flush();
        return redirect()->route('home');
     }
 }

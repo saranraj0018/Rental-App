@@ -105,11 +105,17 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex text-center">
+                        <!-- Search for Booking ID -->
                         <div class="input-group" style="width: 250px;">
+                            <label for="hub_type"></label>
                             <select id="hub_type" class="form-control">
-                                <option value="" selected disabled>Select Hub</option>
-                                <option value="629">Coimbatore</option>
+                                <option selected disabled>Select Hub</option>
+                                @if(!empty($city_list))
+                                    @foreach($city_list as $id => $list)
+                                        <option value="{{$id}}" >{{ $list }}</option>
+                                    @endforeach
+                                @endif
                             </select>
                         </div>
                         <div class="input-group" style="width: 250px;">
@@ -118,22 +124,6 @@
                                 <option value="delivery">Delivery</option>
                                 <option value="pickup">Pickup</option>
                             </select>
-                        </div>
-
-                        <div class="input-group" style="width: 250px;">
-                            <input type="text" id="car_model" name="car_model" class="form-control" placeholder="Search Car Model">
-                        </div>
-                        <!-- Search for Registration Number -->
-                        <div class="input-group" style="width: 250px;">
-                            <input type="text" id="register_number" name="register_number" class="form-control" placeholder="Search Registration Number">
-                        </div>
-                        <!-- Search for Booking ID -->
-                        <div class="input-group" style="width: 250px;">
-                            <input type="text" id="booking_id" name="booking_id" class="form-control" placeholder="Search Booking ID">
-                        </div>
-                        <!-- Search for Customer Name -->
-                        <div class="input-group" style="width: 250px;">
-                            <input type="text" id="customer_name" name="customer_name" class="form-control" placeholder="Search Customer Name">
                         </div>
                     </div>
                 </div>
@@ -145,13 +135,15 @@
                             <th>Risk</th>
                             <th>Done</th>
                             <th>Time</th>
-                            <th>Name</th>
-                            <th>Model</th>
-                            <th>Register Number</th>
+                            <th>
+                                <input type="text" id="customer_name" name="customer_name" class="form-control" placeholder="Name">
+                            </th>
+                            <th> <input type="text" id="car_model" name="car_model" class="form-control" placeholder="Model" style="padding: 0%;"></th>
+                            <th><input type="text" id="register_number" name="register_number" class="form-control" placeholder="Registration Number"></th>
                             <th>Address</th>
                             <th>User Details</th>
                             <th>D/L Number</th>
-                            <th>Booking Id</th>
+                            <th><input type="text" id="booking_id" name="booking_id" class="form-control" style="padding: 0%    ;" placeholder="Booking ID"></th>
                             <th>Reschedule</th>
                             <th>Security Dep</th>
                             <th>Amount</th>
@@ -159,8 +151,9 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @if($bookings->isNotEmpty())
+                        @if(!empty($bookings) && $bookings->isNotEmpty())
                             @foreach($bookings as $item)
+
                                 @php
                                     $booking_details = !empty($item->details[0]) ? json_decode($item->details[0]->car_details) : [];
                                     $booking_payment_details = !empty($item->details[0]) ? json_decode($item->details[0]->payment_details, true) : [];
@@ -196,11 +189,12 @@
                                     </td>
                                     <td>{{ $item->user->driving_licence ?? '' }}</td>
                                     <td>{{ $item->booking_id }}</td>
-                                    <td>{{ showDateTime($item->reschedule_date) ?? ($item->booking_type == 'pickup' ? showDateTime($item->end_date) : showDateTime($item->start_date)) }}
+                                    <td>{{ showDateTime($item->reschedule_date ?? ($item->booking_type == 'pickup' ? $item->end_date : $item->start_date)) }}
                                         <br>
                                         <button class="btn btn-warning edit-booking-date" data-id="{{ $item->id }}" data-booking_type="{{$item->booking_type}}"
-                                                data-model_id="{{ $car_model->car_model_id ?? 0 }}" data-delivery_date="{{ $item->end_date ?? 0 }}"
-                                                data-reschedule_date="{{ $item->reschedule_date ?? $item->end_date }}"  data-car_id="{{ $item->car_id ?? 0 }}">
+                                                data-model_id="{{ $car_model->car_model_id ?? 0 }}"
+                                                data-start_date="{{ showDateTime($item->reschedule_date ?? ($item->booking_type == 'pickup' ? $item->end_date : $item->start_date))  }}"
+                                                 data-car_id="{{ $item->car_id ?? 0 }}">
                                             Edit
                                         </button>
                                     </td>
@@ -211,7 +205,7 @@
                                         </button>
                                     </td>
                                     <td>
-                                        <button class="btn btn-danger cancel_booking" data-id="{{ $item->id }}">Cancel Order</button>
+                                        <button class="btn btn-danger cancel_booking" data-id="{{ $item->booking_id }}">Cancel Order</button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -228,7 +222,7 @@
 
             </div>
             <div class="d-flex justify-content-center">
-                {{ $bookings->links() }}
+                {{ !empty($bookings) ? $bookings->links() : '' }}
             </div>
         </div>
         @include('admin.hub.model')

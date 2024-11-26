@@ -6,7 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\UserController;
 use App\Models\Available;
 use App\Models\Booking;
+use App\Models\BookingDetail;
 use App\Models\CarDetails;
+use App\Models\City;
+use App\Models\SwapCar;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Razorpay\Api\Api;
 use App\Models\Payment;
@@ -16,10 +21,19 @@ class SwapController extends Controller
 {
 
     public int $amount = 0;
-    public function list(Request $request)
+    public function list()
     {
-        return view('admin.swap-cars.show');
+        $city_list = City::where('city_status',1)->pluck('name','code');
+        return view('admin.swap-cars.show',compact('city_list'));
     }
+
+    public function table()
+    {
+        $swap_cars = SwapCar::with('user', 'car.carModel', 'swapCar.carModel')->paginate(10);
+        return view('admin.swap-cars.table', compact('swap_cars'));
+
+    }
+
 
     public function getBookingDate(Request $request)
     {
@@ -45,39 +59,37 @@ class SwapController extends Controller
         $data = [
             'available_cars' => [],
             'booked_cars' => [],
-            'all_available_cars' =>[]
         ];
 
         // Check if both start_date and end_date are provided
-        if (!empty($request['start_date']) && !empty($request['end_date'])) {
-            $start_date = $request['start_date'];
-            $end_date = $request['end_date'];
+        if (!empty($request['start_date']) && !empty($request['end_date']) && !empty($request['hub_list'])) {
+            $start_date = Carbon::parse($request['start_date']);
+            $end_date = Carbon::parse($request['end_date']);
 
-            // Fetch all cars
-            $car_list = CarDetails::with('carModel')->get();
+
+            $car_list = CarDetails::with('carModel')->where('city_code',$request['hub_list'])->get();
 
             foreach ($car_list as $car) {
                 // Check if the car is booked during the requested period
                 $isBooked = Available::where('car_id', $car->id)
                     ->where(function ($query) use ($start_date, $end_date) {
                         $query->whereBetween('start_date', [$start_date, $end_date])
-                            ->orWhereBetween('end_date', [$start_date, $end_date])
+                            ->orWhereBetween('next_booking', [$start_date, $end_date])
                             ->orWhere(function ($q) use ($start_date, $end_date) {
                                 $q->where('start_date', '<=', $start_date)
-                                    ->where('end_date', '>=', $end_date);
+                                    ->where('next_booking', '>=', $end_date);
                             });
                     })
-                    ->exists();
-
+                ->exists();
                 // Add car to the respective list based on its availability
                 if ($isBooked) {
                     $data['booked_cars'][] = $car;
                 } else {
                     $data['available_cars'][] = $car;
                 }
-                $data['all_available_cars'][] = $car;
             }
-            return response()->json(['data' => $data, 'success' => 'Data Fetching Successfully.']);
+            $result = !empty($data['available_cars']) ? collect($data['available_cars'])->unique('model_id')->values()->all() : [];
+            return response()->json(['data' => $result, 'success' => 'Data Fetching Successfully.']);
         }
 
         return response()->json(['data' => $data, 'success' => 'Data Found.']);
@@ -86,10 +98,12 @@ class SwapController extends Controller
     public function swapCar(Request $request)
     {
         if (!empty($request['booking_id']) && !empty($request['car_id'])){
-           // Booking::where('booking_id',$request['booking_id'])->where('status',1)->update(['car_id' => $request['car_id']]);
+            $old_booking = Booking::where('booking_id',$request['booking_id'])->first();
+
+            Booking::where('booking_id',$request['booking_id'])->where('status',1)->update(['car_id' => $request['car_id']]);
 
            $car_details = CarDetails::with('carModel')->find($request['car_id']);
-        //   BookingDetail::where('booking_id',$request['booking_id'])->update(['car_details' => json_encode($car_details)]);
+           BookingDetail::where('booking_id',$request['booking_id'])->update(['car_details' => json_encode($car_details)]);
 
            if (!empty($request['start_date']) && !empty($request['end_date'])) {
                $available = new Available();
@@ -100,6 +114,13 @@ class SwapController extends Controller
                $available->start_date = $request['start_date'];
                $available->end_date = $request['end_date'];
                $available->booking_type = 1;
+               $available->save();
+
+               $available = new SwapCar();
+               $available->booking_id = $request['booking_id'];
+               $available->user_id =  Auth::guard('admin')->id();
+               $available->car_id = !empty($old_booking->car_id) ? $old_booking->car_id : 0;
+               $available->swap_car_id = $request['car_id'];
                $available->save();
            }
 
@@ -184,6 +205,18 @@ class SwapController extends Controller
                 return response()->json(['error' => 'Failed to create payment link: ' . $e->getMessage()], 500);
             }
         }
+        return response()->json(['error' => 'Failed to create payment link: '], 500);
+    }
+
+    public function searchHistory(Request $request)
+    {
+        $query = SwapCar::with('user', 'car.carModel', 'swapCar.carModel');
+
+        if (!empty($request['booking_id'])) {
+            $query->where('booking_id', 'like', '%' .  $request['booking_id']. '%');
+        }
+        $swap_list = $query->paginate(10);
+        return response()->json(['data'=> ['swap' => $swap_list->items(),'pagination' => $swap_list->links()->render()]]);
 
     }
 

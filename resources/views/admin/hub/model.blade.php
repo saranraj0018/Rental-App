@@ -65,13 +65,14 @@
                 <form id="booking_date">
                     <div class="form-group">
                         <input type="hidden" id="date_booking_id" name="booking_id">
-                        <input type="hidden" id="booking_type" name="booking_type">
-                        <input type="hidden" id="start_date" name="start_date">
+                        <input type="hidden" id="date_booking_type" name="booking_type">
+                        <input type="hidden" id="date_start_date" name="start_date">
                         <input type="hidden" id="model_id" name="model_id">
                         <input type="hidden" id="car_id" name="car_id">
                         <label for="start_date">Choose Date & Time</label>
                         <div class="input-group date datetimepicker" id="datetimepicker" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker" id="end_date" name="end_date" placeholder="Select date and time" />
+                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker"
+                                   id="end_date" name="end_date" placeholder="Select date and time" />
                             <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
@@ -161,7 +162,6 @@
             <form id="user_booking_form">
                 <div class="modal-header">
                     <h5 class="modal-title" id="bookingModalLabel">Booking Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
                 </div>
                 <div class="modal-body">
                     <!-- Form fields with horizontal layout -->
@@ -216,7 +216,7 @@
                                 Please enter the Aadhaar Card Number.
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="start_date">Start Date & Time</label>
                             <div class="input-group date" id="start_date_time_picker" data-target-input="nearest">
                                 <input type="text" class="form-control datetimepicker-input" data-target="#start_date_time_picker" id="user_start_date" name="user_start_date" placeholder="Select date and time" />
@@ -228,7 +228,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="start_date">End Date & Time</label>
                             <div class="input-group date" id="end_date_time_picker" data-target-input="nearest">
                                 <input type="text" class="form-control datetimepicker-input" data-target="#end_date_time_picker" id="user_end_date" name="user_end_date" placeholder="Select date and time" />
@@ -240,8 +240,18 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-md-4 " style="margin-top: 30px">
+                        <div class="col-md-3">
+                            <label for="hub_list" class="form-label">Hub List </label>
+                            <select class="form-select" id="hub_list" name="hub_list" data-live-search="true">
+                                <option disabled selected>Select City</option>
+                                @if(!empty($city_list))
+                              @foreach($city_list as $id => $list)
+                                  <option value="{{$id}}">{{$list}}</option>
+                              @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="col-md-3" style="margin-top: 30px">
                             <button type="submit" class="btn btn-primary" id="car_available">Car Availability</button>
                         </div>
 
@@ -277,7 +287,6 @@
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" id="user_payment_link">Send Payment Link</button>
                     <button type="submit" class="btn btn-primary">Save User</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </form>
         </div>

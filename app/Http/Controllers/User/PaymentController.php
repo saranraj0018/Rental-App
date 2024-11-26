@@ -8,7 +8,9 @@ use App\Models\Booking;
 use App\Models\BookingDetail;
 use App\Models\CarDetails;
 use App\Models\CarModel;
+use App\Models\Frontend;
 use App\Models\Payment;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,12 +25,20 @@ class PaymentController extends Controller
     // Store booking details
     public function orderBooking(Request $request)
     {
+        $last_booking = Booking::orderBy('id', 'desc')->first() ?? 0;
 
-        $id = rand(100000, 999999);
+        if ($last_booking) {
+            // Increment the last booking ID by 1
+            $new_booking_id = $last_booking->id + 1;
+        } else {
+            // Start from 100001 if no booking exists
+            $new_booking_id = 100001;
+        }
         $booking = new Booking();
-        $booking->booking_id = $id;
+        $booking->booking_id = $new_booking_id;
         $booking->user_id = Auth::id();
         $booking->car_id = !empty(session('booking_details.car_id')) ?  session('booking_details.car_id') : 0;
+        $booking->city_code =  !empty(session('booking_details.city_id')) ?  session('booking_details.city_id') : 0;
         $booking->booking_type = 'delivery';
         $booking->start_date = formDateTime(session('booking_details.start_date'));
         $booking->end_date = formDateTime(session('booking_details.end_date'));
@@ -42,9 +52,10 @@ class PaymentController extends Controller
 
 
         $delivery_booking = new Booking();
-        $delivery_booking->booking_id = $id;
+        $delivery_booking->booking_id = $new_booking_id;
         $delivery_booking->user_id = Auth::id();
         $delivery_booking->car_id = !empty(session('booking_details.car_id')) ?  session('booking_details.car_id') : 0;
+        $delivery_booking->city_code =  !empty(session('booking_details.city_id')) ?  session('booking_details.city_id') : 0;
         $delivery_booking->booking_type = 'pickup';
         $delivery_booking->start_date = formDateTime(session('booking_details.start_date'));
         $delivery_booking->end_date = formDateTime(session('booking_details.end_date'));
@@ -58,7 +69,6 @@ class PaymentController extends Controller
 
         $paymentDetails = $this->getPaymentDetails($request['payment_id']);
 
-// Decode JSON response if necessary
         if ($paymentDetails instanceof \Illuminate\Http\JsonResponse) {
             $data = $paymentDetails->getData(true); // Get as array
         } else {
@@ -67,7 +77,7 @@ class PaymentController extends Controller
 
         $payment = new Payment();
         $payment->payment_id = $request['payment_id'];
-        $payment->booking_id = $id;
+        $payment->booking_id = $new_booking_id;
         $payment->amount = $data['amount'];
         $payment->currency = $data['currency'];
         $payment->customer_id = Auth::id();
@@ -75,32 +85,42 @@ class PaymentController extends Controller
         $payment->save();
 
         $booking_details = new BookingDetail();
-        $booking_details->booking_id = $id;
+        $booking_details->booking_id = $new_booking_id;
         $booking_details->coupon = !empty(session('coupon')) ?  json_encode(session('coupon')) : null;
         $booking_details->payment_details = json_encode(session('booking_details.price_list'));
         $booking_details->car_details = json_encode(session('booking_details.car_details'));
         $booking_details->save();
 
-
+        $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
+        $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
         $car_details = !empty(session('booking_details.car_id')) ? CarDetails::find(session('booking_details.car_id')) : 0;
         $car_available = new Available();
         $car_available->car_id = !empty(session('booking_details.car_id')) ?  session('booking_details.car_id') : 0;
         $car_available->model_id = !empty($car_details->model_id) ? $car_details->model_id: 0;
         $car_available->register_number = !empty($car_details->register_number) ? $car_details->register_number: 0;
-        $car_available->booking_id = $id;
+        $car_available->booking_id = $new_booking_id;
         $car_available->start_date = formDateTime(session('booking_details.start_date'));
         $car_available->end_date = formDateTime(session('booking_details.end_date'));
-        $car_available->next_booking = Carbon::parse(formDateTime(session('booking_details.end_date')))->addHours(3);
+        $car_available->next_booking = Carbon::parse(formDateTime(session('booking_details.end_date')))->addHours($timing_setting['booking_duration'] ?? 3);
         $car_available->booking_type = 1;
         $car_available->save();
+
+        $user = User::find(Auth::id());
+        $user->drop_location = null;
+        $user->pick_location = null;
+        $user->save();
 
         // Send booking confirmation email
         Mail::to(Auth::user()->email)->send(new BookingConfirmed($delivery_booking));
 
         // Send SMS via Twilio
-        $this->sendSMS(Auth::user()->mobile, $delivery_booking->booking_id);
+        self::sendSMS(Auth::user()->mobile, $delivery_booking->booking_id);
 
-        session(['booking_id' => $id]);
+        session()->forget(['booking_details.car_id','booking_details.city_id',
+            'booking_details.start_date','booking_details.end_date','delivery.lat',
+            'delivery.lng','delivery.address','booking_details.delivery_fee',
+            'booking_details.price_list','booking_details.car_details','coupon']);
+        session(['booking_id' => $new_booking_id]);
         return response()->json([
             'success' => true,
             'message' => 'Payment successful',
@@ -157,11 +177,9 @@ class PaymentController extends Controller
     }
 
 
-    public function sendSMS($phone, $booking_id)
+    public static function sendSMS($phone, $booking_id)
     {
-
         $client = new Client(config('services.twilio_sms.sid'), config('services.twilio_sms.token'));
-
         // Send SMS
         $client->messages->create(
             '+91' . $phone,
@@ -228,10 +246,11 @@ class PaymentController extends Controller
         if (empty($booking_id)) {
             return response()->json(['success' => false]);
         }
-        $booking = Booking::where('booking_id',$booking_id)->get();
-        $booking->notes = $request['cancel_reason'];
-        $booking->status = 3;
-        $booking->save();
+        Booking::where('booking_id', $booking_id)
+            ->update([
+                'notes' => $request['cancel_reason'],
+                'status' => 3,
+            ]);
 
         return response()->json(['success' => true]);
     }

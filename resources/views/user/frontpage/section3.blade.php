@@ -38,10 +38,7 @@
                                         <p class="fs-15 fw-600 m-0">
                                            {{ $item->carModel->model_name ?? '' }}
                                         </p>
-                                        <p class="fs-15 fw-600 my-2">
-                                            <i class="fas fa-map-marker-alt text-blue me-2"></i>
-                                            {{ $item->carModel->model_name ?? '' }}
-                                        </p>
+
                                         <p class="d-flex text-secondary fs-12">
                                             <img src="{{ asset('user/img/iconTransmission.png') }}" alt="icon" class="img-fluid me-1"> {{ $item->carModel->transmission ?? ''}}
                                             <img src="{{ asset('user/img/iconSeat.png') }}" alt="icon" class="img-fluid mx-1">

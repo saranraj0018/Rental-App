@@ -23,23 +23,25 @@ $(function () {
         $('#search_cars').on('click', function () {
             let start_date = $('#start_date').val();
             let end_date = $('#end_date').val();
+            let hub_list = $('#hub_city').val();
 
             $.ajax({
                 url: '/admin/available/cars',
                 type: 'GET',
-                data: {start_date : start_date, end_date : end_date},
+                data: {start_date : start_date, end_date : end_date,hub_list : hub_list},
                 success: function (response) {
-                    if (response.data.available_cars && response.data.available_cars.length > 0) {
+                    if (response.data && response.data.length > 0) {
                         $('#car-list').empty();
                         $('#car-card-container').empty();
                         $('#car-swap-table').show();
-                        response.data.available_cars.forEach(function (car) {
+                        response.data.forEach(function (car) {
                             let card = `
                         <div class="card m-2" style="width: 18rem;">
                             <div class="card-body">
-                              <input type="hidden" name="car_id" id="car_id" value="${car.id}" >
+                              <input type="hidden" name="car_id" id="car_id" class="car_id" value="${car.id}" >
                                 <h5 class="card-title">${car.car_model.model_name ?? ''}</h5>
                                 <p class="card-text">Register Number: ${car.register_number}</p>
+                                <p class="card-text">car id Number: ${car.id}</p>
                                 <button type="button" class="btn btn-primary with_price">With Price</button>
                                 <button type="button" class="btn btn-secondary without_price">Without Price</button>
                             </div>
@@ -59,7 +61,7 @@ $(function () {
 
         $(document).on('click', '.without_price', function (e) {
             e.preventDefault();
-            let car_id = $('#car_id').val();
+            let car_id = $(this).closest('.card').find('.car_id').val();
             let booking_id = $('#booking_id').val();
             let start_date = $('#start_date').val();
             let end_date = $('#end_date').val();
@@ -84,7 +86,7 @@ $(function () {
 
         $(document).on('click', '.with_price', function (e) {
             e.preventDefault();
-            let car_id = $('#car_id').val();
+            let car_id = $(this).closest('.card').find('.car_id').val();
             let booking_id = $('#booking_id').val();
             let start_date = $('#start_date').val();
             let end_date = $('#end_date').val();
@@ -106,7 +108,7 @@ $(function () {
                         $('#with-price-modal').modal('show');
 
                     } else {
-                        alert('Error calculating price. Please try again.');
+                        alertify.error('Error calculating price. Please try again.');
                     }
                 },
                 error: function () {
@@ -137,6 +139,55 @@ $(function () {
                 }
             });
         });
+
+        $('#booking_id').on('keyup', fetchData);
+
+        function fetchData() {
+            let booking_id = $('#booking_id').val();
+            $.ajax({
+                url: '/admin/swap/search', // Define this route in your web.php
+                type: 'GET',
+                data: {
+                    booking_id: booking_id
+                },
+                success: function (response) {
+                    updateSwapTable(response.data) // Populate table with new data
+                },
+                error: function (xhr) {
+                    alertify.error('Something Went Wrong');
+                }
+            });
+        }
+
+        function updateSwapTable(data) {
+            let tbody = $('#swap_table tbody');
+            tbody.empty(); // Clear existing rows
+
+            if (data.swap.length === 0) {
+                tbody.append(`<tr><td colspan="10" class="text-center">Record Not Found</td></tr>`);
+            } else {
+                // Loop through the data and append rows
+                let rowCount = 1;
+                $.each(data.swap, function(index, item) {
+                    tbody.append(`
+                <tr>
+                     <td>${rowCount++}</td>
+                    <td>${item.booking_id}</td>
+                   <td>${item.user ? item.user.email : ''}</td>
+                   <td>${item.car.car_model ? item.car.car_model.model_name : ''}</td>
+                    <td>${item.swap_car.car_model ? item.swap_car.car_model.model_name : ''}</td>
+                    <td>${formatDateTime(item.updated_at)}</td>
+
+                </tr>
+            `);
+                });
+            }
+        }
+
+        function formatDateTime(dateString) {
+            let date = new Date(dateString);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        }
 
     });
 });

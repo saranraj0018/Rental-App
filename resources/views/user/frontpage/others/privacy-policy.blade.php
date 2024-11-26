@@ -22,14 +22,14 @@
                                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right">
                                 </ul>
                                 <ul class="navbar-nav navbar-light w-100 ms-0 ms-lg-5 ps-0 ps-lg-5 text-end text-lg-start">
-                                    <li class="nav-item ms-0 ms-lg-5 pe-0 pe-lg-3"><a class="nav-link text-dark" href="#">Home</a></li>
+                                    <li class="nav-item ms-0 ms-lg-5 pe-0 pe-lg-3"><a class="nav-link text-dark" href="{{ route('home') }}">Home</a></li>
                                     @if(!Auth::user())
-                                    <li class="nav-item"><a class="nav-link text-dark" href="#">FAQ</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" href="{{ route('faq') }}">FAQ</a></li>
                                     @else
                                     <li class="nav-item"><a class="nav-link text-dark" href="{{ route('booking.history') }}">Booking</a></li>
                                     @endif
-                                    <li class="nav-item"><a class="nav-link text-dark" href="#">Blog</a></li>
-                                    <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2"><a class="nav-link text-dark me-0 me-lg-5" href="#">Contact-us</a></li>
+{{--                                    <li class="nav-item"><a class="nav-link text-dark" href="#">Blog</a></li>--}}
+                                    <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2"><a class="nav-link text-dark me-0 me-lg-5" href="{{ route('contact') }}">Contact-us</a></li>
                                     <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0">
                                         @if(!Auth::user())
                                         <button type="button" class="btn border border-dark rounded-pill me-1" id="login_user">Sign-In</button>
@@ -68,7 +68,7 @@
                                 <ul class="navbar-nav navbar-light">
                                     <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Home</a></li>
                                     <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Booking</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Blog</a></li>
+{{--                                    <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Blog</a></li>--}}
                                     <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Contact-us</a></li>
                                 </ul>
                             </div>
@@ -96,11 +96,11 @@
         </script>
 
     </header>
-    
-</section>
-    
 
-    
+</section>
+
+
+
     <section class="my-5">
         <div class="container">
             <div>
@@ -116,7 +116,7 @@
             </div>
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
-                    2. Information                  
+                    2. Information
                 </h2>
                 <p class="fs-16 text-justify">
                     Information We collect the following types of information:
@@ -154,7 +154,7 @@
             </div>
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
-                    3. How We Use Your Information                   
+                    3. How We Use Your Information
                 </h2>
                 <p class="fs-16 text-justify">
                     We use the collected data for the following purposes:
@@ -171,7 +171,7 @@
             </div>
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
-                    4. Sharing Your Information 
+                    4. Sharing Your Information
                 </h2>
                 <p class="fs-16 text-justify">
                     we may share your personal information under the following circumstances:
@@ -185,7 +185,7 @@
             </div>
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
-                5. Data Security 
+                5. Data Security
                 </h2>
                 <p class="fs-16 text-justify">
                     We employ industry-standard security measures, such as encryption and secure servers, to protect your data. While we strive to protect your personal information, no method of transmission over the internet or method of storage is 100% secure. We cannot guarantee absolute security.
@@ -193,7 +193,7 @@
             </div>
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
-                    6. Your Rights 
+                    6. Your Rights
                 </h2>
                 <p class="fs-16 text-justify">
                     You have the following rights concerning your personal data:
@@ -208,7 +208,7 @@
             </div>
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
-                    7. Cookies and Tracking Technologies 
+                    7. Cookies and Tracking Technologies
                 </h2>
                 <p class="fs-16 text-justify">
                     We use cookies and similar technologies to enhance your browsing experience. These track your preferences and help us understand how you interact with our website. You can manage cookie preferences through your browser settings.
@@ -224,8 +224,8 @@
             </div>
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
-                    9. Refund Policy / Cancellation Policy 
-                </h2>            
+                    9. Refund Policy / Cancellation Policy
+                </h2>
                 <ul>
                     <li class="text-justify fs-16">If you wish to cancel your booking, a charge of ₹500 will be deducted from the total amount paid when processing the refund.</li>
                     <li class="text-justify fs-16">Valam Cars reserves the right to cancel and refund any orders without customer approval due to incorrect information in the booking or issues beyond our control, such as document discrepancies or incorrect details.</li>
@@ -235,12 +235,12 @@
             <div>
                 <h2 class="text-blue fs-5 fw-bold">
                 10. Changes to This Policy
-                </h2>            
+                </h2>
                 <p class="fs-16 text-justify">
                     We may update this Privacy Policy from time to time. Any changes will be posted on this page with a revised "Effective Date." Your continued use of our services constitutes acceptance of the updated policy.
                 </p>
-                
-                
+
+
             </div>
         </div>
     </section>

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Auth;
@@ -76,12 +78,14 @@ class OTPController extends Controller
     {
         $request->validate([
             'user_name' => 'required|string|max:255',
-            'mobile_number' => 'required|digits:10|unique:users,mobile',
+            'user_email' => 'required|email|unique:users,email',
+            'reg_mobile_number' => 'required|digits:10|unique:users,mobile',
         ]);
 
        $user = new User();
        $user->name = $request['user_name'];
-       $user->mobile = $request['mobile_number'];
+       $user->mobile = $request['reg_mobile_number'];
+       $user->email = $request['user_email'];
        $user->save();
 
         return response()->json(['success' => 'true','message' => 'Registration successful!']);
@@ -99,11 +103,32 @@ class OTPController extends Controller
 
     public function verifyLocation()
     {
-        if (empty(Auth::user()->pick_location) || empty(Auth::user()->pick_location) || empty(Auth::user()->drop_location)) {
+        if (empty(Auth::user()->pick_location) || empty(Auth::user()->drop_location)) {
             return response()->json(['success' => false,'message' => 'Location not found.']);
         }
 
         return response()->json(['success' => true,'message' => 'Location Added']);
+    }
+
+    public function verifyBooking()
+    {
+        $startDateTime = Carbon::parse(session('booking_details.start_date')); // Assuming you have start_date_time field
+        $endDateTime = Carbon::parse(session('booking_details.end_date')); //
+        if (!empty($startDateTime) && !empty($endDateTime)) {
+            $existingBooking = Booking::where('user_id', Auth::id())->where('status', 1)->where(function ($query) use ($startDateTime, $endDateTime) {
+                $query->whereBetween('start_date', [$startDateTime, $endDateTime]) // Check if start time is in the range
+                ->orWhereBetween('end_date', [$startDateTime, $endDateTime]) // Check if end time is in the range
+                ->orWhere(function ($query) use ($startDateTime, $endDateTime) {
+                    $query->where('start_date', '<=', $startDateTime)
+                        ->where('end_date', '>=', $endDateTime);
+                });
+            })->exists();
+
+            if (empty($existingBooking)) {
+                return response()->json(['success' => true,'message' => 'user not found.']);
+            }
+        }
+        return response()->json(['success' => false,'message' => 'User Found']);
     }
 
 }

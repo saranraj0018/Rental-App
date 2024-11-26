@@ -1,20 +1,27 @@
 $(function () {
     'use strict'
     $(document).ready(function() {
-        $('#cancel_car_model, #cancel_register_number, #cancel_booking_id, #cancel_customer_name, #cancel_booking_type, #cancel_hub_type').on('input change', function() {
-            fetchData();
+        let debounceTimer;
+        $('#pending_car_model, #pending_register_number, #pending_booking_id, #pending_customer_name, #pending_booking_type, #pending_hub_type, #booking_history').on('input change', function() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(function() {
+                fetchData();
+            }, 300); // 300ms delay
         });
 
+
+
         function fetchData() {
-            const carModel = $('#cancel_car_model').val();
-            const registerNumber = $('#cancel_register_number').val();
-            const bookingId = $('#cancel_booking_id').val();
-            const customerName = $('#cancel_customer_name').val();
-            const bookingType = $('#cancel_booking_type').val();
-            const hub_type = $('#cancel_hub_type').val();
-            let status = 3;
+            const carModel = $('#pending_car_model').val();
+            const registerNumber = $('#pending_register_number').val();
+            const bookingId = $('#pending_booking_id').val();
+            const customerName = $('#pending_customer_name').val();
+            const bookingType = $('#pending_booking_type').val();
+            const hub_type = $('#pending_hub_type').val();
+            const booking_history = $('#booking_history').val();
+
             $.ajax({
-                url: '/admin/booking/search', // Define this route in your web.php
+                url: '/admin/booking/pending/search', // Define this route in your web.php
                 type: 'GET',
                 data: {
                     car_model: carModel,
@@ -23,7 +30,8 @@ $(function () {
                     customer_name: customerName,
                     booking_type: bookingType,
                     hub_type: hub_type,
-                    status:status
+                    booking_history: booking_history,
+
                 },
                 success: function(response) {
                     updateBookingTable(response.data) // Populate table with new data
@@ -34,14 +42,14 @@ $(function () {
             });
         }
 
-        $('#cancel_booking_table').on('click', '.user-details-modal', function() {
+        $('#pending_table').on('click', '.user-details-modal', function() {
             $('#user_mobile').val($(this).data('mobile'));
             $('#user_aadhaar').val($(this).data('aadhaar_number'));
             $('#booking_count').text($(this).data('booking'));
             $('#user_model').modal('show');
         });
 
-        $('#cancel_booking_table').on('click', '.amount-modal', function() {
+        $('#pending_table').on('click', '.amount-modal', function() {
             let total = $(this).data('week_days_amount') + $(this).data('week_end_amount') + $(this).data('festival_amount');
             $('#booking_id').val($(this).data('id'));
             $('#week_days_amount').text($(this).data('week_days_amount'));
@@ -53,7 +61,7 @@ $(function () {
             $('#amount_modal').modal('show');
         });
 
-        $('#cancel_booking_table').on('click', '.open-risk-modal', function() {
+        $('#pending_table').on('click', '.open-risk-modal', function() {
             let bookingId = $(this).data('id');
             let commend = $(this).data('commend');
             // Parse the comments if they are not already an array
@@ -93,6 +101,81 @@ $(function () {
             $('#riskModal').modal('show');
         });
 
+
+        $('#pending_table').on('change', '.risk-checkbox', function() {
+            let booking_id = $(this).data('id');
+            let status = $(this).is(':checked') ? 1 : 2;
+            let note = 'risk'
+            updatetable(booking_id,status,note)
+        });
+        $('#pending_table').on('change', '.done-checkbox', function() {
+            let booking_id = $(this).data('id');
+            let status = $(this).is(':checked') ? 2 : 1;
+            let note = 'complete'
+            updatetable(booking_id,status,note)
+        });
+
+        $('#pending_table').on('click', '.cancel_booking', function() {
+            let booking_id = $(this).data('id');
+            $('#cancel-booking-id').val(booking_id);
+            $('#cancelModal').modal('show');
+        });
+
+        $('#cancel-booking-form').on('submit', function(e) {
+            e.preventDefault();
+            let bookingId = $('#cancel-booking-id').val();
+            let reason = $('#cancel-reason').val().trim();
+
+            // Validate the reason field
+            if (reason === '') {
+                $('#cancel-reason').addClass('is-invalid');
+                return; // Stop the form from submitting
+            } else {
+                $('#cancel-reason').removeClass('is-invalid');
+            }
+
+            $.ajax({
+                url: '/admin/booking/pending/cancel',
+                type: 'POST',
+                data: {
+                    booking_id: bookingId,
+                    reason: reason,
+                },
+                success: function(response) {
+                    $('#cancelModal').modal('hide');
+                    alertify.success('Booking has been cancelled successfully.');
+                    updateBookingTable(response.data);
+                },
+                error: function(xhr) {
+                    alertify.error('Failed to cancel the booking. Please try again.');
+                }
+            });
+        });
+
+
+        function updatetable(booking_id, status,note) {
+            $.ajax({
+                url: '/admin/risk-status/pending', // Replace with your route URL
+                method: 'POST',
+                data: {
+                    booking_id: booking_id,
+                    status: status,
+                    note:note
+                },
+                success: function(response) {
+                    if (response.data) {
+                        alertify.success(response.message);
+                        updateBookingTable(response.data);
+                    } else {
+                        alertify.error('Failed to update status.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alertify.error('AJAX error:', error);
+                }
+            });
+        }
+
         function formatDateTime(dateString) {
             let date = new Date(dateString);
 
@@ -114,14 +197,14 @@ $(function () {
         }
 
         function updateBookingTable(data) {
-            let tbody = $('#cancel_booking_table tbody');
+            let tbody = $('#pending_table tbody');
             tbody.empty(); // Clear existing rows
 
             if (data.bookings.length === 0) {
                 tbody.append(`<tr><td colspan="15" class="text-center">Record Not Found</td></tr>`);
             } else {
                 $.each(data.bookings, function(index, item) {
-                    // Check if details exist and have at least one element
+                    // Parse booking details and payment details if they exist
                     let bookingDetails = (item.details && item.details.length > 0)
                         ? JSON.parse(item.details[0].car_details || '{}')
                         : {};
@@ -131,19 +214,29 @@ $(function () {
 
                     let carModel = bookingDetails.car_model || {};
                     let commends = item.comments || [];
-
                     let rescheduleDate = item.reschedule_date ? `<p class="text-danger">${formatDateTime(item.reschedule_date)}</p>` : '';
+
+                    // Conditionally set the main date based on booking_type
+                    let mainDate = item.booking_type === 'pickup'
+                        ? formatDateTime(item.end_date)
+                        : formatDateTime(item.start_date);
 
                     tbody.append(`
                 <tr class="${item.risk === 1 ? 'bg-light-red' : item.status === 2 ? 'bg-light-green' : ''}">
                     <td>${item.booking_type === 'pickup' ? '<h2>P</h2>' : '<h2>D</h2>'}</td>
                     <td>
-                       <button class="btn btn-warning open-risk-modal" data-id="${item.id}" data-commend='${JSON.stringify(commends).replace(/'/g, "&apos;")}'>
-                         <h5>i</h5>
+                        <div class="d-flex justify-content-center">
+                            <input type="checkbox" class="risk-checkbox" data-id="${item.id}" ${item.risk === 1 ? 'checked' : ''}>
+                        </div>
+                        <br>
+                        <button class="btn btn-warning open-risk-modal" data-id="${item.id}" data-commend='${JSON.stringify(commends).replace(/'/g, "&apos;")}'>
+                            <h5>i</h5>
                         </button>
                     </td>
-                    <td>${formatDateTime(item.start_date)}<br>
-<p class="text-danger">${rescheduleDate}</p></td>
+                    <td class="d-flex justify-content-center">
+                        <input type="checkbox" class="done-checkbox" data-id="${item.id}" ${item.status == 2 ? 'checked' : ''}>
+                    </td>
+                    <td>${mainDate}<br>${rescheduleDate}</td>
                     <td>${item.user ? item.user.name : ''}</td>
                     <td>${carModel.model_name || ''}</td>
                     <td>${bookingDetails.register_number || ''}</td>
@@ -155,12 +248,19 @@ $(function () {
                     </td>
                     <td>${item.user ? item.user.driving_licence : ''}</td>
                     <td>${item.booking_id}</td>
-                    <td>${item.start_date ? formatDateTime(item.start_date) : formatDateTime(item.end_date)}<br>
+
+                    <td>${mainDate}<br>
+
                     </td>
                     <td>${carModel.dep_amount || 0}</td>
                     <td>
                         <button class="btn btn-warning amount-modal" data-id="${item.booking_id}" data-week_days_amount="${paymentDetails.week_days_amount || 0}" data-week_end_amount="${paymentDetails.week_end_amount || 0}" data-festival_amount="${paymentDetails.festival_amount || 0}" data-delivery_fee="${item.delivery_fee || ''}" data-dep_fee="${carModel.dep_amount || ''}" data-coupon="${item.coupon ? item.coupon.discount : ''}" data-type="${item.coupon ? item.coupon.type : ''}">
                             Amount Details
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger cancel_booking" data-id="${item.booking_id}">
+                            Cancel Order
                         </button>
                     </td>
                 </tr>

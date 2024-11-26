@@ -21,14 +21,14 @@
                                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right">
                                 </ul>
                                 <ul class="navbar-nav navbar-light w-100 ms-0 ms-lg-5 ps-0 ps-lg-5 text-end text-lg-start">
-                                    <li class="nav-item ms-0 ms-lg-5 pe-0 pe-lg-3"><a class="nav-link text-dark" href="#">Home</a></li>
+                                    <li class="nav-item ms-0 ms-lg-5 pe-0 pe-lg-3"><a class="nav-link text-dark" href="{{ route('home') }}">Home</a></li>
                                     @if(!Auth::user())
-                                    <li class="nav-item"><a class="nav-link text-dark" href="#">FAQ</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" href="{{ route('faq') }}">FAQ</a></li>
                                     @else
                                     <li class="nav-item"><a class="nav-link text-dark" href="{{ route('booking.history') }}">Booking</a></li>
                                     @endif
-                                    <li class="nav-item"><a class="nav-link text-dark" href="#">Blog</a></li>
-                                    <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2"><a class="nav-link text-dark me-0 me-lg-5" href="#">Contact-us</a></li>
+{{--                                    <li class="nav-item"><a class="nav-link text-dark" href="#">Blog</a></li>--}}
+                                    <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2"><a class="nav-link text-dark me-0 me-lg-5" href="{{ route('contact') }}">Contact-us</a></li>
                                     <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0">
                                         @if(!Auth::user())
                                         <button type="button" class="btn border border-dark rounded-pill me-1" id="login_user">Sign-In</button>
@@ -68,7 +68,7 @@
                                 <ul class="navbar-nav navbar-light">
                                     <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Home</a></li>
                                     <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Booking</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Blog</a></li>
+{{--                                    <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Blog</a></li>--}}
                                     <li class="nav-item"><a class="nav-link text-white d-flex align-items-center justify-content-center " href="#">Contact-us</a></li>
                                 </ul>
                             </div>
