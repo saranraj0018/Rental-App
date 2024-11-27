@@ -3,7 +3,8 @@
 @section('content')
     <div class="container">
         <h1>{{ ucfirst($section) }}</h1>
-        <form action="{{ route('section.update', ['section' => $section]) }}" method="POST">
+
+        <form action="{{ route("$section.store", ['section' => $section]) }}" method="POST">
             @csrf
             <div class="form-group">
                 <textarea required name="content" id="content" class="form-control wysiwyg">

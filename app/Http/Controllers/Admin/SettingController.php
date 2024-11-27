@@ -10,18 +10,20 @@ class SettingController extends Controller
 {
     public function view($section)
     {
-        $item = Frontend::where('data_keys', $section)->first();
+        $item = !empty($section) ? Frontend::where('data_keys', $section)->first() : [];
         return view('admin.setting.view', compact('item', 'section'));
     }
 
-    public function update(Request $request, $section)
+    public function update(Request $request)
     {
+
         $request->validate([
             'content' => 'required',
+            'section' => 'required',
         ]);
 
-        $frontend = !empty($request["{$section}_id"])  ? Frontend::find($request["{$section}_id"]) : new Frontend();
-        $frontend->data_keys = $section;
+        $frontend = !empty($request["{$request['section']}_id"])  ? Frontend::find($request["{$request['section']}_id"]) : new Frontend();
+        $frontend->data_keys = $request['section'];
         $frontend->data_values = json_encode($request['content']);
         $frontend->save();
 
