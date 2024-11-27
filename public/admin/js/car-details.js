@@ -23,10 +23,13 @@ $(function () {
             $('#create_car').find('.is-valid').removeClass('is-valid');
             // Optionally reset other elements
             $('#save_coupon').text('');
+            $('#singleImageContainer').html('');
+            $('#car_other_images_preview').html('');
         }
 
         // Add Cars
         $('#add_car').click(function() {
+            resetInput();
             $('#car_label').text("Add New Car");
             $('#create_car').modal('show');
             $('#submit_btn').text("Submit");
@@ -187,6 +190,7 @@ $(function () {
 
         // Add Car Models
         $('#add_car_model').click(function() {
+            resetInput();
             $('select').selectpicker();
             $('#car_model_form').trigger("reset");
             $('#car_modal_label').text("Add New Car");

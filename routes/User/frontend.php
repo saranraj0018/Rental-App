@@ -43,6 +43,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('user/logout', [UserController::class, 'logout'])->name('user.logout');
     Route::get('booking/history', [PaymentController::class, 'bookingHistory'])->name('booking.history');
     Route::post('user/update-delivery-fee', [PaymentController::class, 'updateDeliveryFee'])->name('update.fee');
+    Route::delete('/user-documents/{id}', [UserController::class, 'destroy'])->name('user-documents.destroy');
+
 });
 
 
