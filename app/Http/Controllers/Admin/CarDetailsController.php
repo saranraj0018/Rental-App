@@ -57,7 +57,7 @@ class CarDetailsController extends BaseController {
             return Excel::download(new CarHistory(type: $type, dataset: $dataset), 'car-details-models-export.csv');
         }
 
-        $pdf = Pdf::loadView('admin.cars.pdf', ["data" => $dataset, "type" => $type]);
+        $pdf = Pdf::loadView('admin.cars.pdf', ["dataset" => $dataset, "type" => $type]);
         return $pdf->download('car-details-models-export.pdf');
     }
 
@@ -240,7 +240,6 @@ class CarDetailsController extends BaseController {
                 "created_at",
             ]);
         }
-
 
         return collect([]);
     }
