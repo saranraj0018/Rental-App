@@ -12,7 +12,7 @@ class Hub implements FromCollection, WithHeadings {
 
     /**
      * Get the data to export
-     * @var 
+     * @var
      */
     public $dataset;
 
@@ -20,7 +20,7 @@ class Hub implements FromCollection, WithHeadings {
 
     /**
      * Extension
-     * @var 
+     * @var
      */
     public $type;
 
@@ -45,13 +45,12 @@ class Hub implements FromCollection, WithHeadings {
      */
     public function headings(): array {
         return [
-            "ID",
-            "Name",
-            "Mobile Number",
-            "Email",
-            "Aadhaar Number",
-            "Driving Licence",
-            "Update At",
+            "Booking Type",
+            "Risk",
+            "Done",
+            "Address",
+            "Booking ID",
+            "Reschedule",
         ];
     }
 

@@ -664,7 +664,7 @@ class PickupDeliveryController extends BaseController {
             return Excel::download(new Hub(type: $ext, dataset: $dataset), 'hub-export.csv');
         }
 
-        $pdf = Pdf::loadView('admin.user.pdf', ["data" => $dataset, "type" => $type]);
+        $pdf = Pdf::loadView('admin.hub.pdf', ["dataset" => $dataset]);
         return $pdf->download('hub-export.pdf');
     }
 
@@ -677,16 +677,37 @@ class PickupDeliveryController extends BaseController {
      * @param string $type
      */
     protected function getData() {
+        $timeLimit = now()->addHours(48);
 
-        return User::with('userDoc')->orderBy('created_at', 'desc')->get([
-            'iteration',
-            'name',
-            'mobile',
-            'email',
-            'aadhaar_number',
-            'driving_licence',
-            'updated_at'
-        ]);
+        return Booking::with(['user', 'details', 'comments', 'user.bookings'])
+            ->where('status', 1)
+            ->where(function ($query) use ($timeLimit) {
+                $query->where('risk', 2)
+                    ->where(function ($query) use ($timeLimit) {
+                        $query->where(function ($query) use ($timeLimit) {
+                            $query->where('booking_type', 'delivery')
+                                ->whereBetween('start_date', [now(), $timeLimit]);
+                        })->orWhere(function ($query) use ($timeLimit) {
+                            $query->where('booking_type', 'pickup')
+                                ->whereBetween('end_date', [now(), $timeLimit]);
+                        });
+                    })
+                    ->orWhere(function ($query) {
+                        $query->where('risk', 1);
+                    });
+            })
+            ->orWhere(function ($query) {
+                $query->where('risk', 1)
+                    ->where('status', 1);
+            })
+            ->orderBy('created_at', 'desc')->get([
+                    'booking_type',
+                    'risk',
+                    'status',
+                    'address',
+                    'booking_id',
+                    'reschedule_date',
+                ]);
     }
 
 }
