@@ -21,12 +21,16 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use Razorpay\Api\Api;
 
 class PickupDeliveryController extends BaseController {
     public function list(Request $request) {
+
+        // dd($this->getData());
+
         $this->authorizePermission('hub_list');
         //  $bookings = self::getBooking();
         $city_list = City::where('city_status', 1)->pluck('name', 'code');
@@ -677,37 +681,6 @@ class PickupDeliveryController extends BaseController {
      * @param string $type
      */
     protected function getData() {
-        $timeLimit = now()->addHours(48);
-
-        return Booking::with(['user', 'details', 'comments', 'user.bookings'])
-            ->where('status', 1)
-            ->where(function ($query) use ($timeLimit) {
-                $query->where('risk', 2)
-                    ->where(function ($query) use ($timeLimit) {
-                        $query->where(function ($query) use ($timeLimit) {
-                            $query->where('booking_type', 'delivery')
-                                ->whereBetween('start_date', [now(), $timeLimit]);
-                        })->orWhere(function ($query) use ($timeLimit) {
-                            $query->where('booking_type', 'pickup')
-                                ->whereBetween('end_date', [now(), $timeLimit]);
-                        });
-                    })
-                    ->orWhere(function ($query) {
-                        $query->where('risk', 1);
-                    });
-            })
-            ->orWhere(function ($query) {
-                $query->where('risk', 1)
-                    ->where('status', 1);
-            })
-            ->orderBy('created_at', 'desc')->get([
-                    'booking_type',
-                    'risk',
-                    'status',
-                    'address',
-                    'booking_id',
-                    'reschedule_date',
-                ]);
+        return collect(DB::select('call sp_hub_export'));
     }
-
 }

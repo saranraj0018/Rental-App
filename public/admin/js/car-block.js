@@ -1,7 +1,7 @@
 $(function () {
     'use strict'
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         loadDatePickers();
 
         function loadDatePickers() {
@@ -40,7 +40,7 @@ $(function () {
 
 
         // Add Cars
-        $('#add_block').click(function() {
+        $('#add_block').click(function () {
             toggleBookingIdField();
             $('#car_block_form').trigger("reset");
             $('#car_block_label').text("Add New Block");
@@ -49,7 +49,7 @@ $(function () {
             $('select').selectpicker('refresh');
         });
         toggleBookingIdField();
-        $('input[name="block_type"]').on('change', function() {
+        $('input[name="block_type"]').on('change', function () {
             toggleBookingIdField();
             reasonField();
 
@@ -80,7 +80,7 @@ $(function () {
         }
 
         $('#radioError').hide();
-        $('#car_block_form').on('submit', function(e) {
+        $('#car_block_form').on('submit', function (e) {
             e.preventDefault();
             let isValid = true;
 
@@ -98,7 +98,7 @@ $(function () {
 
             if ($('.discretionary').is(':checked')) {
                 let reason = $('input[name="reason_discretion"]:checked').length > 0;
-                radioField(reason,'reason_discretion');
+                radioField(reason, 'reason_discretion');
             }
 
 
@@ -115,7 +115,7 @@ $(function () {
                 }
             });
 
-            function radioField(reason,name) {
+            function radioField(reason, name) {
 
                 if (!reason || reason === 'false') {
                     if (name === 'reason') {
@@ -147,21 +147,21 @@ $(function () {
                     url: '/admin/car-block/save',
                     type: 'POST',
                     data: $(this).serialize(),
-                    success: function(response) {
+                    success: function (response) {
                         $('#create_block').modal('hide');
                         updateBlockTable(response.data);
                         alertify.success(response.success);
                     },
-                    error: function(response) {
+                    error: function (response) {
                         if (response.responseJSON.errors) {
                             let errors = response.responseJSON.errors;
                             // Remove existing invalid classes and messages
                             $('.form-control').removeClass('is-invalid');
                             $('.invalid-feedback').empty();
                             $('.bootstrap-select').removeClass('is-invalid');
-                            $.each(errors, function(key, value) {
+                            $.each(errors, function (key, value) {
                                 let element = $('#' + key);
-                                radioField('false',key);
+                                radioField('false', key);
                                 // Check if the element is a Bootstrap Select
                                 if (element.is('select')) {
                                     let selectPicker = element.closest('.bootstrap-select');
@@ -176,7 +176,7 @@ $(function () {
                             });
                         }
                     },
-                    complete: function() {
+                    complete: function () {
                         $('select').selectpicker('refresh');
                         $('#submit_block').prop('disabled', false);  // Re-enable the submit button
                     }
@@ -260,7 +260,7 @@ $(function () {
 
 
         // Edit Car
-        $('#car_block_table').on('click', '.edit_block_model', function() {
+        $('#car_block_table').on('click', '.edit_block_model', function () {
 
             $('#start_date_time').datetimepicker({
                 format: 'YYYY-MM-DD HH:mm', // Customize the format as needed
@@ -303,7 +303,7 @@ $(function () {
         });
 
 
-        $('#car_edit_block_form').on('submit', function(e) {
+        $('#car_edit_block_form').on('submit', function (e) {
             e.preventDefault();
             let isValid = true;
 
@@ -331,24 +331,24 @@ $(function () {
                     url: '/admin/car-block/update',
                     type: 'PUT',
                     data: $(this).serialize(),
-                    success: function(response) {
+                    success: function (response) {
                         $('#edit_block').modal('hide');
                         updateBlockTable(response.data);
                         alertify.success(response.success);
                     },
-                    error: function(response) {
+                    error: function (response) {
                         if (response.responseJSON.errors) {
                             let errors = response.responseJSON.errors;
                             $('.form-control').removeClass('is-invalid');
                             $('.invalid-feedback').empty();
-                            $.each(errors, function(key, value) {
+                            $.each(errors, function (key, value) {
                                 let element = $('#' + key);
-                                    element.addClass('is-invalid');
-                                    element.siblings('.invalid-feedback').text(value[0]).show();
+                                element.addClass('is-invalid');
+                                element.siblings('.invalid-feedback').text(value[0]).show();
                             });
                         }
                     },
-                    complete: function() {
+                    complete: function () {
                         $('#update_block').prop('disabled', false);  // Re-enable the submit button
                     }
                 });
@@ -357,22 +357,22 @@ $(function () {
 
         // Delete Car
         let delete_id;
-        $('#car_block_table').on('click', '.delete_block_model', function() {
+        $('#car_block_table').on('click', '.delete_block_model', function () {
             delete_id = $(this).data('id');  // Capture the ID of the item to delete
             $('#deleteModal').modal('show');  // Show the modal
         });
 
-        $('#confirmDelete').on('click', function() {
+        $('#confirmDelete').on('click', function () {
             $.ajax({
                 url: `/admin/car-block/${delete_id}/delete`,
                 type: 'DELETE',
-                success: function(response) {
+                success: function (response) {
                     $('#deleteModal').modal('hide');  // Hide the modal
                     updateBlockTable(response.data);
                     alertify.success(response.success);
 
                 },
-                error: function(response) {
+                error: function (response) {
                     alertify.error('Internal server error');
                 }
             });
@@ -389,10 +389,10 @@ $(function () {
                     block_type: blockType,
                     register_number: registerNumber
                 },
-                success: function(response) {
+                success: function (response) {
                     updateBlockTable(response.data); // Populate table with new data
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                 }
             });
         }
@@ -400,39 +400,39 @@ $(function () {
         $('#block_type').on('change', fetchData);
         $('#register_number').on('keyup', fetchData);
 
-        $('#hub_city').change(function() {
+        $('#hub_city').change(function () {
             let hubId = $(this).val();
             if (hubId) {
                 $.ajax({
                     url: '/admin/get-car-models',
                     method: 'GET',
                     data: { hub_id: hubId },
-                    success: function(response) {
+                    success: function (response) {
                         let carModelSelect = $('#car_model');
                         carModelSelect.empty(); // Clear current options
                         carModelSelect.append('<option selected disabled>Choose a Car Model</option>');
                         if (response.carModels.length > 0) {
-                            response.carModels.forEach(function(model) {
+                            response.carModels.forEach(function (model) {
                                 carModelSelect.append('<option value="' + model.id + '">' + model.name + '</option>');
                             });
                         }
                         // Refresh the selectpicker to update UI
                         carModelSelect.selectpicker('refresh');
                     },
-                    error: function() {
+                    error: function () {
                         alertify.error('Error fetching car models.');
                     }
                 });
             }
         });
 
-        $('#car_model').change(function() {
+        $('#car_model').change(function () {
             let modelId = $(this).val();  // Get selected car model ID
             let start_date = $('#start_date').val();
             let end_date = $('#end_date').val();
             let hubId = $('#hub_city').val();
 
-            if (start_date === '' && end_date === ''){
+            if (start_date === '' && end_date === '') {
                 alertify.error('Choose First Start and End dates')
                 return;
             }
@@ -441,19 +441,19 @@ $(function () {
                 $.ajax({
                     url: '/admin/get-car-registration-numbers', // Laravel route to get registration numbers by model
                     method: 'GET',
-                    data: { model_id: modelId,start_date:start_date,end_date:end_date, hub_id: hubId  },
-                    success: function(response) {
+                    data: { model_id: modelId, start_date: start_date, end_date: end_date, hub_id: hubId },
+                    success: function (response) {
                         let carModelSelect = $('#block_car_register_number');
                         carModelSelect.empty().append('<option selected disabled>Registration Number</option>'); // Clear register number options
                         carModelSelect.selectpicker('refresh');
                         if (response.register_number.length > 0) {
-                            response.register_number.forEach(function(register_number) {
+                            response.register_number.forEach(function (register_number) {
                                 carModelSelect.append('<option value="' + register_number + '">' + register_number + '</option>');
                             });
                         }
                         carModelSelect.selectpicker('refresh');
                     },
-                    error: function() {
+                    error: function () {
                         alertify.error('Internal Error')
                     }
                 });

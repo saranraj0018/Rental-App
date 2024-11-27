@@ -61,7 +61,7 @@
             border-bottom: 1px solid #444;
         }
 
-        td[colspan="7"] {
+        td[colspan="8"] {
             text-align: center;
             color: #bbb;
             padding: 12px;
@@ -86,52 +86,36 @@
     <main>
         <table>
             <thead>
-                @if ($type != 'models')
-                    <tr>
-                        <th>Action</th>
-                        <th>Car Model ID</th>
-                        <th>Car Model Name</th>
-                        <th>Car Registration No.</th>
-                        <th>Hub</th>
-                        <th>Created By</th>
-                        <th>Created At</th>
-                    </tr>
-                @else
-                    <tr>
-                        <th>Action</th>
-                        <th>Car Model ID</th>
-                        <th>Car Model Name</th>
-                        <th>Created By</th>
-                        <th>Created At</th>
-                    </tr>
-                @endif
+                <tr>
+                    <th>Action</th>
+                    <th>Block Type</th>
+                    <th>Reason</th>
+                    <th>Created By</th>
+                    <th>Created At</th>
+                    <th>Car Register Number</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                </tr>
             </thead>
 
             <tbody>
-                @if ($type != 'models')
+                @if (filled($dataset))
                     @foreach ($dataset as $item)
                         <tr>
-                            <td>{{ $item?->action }}</td>
-                            <td>{{ $item?->car_model_id }}</td>
-                            <td>{{ $item?->model_name }}</td>
-                            <td>{{ $item?->register_number }}</td>
-                            <td>{{ $item?->carDetails?->city->name }}</td>
-                            <td>{{ $item?->user?->email }}</td>
-                            <td>{{ !$item?->created_at ? '' : Carbon\Carbon::parse($item?->created_at)->format('d-m-Y H:i A') }}
-                            </td>
+                            <td>{{ $item->action }}</td>
+                            <td>{{ block_type()[$item->block_type] ?? '' }}</td>
+                            <td>{{ reason_type()[$item->reason] ?? '' }}</td>
+                            <td>{{ $item->user->email ?? '' }}</td>
+                            <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i A') }}</td>
+                            <td>{{ $item->register_number }}</td>
+                            <td>{{ Carbon\Carbon::parse($item->start_date)->format('d-m-Y') }}</td>
+                            <td>{{ Carbon\Carbon::parse($item->end_date)->format('d-m-Y') }}</td>
                         </tr>
                     @endforeach
                 @else
-                    @foreach ($dataset as $item)
-                        <tr>
-                            <td>{{ $item?->action }}</td>
-                            <td>{{ $item?->car_model_id }}</td>
-                            <td>{{ $item?->model_name }}</td>
-                            <td>{{ $item?->user?->email }}</td>
-                            <td>{{ !$item?->created_at ? '' : Carbon\Carbon::parse($item?->created_at)->format('d-m-Y H:i A') }}
-                            </td>
-                        </tr>
-                    @endforeach
+                    <tr>
+                        <td colspan="8">Record Not Found</td>
+                    </tr>
                 @endif
             </tbody>
         </table>

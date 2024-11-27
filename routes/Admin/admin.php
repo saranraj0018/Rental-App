@@ -73,6 +73,8 @@ Route::group(['prefix' => 'admin'], function () {
 
         // Car-block list
         Route::get('/car-block/list', [CarBlockController::class, 'list'])->name('car-block.list');
+        Route::get('/car-block/list/history', [CarBlockController::class, 'history'])->name('car-block.history');
+        Route::get('/car-block/list/history/export', [CarBlockController::class, 'export'])->name('car-block.export');
         Route::post('/car-block/save', [CarBlockController::class, 'save'])->name('car-block.save');
         Route::put('/car-block/update', [CarBlockController::class, 'update'])->name('car-block.update');
         Route::delete('/car-block/{id?}/delete', [CarBlockController::class, 'delete'])->name('car-block.delete');
