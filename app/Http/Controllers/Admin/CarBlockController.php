@@ -68,7 +68,7 @@ class CarBlockController extends BaseController
         $car_available->start_date = $request['start_date'];
         $car_available->end_date = $request['end_date'];
         $car_available->next_booking = Carbon::parse(formDateTime($request['end_date']))->addHours($timing_setting['booking_duration'] ?? 3);
-        $car_available->booking_type = $request['block_type'] == 1 ? 6 : $request['block_type'];
+        $car_available->booking_type = $request['block_type'] == 1 ? 6 : ($request['block_type'] == 0 ? 7 : $request['block_type']);
         $car_available->save();
 
         $car_block_list = CarBlock::with('user')->orderBy('created_at', 'desc')->get();
