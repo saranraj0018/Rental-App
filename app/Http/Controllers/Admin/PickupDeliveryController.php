@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\Hub;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\UserController;
@@ -17,23 +18,27 @@ use App\Models\Frontend;
 use App\Models\Payment;
 use Carbon\Carbon;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 use Razorpay\Api\Api;
 
-class PickupDeliveryController extends BaseController
-{
-    public function list(Request $request)
-    {
+class PickupDeliveryController extends BaseController {
+    public function list(Request $request) {
+
+        // dd($this->getData());
+
         $this->authorizePermission('hub_list');
         //  $bookings = self::getBooking();
-        $city_list = City::where('city_status',1)->pluck('name','code');
-        return view('admin.hub.list',compact('city_list',));
+        $city_list = City::where('city_status', 1)->pluck('name', 'code');
+        return view('admin.hub.list', compact('city_list', ));
     }
 
-    public static function getBooking()
-    {
+
+    public static function getBooking() {
         $timeLimit = now()->addHours(48);
         return Booking::with(['user', 'details', 'comments', 'user.bookings'])
             ->where('status', 1)
@@ -60,8 +65,7 @@ class PickupDeliveryController extends BaseController
             ->paginate(20);
     }
 
-    public function rescheduleDate(Request $request)
-    {
+    public function rescheduleDate(Request $request) {
         $request->validate([
             'booking_id' => 'required|numeric',
             'car_id' => 'required|numeric',
@@ -90,8 +94,8 @@ class PickupDeliveryController extends BaseController
                         $bookingUpdate = Booking::where('booking_id', $booking->booking_id)
                             ->update(['car_id' => $carId]);
 
-                        if (!empty($carId)){
-                            $car_details =  CarDetails::with('carModel')->find($carId);
+                        if (!empty($carId)) {
+                            $car_details = CarDetails::with('carModel')->find($carId);
                             BookingDetail::where('booking_id', $booking->booking_id)
                                 ->update(['car_details' => json_encode($car_details)]);
                         }
@@ -99,8 +103,8 @@ class PickupDeliveryController extends BaseController
                         $car_available = new Available();
                         $car_available->car_id = !empty($carId) ? $carId : 0;
                         $car_available->model_id = !empty($request['model_id']) ? $request['model_id'] : 0;
-                        $car_available->register_number = !empty($car_details->register_number) ? $car_details->register_number: 0;
-                        $car_available->booking_id =  $booking->booking_id;
+                        $car_available->register_number = !empty($car_details->register_number) ? $car_details->register_number : 0;
+                        $car_available->booking_id = $booking->booking_id;
                         $car_available->start_date = formDateTime($request['start_date']);
                         $car_available->end_date = formDateTime($request['end_date']);
                         $car_available->next_booking = Carbon::parse(formDateTime($request['end_date']))->addHours(3);
@@ -121,12 +125,11 @@ class PickupDeliveryController extends BaseController
         }
 
         $bookings = self::getBooking();
-        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'success' => 'Reschedule date Update successfully']);
+        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'success' => 'Reschedule date Update successfully']);
 
     }
 
-    public static function checkAvailability($startDate, $endDate, $carId, $model_id)
-    {
+    public static function checkAvailability($startDate, $endDate, $carId, $model_id) {
         $availableCars = [];
 
         if (!empty($startDate) && !empty($endDate) && !empty($carId)) {
@@ -143,7 +146,7 @@ class PickupDeliveryController extends BaseController
 
             if ($bookingDetails) {
                 $otherCars = CarDetails::where('model_id', $model_id)->
-                where('id','!=', $carId)->get();
+                    where('id', '!=', $carId)->get();
                 // Check availability of other cars within the date range
                 foreach ($otherCars as $car) {
                     $isAvailable = Available::where('car_id', $car->id)
@@ -175,8 +178,7 @@ class PickupDeliveryController extends BaseController
     }
 
 
-    public function riskCommends(Request $request)
-    {
+    public function riskCommends(Request $request) {
         $request->validate([
             'booking_id' => 'required|numeric',
             'commends' => 'required',
@@ -187,35 +189,33 @@ class PickupDeliveryController extends BaseController
         $commend->commends = $request['commends'];
         $commend->save();
         $bookings = self::getBooking();
-        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Commends Update successfully']);
+        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Commends Update successfully']);
     }
 
-    public function riskStatus(Request $request)
-    {
+    public function riskStatus(Request $request) {
         $request->validate([
             'booking_id' => 'required|numeric',
             'status' => 'required',
         ]);
         $booking = Booking::find($request['booking_id']);
-        if (!empty($booking) && !empty($request['note']) && $request['note'] == 'complete' ) {
+        if (!empty($booking) && !empty($request['note']) && $request['note'] == 'complete') {
             $booking->status = $request['status'];
             $booking->risk = 2;
             $booking->save();
             $bookings = self::getBooking();
-            return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
-        } elseif (!empty($booking) && !empty($request['note']) && $request['note'] == 'risk' ) {
+            return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Risk updated successfully']);
+        } elseif (!empty($booking) && !empty($request['note']) && $request['note'] == 'risk') {
             $booking->risk = $request['status'];
             $booking->save();
             $bookings = self::getBooking();
-            return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
+            return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Risk updated successfully']);
 
         }
         $bookings = self::getBooking();
-        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Booking not found']);
+        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Booking not found']);
     }
 
-    public function riskStatusPending(Request $request)
-    {
+    public function riskStatusPending(Request $request) {
         $request->validate([
             'booking_id' => 'required|numeric',
             'status' => 'required',
@@ -233,26 +233,25 @@ class PickupDeliveryController extends BaseController
                         ->where('end_date', '<', now());
                 });
             });
-        if (!empty($booking) && !empty($request['note']) && $request['note'] == 'complete' ) {
+        if (!empty($booking) && !empty($request['note']) && $request['note'] == 'complete') {
             $booking->status = $request['status'];
             $booking->risk = 2;
             $booking->save();
             $bookings = $query->paginate(20);
-            return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
-        } elseif (!empty($booking) && !empty($request['note']) && $request['note'] == 'risk' ) {
+            return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Risk updated successfully']);
+        } elseif (!empty($booking) && !empty($request['note']) && $request['note'] == 'risk') {
             $booking->risk = $request['status'];
             $booking->save();
             $bookings = $query->paginate(20);
-            return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
+            return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Risk updated successfully']);
 
         }
-        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',2)->paginate(20);
+        $bookings = Booking::with(['user', 'details', 'comments', 'user.bookings'])->where('status', 2)->paginate(20);
 
-        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Booking not found']);
+        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Booking not found']);
     }
 
-    public function bookingPendingCancel(Request $request)
-    {
+    public function bookingPendingCancel(Request $request) {
         $request->validate([
             'booking_id' => 'required',
             'reason' => 'required|string|max:255',
@@ -275,11 +274,10 @@ class PickupDeliveryController extends BaseController
                 });
             });
         $bookings = $query->paginate(20);
-        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Booking cancelled successfully']);
+        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Booking cancelled successfully']);
     }
 
-    public function bookingCancel(Request $request)
-    {
+    public function bookingCancel(Request $request) {
         $request->validate([
             'booking_id' => 'required',
             'reason' => 'required|string|max:255',
@@ -290,7 +288,7 @@ class PickupDeliveryController extends BaseController
                 'status' => 3,
             ]);
         $bookings = self::getBooking();
-        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Booking cancelled successfully']);
+        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Booking cancelled successfully']);
     }
 
     public function fetchBookings(Request $request) {
@@ -318,7 +316,7 @@ class PickupDeliveryController extends BaseController
 
         // Apply filters based on request parameters
         if (!empty($request['car_model'])) {
-            $query->whereHas('details', function($query) use ($request) {
+            $query->whereHas('details', function ($query) use ($request) {
                 $query->where('car_details->car_model->model_name', 'like', '%' . $request->input('car_model') . '%');
             });
         }
@@ -329,7 +327,7 @@ class PickupDeliveryController extends BaseController
             $query->where('booking_id', $request->input('booking_id'));
         }
         if (!empty($request['customer_name'])) {
-            $query->whereHas('user', function($q) use ($request) {
+            $query->whereHas('user', function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->input('customer_name') . '%');
             });
         }
@@ -342,19 +340,18 @@ class PickupDeliveryController extends BaseController
         }
         // Paginate the results
         $bookings = $query->paginate($perPage);
-        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Data Fetch successfully']);
+        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Data Fetch successfully']);
 
     }
 
-    public function calculatePrice(Request $request)
-    {
+    public function calculatePrice(Request $request) {
         if (!empty($request['car_model_id']) && !empty($request['start_date']) && !empty($request['end_date'])) {
 
-            $car_model = CarModel::where('car_model_id',$request['car_model_id'])->first();
-            $prices = ['festival' =>  $car_model->peak_reason_surge ?? 0,
+            $car_model = CarModel::where('car_model_id', $request['car_model_id'])->first();
+            $prices = ['festival' => $car_model->peak_reason_surge ?? 0,
                 'weekend' => $car_model->weekend_surge ?? 0,
-                'weekday' =>  $car_model->price_per_hour ?? 0];
-            $general = Frontend::where('data_keys','general-setting')->first();
+                'weekday' => $car_model->price_per_hour ?? 0];
+            $general = Frontend::where('data_keys', 'general-setting')->first();
             $data = !empty($general) && optional($general)->data_values ? json_decode($general->data_values, true) : [];
             $model_price = UserController::calculatePrice($prices, showDateformat($request['start_date']), showDateformat($request['end_date']));
             return response()->json([
@@ -367,15 +364,14 @@ class PickupDeliveryController extends BaseController
                 'total_days' => $model_price['total_days'] ?? 0,
                 'total_hours' => $model_price['total_hours'] ?? 0,
                 'car_model' => $car_model,
-                'delivery_fee' => (int)$data['delivery_fee'] ?? 0
+                'delivery_fee' => (int) $data['delivery_fee'] ?? 0
             ]);
 
         }
-        return response()->json(['success' => 'false','message' => 'Data not Found .']);
+        return response()->json(['success' => 'false', 'message' => 'Data not Found .']);
     }
 
-    public function sendUserPayment(Request $request)
-    {
+    public function sendUserPayment(Request $request) {
         if (!empty($request['email']) && !empty($request['amount'])) {
 
             $amount = $request['amount'] * 100; // Amount in paise (e.g., ₹1000 = 100000)
@@ -384,7 +380,7 @@ class PickupDeliveryController extends BaseController
             $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
 
             try {
-                $uniqueReceiptId = 'rcptid_' .  rand(100000, 999999); // Generate a unique receipt ID using the booking ID
+                $uniqueReceiptId = 'rcptid_' . rand(100000, 999999); // Generate a unique receipt ID using the booking ID
 
                 $response = $api->invoice->create([
                     'type' => 'link',
@@ -415,8 +411,7 @@ class PickupDeliveryController extends BaseController
 
     }
 
-    public static function createBooking(Request $request)
-    {
+    public static function createBooking(Request $request) {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users',
@@ -435,14 +430,14 @@ class PickupDeliveryController extends BaseController
             if (!empty($car_available)) {
                 $available_car = current($car_available);
             }
-            $general = Frontend::where('data_keys','general-setting')->first();
+            $general = Frontend::where('data_keys', 'general-setting')->first();
             $data = !empty($general) && optional($general)->data_values ? json_decode($general->data_values, true) : [];
 
             $user = new User();
             $user->name = $request['name'];
             $user->mobile = $request['mobile'];
             $user->email = $request['email'];
-            $user->aadhaar_number  = $request['aadhaar_card'];
+            $user->aadhaar_number = $request['aadhaar_card'];
             $user->driving_licence = $request['license_number'];
             $user->save();
 
@@ -463,8 +458,8 @@ class PickupDeliveryController extends BaseController
             $booking->car_id = $available_car->id;
             $booking->city_code = $request['hub_list'] ?? 0;
             $booking->booking_type = 'delivery';
-            $booking->start_date = formDateTime( $request['user_start_date']);
-            $booking->end_date = formDateTime( $request['user_end_date']);
+            $booking->start_date = formDateTime($request['user_start_date']);
+            $booking->end_date = formDateTime($request['user_end_date']);
             $booking->address = $request['drop_location'] ?? '';
             $booking->delivery_fee = $data['delivery_fee'] ?? '';
             $booking->status = 1;
@@ -485,13 +480,13 @@ class PickupDeliveryController extends BaseController
             $delivery_booking->save();
             Mail::to($user->email)->send(new BookingConfirmed($delivery_booking));
 
-            $car_details =  CarDetails::with('carModel')->find($available_car->id);
+            $car_details = CarDetails::with('carModel')->find($available_car->id);
 
-            $prices = ['festival' =>  $car_details->carModel->peak_reason_surge ?? 0,
+            $prices = ['festival' => $car_details->carModel->peak_reason_surge ?? 0,
                 'weekend' => $car_details->carModel->weekend_surge ?? 0,
-                'weekday' =>  $car_details->carModel->price_per_hour ?? 0];
+                'weekday' => $car_details->carModel->price_per_hour ?? 0];
 
-            $general = Frontend::where('data_keys','general-setting')->first();
+            $general = Frontend::where('data_keys', 'general-setting')->first();
             $data = !empty($general) && optional($general)->data_values ? json_decode($general->data_values, true) : [];
             $delivery_fee = $data['delivery_fee'] ?? 0;
             $deposit_amount = $car_details->carModel->dep_amount ?? 0;
@@ -508,17 +503,17 @@ class PickupDeliveryController extends BaseController
 
 
             $payment = new Payment();
-            $payment->payment_id = 'custom_'.rand(100, 999);
+            $payment->payment_id = 'custom_' . rand(100, 999);
             $payment->booking_id = $new_booking_id;
             $payment->amount = $total_price;
             $payment->currency = 'INR';
             $payment->customer_id = $user->id;
-            $payment->payment_status =  'complete';
+            $payment->payment_status = 'complete';
             $payment->save();
 
 
             $car_available = new Available();
-            $car_available->car_id  = $available_car->id;
+            $car_available->car_id = $available_car->id;
             $car_available->model_id = $request['user_car_model'];
             $car_available->booking_id = $new_booking_id;
             $car_available->register_number = $available_car->register_number;
@@ -536,7 +531,7 @@ class PickupDeliveryController extends BaseController
     }
 
 
-    public static function carAvailablity($model_id ,$start_date, $end_date,$hub_id = 0) {
+    public static function carAvailablity($model_id, $start_date, $end_date, $hub_id = 0) {
         if (!empty($model_id)) {
             $details = CarDetails::where('model_id', $model_id);
             if (!empty($hub_id)) {
@@ -569,18 +564,16 @@ class PickupDeliveryController extends BaseController
         }
         return [];
     }
-    public function bookingComplete()
-    {
+    public function bookingComplete() {
         // $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',2)->paginate(20);
-        $city_list = City::where('city_status',1)->pluck('name','code');
-        return view('admin.hub.complete_booking',compact('city_list'));
+        $city_list = City::where('city_status', 1)->pluck('name', 'code');
+        return view('admin.hub.complete_booking', compact('city_list'));
     }
 
-    public function bookingPending()
-    {
+    public function bookingPending() {
         // $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',2)->paginate(20);
-        $city_list = City::where('city_status',1)->pluck('name','code');
-        return view('admin.hub.pending_booking',compact('city_list'));
+        $city_list = City::where('city_status', 1)->pluck('name', 'code');
+        return view('admin.hub.pending_booking', compact('city_list'));
     }
 
     public function fetchPendingBookings(Request $request) {
@@ -612,7 +605,7 @@ class PickupDeliveryController extends BaseController
         }
         // Apply filters based on request parameters
         if (!empty($request['car_model'])) {
-            $query->whereHas('details', function($query) use ($request) {
+            $query->whereHas('details', function ($query) use ($request) {
                 $query->where('car_details->car_model->model_name', 'like', '%' . $request->input('car_model') . '%');
             });
         }
@@ -623,7 +616,7 @@ class PickupDeliveryController extends BaseController
             $query->where('booking_id', $request->input('booking_id'));
         }
         if (!empty($request['customer_name'])) {
-            $query->whereHas('user', function($q) use ($request) {
+            $query->whereHas('user', function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->input('customer_name') . '%');
             });
         }
@@ -637,26 +630,57 @@ class PickupDeliveryController extends BaseController
         // Paginate the results
         $bookings = $query->paginate($perPage);
 
-        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Data Fetch successfully']);
+        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Data Fetch successfully']);
 
     }
 
-    public function revertBooking(Request $request)
-    {
+    public function revertBooking(Request $request) {
         if (empty($request['booking_id'])) {
-            return response()->json(['data'=> [],'message' => 'Data Fetch Failed']);
+            return response()->json(['data' => [], 'message' => 'Data Fetch Failed']);
         }
 
         Booking::find($request['booking_id'])->update(['status' => 1]);
-        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',2)->paginate(20);
-        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Data Fetch successfully']);
+        $bookings = Booking::with(['user', 'details', 'comments', 'user.bookings'])->where('status', 2)->paginate(20);
+        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Data Fetch successfully']);
     }
 
-    public function bookingCancelList()
-    {
+    public function bookingCancelList() {
         // $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',3)->paginate(20);
-        $city_list = City::where('city_status',1)->pluck('name','code');
-        return view('admin.hub.cancel_booking',compact('city_list'));
+        $city_list = City::where('city_status', 1)->pluck('name', 'code');
+        return view('admin.hub.cancel_booking', compact('city_list'));
     }
 
+
+
+
+
+
+    /**
+     * Export data for History
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function export(Request $request) {
+        $ext = $request->query('v');
+        $dataset = $this->getData();
+
+        if ($ext == 'csv') {
+            return Excel::download(new Hub(type: $ext, dataset: $dataset), 'hub-export.csv');
+        }
+
+        $pdf = Pdf::loadView('admin.hub.pdf', ["dataset" => $dataset]);
+        return $pdf->download('hub-export.pdf');
+    }
+
+
+
+
+
+    /**
+     * Get Data for History
+     * @param string $type
+     */
+    protected function getData() {
+        return collect(DB::select('call sp_hub_export'));
+    }
 }

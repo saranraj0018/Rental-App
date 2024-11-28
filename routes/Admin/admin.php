@@ -6,9 +6,9 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PickupDeliveryController;
 use App\Http\Controllers\Admin\CarDetailsController;
 use App\Http\Controllers\Admin\CarBlockController;
-Use App\Http\Controllers\Admin\RoleController;
-Use App\Http\Controllers\Admin\BannerController;
-Use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\MapController;
 use App\Http\Controllers\Admin\HolidayController;
 use App\Http\Controllers\Admin\AvailableController;
@@ -29,20 +29,21 @@ use App\Http\Controllers\Admin\CityController;
 
 
 
-Route::group(['prefix'=> 'admin'],function (){
-    Route::group(['middleware'=> 'admin.guest'],function (){
-        Route::view('/login',  'admin.login')->name('admin.login');
-        Route::view('/register',  'admin.register')->name('admin.register');
+Route::group(['prefix' => 'admin'], function () {
+    Route::group(['middleware' => 'admin.guest'], function () {
+        Route::view('/login', 'admin.login')->name('admin.login');
+        Route::view('/register', 'admin.register')->name('admin.register');
         Route::post('/authenticate', [AdminAuthController::class, 'adminAuthenticate'])->name('admin.authenticate');
         Route::post('/register/update', [AdminAuthController::class, 'registerUpdate'])->name('admin.register.update');
     });
 
-    Route::group(['middleware'=> 'admin.auth'],function (){
+    Route::group(['middleware' => 'admin.auth'], function () {
         Route::get('/dashboard', [DashboardController::class, 'view'])->name('admin.dashboard');
         Route::get('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
         // Pickup-delivery list
         Route::get('/pickup-delivery/list', [PickupDeliveryController::class, 'list'])->name('pickup-delivery.list');
+        Route::get('/pickup-delivery/list/export', [PickupDeliveryController::class, 'export'])->name('pickup-delivery.list.export');
         Route::post('/reschedule/date', [PickupDeliveryController::class, 'rescheduleDate'])->name('pickup-delivery.reschedule');
         Route::post('/risk-comment', [PickupDeliveryController::class, 'riskCommends'])->name('pickup-delivery.commends');
         Route::post('/risk-status', [PickupDeliveryController::class, 'riskStatus'])->name('pickup-delivery.status');
@@ -61,6 +62,8 @@ Route::group(['prefix'=> 'admin'],function (){
 
         // Cars list
         Route::get('/cars/list', [CarDetailsController::class, 'list'])->name('car.list');
+        Route::get('/cars/history/list', [CarDetailsController::class, 'history_list']);
+        Route::get('/cars/history/list/export', [CarDetailsController::class, 'history_list_export'])->name('export-csv');
         Route::post('/car/save', [CarDetailsController::class, 'save'])->name('car.save');
         Route::delete('/car/{id?}/delete', [CarDetailsController::class, 'delete'])->name('car.delete');
         Route::get('/cars/search', [CarDetailsController::class, 'search'])->name('cars.search');
@@ -70,6 +73,8 @@ Route::group(['prefix'=> 'admin'],function (){
 
         // Car-block list
         Route::get('/car-block/list', [CarBlockController::class, 'list'])->name('car-block.list');
+        Route::get('/car-block/list/history', [CarBlockController::class, 'history'])->name('car-block.history');
+        Route::get('/car-block/list/history/export', [CarBlockController::class, 'export'])->name('car-block.export');
         Route::post('/car-block/save', [CarBlockController::class, 'save'])->name('car-block.save');
         Route::put('/car-block/update', [CarBlockController::class, 'update'])->name('car-block.update');
         Route::delete('/car-block/{id?}/delete', [CarBlockController::class, 'delete'])->name('car-block.delete');
@@ -141,7 +146,7 @@ Route::group(['prefix'=> 'admin'],function (){
         Route::get('/city/list', [CityController::class, 'list'])->name('city.list');
         Route::post('/city/save', [CityController::class, 'save'])->name('city.save');
         Route::delete('/city/{id?}/delete', [CityController::class, 'delete'])->name('city.delete');
-//        Route::get('/holiday/search', [HolidayController::class, 'search'])->name('holiday.search');
+        //        Route::get('/holiday/search', [HolidayController::class, 'search'])->name('holiday.search');
 
         // Front-end Banner Section
         Route::get('/general', [BannerController::class, 'generalList'])->name('general.list');
@@ -152,7 +157,7 @@ Route::group(['prefix'=> 'admin'],function (){
 
         // User List
         Route::get('/user/list', [UserController::class, 'list'])->name('user.list');
+        Route::get('/user/list/export', [UserController::class, 'users_export'])->name('user.list.export');
         Route::get('/user/search', [UserController::class, 'search'])->name('user.search');
-
     });
 });
