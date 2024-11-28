@@ -5,27 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Booking extends Model
-{
+class Booking extends Model {
     use HasFactory;
     protected $fillable = ['status'];
-    public function user()
-    {
+    public function user() {
         return $this->belongsTo(User::class);
     }
 
-    public function Car()
-    {
+    public function Car() {
         return $this->belongsTo(CarDetails::class);
     }
 
-    public function details()
-    {
-        return $this->hasMany(BookingDetail::class,'booking_id','booking_id');
+    public function details() {
+        return $this->hasMany(BookingDetail::class, 'booking_id', 'booking_id');
     }
 
-    public function comments()
-    {
+    public function comments() {
         return $this->hasMany(Commend::class);
     }
 }
