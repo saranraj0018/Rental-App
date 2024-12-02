@@ -9,7 +9,10 @@
         <div class="d-flex justify-content-between mb-3">
             <div class="my-auto">
                 <p class="fs-18 fw-600 fs-mb-12 m-0">
-                    Available Cars In Coimbatore
+                    @php
+                        $city = !empty($city_list) ? $city_list->toArray() : [];
+                    @endphp
+                    Available Cars In {{ array_key_exists(session('city_id'), $city) ? $city[session('city_id')] : '' }}
                 </p>
             </div>
             <div>

@@ -23,7 +23,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('user/check-location', [LocationController::class, 'checkLocation']);
     Route::get('/user/verify-document', [OTPController::class,'verifyDocument'])->name('verify.document');
-    Route::get('/user/verify-location', [OTPController::class,'verifyLocation'])->name('verify.location');
     Route::get('/user/verify-booking', [OTPController::class,'verifyBooking'])->name('verify.booking');
 
     Route::post('user/apply-coupon', [CouponController::class,'applyCoupon'])->name('apply.coupon');

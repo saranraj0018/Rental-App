@@ -61,7 +61,7 @@ class PickupDeliveryController extends BaseController {
                 $query->where('risk', 1)
                     ->where('status', 1);
             })
-            ->orderBy('created_at', 'desc')
+            ->orderBy('start_date', 'asc')
             ->paginate(20);
     }
 
@@ -294,6 +294,17 @@ class PickupDeliveryController extends BaseController {
     public function fetchBookings(Request $request) {
         // Set the number of items per page
         $perPage = $request->input('per_page', 20);
+
+        if (!empty($request->input('booking_id'))) {
+            $booking = Booking::with(['user', 'details', 'comments', 'user.bookings'])
+                ->where('city_code', $request['hub_type'] ?? 632)
+                ->where('booking_id', $request->input('booking_id'));
+
+            $bookings = $booking->paginate($perPage);
+            return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Data Fetch successfully']);
+
+        }
+
         $timeLimit = now()->addHours(48);
         $query = Booking::with(['user', 'details', 'comments', 'user.bookings'])
             ->where('status', $request['status'])
@@ -331,10 +342,6 @@ class PickupDeliveryController extends BaseController {
                 $q->where('name', 'like', '%' . $request->input('customer_name') . '%');
             });
         }
-        if ($request->has('booking_type') && $request->input('booking_type') !== 'both') {
-            $query->where('booking_type', $request->input('booking_type'));
-        }
-
         if ($request->has('hub_type')) {
             $query->where('city_code', $request->input('hub_type'));
         }

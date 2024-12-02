@@ -101,15 +101,6 @@ class OTPController extends Controller
         return response()->json(['success' => true,'message' => 'Document is Already Verify successful!']);
     }
 
-    public function verifyLocation()
-    {
-        if (empty(Auth::user()->pick_location) || empty(Auth::user()->drop_location)) {
-            return response()->json(['success' => false,'message' => 'Location not found.']);
-        }
-
-        return response()->json(['success' => true,'message' => 'Location Added']);
-    }
-
     public function verifyBooking()
     {
         $startDateTime = Carbon::parse(session('booking_details.start_date')); // Assuming you have start_date_time field

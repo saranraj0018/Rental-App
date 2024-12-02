@@ -157,7 +157,13 @@ $(function () {
             $('#cancel_booking').modal('hide');
         });
 
-
+        $('#accept_terms').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('#confirm_cancel_btn').prop('disabled', false);
+            } else {
+                $('#confirm_cancel_btn').prop('disabled', true);
+            }
+        });
 
 
         $('#cancel_booking_form').on('submit', function(e) {
@@ -185,7 +191,7 @@ $(function () {
                     data: $(this).serialize(),
                     success: function(response) {
                         $('#cancel_booking').modal('hide');
-                        window.location.reload();
+                      //  window.location.reload();
                     },
                     error: function(response) {
                         if (response.responseJSON && response.responseJSON.errors) {

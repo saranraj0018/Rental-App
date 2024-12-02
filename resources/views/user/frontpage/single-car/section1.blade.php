@@ -192,10 +192,16 @@
                                 <div class="text-white">
                                     <input type="hidden" id="drop_address_pine">
                                     <input type="hidden" id="pickup_address_pine">
-                                    <p class="fs-20 fs-mb-16 my-2 text-end">
-                                        Drop Address<span id="drop_address">{{ session('delivery.address') ?? session('pick-delivery.address') ?? '' }}</span></p>
-                                    <p class="fs-20 fs-mb-16 my-2 text-end">
-                                        Pickup Address<span id="pickup_address">{{ session('pickup.address') ?? session('pick-delivery.address') ?? '' }}</span></p>
+                                    <p class="fs-20 fs-mb-16 my-1">
+                                        Delivery location</p>
+                                    <span id="drop_address" class="fs-14 fw-500">{{ session('delivery.address') ?? session('pick-delivery.address') ?? '' }}</span>
+                                    <button type="button" class="input-group-text form-dates text-danger fs-16 bg-transparent border-0 fw-500 p-0"
+                                            id="delivery_location">Change</button>
+                                    <p class="fs-20 fs-mb-16 my-1">
+                                        Return location </p>
+                                    <span id="pickup_address" class="fs-14 fw-500">{{ session('pickup.address') ?? session('pick-delivery.address') ?? '' }}</span>
+                                    <button type="button" class="input-group-text form-dates text-danger fs-16 bg-transparent border-0 fw-500 p-0"
+                                            id="return_location">Change</button>
                                 </div>
                             </div>
                         </div>
@@ -265,8 +271,6 @@
             }
         }
         // Ensure both values are correctly processed
-
-
 
         let user_booking = await verifyUserbooking();
         if (!user_booking) {
@@ -369,7 +373,7 @@
                 <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
                 <div class="p-3">
                     <div id="delivery-section" class="slide-section">
-                        <p class="fs-16 fw-500">Select Drop Location</p>
+                        <p class="fs-16 fw-500">Select delivery location</p>
                         <div class="container">
                             <div id="delivery_map" style="height: 500px; width: 100%;"></div>
 
@@ -390,7 +394,7 @@
 
                     <div id="pickup-section" class="slide-section d-none">
                         <div class="d-flex">
-                            <p class="fs-16 fw-500">Select Pickup Location</p>
+                            <p class="fs-16 fw-500">Select return location</p>
                         </div>
                         <div class="container">
                             <div id="custom_map" style="height: 500px; width: 100%;"></div>

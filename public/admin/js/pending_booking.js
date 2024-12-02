@@ -62,6 +62,7 @@ $(function () {
         });
 
         $('#pending_table').on('click', '.open-risk-modal', function() {
+            $('#risk-comment').val(' ');
             let bookingId = $(this).data('id');
             let commend = $(this).data('commend');
             // Parse the comments if they are not already an array
