@@ -1,13 +1,17 @@
+
 $(function () {
     'use strict'
-    $(document).ready(function() {
-        $('#add_faq').click(function() {
+    $(document).ready(function () {
+
+
+
+        $('#add_faq').click(function () {
             $('#add_faq_label').text("Add Faq Item");
             $('#add_faq_item').modal('show');
             $('#save_faq').text("Save");
         });
 
-        $('#faq_form').on('submit', function(e) {
+        $('#faq_form').on('submit', function (e) {
             e.preventDefault();
             // Define the elements and their conditions in an array of objects
             let isValid = true;
@@ -17,7 +21,6 @@ $(function () {
             ];
 
             // Loop through the fields and apply the validation logic
-
             fields.forEach(field => {
                 let element = $(field.id);
                 let value = element.val();
@@ -30,17 +33,19 @@ $(function () {
             });
 
             if (isValid) {
+
                 // $('#save_user_role').prop('disabled', true);  // Disable submit button during AJAX
                 $.ajax({
                     url: '/admin/faq/save',
                     type: 'POST',
                     data: $(this).serialize(),
-                    success: function(response) {
+                    success: function (response) {
                         $('#add_faq_item').modal('hide');
                         updateFaqTable(response.data)
                         alertify.success(response.success);
+
                     },
-                    error: function(response) {
+                    error: function (response) {
                         if (response.responseJSON) {
                             let errors = response.responseJSON.errors;
                             $('.form-control').removeClass('is-invalid');
@@ -54,17 +59,20 @@ $(function () {
                             });
                         }
                     },
-                    complete: function() {
+                    complete: function () {
                         $('#save_user_role').prop('disabled', false);  // Re-enable the submit button
                     }
                 });
+
+                $('#question').val('')
+                $('#answer').val('')
             }
 
 
 
         });
 
-        $('#faq_table').on('click', '.faq_edit', function() {
+        $('#faq_table').on('click', '.faq_edit', function () {
             let modal = $('#add_faq_item');
             $('#add_faq_label').text("Update Faq Item");
             $('#save_faq').text("Update");
@@ -84,7 +92,7 @@ $(function () {
                 tbody.append(`<tr><td colspan="4" class="text-center">Record Not Found</td></tr>`);
             } else {
                 window.history.pushState(null, '', '/admin/faq/list?page=' + 1);
-                $.each(data.faq_items, function(index, item) {
+                $.each(data.faq_items, function (index, item) {
                     let dataValues = item.data_values ? JSON.parse(item.data_values) : null;
 
                     tbody.append(`
@@ -113,8 +121,8 @@ $(function () {
             `);
                 });
                 $('#pagination').html(data.pagination);
-                let newBaseUrl =  window.location.href;
-                $('.pagination a').each(function() {
+                let newBaseUrl = window.location.href;
+                $('.pagination a').each(function () {
                     $(this).attr('href', newBaseUrl); // Set the new URL
                 });
             }
@@ -126,27 +134,27 @@ $(function () {
         }
         // Delete Car
         let deleteId;
-        $('#faq_table').on('click', '.faq_delete', function() {
+        $('#faq_table').on('click', '.faq_delete', function () {
             deleteId = $(this).data('id');  // Capture the ID of the item to delete
             $('#delete_faq_model').modal('show');  // Show the modal
         });
 
-        $('#confirm_delete_row').on('click', function() {
+        $('#confirm_delete_row').on('click', function () {
             $.ajax({
                 url: `/admin/faq/${deleteId}/delete`,
                 type: 'DELETE',
-                success: function(response) {
+                success: function (response) {
                     $('#delete_faq_model').modal('hide');  // Hide the modal
                     updateFaqTable(response.data)
                     alertify.success(response.success);
                 },
-                error: function(response) {
+                error: function (response) {
                     // alert('Error');
                 }
             });
         });
 
-        $('#search_item').on('keyup', function() {
+        $('#search_item').on('keyup', function () {
             let query = $(this).val();
 
             $.ajax({
@@ -155,13 +163,13 @@ $(function () {
                 data: {
                     question: query,
                 },
-                success: function(response) {
+                success: function (response) {
                     // Clear existing table rows
                     $('#faq_table tbody').empty();
                     updateFaqTable(response.data);
                     // Populate table with new data
                 },
-                error: function(xhr) {
+                error: function (xhr) {
 
                 }
             });
