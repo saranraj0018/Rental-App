@@ -10,9 +10,10 @@
                 <button class="btn text-blue fs-16 fs-mb-12 fw-500">View All <i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
-        <div class="home-demo">
-            <div class="owl-carousel owl-carousel-5 owl-theme">
-                @if(!empty($section3))
+        @if(!empty($section3))
+            <div class="home-demo">
+                <div class="owl-carousel owl-carousel-5 owl-theme">
+
                     @foreach($section3 as $item)
                         <div class="item">
                             <div class="r2dc-card-bg p-3">
@@ -36,9 +37,8 @@
                                 <div class="d-flex justify-content-between">
                                     <div>
                                         <p class="fs-15 fw-600 m-0">
-                                           {{ $item->carModel->model_name ?? '' }}
+                                            {{ $item->carModel->model_name ?? '' }}
                                         </p>
-
                                         <p class="d-flex text-secondary fs-12">
                                             <img src="{{ asset('user/img/iconTransmission.png') }}" alt="icon" class="img-fluid me-1"> {{ $item->carModel->transmission ?? ''}}
                                             <img src="{{ asset('user/img/iconSeat.png') }}" alt="icon" class="img-fluid mx-1">
@@ -56,55 +56,8 @@
                         </div>
                     @endforeach
 
-                @else
-                    @foreach($sold_cars as $item)
-                        <div class="item">
-                            <div class="r2dc-card-bg p-3">
-                                <div class="d-flex justify-content-between">
-                                    <div class="d-flex">
-                                        <div class="bg-white rounded-pill w-fit px-2 py-1 fw-500 fs-15 my-auto">
-                                            <i class="fas fa-star" style="color:#E66742;"></i> 4.5
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="save-icon my-auto">
-                                            <i class="fas fa-bookmark text-blue"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-block">
-                                    <img src="{{ asset('storage/car_image/' . $item->carModel->car_image ?? '') }}" alt="Cars" class="img-fluid w-75 mx-auto">
-                                </div>
-                            </div>
-                            <div class="r2dc-card-content-bg p-3">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <p class="fs-15 fw-600 m-0">
-                                            {{ $item->carModel->model_name ?? '' }}
-                                        </p>
-                                        <p class="fs-15 fw-600 my-2">
-                                            <i class="fas fa-map-marker-alt text-blue me-2"></i>
-                                            {{ $item->carModel->model_name ?? '' }}
-                                        </p>
-                                        <p class="d-flex text-secondary fs-12">
-                                            <img src="{{ asset('user/img/iconTransmission.png') }}" alt="icon" class="img-fluid me-1"> {{ $item->carModel->transmission ?? ''}}
-                                            <img src="{{ asset('user/img/iconSeat.png') }}" alt="icon" class="img-fluid mx-1">
-                                            {{ $item->carModel->seat.' Seats' ?? ''}}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <p class="fs-15 fw-600 mb-2">
-                                            ₹ {{ $item->carModel->price_per_hour ?? ''}} <span class="fw-500 fs-12">per hours</span>
-                                        </p>
-                                        <button type="button" class="my-button btn btn-lg fs-14 float-end">Sold</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                @endif
-
+                </div>
             </div>
-        </div>
+        @endif
     </div>
 </section>

@@ -148,7 +148,7 @@
                             <p class="text-blue fs-4 fw-600">{{ $section4['travel'] ?? "LET'S TRAVEL TOGETHER!" }}</p>
                             <p class="fs-14">{{ $section4['travel_description'] ?? ''}}</p>
                         </div>
-                        <button class="my-button btn fs-mb-12">Book Us for Safety Ride</button>
+{{--                        <button class="my-button btn fs-mb-12">Book Us for Safety Ride</button>--}}
                     </div>
                 </div>
             </div>
@@ -168,7 +168,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <button class="my-button btn mt-2 mt-lg-0 mt-lg-3 fs-mb-9 p-1 p-auto">To Know More Offers</button>
+{{--                                        <button class="my-button btn mt-2 mt-lg-0 mt-lg-3 fs-mb-9 p-1 p-auto">To Know More Offers</button>--}}
                                     </div>
                                 </div>
                             </div>

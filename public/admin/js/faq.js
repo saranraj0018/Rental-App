@@ -2,6 +2,8 @@ $(function () {
     'use strict'
     $(document).ready(function() {
         $('#add_faq').click(function() {
+            $('#question').val('')
+            $('#answer').val('')
             $('#add_faq_label').text("Add Faq Item");
             $('#add_faq_item').modal('show');
             $('#save_faq').text("Save");
@@ -65,6 +67,8 @@ $(function () {
         });
 
         $('#faq_table').on('click', '.faq_edit', function() {
+            $('#question').val('')
+            $('#answer').val('')
             let modal = $('#add_faq_item');
             $('#add_faq_label').text("Update Faq Item");
             $('#save_faq').text("Update");

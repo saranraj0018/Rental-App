@@ -95,8 +95,10 @@
                 Similer cars for your needs
             </p>
         </div>
+        @if(!empty($available_cars))
         <div class="home-demo">
             <div class="owl-carousel owl-carousel-7 owl-theme">
+                @foreach($available_cars as $cars)
                 <div class="item">
                     <div class="r2dc-card-bg p-3">
                         <div class="d-flex justify-content-between">
@@ -112,152 +114,42 @@
                             </div>
                         </div>
                         <div class="d-block">
-                            <img src="{{ asset('user/img/Group (2).png') }}" alt="Cars" class="img-fluid w-75 mx-auto">
+                            <img src="{{ asset('storage/car_image/' . $cars->carModel->car_image ?? '') }}" alt="cars" class="img-fluid w-100">
                         </div>
                     </div>
                     <div class="r2dc-card-content-bg p-3">
                         <div class="d-flex justify-content-between">
                             <div>
                                 <p class="fs-15 fw-600">
-                                    Maruthi Swift
+                                    {{ $cars->carModel->model_name ?? '' }}
                                 </p>
                                 <p class="d-flex text-secondary fs-12">
-                                    <img src="{{ asset('user/img/iconTransmission.png') }}" alt="icon" class="img-fluid me-1"> Automatic
-                                    <img src="{{ asset('user/img/iconSeat.png') }}" alt="icon" class="img-fluid mx-1"> 5 Seats
+                                    <img src="{{ asset('user/img/iconTransmission.png') }}" alt="icon" class="img-fluid me-1"> {{ $cars->carModel->transmission ?? '' }}
+                                    <img src="{{ asset('user/img/iconSeat.png') }}" alt="icon" class="img-fluid mx-1">  {{ $cars->carModel->seat.' Seats' }}
                                 </p>
                             </div>
                             <div>
+                                @php
+                                    $prices = ['festival' =>  $cars->carModel->peak_reason_surge ?? 0,
+                                                'weekend' => $cars->carModel->weekend_surge ?? 0,
+                                                'weekday' =>  $cars->carModel->price_per_hour ?? 0];
+            $price_list = \App\Http\Controllers\User\UserController::calculatePrice($prices,session('start_date'),session('end_date'));
+                                @endphp
                                 <p class="fs-15 fw-600 mb-2">
-                                    ₹3144 <span class="fw-500 fs-12">per day</span>
+                                    ₹{{ $price_list['total_price'] ?? '' }}<span class="fw-500 fs-12"></span>
                                 </p>
-                                <button class="my-button btn fs-14">
-                                    Book now
-                                </button>
+                            @if ($cars['booking_status'] === 'available')
+                                <a href="{{ route('book.car', ['model_id' => $cars->id]) }}" class="my-button p-1 px-3 w-100 btn fs-14">Book now</a>
+                            @elseif ($cars['booking_status'] === 'sold')
+                                <button type="button" class="sold-button btn btn-lg fs-14 float-end">Sold</button>
+                            @endif
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="item">
-                    <div class="r2dc-card-bg p-3">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="bg-white rounded-pill w-fit px-1 fw-500 fs-15 my-auto">
-                                    <i class="fas fa-star" style="color:#E66742;"></i> 4.5
-                                </div>
-                            </div>
-                            <div>
-                                <div class="save-icon my-auto">
-                                    <i class="fas fa-bookmark text-blue"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-block">
-                            <img src="{{ asset('user/img/Group (2).png') }}" alt="Cars" class="img-fluid w-75 mx-auto">
-                        </div>
-                    </div>
-                    <div class="r2dc-card-content-bg p-3">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <p class="fs-15 fw-600">
-                                    Mahindra Scorpio
-                                </p>
-                                <p class="d-flex text-secondary fs-12">
-                                    <img src="{{ asset('user/img/iconTransmission.png') }}" alt="icon" class="img-fluid me-1"> Automatic
-                                    <img src="{{ asset('user/img/iconSeat.png') }}" alt="icon" class="img-fluid mx-1"> 6 + 1 Seats
-                                </p>
-                            </div>
-                            <div>
-                                <p class="fs-15 fw-600 mb-2">
-                                    ₹7500 <span class="fw-500 fs-12">per day</span>
-                                </p>
-                                <button class="my-button btn fs-14">
-                                    Book now
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="r2dc-card-bg p-3">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="bg-white rounded-pill w-fit px-1 fw-500 fs-15 my-auto">
-                                    <i class="fas fa-star" style="color:#E66742;"></i> 4.5
-                                </div>
-                            </div>
-                            <div>
-                                <div class="save-icon my-auto">
-                                    <i class="fas fa-bookmark text-blue"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-block">
-                            <img src="{{ asset('user/img/Group (2).png') }}" alt="Cars" class="img-fluid w-75 mx-auto">
-                        </div>
-                    </div>
-                    <div class="r2dc-card-content-bg p-3">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <p class="fs-15 fw-600">
-                                    Maruthi Swift
-                                </p>
-                                <p class="d-flex text-secondary fs-12">
-                                    <img src="{{ asset('user/img/iconTransmission.png') }}" alt="icon" class="img-fluid me-1"> Automatic
-                                    <img src="{{ asset('user/img/iconSeat.png') }}" alt="icon" class="img-fluid mx-1"> 5 Seats
-                                </p>
-                            </div>
-                            <div>
-                                <p class="fs-15 fw-600 mb-2">
-                                    ₹3144 <span class="fw-500 fs-12">per day</span>
-                                </p>
-                                <button class="my-button btn fs-14">
-                                    Book now
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="r2dc-card-bg p-3">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="bg-white rounded-pill w-fit px-1 fw-500 fs-15 my-auto">
-                                    <i class="fas fa-star" style="color:#E66742;"></i> 4.5
-                                </div>
-                            </div>
-                            <div>
-                                <div class="save-icon my-auto">
-                                    <i class="fas fa-bookmark text-blue"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-block">
-                            <img src="{{ asset('user/img/Group (2).png') }}" alt="Cars" class="img-fluid w-75 mx-auto">
-                        </div>
-                    </div>
-                    <div class="r2dc-card-content-bg p-3">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <p class="fs-15 fw-600">
-                                    Mahindra Scorpio
-                                </p>
-                                <p class="d-flex text-secondary fs-12">
-                                    <img src="{{ asset('user/img/iconTransmission.png') }}" alt="icon" class="img-fluid me-1"> Automatic
-                                    <img src="{{ asset('user/img/iconSeat.png') }}" alt="icon" class="img-fluid mx-1"> 5 Seats
-                                </p>
-                            </div>
-                            <div>
-                                <p class="fs-15 fw-600 mb-2">
-                                    ₹7500 <span class="fw-500 fs-12">per day</span>
-                                </p>
-                                <button class="my-button btn fs-14">
-                                    Book now
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
+        @endif
     </div>
 </section>

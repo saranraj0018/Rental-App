@@ -65,7 +65,7 @@
                                         <div class="text-white fs-14 fw-500 my-2">
                                             Discover your perfect ride, wherever your journey takes you.<br> We've got it all, ready for your next adventure—super cool!
                                         </div>
-                                        <button class="btn bg-white rounded-pill fw-600 text-blue my-4 p-1 px-3">Book your car now</button>
+{{--                                        <button class="btn bg-white rounded-pill fw-600 text-blue my-4 p-1 px-3">Book your car now</button>--}}
                                     </div>
                                     <div class="col-4">
                                     </div>
