@@ -23,13 +23,8 @@ $(function () {
             // Calculate the date offset by weeks
             const newDate = new Date(today);
             newDate.setDate(newDate.getDate() - currentWeekOffset * 7 - 7); // Previous week's date
-
-            if (newDate >= initialDate) {
                 currentWeekOffset--;
                 loadWeekData();
-            }
-
-            // Hide the button if reaching the initial date
 
         });
 

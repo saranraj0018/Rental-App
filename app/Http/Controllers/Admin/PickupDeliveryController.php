@@ -298,7 +298,7 @@ class PickupDeliveryController extends BaseController
         $perPage = $request->input('per_page', 20);
         $timeLimit = now()->addHours(48);
         $query = Booking::with(['user', 'details', 'comments', 'user.bookings'])
-            ->where('status', 1)
+            ->where('status', $request['status'])
             ->where('city_code', $request['hub_type'] ?? 632) // Apply city_code filter globally
             ->where(function ($query) use ($timeLimit) {
                 $query->where(function ($query) use ($timeLimit) {

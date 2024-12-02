@@ -276,7 +276,7 @@ class UserController extends Controller
 
 
     public function profile() {
-        $user_details = User::with('userDoc')->find(Auth::id())->first();
+        $user_details = User::with('userDoc')->find(Auth::id());
         return view('user.frontpage.profile.view',compact('user_details'));
     }
 

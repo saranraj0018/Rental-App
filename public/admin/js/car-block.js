@@ -148,11 +148,17 @@ $(function () {
                     type: 'POST',
                     data: $(this).serialize(),
                     success: function(response) {
+                        if (response.success) {
+                            alertify.error(response.message);
+                        }
                         $('#create_block').modal('hide');
                         updateBlockTable(response.data);
                         alertify.success(response.success);
                     },
                     error: function(response) {
+                        if (response.success) {
+                            alertify.error(response.message);
+                        }
                         if (response.responseJSON.errors) {
                             let errors = response.responseJSON.errors;
                             // Remove existing invalid classes and messages
