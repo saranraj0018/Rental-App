@@ -2,7 +2,12 @@ $(function () {
     'use strict';
 
     $(document).ready(function() {
-        let currentWeekOffset = 0; // Track the current week offset
+        let currentWeekOffset = 0;
+        const initialDate = new Date();
+        initialDate.setDate(initialDate.getDate() - 7); // 7 days before today
+
+// Get today's date
+        const today = new Date(); // Current date
 
         // Load data on car model change
         $('#car_available_model').on('change', loadWeekData);
@@ -15,10 +20,12 @@ $(function () {
 
         // Load previous week's data
         $('#prev-week').on('click', function() {
-            if (currentWeekOffset > 0) {
+            // Calculate the date offset by weeks
+            const newDate = new Date(today);
+            newDate.setDate(newDate.getDate() - currentWeekOffset * 7 - 7); // Previous week's date
                 currentWeekOffset--;
                 loadWeekData();
-            }
+
         });
 
         // Fetch and render data for the selected week
@@ -33,6 +40,7 @@ $(function () {
                 },
                 success: function(response) {
                     const $tbody = $('#registration-numbers-body');
+
                     $tbody.empty(); // Clear previous data
                     generateTableHeaders(); // Generate table headers
 
@@ -60,31 +68,41 @@ $(function () {
                                 (bookingType === '3') ? 'yellow' :
                                         (bookingType === '4') ? 'purple' :
                                             (bookingType === '5') ? 'orange' :
-                                                (bookingType === '6') ? 'black' : 'green';
+                                                (bookingType === '6') ? 'gray' :
+                                                    (bookingType === '7') ? 'brown' : 'green';
+                        let tempDate = new Date(startDate); // Clone startDate to avoid mutation
 
-                        let currentDate = new Date(startDate);
-                        while (currentDate <= endDate) {
-                            const dayIndex = calculateDayIndex(currentDate);
+                        while (tempDate <= endDate) {
+                            const dayIndex = calculateDayIndex(tempDate);
 
                             if (dayIndex >= 0 && dayIndex < 7) {
                                 let hourStart = 0;
                                 let hourEnd = 48;
 
-                                if (currentDate.toDateString() === startDate.toDateString()) {
+                                // Handle start day
+                                if (tempDate.toDateString() === startDate.toDateString()) {
                                     hourStart = Math.floor(startDate.getHours() * 2 + startDate.getMinutes() / 30);
                                 }
-                                if (currentDate.toDateString() === endDate.toDateString()) {
+
+                                // Handle end day
+                                if (tempDate.toDateString() === endDate.toDateString()) {
                                     hourEnd = Math.ceil(endDate.getHours() * 2 + endDate.getMinutes() / 30) + 1;
                                 }
 
+                                // Loop through the hours for the current day
                                 for (let h = hourStart; h < hourEnd; h++) {
                                     if (h < 48) {
-                                        bookingsMap[registerNumber][dayIndex][h] = {color,booking_id};
+                                        bookingsMap[registerNumber][dayIndex][h] = { color, booking_id };
                                     }
                                 }
                             }
-                            currentDate.setDate(currentDate.getDate() + 1);
+
+                            // Move to the next day safely without affecting tempDate
+                            tempDate.setDate(tempDate.getDate() + 1);
+                            tempDate.setHours(0, 0, 0, 0); // Reset time to midnight for the new day
                         }
+
+
                     });
 
 // Populate the table with booking data

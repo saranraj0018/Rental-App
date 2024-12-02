@@ -30,7 +30,7 @@ $(function () {
         if (isValid) {
             let formData = new FormData(this);
             $.ajax({
-                url: '/user/document/update', // Update with your route
+                    url: '/user/document/update', // Update with your route
                 method: 'POST',
                 data: formData,
                 processData: false, // Required for jQuery to send the data properly
@@ -59,6 +59,30 @@ $(function () {
                 },
             });
         }
+    });
+
+    $(document).on('click', '.delete-image', function(e) {
+        e.preventDefault(); // Prevent the form from submitting
+        const imageId = $(this).data('id');
+        const url = '/user-documents/' + imageId;
+
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            success: function(response) {
+                if (response.success){
+                    $('#profile_message').text(response.message)
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 3000);
+                } else if (!response.success){
+                    $('#profile_message').text(response.message)
+                }
+            },
+            error: function(response) {
+               // alertify.error(response.responseJSON.message);
+            }
+        });
     });
 
 });

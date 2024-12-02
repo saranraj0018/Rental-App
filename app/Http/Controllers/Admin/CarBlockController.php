@@ -50,6 +50,23 @@ class CarBlockController extends BaseController {
             'reason_discretion' => 'required_if:block_type,1',
 
         ]);
+        $startDateTime = Carbon::parse($request['start_date']);
+        $endDateTime = Carbon::parse($request['end_date']);
+        if (!empty($startDateTime) && !empty($endDateTime)) {
+            $existingBooking = CarBlock::where('hub', $request['hub_city'])->where('car_register_number', $request['block_car_register_number'])->where(function ($query) use ($startDateTime, $endDateTime) {
+                $query->whereBetween('start_date', [$startDateTime, $endDateTime]) // Check if start time is in the range
+                ->orWhereBetween('end_date', [$startDateTime, $endDateTime]) // Check if end time is in the range
+                ->orWhere(function ($query) use ($startDateTime, $endDateTime) {
+                    $query->where('start_date', '<=', $startDateTime)
+                        ->where('end_date', '>=', $endDateTime);
+                });
+            })->exists();
+
+            if (!empty($existingBooking)) {
+                return response()->json(['success' => true,'message' => 'Car already exits.']);
+            }
+        }
+
         $car_block = new CarBlock();
         $car_block->block_type = $request['block_type'];
         $car_block->hub = $request['hub_city'];
@@ -76,7 +93,7 @@ class CarBlockController extends BaseController {
         $car_available->start_date = $request['start_date'];
         $car_available->end_date = $request['end_date'];
         $car_available->next_booking = Carbon::parse(formDateTime($request['end_date']))->addHours($timing_setting['booking_duration'] ?? 3);
-        $car_available->booking_type = $request['block_type'] == 1 ? 6 : $request['block_type'];
+        $car_available->booking_type = $request['block_type'] == 1 ? 6 : ($request['block_type'] == 0 ? 7 : $request['block_type']);
         $car_available->save();
 
         $car_block_list = CarBlock::with('user')->orderBy('created_at', 'desc')->get();

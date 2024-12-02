@@ -122,7 +122,7 @@
                     <img src="{{ asset('user/img/about/Group 40519.png') }}" alt="" class="img-fluid">
                 </div>
                 <div class="col-12 col-lg-3">
-                    <img src="{{ asset('user/img/about/Group 40519.png') }}" alt="" class="img-fluid">
+                    <img src="{{ asset('user/img/about/Group 40518.png') }}" alt="" class="img-fluid">
                 </div>
                 <div class="col-12 col-lg-6">
                     <img src="{{ asset('user/img/about/Group 40520.png') }}" alt="" class="img-fluid">

@@ -83,18 +83,20 @@
         </div>
         <div class="container mt-5">
             <h4 class="mb-4">Documents List</h4>
-
             <div class="mb-3">
                 <label for="image" class="form-label">Upload Additional Document</label>
                 <input type="file" class="form-control w-50" id="other_documents" name="other_documents" >
             </div>
-
             <div class="row" id="image-gallery">
                 @if(!empty($user_details->userDoc))
                 @foreach($user_details->userDoc as $image)
                     <div class="col-md-4 mb-4">
                         <div class="card image-card">
                             <img src="{{ asset('/storage/user-documents/' . $image->image_name) }}" class="card-img-top" alt="Image">
+                            <button class="btn btn-danger btn-sm delete-image position-absolute" data-id="{{ $image->id }}"
+                                    style="top: 5px; right: 5px;">
+                                &times;
+                            </button>
                         </div>
                     </div>
                 @endforeach

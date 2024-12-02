@@ -564,6 +564,7 @@ $(function () {
             const customerName = $('#customer_name').val();
             const bookingType = $('#booking_type').val();
             const hub_type = $('#hub_type').val();
+            let status = 1;
             $.ajax({
                 url: '/admin/booking/search',
                 type: 'GET',
@@ -574,6 +575,7 @@ $(function () {
                     customer_name: customerName,
                     booking_type: bookingType,
                     hub_type: hub_type,
+                    status:status
                 },
                 success: function(response) {
                     updateBookingTable(response.data)

@@ -9,14 +9,13 @@ use App\Models\City;
 use App\Models\Holiday;
 use App\Models\User;
 use App\Models\UserDocument;
-use GuzzleHttp\Client;
 use App\Models\CarModel;
 use App\Models\Coupon;
 use App\Models\Frontend;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
@@ -277,7 +276,7 @@ class UserController extends Controller
 
 
     public function profile() {
-        $user_details = User::with('userDoc')->find(Auth::id())->first();
+        $user_details = User::with('userDoc')->find(Auth::id());
         return view('user.frontpage.profile.view',compact('user_details'));
     }
 
@@ -312,6 +311,18 @@ class UserController extends Controller
         return response()->json(['success' => true, 'message' => 'User Profile updated successfully']);
 
     }
+
+    public function destroy($id)
+    {
+        if (empty($id)) {
+            return response()->json(['success' => false,'message' => 'Image not found.'], 404);
+        }
+            $userDoc = UserDocument::find($id);
+            Storage::disk('public')->delete('user-documents/' . $userDoc->image_name);
+            $userDoc->delete();
+            return response()->json(['success' => true,'message' => 'Image deleted successfully.'], 200);
+    }
+
 
     public function logout()
     {

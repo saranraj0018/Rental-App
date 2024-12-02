@@ -95,29 +95,15 @@
         </script>
 
     </header>
-
+    @php
+        $item = \App\Models\Frontend::where('data_keys', 'shipping')->first();
+    @endphp
 </section>
-
-
     <section class="my-5">
         <div class="container">
             <div>
-                <ol>
-                    <li class="fs-18 my-2 text-justify">
-                        Prior to taking possession of Valam Cars, it shall be the responsibility of every User to do an exterior walk-around and an interior look-over of the vehicle
-                    </li>
-                    <li class="fs-18 my-2 text-justify">
-                        User's shall be permitted to test drive Valam Cars to ensure that there is no damage or abnormality encountered in the operation of the vehicle.
-                    </li>
-                    <li class="fs-18 my-2 text-justify">
-                        In case such an abnormality or damage is found, the user shall be required to inform Valam Cars of any such damage or abnormality encountered on the vehicle or in the operation of the vehicle prior to taking possession of such vehicle.
-                    </li>
-                    <li class="fs-18 my-2 text-justify">
-                        It shall be the responsibility of the user to pick up the selected Valam cars and return them secured, clean, and in good working order at the same place by no later than the end time of the reservation.
-                    </li>
-                </ol>
+                {!! !empty($item['data_values']) ? json_decode($item['data_values']) : ''!!}
             </div>
-
         </div>
     </section>
     @include('user.frontpage.footer')

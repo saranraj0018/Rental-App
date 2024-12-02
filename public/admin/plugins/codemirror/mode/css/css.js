@@ -518,7 +518,7 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
     "outline-style", "outline-width", "overflow", "overflow-style",
     "overflow-wrap", "overflow-x", "overflow-y", "padding", "padding-bottom",
     "padding-left", "padding-right", "padding-top", "page", "page-break-after",
-    "page-break-before", "page-break-inside", "page-policy", "pause",
+    "page-break-before", "page-break-inside", "page-setting", "pause",
     "pause-after", "pause-before", "perspective", "perspective-origin", "pitch",
     "pitch-range", "place-content", "place-items", "place-self", "play-during",
     "position", "presentation-level", "punctuation-trim", "quotes",

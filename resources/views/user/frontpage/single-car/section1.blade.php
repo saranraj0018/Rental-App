@@ -84,16 +84,19 @@
                             $city_list = \App\Models\City::where('city_status',1)->pluck('name','code')->toArray();
                             $city = !empty($city_list) ?  $city_list : [];
                         @endphp
-                        <div class="me-0 me-lg-1 my-auto">
-                            <div class="text-white fs-14 mb-2 text-left">Selected Location</div>
-                            <div class="d-flex text-white py-2 px-4 date-pick">
-                                <div class="fs-14">
-                                    <i class="fa fa-map-marker me-2" aria-hidden="true"></i><span> {{ array_key_exists(session('city_id'), $city) ? $city[session('city_id')] : '' }}</span>
+                        <div class="container my-3">
+                            <div class="me-0 mx-lg-2 my-auto">
+                                <div class="text-white fs-14 mb-2 text-left">Selected Location</div>
+                                <div class="d-flex text-white py-2 px-4 date-pick">
+                                    <div class="fs-14">
+                                        <i class="fa fa-map-marker me-2" aria-hidden="true"></i><span> {{ array_key_exists(session('city_id'), $city) ? $city[session('city_id')] : '' }}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="d-none d-lg-block">
-                            <div class="d-flex justify-content-evenly">
+                        <div class="">
+
+                            <div class="d-block d-lg-flex justify-content-evenly">
                                 <div class="me-0 me-lg-1 my-auto">
                                     <div class="text-white fs-14 mb-2 text-center">Pick Date & Time </div>
                                     <div class="d-flex text-white py-2 px-4 date-pick">
@@ -102,8 +105,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text-white my-auto fs-4">
-                                    <img src="{{ asset('user/img/heroicons_arrows-up-down.svg') }}" alt="icon" class="img-fluid mx-1 conf-icon ms-3">
+                                <div class="text-white my-auto fs-4 d-flex justify-content-center">
+                                    <img src="{{ asset('user/img/heroicons_arrows-up-down.svg') }}" alt="icon" class="img-fluid mx-1 conf-icon ms-3 my-3">
                                 </div>
                                 <div class="ms-0 ms-lg-1">
                                     <div class="text-white fs-14 mb-2 text-center">Pick Date & Time </div>

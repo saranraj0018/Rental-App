@@ -11,7 +11,7 @@ function formDate($date, $format = 'Y-m-d')
 {
     return \Illuminate\Support\Carbon::parse($date)->format($format);
 }
-function formDateTime($date, $format = 'Y-m-d h:i')
+function formDateTime($date, $format = 'Y-m-d H:i')
 {
     return \Illuminate\Support\Carbon::parse($date)->format($format);
 }
