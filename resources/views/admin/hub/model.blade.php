@@ -70,10 +70,10 @@
                         <input type="hidden" id="model_id" name="model_id">
                         <input type="hidden" id="car_id" name="car_id">
                         <label for="start_date">Choose Date & Time</label>
-                        <div class="input-group date datetimepicker" id="datetimepicker" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker"
+                        <div class="input-group">
+                            <input type="text" class="form-control"
                                    id="end_date" name="end_date" placeholder="Select date and time" />
-                            <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
+                            <div class="input-group-append">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
                         </div>
@@ -218,9 +218,9 @@
                         </div>
                         <div class="col-md-3">
                             <label for="start_date">Start Date & Time</label>
-                            <div class="input-group date" id="start_date_time_picker" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#start_date_time_picker" id="user_start_date" name="user_start_date" placeholder="Select date and time" />
-                                <div class="input-group-append" data-target="#start_date_time_picker" data-toggle="datetimepicker">
+                            <div class="input-group" id="start_date_picker">
+                                <input type="text" class="form-control" id="user_start_date" name="user_start_date" placeholder="Select date and time" />
+                                <div class="input-group-append">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                                 <div class="invalid-feedback">
@@ -230,9 +230,9 @@
                         </div>
                         <div class="col-md-3">
                             <label for="start_date">End Date & Time</label>
-                            <div class="input-group date" id="end_date_time_picker" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#end_date_time_picker" id="user_end_date" name="user_end_date" placeholder="Select date and time" />
-                                <div class="input-group-append" data-target="#end_date_time_picker" data-toggle="datetimepicker">
+                            <div class="input-group" id="user_end_date_picker" data-target-input="nearest">
+                                <input type="text" class="form-control" id="user_end_date" name="user_end_date" placeholder="Select date and time" />
+                                <div class="input-group-append">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                                 <div class="invalid-feedback">

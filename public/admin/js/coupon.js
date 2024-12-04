@@ -3,34 +3,23 @@ $(function () {
     $(document).ready(function() {
         loadDatePickers()
         function loadDatePickers() {
-            $('#datetimepicker').datetimepicker({
-                format: 'YYYY-MM-DD HH:mm', // Customize the format as needed
-                icons: {
-                    time: 'far fa-clock',
-                    date: 'far fa-calendar',
-                    up: 'fas fa-arrow-up',
-                    down: 'fas fa-arrow-down',
-                    previous: 'fas fa-chevron-left',
-                    next: 'fas fa-chevron-right',
-                    today: 'fas fa-calendar-check',
-                    clear: 'fas fa-trash-alt',
-                    close: 'fas fa-times'
+
+
+            $('input[name="coupon_start_date"]').daterangepicker({
+                singleDatePicker: true,
+                startDate: moment().startOf('hour'),
+                minDate: moment().startOf('day'),
+                locale: {
+                    format: 'DD-MM-YYYY'
                 }
             });
 
-
-            $('#enddatetimepicker').datetimepicker({
-                format: 'YYYY-MM-DD HH:mm',
-                icons: {
-                    time: 'far fa-clock',
-                    date: 'far fa-calendar',
-                    up: 'fas fa-arrow-up',
-                    down: 'fas fa-arrow-down',
-                    previous: 'fas fa-chevron-left',
-                    next: 'fas fa-chevron-right',
-                    today: 'fas fa-calendar-check',
-                    clear: 'fas fa-trash-alt',
-                    close: 'fas fa-times'
+            $('input[name="coupon_end_date"]').daterangepicker({
+                singleDatePicker: true,
+                startDate: moment().startOf('hour'),
+                minDate: moment().startOf('day'),
+                locale: {
+                    format: 'DD-MM-YYYY'
                 }
             });
         }
@@ -172,7 +161,7 @@ $(function () {
                     <td>${item.start_date ? formatDate(item.start_date) : ''}</td>
                     <td>${item.end_date ? formatDate(item.end_date) : ''}</td>
                    <td>${item.user ? item.user.email : ''}</td>
-                    <td>${formatDate(item.updated_at)}</td>
+                    <td>${formatDateTime(item.updated_at)}</td>
                     <td>
                         <a href="javascript:void(0)" class="coupon_edit" data-id="${item.id}"
                             data-title="${item.title}" data-description="${item.description}"
@@ -197,9 +186,13 @@ $(function () {
         }
 
 // Helper function to format dates
-        function formatDate(dateString) {
+        function formatDateTime(dateString) {
             let date = new Date(dateString);
             return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        }
+        function formatDate(dateString) {
+            let date = new Date(dateString);
+            return date.toLocaleDateString();
         }
 
         function resetInput() {

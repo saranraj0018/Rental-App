@@ -73,8 +73,8 @@ class CarBlockController extends BaseController {
         $car_block->car_model = $request['car_model'];
         $car_block->booking_id = $request['booking_id'];
         $car_block->car_register_number = $request['block_car_register_number'];
-        $car_block->start_date = $request['start_date'];
-        $car_block->end_date = $request['end_date'];
+        $car_block->start_date = formDateTime($request['start_date']);
+        $car_block->end_date = formDateTime($request['end_date']);
         $car_block->comment = $request['block_type'] != 1 ? $request['comment'] : null;
         $car_block->reason = $request['block_type'] == 0 || $request['block_type'] == 1 ?
             !empty($request['reason']) ? $request['reason'] : $request['reason_discretion'] : null;
@@ -90,8 +90,8 @@ class CarBlockController extends BaseController {
         $car_available->model_id = !empty($request['car_model']) ? $request['car_model'] : 0;
         $car_available->booking_id = !empty($car_block->id) ? $car_block->id : 0;
         $car_available->register_number = !empty($request['block_car_register_number']) ? $request['block_car_register_number'] : 0;
-        $car_available->start_date = $request['start_date'];
-        $car_available->end_date = $request['end_date'];
+        $car_available->start_date = formDateTime($request['start_date']);
+        $car_available->end_date = formDateTime($request['end_date']);
         $car_available->next_booking = Carbon::parse(formDateTime($request['end_date']))->addHours($timing_setting['booking_duration'] ?? 3);
         $car_available->booking_type = $request['block_type'] == 1 ? 6 : ($request['block_type'] == 0 ? 7 : $request['block_type']);
         $car_available->save();
@@ -108,11 +108,18 @@ class CarBlockController extends BaseController {
             'edit_comment' => 'required|string',
         ]);
         $car_block = CarBlock::find($request['block_id']);
-        $car_block->start_date = $request['edit_start_date'];
-        $car_block->end_date = $request['edit_end_date'];
+        $car_block->start_date = formDateTime($request['edit_start_date']);
+        $car_block->end_date = formDateTime($request['edit_end_date']);
         $car_block->comment = $request['edit_comment'];
         $car_block->user_id = Auth::guard('admin')->id();
         $car_block->save();
+
+        $car_available = Available::where('booking_id', $request['block_id'])->first();
+        $car_available->start_date = formDateTime($request['edit_start_date']);
+        $car_available->end_date = formDateTime($request['edit_end_date']);
+        $car_available->next_booking = Carbon::parse(formDateTime($request['end_date']))->addHours($timing_setting['booking_duration'] ?? 3);
+        $car_available->save();
+
         $car_block_list = CarBlock::with('user')->orderBy('created_at', 'desc')->get();
         return response()->json(['data' => $car_block_list, 'success' => 'Car blocked Update successfully']);
     }

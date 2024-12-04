@@ -59,8 +59,8 @@ class CouponController extends BaseController
         $coupon->type = $request['type'];
         $coupon->prefix = $request['prefix'];
         $coupon->code = $request['coupon_code'];
-        $coupon->start_date = $request['coupon_start_date'];
-        $coupon->end_date = $request['coupon_end_date'];
+        $coupon->start_date = formDate($request['coupon_start_date']);
+        $coupon->end_date = formDate($request['coupon_end_date']);
         $coupon->booking_order = $request['order_booking'];
         $coupon->status = $request['status'];
         $coupon->user_id = Auth::guard('admin')->id();
