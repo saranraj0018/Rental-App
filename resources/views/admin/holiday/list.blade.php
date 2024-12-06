@@ -104,7 +104,7 @@
                         @if(!empty($holidays))
                             @foreach($holidays as $item)
                                 <tr>
-                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->event_name }}</td>
                                     <td>{{ showDate($item->event_date) }}</td>
                                     <td>{{ $item->user->email ?? '' }}</td>

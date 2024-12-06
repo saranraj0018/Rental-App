@@ -5,34 +5,28 @@ $(function () {
         loadDatePickers();
 
         function loadDatePickers() {
-            $('#datetimepicker').datetimepicker({
-                format: 'YYYY-MM-DD HH:mm', // Customize the format as needed
-                icons: {
-                    time: 'far fa-clock',
-                    date: 'far fa-calendar',
-                    up: 'fas fa-arrow-up',
-                    down: 'fas fa-arrow-down',
-                    previous: 'fas fa-chevron-left',
-                    next: 'fas fa-chevron-right',
-                    today: 'fas fa-calendar-check',
-                    clear: 'fas fa-trash-alt',
-                    close: 'fas fa-times'
+
+            $('input[name="start_date"]').daterangepicker({
+                timePicker: true,
+                singleDatePicker: true,
+                timePickerIncrement: 30,
+                timePicker24Hour: true,
+                startDate: moment().startOf('hour'),
+                minDate: moment().startOf('day'),
+                locale: {
+                    format: 'DD-MM-YYYY HH:mm'
                 }
             });
 
-
-            $('#enddatetimepicker').datetimepicker({
-                format: 'YYYY-MM-DD HH:mm',
-                icons: {
-                    time: 'far fa-clock',
-                    date: 'far fa-calendar',
-                    up: 'fas fa-arrow-up',
-                    down: 'fas fa-arrow-down',
-                    previous: 'fas fa-chevron-left',
-                    next: 'fas fa-chevron-right',
-                    today: 'fas fa-calendar-check',
-                    clear: 'fas fa-trash-alt',
-                    close: 'fas fa-times'
+            $('input[name="end_date"]').daterangepicker({
+                timePicker: true,
+                singleDatePicker: true,
+                timePickerIncrement: 30,
+                timePicker24Hour: true,
+                startDate: moment().startOf('hour'),
+                minDate: moment().startOf('day'),
+                locale: {
+                    format: 'DD-MM-YYYY HH:mm'
                 }
             });
 
@@ -268,33 +262,28 @@ $(function () {
         // Edit Car
         $('#car_block_table').on('click', '.edit_block_model', function() {
 
-            $('#start_date_time').datetimepicker({
-                format: 'YYYY-MM-DD HH:mm', // Customize the format as needed
-                icons: {
-                    time: 'far fa-clock',
-                    date: 'far fa-calendar',
-                    up: 'fas fa-arrow-up',
-                    down: 'fas fa-arrow-down',
-                    previous: 'fas fa-chevron-left',
-                    next: 'fas fa-chevron-right',
-                    today: 'fas fa-calendar-check',
-                    clear: 'fas fa-trash-alt',
-                    close: 'fas fa-times'
+
+            $('input[name="edit_start_date"]').daterangepicker({
+                timePicker: true,
+                singleDatePicker: true,
+                timePickerIncrement: 30,
+                timePicker24Hour: true,
+                startDate: moment().startOf('hour'),
+                minDate: moment().startOf('day'),
+                locale: {
+                    format: 'DD-MM-YYYY HH:mm'
                 }
             });
 
-            $('#end_date_time').datetimepicker({
-                format: 'YYYY-MM-DD HH:mm',
-                icons: {
-                    time: 'far fa-clock',
-                    date: 'far fa-calendar',
-                    up: 'fas fa-arrow-up',
-                    down: 'fas fa-arrow-down',
-                    previous: 'fas fa-chevron-left',
-                    next: 'fas fa-chevron-right',
-                    today: 'fas fa-calendar-check',
-                    clear: 'fas fa-trash-alt',
-                    close: 'fas fa-times'
+            $('input[name="edit_end_date"]').daterangepicker({
+                timePicker: true,
+                singleDatePicker: true,
+                timePickerIncrement: 30,
+                timePicker24Hour: true,
+                startDate: moment().startOf('hour'),
+                minDate: moment().startOf('day'),
+                locale: {
+                    format: 'DD-MM-YYYY HH:mm'
                 }
             });
 

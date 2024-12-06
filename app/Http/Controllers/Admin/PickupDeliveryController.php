@@ -62,6 +62,7 @@ class PickupDeliveryController extends BaseController {
                     ->where('status', 1);
             })
             ->orderBy('start_date', 'asc')
+            ->orderBy('end_date', 'asc')
             ->paginate(20);
     }
 
@@ -334,9 +335,11 @@ class PickupDeliveryController extends BaseController {
         if (!empty($request['register_number'])) {
             $query->where('register_number', 'like', '%' . $request->input('register_number') . '%');
         }
-        if (!empty($request['booking_id'])) {
-            $query->where('booking_id', $request->input('booking_id'));
+
+        if ($request->has('booking_type') && $request->input('booking_type') !== 'both') {
+            $query->where('booking_type', $request->input('booking_type'));
         }
+
         if (!empty($request['customer_name'])) {
             $query->whereHas('user', function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->input('customer_name') . '%');

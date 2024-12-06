@@ -116,7 +116,7 @@
                         @if(filled($coupons))
                             @foreach($coupons as $item)
                                 <tr>
-                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->title }}</td>
                                     <td>{{ $item->amount }}</td>
                                     <td>
@@ -134,8 +134,8 @@
                                             <span class="badge badge-danger" style="background-color: red">Deactivate</span>
                                         @endif
                                     </td>
-                                    <td>{{ showDateTime($item->start_date) }}</td>
-                                    <td>{{ showDateTime($item->end_date) }}</td>
+                                    <td>{{ showDate($item->start_date) }}</td>
+                                    <td>{{ showDate($item->end_date) }}</td>
                                     <td>{{ $item->user->email ?? '' }}</td>
                                     <td>{{ showDateTime($item->updated_at) }}</td>
 

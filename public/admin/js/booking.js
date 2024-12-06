@@ -9,51 +9,39 @@ $(function () {
             }
         });
 
-
-        $('#datetimepicker').datetimepicker({
-            format: 'DD-MM-YYYY HH:mm', // Customize the format as needed
-            stepping:30,
-            icons: {
-                time: 'far fa-clock',
-                date: 'far fa-calendar',
-                up: 'fas fa-arrow-up',
-                down: 'fas fa-arrow-down',
-                previous: 'fas fa-chevron-left',
-                next: 'fas fa-chevron-right',
-                today: 'fas fa-calendar-check',
-                clear: 'fas fa-trash-alt',
-                close: 'fas fa-times'
+        $('input[name="end_date"]').daterangepicker({
+            timePicker: true,
+            singleDatePicker: true,
+            timePickerIncrement: 30,
+            timePicker24Hour: true,
+            startDate: moment().startOf('hour'),
+            minDate: moment().startOf('day'),
+            locale: {
+                format: 'DD-MM-YYYY HH:mm'
             }
         });
 
-        $('#start_date_time_picker').datetimepicker({
-            format: 'DD-MM-YYYY HH:mm', // Customize the format as needed
-            icons: {
-                time: 'far fa-clock',
-                date: 'far fa-calendar',
-                up: 'fas fa-arrow-up',
-                down: 'fas fa-arrow-down',
-                previous: 'fas fa-chevron-left',
-                next: 'fas fa-chevron-right',
-                today: 'fas fa-calendar-check',
-                clear: 'fas fa-trash-alt',
-                close: 'fas fa-times'
+        $('input[name="user_start_date"]').daterangepicker({
+            timePicker: true,
+            singleDatePicker: true,
+            timePickerIncrement: 30,
+            timePicker24Hour: true,
+            startDate: moment().startOf('hour'),
+            minDate: moment().startOf('day'),
+            locale: {
+                format: 'DD-MM-YYYY HH:mm'
             }
         });
 
-
-        $('#end_date_time_picker').datetimepicker({
-            format: 'DD-MM-YYYY HH:mm',
-            icons: {
-                time: 'far fa-clock',
-                date: 'far fa-calendar',
-                up: 'fas fa-arrow-up',
-                down: 'fas fa-arrow-down',
-                previous: 'fas fa-chevron-left',
-                next: 'fas fa-chevron-right',
-                today: 'fas fa-calendar-check',
-                clear: 'fas fa-trash-alt',
-                close: 'fas fa-times'
+        $('input[name="user_end_date"]').daterangepicker({
+            timePicker: true,
+            singleDatePicker: true,
+            timePickerIncrement: 30,
+            timePicker24Hour: true,
+            startDate: moment().startOf('hour'),
+            minDate: moment().startOf('day'),
+            locale: {
+                format: 'DD-MM-YYYY HH:mm'
             }
         });
         // Edit Pickup/delivery

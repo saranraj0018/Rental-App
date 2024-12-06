@@ -42,9 +42,9 @@
                     <div class="form-row">
                         <div class="form-group col-md-3">
                             <label for="start_date"></label>
-                            <div class="input-group date datetimepicker" id="datetimepicker" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker" id="start_date" name="start_date" placeholder="Select date and time" />
-                                <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
+                            <div class="input-group" id="datetimepicker">
+                                <input type="text" class="form-control" id="start_date" name="start_date" placeholder="Select date and time" />
+                                <div class="input-group-append">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                                 <div class="invalid-feedback">
@@ -54,9 +54,9 @@
                         </div>
                         <div class="form-group col-md-3">
                             <label for="end_date"></label>
-                            <div class="input-group date" id="enddatetimepicker" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#enddatetimepicker" id="end_date" name="end_date" placeholder="Select end date and time" />
-                                <div class="input-group-append" data-target="#enddatetimepicker" data-toggle="datetimepicker">
+                            <div class="input-group ">
+                                <input type="text" class="form-control" id="end_date" name="end_date" placeholder="Select end date and time" />
+                                <div class="input-group-append" >
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                                 <div class="invalid-feedback">

@@ -17,10 +17,10 @@
                     <div class="form-row mt-2">
                         <div class="form-group col-md-4">
                             <label for="start_date_time">Start Date & Time</label>
-                            <div class="input-group date" id="start_date_time" data-target-input="nearest">
-                                <label for="edit_start_date"></label><input type="text" class="form-control datetimepicker-input"
-                             data-target="#start_date_time" id="edit_start_date" name="edit_start_date" placeholder="Select date and time" />
-                                <div class="input-group-append" data-target="#start_date_time" data-toggle="datetimepicker">
+                            <div class="input-group" >
+                                <label for="edit_start_date"></label>
+                                <input type="text" class="form-control" id="edit_start_date" name="edit_start_date" placeholder="Select date and time" />
+                                <div class="input-group-append">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                                 <div class="invalid-feedback">
@@ -30,9 +30,10 @@
                         </div>
                         <div class="form-group col-md-4">
                             <label for="end_date">End Date and Time</label>
-                            <div class="input-group date" id="end_date_time" data-target-input="nearest">
-                                <label for="edit_end_date"></label><input type="text" class="form-control datetimepicker-input" data-target="#end_date_time" id="edit_end_date" name="edit_end_date" placeholder="Select end date and time" />
-                                <div class="input-group-append" data-target="#end_date_time" data-toggle="datetimepicker">
+                            <div class="input-group">
+                                <label for="edit_end_date"></label>
+                                <input type="text" class="form-control" id="edit_end_date" name="edit_end_date" placeholder="Select end date and time" />
+                                <div class="input-group-append">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                                 <div class="invalid-feedback">

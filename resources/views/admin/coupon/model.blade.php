@@ -71,18 +71,18 @@
                         </div>
                         <div class="form-group col-md-4">
                             <label for="coupon_start_date">Start Date & Time</label>
-                            <div class="input-group date" id="datetimepicker" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker" id="coupon_start_date" name="coupon_start_date" placeholder="Start date and time" />
-                                <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="coupon_start_date" name="coupon_start_date" placeholder="Start date and time" />
+                                <div class="input-group-append">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="coupon_end_date">End Date and Time</label>
-                            <div class="input-group date" id="enddatetimepicker" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#enddatetimepicker" id="coupon_end_date" name="coupon_end_date" placeholder="End date and time" />
-                                <div class="input-group-append" data-target="#enddatetimepicker" data-toggle="datetimepicker">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="coupon_end_date" name="coupon_end_date" placeholder="End date and time" />
+                                <div class="input-group-append">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                                 <div class="invalid-feedback">
