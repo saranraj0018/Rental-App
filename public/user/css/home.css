@@ -190,7 +190,15 @@ button[type="button"][role="presentation"].owl-next {
 button.navbar-toggler {
     background-color: white;
 }
-
+.btn.disabled, .btn:disabled {
+    opacity: 0.65;
+    background: #e4e4e4 !important;
+    color: black !important;
+    border:none !important;
+}
+.btn.disabled , .btn:disabled i{
+    color: black !important;
+}
 .header-bg {
     background: url("../img/Group\ 35493.png");
     background-position: center center;

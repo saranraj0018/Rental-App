@@ -154,9 +154,16 @@
                                         </div>
                                     </td>
                                     <td class="pt-4 pt-lg-5">
+                                        @php
+                                            $currentDateTime = \Carbon\Carbon::now(); // Get current date and time
+                                            $startDate =  \Carbon\Carbon::parse($details->start_date ?? null); // Parse the start date
+                                            $endDate =  \Carbon\Carbon::parse($details->end_date ?? null); // Parse the start date
+                                        @endphp
+                                        @if ($endDate->gt($currentDateTime))
                                         <button class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none edit_date"
                                                 data-end_date="{{showDateformat($details->end_date) ?? ''}}" data-booking_id="{{$details->booking_id ?? ''}}"
                                                 data-model_id="{{ $model_details->car_model->id ?? '' }}">Edit</button>
+                                        @endif
                                         <button class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none details"
                                                 data-total_days="{{ $payment_details->total_days ?? '' }}" data-total_hours="{{ $payment_details->total_hours ?? '' }}"
                                                 data-total_price="{{ $payment_details->total_price ?? '' }}"
@@ -167,7 +174,12 @@
                                                 data-week_end_amount="{{ $payment_details->week_end_amount ?? '' }}"
                                                 data-week_days_amount="{{ $payment_details->week_days_amount ?? '' }}"
                                                 data-festival_amount="{{ $payment_details->festival_amount ?? '' }}">View Details</button>
-                                        <button class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none cancel_booking"  data-booking_id="{{$details->booking_id ?? ''}}">Cancel</button>
+                                        @if ($startDate->gt($currentDateTime))
+                                        <button class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none cancel_booking"
+                                                data-booking_id="{{ $details->booking_id ?? '' }}">
+                                            Cancel
+                                        </button>
+                                        @endif
                                     </td>
                                 </tr>
                                     @endif

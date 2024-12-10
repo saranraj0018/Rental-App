@@ -195,13 +195,19 @@
                                     <p class="fs-20 fs-mb-16 my-1">
                                         Delivery location</p>
                                     <span id="drop_address" class="fs-14 fw-500">{{ session('delivery.address') ?? session('pick-delivery.address') ?? '' }}</span>
-                                    <button type="button" class="input-group-text form-dates text-danger fs-16 bg-transparent border-0 fw-500 p-0"
-                                            id="delivery_location">Change</button>
+                                       <div id="check_delivery_location" class="{{ !empty(session('delivery.address')) || !empty(session('pick-delivery.address')) ? '' : 'd-none' }}">
+                                           <button type="button" class="input-group-text form-dates fs-16 bg-transparent border-0 font-weight-normal p-0 "
+                                                   id="delivery_location" style="color: #47ACFF !important;">Change</button>
+                                       </div>
+
+
                                     <p class="fs-20 fs-mb-16 my-1">
                                         Return location </p>
                                     <span id="pickup_address" class="fs-14 fw-500">{{ session('pickup.address') ?? session('pick-delivery.address') ?? '' }}</span>
-                                    <button type="button" class="input-group-text form-dates text-danger fs-16 bg-transparent border-0 fw-500 p-0"
-                                            id="return_location">Change</button>
+                                    <div id="check_pickup_location" class="{{ !empty(session('pickup.address')) || !empty(session('pick-delivery.address')) ? '' : 'd-none' }}">
+                                    <button type="button" class="input-group-text form-dates fs-16 bg-transparent border-0 font-weight-normal p-0"
+                                                id="return_location" style="color: #47ACFF !important;">Change</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
