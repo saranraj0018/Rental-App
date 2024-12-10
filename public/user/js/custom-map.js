@@ -200,10 +200,45 @@ $(function () {
         };
 
         $(document).on('click', '.pickup_location', function() {
-            $('#secondModal').modal('show');
-            window.initMarker();
-            $('#custom-city').focus();
+            checkUserAuthentication(
+                function() {
+                    // Authenticated callback
+                    $('#secondModal').modal('show');
+                    window.initMarker();
+                    $('#custom-city').focus();
+                },
+                function() {
+                    // Unauthenticated callback
+                    $('#mobileModal').modal('show');
+                }
+            );
         });
+
+
+        function checkUserAuthentication(onAuthenticated, onUnauthenticated) {
+            $.ajax({
+                url: '/user/check-auth', // Endpoint to check authentication
+                method: 'GET',
+                success: function(response) {
+                    if (response.isAuthenticated) {
+                        // User is authenticated
+                        if (typeof onAuthenticated === 'function') {
+                            onAuthenticated();
+                        }
+                    } else {
+                        // User is not authenticated
+                        if (typeof onUnauthenticated === 'function') {
+                            onUnauthenticated();
+                        }
+                    }
+                },
+                error: function() {
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        }
+
+
         // Example values for car location
         let car_latitude_current = parseFloat($('#car_latitude_current').val()) || 11.0168;
         let car_longitude_current = parseFloat($('#car_longitude_current').val()) || 76.9558;
@@ -245,6 +280,8 @@ $(function () {
                         $('#drop_address').text(delivery_address);
                         $('#drop_address_pine').val(true);
                         $('#pickup_address_pine').val(true);
+                        $('#check_delivery_location').removeClass('d-none');
+                        $('#check_pickup_location').removeClass('d-none');
                     } else {
                         $('#pick_outside_area').text(' ');
                         $('#delivery_outside_area').text(' ').text('Pickup location is outside the designated area. Please select a different location.');
@@ -271,6 +308,7 @@ $(function () {
                         $('#secondModal').modal('hide');
                         $('#pickup_address').text(pickup_address);
                         $('#pickup_address_pine').val(true);
+                        $('#check_pickup_location').removeClass('d-none');
                     } else {
                         $('#pickup_outside_area').text('').text('Pickup location is outside the designated area. Please select a different location.');
                     }
@@ -305,6 +343,7 @@ $(function () {
                         }
                         $('#drop_address').text(delivery_address);
                         $('#drop_address_pine').val(true);
+                        $('#check_delivery_location').removeClass('d-none');
                     } else {
                         $('#delivery_outside_area').text('').text('Pickup location is outside the designated area. Please select a different location.');
                     }
@@ -348,19 +387,39 @@ $(function () {
         }
 
         $('#return_location').click(function() {
-            $('#secondModal').modal('show');
-            window.initMarker();
-            $('#custom-city').focus();
-            $('#pickup-section').removeClass('d-none');
-            $('#delivery-section').addClass('d-none');
+            checkUserAuthentication(
+                function() {
+                    // Authenticated callback
+                    $('#secondModal').modal('show');
+                    window.initMarker();
+                    $('#custom-city').focus();
+                    $('#pickup-section').removeClass('d-none');
+                    $('#delivery-section').addClass('d-none');
+                },
+                function() {
+                    // Unauthenticated callback
+                    $('#mobileModal').modal('show');
+                }
+            );
+
         });
 
         $('#delivery_location').click(function() {
-            $('#secondModal').modal('show');
-            window.initMarker();
-            $('#custom-city').focus();
-            $('#pickup-section').addClass('d-none');
-            $('#delivery-section').removeClass('d-none');
+            checkUserAuthentication(
+                function() {
+                    // Authenticated callback
+                    $('#secondModal').modal('show');
+                    window.initMarker();
+                    $('#custom-city').focus();
+                    $('#pickup-section').addClass('d-none');
+                    $('#delivery-section').removeClass('d-none');
+                },
+                function() {
+                    // Unauthenticated callback
+                    $('#mobileModal').modal('show');
+                }
+            );
+
         });
 
     });
