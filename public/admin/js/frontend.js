@@ -1,21 +1,21 @@
 $(function () {
     'use strict'
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $(".select2-auto-tokenize").select2();
         //  let imageUploadCount = 3;
 
         function readURL(input, previewElement) {
             if (input.files && input.files[0]) {
                 let reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     $(previewElement).attr('src', e.target.result).removeClass('d-none');
                 };
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        $('input[name="image_car[]"]').on('change', function() {
+        $('input[name="image_car[]"]').on('change', function () {
             // Find the corresponding preview element
             let previewElement = $(this).closest('.image-upload-section').find('img');
             readURL(this, previewElement);
@@ -50,16 +50,16 @@ $(function () {
         });
         // Validate the form before submission
 
-        $('#banner_section').on('submit', function(e) {
+        $('#banner_section').on('submit', function (e) {
             e.preventDefault(); // Prevent form submission for validation
 
             let isValid = true;
 
             // Define the elements and their conditions
             let fields = [
-                {id: '#title', condition: (val) => val.trim() === ''},
-                {id: '#description', condition: (val) => val.trim() === ''},
-                {id: '#features', condition: (val) => !val || val.length === 0}, // Validate array for features
+                { id: '#title', condition: (val) => val.trim() === '' },
+                { id: '#description', condition: (val) => val.trim() === '' },
+                { id: '#features', condition: (val) => !val || val.length === 0 }, // Validate array for features
             ];
             if ($('#banner_id').val() === '0') {
                 let imageInputs = $('input[name="image_car[]"]');
@@ -120,17 +120,17 @@ $(function () {
 
                     processData: false, // Required for jQuery to send the data properly
                     contentType: false, // Required to handle file uploads correctly
-                    success: function(response) {
+                    success: function (response) {
                         alertify.success(response.success);
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.location.reload();
                         }, 1000);
                     },
-                    error: function(response) {
+                    error: function (response) {
                         if (response.responseJSON.errors) {
                             let errors = response.responseJSON.errors;
                             for (let key in errors) {
-                                let inputElement = $(`[name="${key+[]}"]`);
+                                let inputElement = $(`[name="${key + []}"]`);
                                 // Check for array inputs
                                 if (key.includes('.')) {
                                     let baseKey = key.split('.')[0];
@@ -151,65 +151,65 @@ $(function () {
                             console.log(response);
                         }
                     },
-                    complete: function() {
+                    complete: function () {
                         $('#banner_save').prop('disabled', false);  // Re-enable the submit button
                     }
                 });
             }
         });
 
-        $('.editable-field').each(function() {
+        $('.editable-field').each(function () {
             const $span = $(this).find('span');
             const $input = $(this).find('input');
 
-            $span.on('click', function() {
+            $span.on('click', function () {
                 $span.addClass('d-none');
                 $input.removeClass('d-none').focus();
             });
 
-            $input.on('blur', function() {
+            $input.on('blur', function () {
                 $span.text($input.val());
                 $input.addClass('d-none');
                 $span.removeClass('d-none');
             });
         });
 
-        $('#front_car_image').on('change', function(event) {
+        $('#front_car_image').on('change', function (event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     $('#image_preview').attr('src', e.target.result);
                 };
                 reader.readAsDataURL(file);
             }
         });
 
-        $('#car_info_section').on('submit', function(e) {
+        $('#car_info_section').on('submit', function (e) {
             e.preventDefault(); // Prevent form submission for validation
 
             let isValid = true;
 
             let fields = [
-                {id: '#daily_price', condition: (val) => val.trim() === ''},
-                {id: '#daily_price_title', condition: (val) => val.trim() === ''},
-                {id: '#car_model', condition: (val) => val.trim() === ''},
-                {id: '#car_model_title', condition: (val) => val.trim() === ''},
-                {id: '#hour_rate', condition: (val) => val.trim() === ''},
-                {id: '#hour_rate_title', condition: (val) => val.trim() === ''},
-                {id: '#rating', condition: (val) => val.trim() === ''},
-                {id: '#rating_title', condition: (val) => val.trim() === ''},
-                {id: '#flexibility', condition: (val) => val.trim() === ''},
-                {id: '#flexibility_description', condition: (val) => val.trim() === ''},
-                {id: '#maintained', condition: (val) => val.trim() === ''},
-                {id: '#maintained_description', condition: (val) => val.trim() === ''},
-                {id: '#delivery', condition: (val) => val.trim() === ''},
-                {id: '#delivery_description', condition: (val) => val.trim() === ''},
-                {id: '#price', condition: (val) => val.trim() === ''},
-                {id: '#price_description', condition: (val) => val.trim() === ''},
-                {id: '#travel_description', condition: (val) => val.trim() === ''},
-                {id: '#description', condition: (val) => val.trim() === ''},
-                {id: '#discount', condition: (val) => val.trim() === ''},
+                { id: '#daily_price', condition: (val) => val.trim() === '' },
+                { id: '#daily_price_title', condition: (val) => val.trim() === '' },
+                { id: '#car_model', condition: (val) => val.trim() === '' },
+                { id: '#car_model_title', condition: (val) => val.trim() === '' },
+                { id: '#hour_rate', condition: (val) => val.trim() === '' },
+                { id: '#hour_rate_title', condition: (val) => val.trim() === '' },
+                { id: '#rating', condition: (val) => val.trim() === '' },
+                { id: '#rating_title', condition: (val) => val.trim() === '' },
+                { id: '#flexibility', condition: (val) => val.trim() === '' },
+                { id: '#flexibility_description', condition: (val) => val.trim() === '' },
+                { id: '#maintained', condition: (val) => val.trim() === '' },
+                { id: '#maintained_description', condition: (val) => val.trim() === '' },
+                { id: '#delivery', condition: (val) => val.trim() === '' },
+                { id: '#delivery_description', condition: (val) => val.trim() === '' },
+                { id: '#price', condition: (val) => val.trim() === '' },
+                { id: '#price_description', condition: (val) => val.trim() === '' },
+                { id: '#travel_description', condition: (val) => val.trim() === '' },
+                { id: '#description', condition: (val) => val.trim() === '' },
+                { id: '#discount', condition: (val) => val.trim() === '' },
             ];
 
             fields.forEach(function (field) {
@@ -241,13 +241,13 @@ $(function () {
                     data: formData,
                     processData: false, // Required for jQuery to send the data properly
                     contentType: false, // Required to handle file uploads correctly
-                    success: function(response) {
+                    success: function (response) {
                         alertify.success(response.success);
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.location.reload();
                         }, 1000);
                     },
-                    error: function(response) {
+                    error: function (response) {
                         if (response.responseJSON.errors) {
                             let errors = response.responseJSON.errors;
                             $('.form-control').removeClass('is-invalid');
@@ -261,21 +261,21 @@ $(function () {
                             });
                         }
                     },
-                    complete: function() {
+                    complete: function () {
                         $('#banner_save').prop('disabled', false);  // Re-enable the submit button
                     }
                 });
             }
         });
 
-        $('#brand_section').on('submit', function(e) {
+        $('#brand_section').on('submit', function (e) {
             e.preventDefault();
             $('#vacation_submit').prop('disabled', true);  // Disable submit button during AJAX
             let isValid = true;
 
             let brandValue = $('#brand_id').val();
 
-            $('.vacation-description, .car, .vacation, .vacation-url').each(function() {
+            $('.vacation-description, .car, .vacation, .vacation-url').each(function () {
                 const $this = $(this);
 
                 const shouldValidate =
@@ -302,13 +302,13 @@ $(function () {
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function(response) {
+                    success: function (response) {
                         alertify.success(response.success);
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.location.reload();
                         }, 1000);
                     },
-                    error: function(response) {
+                    error: function (response) {
                         if (response.responseJSON.errors) {
                             let errors = response.responseJSON.errors;
                             $('.form-control').removeClass('is-invalid');
@@ -322,7 +322,7 @@ $(function () {
                             });
                         }
                     },
-                    complete: function() {
+                    complete: function () {
                         $('#vacation_submit').prop('disabled', false);  // Re-enable the submit button
                     }
                 });
@@ -330,40 +330,40 @@ $(function () {
         });
 
         let deleteId;
-        $('#brand_section').on('click', '.delete-brand', function() {
+        $('#brand_section').on('click', '.delete-brand', function () {
             deleteId = $(this).data('id');
             $('#delete_brand_model').modal('show');
         });
 
-        $('#confirm_delete_image').on('click', function() {
+        $('#confirm_delete_image').on('click', function () {
             $.ajax({
                 url: `/admin/brand/${deleteId}/delete`,
                 type: 'DELETE',
-                success: function(response) {
+                success: function (response) {
                     $('#delete_brand_model').modal('hide');  // Hide the modal
                     alertify.success(response.success);
-                    setTimeout(function() {
+                    setTimeout(function () {
                         window.location.reload();
                     }, 1000);
 
                 },
-                error: function(response) {
+                error: function (response) {
                     alert('Error');
                 }
             });
         });
 
-        $('#general_section').on('submit', function(e) {
+        $('#general_section').on('submit', function (e) {
             e.preventDefault(); // Prevent form submission for validation
 
             let isValid = true;
 
             // Define the elements and their conditions
             let fields = [
-                {id: '#minimum_hours', condition: (val) => val.trim() === ''},
-                {id: '#maximum_hours', condition: (val) => val.trim() === ''},
-                {id: '#delivery_fee',condition: (val) => val.trim() === ''},
-                {id: '#show_duration',condition: (val) => val.trim() === ''},
+                { id: '#minimum_hours', condition: (val) => val.trim() === '' },
+                { id: '#maximum_hours', condition: (val) => val.trim() === '' },
+                { id: '#delivery_fee', condition: (val) => val.trim() === '' },
+                { id: '#show_duration', condition: (val) => val.trim() === '' },
             ];
 
             fields.forEach(field => {
@@ -378,17 +378,18 @@ $(function () {
             });
 
             if (isValid) {
+
                 $.ajax({
                     url: '/admin/general/save',
                     type: 'POST',
                     data: $(this).serialize(),
-                    success: function(response) {
+                    success: function (response) {
                         alertify.success(response.success);
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.location.reload();
                         }, 1000);
                     },
-                    error: function(response) {
+                    error: function (response) {
                         if (response.responseJSON && response.responseJSON.errors) {
                             let errors = response.responseJSON.errors;
                             $('.form-control').removeClass('is-invalid');
@@ -402,7 +403,7 @@ $(function () {
                             });
                         }
                     },
-                    complete: function() {
+                    complete: function () {
                         // $('#banner_save').prop('disabled', false);  // Re-enable the submit button
                     }
                 });
