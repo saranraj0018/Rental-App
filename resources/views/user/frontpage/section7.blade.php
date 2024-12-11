@@ -1,4 +1,4 @@
-<section class="my-4">
+<section class="my-4" style="display: @if ($_setting['show_bookmarks'] == 1) inherit @else none @endif">
     <div class="container">
         <div class="row g-4">
             <div class="col-12 col-lg-5 bg-grey h-100 p-3 bdr-20">
@@ -11,7 +11,10 @@
                             4.8<sub class="fs-14">/5</sub>
                         </p>
                         <p class="fs-16 fw-600 m-0 text-center text-lg-start">
-                            <i class="fas fa-star" style="color:#E66742;"></i><i class="fas fa-star" style="color:#E66742;"></i><i class="fas fa-star" style="color:#E66742;"></i><i class="fas fa-star" style="color:#E66742;"></i><i class="fas fa-star" style="color:#E66742;"></i>
+                            <i class="fas fa-star" style="color:#E66742;"></i><i class="fas fa-star"
+                                style="color:#E66742;"></i><i class="fas fa-star" style="color:#E66742;"></i><i
+                                class="fas fa-star" style="color:#E66742;"></i><i class="fas fa-star"
+                                style="color:#E66742;"></i>
                         </p>
                         <p class="fs-14 text-secondary m-0 text-center text-lg-start">
                             120 Ratings
@@ -24,7 +27,8 @@
                             </div>
                             <div class="my-auto w-60">
                                 <div class="progress bdr-30">
-                                    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
                         </div>
@@ -34,7 +38,8 @@
                             </div>
                             <div class="my-auto w-60">
                                 <div class="progress bdr-30">
-                                    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
                         </div>
@@ -44,7 +49,8 @@
                             </div>
                             <div class="my-auto w-60">
                                 <div class="progress bdr-30">
-                                    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +60,8 @@
                             </div>
                             <div class="my-auto w-60">
                                 <div class="progress bdr-30">
-                                    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
                         </div>
@@ -64,7 +71,8 @@
                             </div>
                             <div class="my-auto w-60">
                                 <div class="progress bdr-30">
-                                    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
                         </div>
@@ -79,7 +87,8 @@
                                 <div class="bg-grey bdr-10 p-3">
                                     <div class="d-flex">
                                         <div class="me-2">
-                                            <img src="{{ asset('user/img/Rectangle 28.png')}}" alt="" class="img-fluid d-block">
+                                            <img src="{{ asset('user/img/Rectangle 28.png') }}" alt=""
+                                                class="img-fluid d-block">
                                         </div>
                                         <div>
                                             <p class="fs-16 fw-600 mb-0">Suresh Kumar</p>
@@ -92,7 +101,9 @@
                                     </div>
                                     <div class="mt-2">
                                         <p class="fs-14 fw-500 m-0">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam...
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                            veniam...
                                         </p>
                                     </div>
                                 </div>
@@ -101,7 +112,8 @@
                                 <div class="bg-grey bdr-10 p-3">
                                     <div class="d-flex">
                                         <div class="me-2">
-                                            <img src="{{ asset('user/img/Rectangle 28.png')}}" alt="" class="img-fluid d-block">
+                                            <img src="{{ asset('user/img/Rectangle 28.png') }}" alt=""
+                                                class="img-fluid d-block">
                                         </div>
                                         <div>
                                             <p class="fs-16 fw-600 mb-0">Raj</p>
@@ -114,7 +126,9 @@
                                     </div>
                                     <div class="mt-2">
                                         <p class="fs-14 fw-500 m-0">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam...
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                            veniam...
                                         </p>
                                     </div>
                                 </div>
@@ -123,7 +137,8 @@
                                 <div class="bg-grey bdr-10 p-3">
                                     <div class="d-flex">
                                         <div class="me-2">
-                                            <img src="{{ asset('user/img/Rectangle 28.png')}}" alt="" class="img-fluid d-block">
+                                            <img src="{{ asset('user/img/Rectangle 28.png') }}" alt=""
+                                                class="img-fluid d-block">
                                         </div>
                                         <div>
                                             <p class="fs-16 fw-600 mb-0">Tharun</p>
@@ -136,7 +151,9 @@
                                     </div>
                                     <div class="mt-2">
                                         <p class="fs-14 fw-500 m-0">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam...
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                            veniam...
                                         </p>
                                     </div>
                                 </div>
@@ -160,7 +177,9 @@
             margin: 10,
             loop: true,
             nav: true,
-            navText: ['<button class="owl-prev"><i class="fas fa-chevron-left"></i></button>', '<button class="owl-next"><i class="fas fa-chevron-right"></i></button>'],
+            navText: ['<button class="owl-prev"><i class="fas fa-chevron-left"></i></button>',
+                '<button class="owl-next"><i class="fas fa-chevron-right"></i></button>'
+            ],
             responsive: {
                 // Breakpoint from 0 up
                 0: {

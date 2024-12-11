@@ -13,13 +13,14 @@ $(function () {
         }
     }
 
-    $('#user_profile').on('submit', function(e) {
+    $('#user_profile').on('submit', function (e) {
         e.preventDefault();
         let isValid = true;
 
         const fields = [
             { id: '#user_name', condition: (val) => val === '' },
             { id: '#user_mobile', condition: (val) => val === '' },
+            { id: '#user_email', condition: (val) => val === '' },
             { id: '#aadhaar_number', condition: (val) => val === '' },
             { id: '#driving_licence', condition: (val) => val === '' },
         ];
@@ -30,20 +31,20 @@ $(function () {
         if (isValid) {
             let formData = new FormData(this);
             $.ajax({
-                    url: '/user/document/update', // Update with your route
+                url: '/user/document/update', // Update with your route
                 method: 'POST',
                 data: formData,
                 processData: false, // Required for jQuery to send the data properly
                 contentType: false, // Required to handle file uploads correctly
-                success: function(response) {
-                    if (response.success){
+                success: function (response) {
+                    if (response.success) {
                         $('#profile_message').text(response.message)
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.location.reload();
                         }, 3000);
                     }
                 },
-                error: function(response) {
+                error: function (response) {
                     if (response.responseJSON && response.responseJSON.errors) {
                         let errors = response.responseJSON.errors;
                         $('.form-control').removeClass('is-invalid');
@@ -61,7 +62,7 @@ $(function () {
         }
     });
 
-    $(document).on('click', '.delete-image', function(e) {
+    $(document).on('click', '.delete-image', function (e) {
         e.preventDefault(); // Prevent the form from submitting
         const imageId = $(this).data('id');
         const url = '/user-documents/' + imageId;
@@ -69,18 +70,18 @@ $(function () {
         $.ajax({
             url: url,
             type: 'DELETE',
-            success: function(response) {
-                if (response.success){
+            success: function (response) {
+                if (response.success) {
                     $('#profile_message').text(response.message)
-                    setTimeout(function() {
+                    setTimeout(function () {
                         window.location.reload();
                     }, 3000);
-                } else if (!response.success){
+                } else if (!response.success) {
                     $('#profile_message').text(response.message)
                 }
             },
-            error: function(response) {
-               // alertify.error(response.responseJSON.message);
+            error: function (response) {
+                // alertify.error(response.responseJSON.message);
             }
         });
     });
