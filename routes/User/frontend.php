@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
     // upload documents
     Route::get('user/profile', [UserController::class, 'profile'])->name('user.profile');
     Route::post('user/document/update', [UserController::class, 'updateUser'])->name('update.user');
+    Route::post('user/document', [UserController::class, 'updateUserDocument'])->name('update.user.document');
     Route::post('user/logout', [UserController::class, 'logout'])->name('user.logout');
     Route::get('booking/history', [PaymentController::class, 'bookingHistory'])->name('booking.history');
     Route::post('user/update-delivery-fee', [PaymentController::class, 'updateDeliveryFee'])->name('update.fee');

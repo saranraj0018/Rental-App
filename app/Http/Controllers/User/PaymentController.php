@@ -193,8 +193,13 @@ class PaymentController extends Controller
     public function calculatePrice(Request $request)
     {
         $request->validate([
-            'delivery_date' => 'required|date_format:d-m-Y  H:i|after:end_date',
+            'delivery_date' => 'required|date_format:d-m-Y H:i|after:end_date',
+        ], [
+            'delivery_date.required' => 'The Pickup date is mandatory.',
+            'delivery_date.date_format' => 'The Pickup date must be in the format DD-MM-YYYY HH:mm.',
+            'delivery_date.after' => 'The Pickup date must be after the end date.',
         ]);
+
         if (!empty($request['end_date']) && !empty($request['delivery_date']) && !empty($request['model_id'])) {
             session(['delivery_date' => $request['delivery_date']]);
 

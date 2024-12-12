@@ -377,7 +377,6 @@ span#basic-addon1 {
 .blue-bg {
     background-color: #123984;
     border-radius: 15px;
-    width: 45%;
 }
 
 .sec-2 .owl-stage-outer {
@@ -402,6 +401,9 @@ span#basic-addon1 {
 }
 .h-40px{
     height: 40px;
+}
+.h-35{
+    height:35px !important;
 }
 .city-option{
     transition: all 0.2s;
@@ -515,6 +517,9 @@ span#basic-addon1 {
 
 .bg-grey {
     background: #f6f6f6;
+}
+.bg-my-light-blue{
+    background:#b9e0ff;
 }
 
 .progress{
@@ -636,4 +641,9 @@ margin-top:-46px !important;
 }
 .date-modal-width {
     width: 20%;
+}
+.my-blue-btn:hover {
+    color: var(--bs-btn-hover-color);
+    background-color: #123984 !important;
+    border-color: var(--bs-btn-hover-border-color);
 }

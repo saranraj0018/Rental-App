@@ -1,7 +1,7 @@
 @extends('user.frontpage.list-cars.main')
 
 @section('content')
-
+    @include('user.frontpage.single-car.verified-model')
 <section>
     <header>
         <section class="booking-header">
@@ -22,26 +22,33 @@
                                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right">
                                 </ul>
                                 <ul class="navbar-nav navbar-light w-100 ms-0 ms-lg-5 ps-0 ps-lg-5 text-end text-lg-start">
-                                    <li class="nav-item ms-0 ms-lg-5 pe-0 pe-lg-3"><a class="nav-link text-dark" href="{{ route('home') }}">Home</a></li>
-                                    @if(!Auth::user())
-                                    <li class="nav-item"><a class="nav-link text-dark" href="{{ route('faq') }}">FAQ</a></li>
-                                    @else
-                                    <li class="nav-item"><a class="nav-link text-dark" href="{{ route('booking.history') }}">Booking</a></li>
-                                    @endif
-{{--                                    <li class="nav-item"><a class="nav-link text-dark" href="#">Blog</a></li>--}}
-                                    <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2"><a class="nav-link text-dark me-0 me-lg-5" href="{{ route('contact') }}">Contact-us</a></li>
-                                    <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0">
-                                        @if(!Auth::user())
-                                        <button type="button" class="btn border border-dark rounded-pill me-1" id="login_user">Sign-In</button>
-                                        <button type="button" class="btn bg-blue text-white rounded-pill" id="register_user">Sign-Up</button>
-                                        @else
-                                        <div class="d-flex justify-content-center justify-content-md-end mt-1 mb-2">
-                                            <div class="me-3">
-                                                <p class="text-blue m-0 border-blue w-fit rounded-3 f-16 py-1 px-2">{{ \Illuminate\Support\Facades\Auth::user()->name ?? ''  }}</p>
-                                            </div>
-                                            <a href="{{ route('user.profile') }}" class="text-dark my-auto ms-2 text-decoration-none">View profile</a>
+                                    <li class="nav-item ms-0 ms-lg-1 pe-0 pe-lg-1 my-auto"><a class="nav-link text-dark" href="{{ route('home') }}">Home</a></li>
+                                    <li class="nav-item my-auto"><a class="nav-link text-dark" href="{{ route('about') }}">About</a></li>
+                                    <li class="nav-item my-auto" id="booking_button" style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
+                                        <a class="nav-link text-dark" href="{{ route('booking.history') }}" >Booking</a></li>
+                                    <li class="nav-item my-auto"><a class="nav-link text-dark" href="{{ route('faq') }}">FAQ</a></li>
+                                    <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2 my-auto"><a class="nav-link text-dark me-0 me-lg-5" href="{{ route('contact') }}">Contact-us</a></li>
+                                    <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0 my-auto">
+
+                                        <div id="login_button" style="display: {{ Auth::check() ? 'none' : 'block' }};">
+                                            <button type="button" class="btn border border-dark rounded-pill me-1" id="login_user">Sign-In</button>
+                                            <button type="button" class="btn bg-blue text-white rounded-pill" id="register_user">Sign-Up</button>
                                         </div>
-                                        @endif
+
+                                        <div id="after_login_button" class="mt-1 mb-2 nav-link" style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
+                                            <a href="{{ route('user.profile') }}" class="text-dark text-center my-auto ms-2 text-decoration-none fs-13 fw-600">View profile</a>
+                                            <div class="d-flex d-lg-block justify-content-end">
+                                                <p class="text-blue m-0 my-1 border-blue w-fit rounded-3 f-16 px-2 fs-13 fw-600" id="user_name">{{ !empty(Auth::user()->name) ? ucfirst(Auth::user()->name) : ''  }}</p></div>
+
+                                        </div>
+                                    </li>
+                                    <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0 my-auto " id="logout_button" style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
+                                        <form id="logout-form" action="{{ route('user.logout') }}" method="POST" style="display: none;">
+                                            @csrf
+                                        </form>
+                                        <a href="#" class="text-decoration-none" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            <i class="fa fa-sign-out text-blue me-1"></i>
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
