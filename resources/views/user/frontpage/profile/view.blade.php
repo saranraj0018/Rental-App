@@ -81,6 +81,11 @@
                     <label for="name" class="fs-14 fw-500">Your Name</label>
                     <input type="text" class=" form-control fs-14" name="user_name" id="user_name" value="{{ Auth::user()->name ?? '' }}" placeholder="Enter Your name">
                 </div>
+                <div class="col-12 col-lg-3">
+                    <label for="name" class="fs-14 fw-500">Email Address</label>
+                    <input type="text" class=" form-control fs-14" name="user_email" id="user_mobile"
+                           value="{{ Auth::user()->email ?? '' }}" placeholder="Enter Your Email Address">
+                </div>
                 <div class="col-12 col-lg-4">
                     <label for="name" class="fs-14 fw-500">Mobile Number</label>
                     <input type="text" class=" form-control fs-14" name="user_mobile" id="user_mobile" value="{{ Auth::user()->mobile ?? '' }}" placeholder="Enter Your Mobile Number">

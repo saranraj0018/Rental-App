@@ -275,14 +275,18 @@ class UserController extends Controller
         $request->validate([
             'user_name' => 'required|string|max:255',
             'user_mobile' => 'required|numeric|digits:10',
+            'user_email' => 'required|email',
             'aadhaar_number' => 'required|digits:12',
             'driving_licence' => 'required',
             'other_documents' => 'nullable|mimes:jpg,png,pdf|max:2048',
         ]);
+
+
         $auth_id = Auth::id() ?? 0;
         $user = User::find($auth_id);
         $user->name = $request['user_name'];
         $user->mobile = $request['user_mobile'];
+        $user->email = $request['user_email'];
         $user->aadhaar_number = $request['aadhaar_number'];
         $user->driving_licence = $request['driving_licence'];
         $user->save();
