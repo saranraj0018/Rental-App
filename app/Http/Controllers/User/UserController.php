@@ -287,18 +287,27 @@ class UserController extends Controller
         $user->driving_licence = $request['driving_licence'];
         $user->save();
 
+        return response()->json(['success' => true, 'message' => 'User Profile updated successfully']);
+
+    }
+
+    public function updateUserDocument(Request $request)
+    {
         $uniq_id =  Str::random(6);
 
         if ($request->hasFile('other_documents') && !empty($request['other_documents'])) {
-            $user_docs = new UserDocument();
-            $img_name = $request->file('other_documents')->getClientOriginalName();
-            $img_name = $uniq_id . '_' . $img_name;
-            $request->other_documents->storeAs('user-documents/', $img_name, 'public');
-            $user_docs->image_name =  $img_name;
-            $user_docs->user_id = Auth::id();
-            $user_docs->save();
+            foreach ($request->file('other_documents') as $file) {
+                $img_name = $file->getClientOriginalName();
+                $img_name = $uniq_id . '_' . $img_name;
+                $file->storeAs('user-documents/', $img_name, 'public');
+                $user_docs = new UserDocument();
+                $user_docs->image_name = $img_name;
+                $user_docs->user_id = Auth::id();
+                $user_docs->save();
+            }
+            return response()->json(['success' => true, 'message' => 'User Profile updated successfully']);
         }
-        return response()->json(['success' => true, 'message' => 'User Profile updated successfully']);
+        return response()->json(['success' => false, 'message' => 'User Profile updated Failed']);
 
     }
 

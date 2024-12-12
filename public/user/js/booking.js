@@ -75,6 +75,7 @@ $(function () {
             time_24hr: true,
             minuteIncrement: 30, // 30-minute intervals
             allowInput: true,
+            sideBySide:true
         });
         $('#calculate_price').on('click', function () {
             const bookingId = $('#booking_id').val();

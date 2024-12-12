@@ -79,6 +79,7 @@ $(function () {
                         $('#user_name').text(response.name)
                         $('#after_login_button').css('display', 'block');
                         $('#booking_button').css('display', 'block');
+                        $('#logout_button').css('display', 'block');
                         $('#login_payment').hide();
                         $('#payment').css('display', 'block');
                         $('#otp_error').text('');
