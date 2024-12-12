@@ -12,12 +12,17 @@ trait FaqTrait
 
     public function faqList()
     {
+        $this->authorizePermission('faq_view');
+
         $faq_items = Frontend::where('data_keys','faq-section')->orderBy('created_at', 'desc')->paginate(10);
         return view('admin.faq.list',compact('faq_items'));
     }
 
     public function faqSave(Request $request)
     {
+
+        $this->authorizePermission('faq_create');
+
         $request->validate([
             'question' => 'required|string',
             'answer' => 'required|string',
@@ -40,6 +45,10 @@ trait FaqTrait
 
     public function faqDelete($id)
     {
+
+
+        $this->authorizePermission('faq_delete');
+
         $faq = Frontend::find($id);
         $faq->delete();
         $faq_list = Frontend::where('data_keys','faq-section')->orderBy('created_at', 'desc')->paginate(10);

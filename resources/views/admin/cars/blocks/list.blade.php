@@ -18,19 +18,24 @@
             margin-left: 50px !important;
         }
     </style>
+    
     <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Cars Blocking List</h1>
                 </div>
-                @if (in_array('car_av_add', $permissions))
+                @if (in_array('car_block_create', $permissions))
                     <div class="col-sm-6 text-right">
                         <a href="{{ route('car-block.history') }}" class="btn btn-primary mb-3" id="">View
                             History</a>
+                            @endif
+
+                @if (in_array('car_block_create', $permissions))
+
                         <button class="btn btn-primary mb-3" id="add_block">Add New Block</button>
+                        @endif
                     </div>
-                @endif
             </div>
         </div>
         <!-- /.container-fluid -->
@@ -85,7 +90,7 @@
                                         <td>{{ $item->start_date }}</td>
                                         <td>{{ $item->end_date }}</td>
                                         <td>
-                                            @if (in_array('car_av_edit', $permissions))
+                                            @if (in_array('car_block_update', $permissions))
                                                 <a href="javascript:void(0)" class="edit_block_model"
                                                     data-id="{{ $item->id }}"
                                                     data-car_register_number="{{ $item->car_register_number }}"

@@ -1,13 +1,13 @@
 $(function () {
     'use strict'
-    $(document).ready(function() {
-        $('#add_role').click(function() {
+    $(document).ready(function () {
+        $('#add_role').click(function () {
             $('#user_role_label').text("Add User Role");
             $('#add_user_role').modal('show');
             $('#save_user_role').text("Submit");
         });
 
-        $('#user_role_form').on('submit', function(e) {
+        $('#user_role_form').on('submit', function (e) {
             e.preventDefault();
             // Define the elements and their conditions in an array of objects
             let isValid = true;
@@ -30,12 +30,12 @@ $(function () {
                     url: '/admin/user-role/save',
                     type: 'POST',
                     data: $(this).serialize(),
-                    success: function(response) {
+                    success: function (response) {
                         $('#add_user_role').modal('hide');
-                        updateRoleTable(response.data,response.permission)
+                        updateRoleTable(response.data, response.permission)
                         alertify.success(response.success);
                     },
-                    error: function(response) {
+                    error: function (response) {
                         if (response.responseJSON) {
                             let errors = response.responseJSON.errors;
                             $('.form-control').removeClass('is-invalid');
@@ -49,17 +49,14 @@ $(function () {
                             });
                         }
                     },
-                    complete: function() {
+                    complete: function () {
                         $('#save_user_role').prop('disabled', false);  // Re-enable the submit button
                     }
                 });
             }
-
-
-
         });
 
-        $('#role_table').on('click', '.role_edit', function() {
+        $('#role_table').on('click', '.role_edit', function () {
             let modal = $('#edit_user_role');
             modal.find('input[type=checkbox]').prop('checked', false);
             let userRoles = $(this).data('user_permission');
@@ -69,7 +66,7 @@ $(function () {
                 // Clear all checkboxes first
                 modal.find('input[type=checkbox]').prop('checked', false);
                 // Loop through the array and check the corresponding checkboxes
-                userRoles.forEach(function(role) {
+                userRoles.forEach(function (role) {
                     modal.find('input[value="' + role + '"]').prop('checked', true);
                 });
             } else {
@@ -80,30 +77,41 @@ $(function () {
             modal.modal('show');
         });
 
-        $('#user_role_edit_form').on('submit', function(e) {
+
+        // $('.perm').on('change', (e) => {
+        //     if (e.target.checked) {
+        //         e.target.value = '1'; // Set value to 1 if checked
+        //     } else {
+        //         e.target.value = '0'; // Set value to 0 if unchecked
+        //     }
+        // });
+
+
+
+        $('#user_role_edit_form').on('submit', function (e) {
             e.preventDefault();
-            $('#update_user_role').prop('disabled', true);  // Disable submit button during AJAX
+            // $('#update_user_role').prop('disabled', true);  // Disable submit button during AJAX
             $.ajax({
                 url: '/admin/user-role/update',
                 type: 'PUT',
                 data: $(this).serialize(),
-                success: function(response) {
+                success: function (response) {
                     $('#edit_user_role').modal('hide');
-                    updateRoleTable(response.data,response.permission)
+                    updateRoleTable(response.data, response.permission)
                     alertify.success(response.success);
                 },
-                error: function(response) {
+                error: function (response) {
                     if (response.responseJSON) {
                         let errors = response.responseJSON.errors;
                     }
                 },
-                complete: function() {
+                complete: function () {
                     $('#update_user_role').prop('disabled', false);  // Re-enable the submit button
                 }
             });
         });
 
-        function updateRoleTable(data,permission) {
+        function updateRoleTable(data, permission) {
             window.history.pushState(null, '', '/admin/user-role/list?page=' + 1);
             let tbody = $('#role_table tbody');
             tbody.empty(); // Clear existing rows
@@ -112,7 +120,7 @@ $(function () {
                 tbody.append(`<tr><td colspan="4" class="text-center">Record Not Found</td></tr>`);
             } else {
                 window.history.pushState(null, '', '/admin/user-role/list?page=' + 1);
-                $.each(data.role, function(index, item) {
+                $.each(data.role, function (index, item) {
                     let editPermission = permission.includes('role_edit');
                     let deletePermission = permission.includes('role_delete');
 
@@ -145,8 +153,8 @@ $(function () {
             `);
                 });
                 $('#pagination').html(data.pagination);
-                let newBaseUrl =  window.location.href;
-                $('.pagination a').each(function() {
+                let newBaseUrl = window.location.href;
+                $('.pagination a').each(function () {
                     let href = $(this).attr('href'); // Get the current href attribute
                     $(this).attr('href', newBaseUrl); // Set the new URL
                 });
@@ -154,21 +162,21 @@ $(function () {
         }
         // Delete Car
         let deleteId;
-        $('#role_table').on('click', '.role_delete', function() {
+        $('#role_table').on('click', '.role_delete', function () {
             deleteId = $(this).data('id');  // Capture the ID of the item to delete
             $('#delete_role_model').modal('show');  // Show the modal
         });
 
-        $('#confirm_delete_row').on('click', function() {
+        $('#confirm_delete_row').on('click', function () {
             $.ajax({
                 url: `/admin/user-role/${deleteId}/delete`,
                 type: 'DELETE',
-                success: function(response) {
+                success: function (response) {
                     $('#delete_role_model').modal('hide');  // Hide the modal
-                    updateRoleTable(response.data,response.permission)
+                    updateRoleTable(response.data, response.permission)
                     alertify.success(response.success);
                 },
-                error: function(response) {
+                error: function (response) {
                     // alert('Error');
                 }
             });

@@ -20,7 +20,10 @@
                        value="{{ old('content', !empty($item['data_values']) ? json_decode($item['data_values']) : '') }}">
                 <input type="hidden" name="{{ $section }}_id" value="{{ $item['id'] ?? 0 }}">
             </div>
+
+            @if (in_array('others_update', getAdminPermissions()))
             <button type="submit" class="btn btn-primary">Save</button>
+            @endif
         </form>
     </div>
 @endsection

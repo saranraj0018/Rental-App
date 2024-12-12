@@ -36,7 +36,7 @@ class CarBlockController extends BaseController {
     }
 
     public function save(Request $request) {
-        $this->authorizePermission('car_av_add');
+        $this->authorizePermission('car_block_create');
         $blockType = $request['block_type'];
         $request->validate([
             'block_type' => 'required|in:0,1,2,3,4,5',
@@ -85,7 +85,7 @@ class CarBlockController extends BaseController {
     }
 
     public function update(Request $request) {
-        $this->authorizePermission('car_av_edit');
+        $this->authorizePermission('car_block_update');
         $request->validate([
             'edit_start_date' => 'required|date',
             'edit_end_date' => 'required|date|after:start_date',

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\Trait\FaqTrait;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController as Controller;
 use App\Models\AdminDetail;
 use App\Models\Frontend;
 use App\Models\FrontendImage;
@@ -16,12 +16,18 @@ class BannerController extends Controller
     use FaqTrait;
     public function view()
     {
+
+        $this->authorizePermission('banner_section_view');
+
         $frontend = Frontend::with('frontendImage')->where('data_keys','section1-image-car')->first();
         return view('admin.banner.section1', compact('frontend'));
     }
 
     public function save(Request $request)
     {
+
+        $this->authorizePermission('banner_section_update');
+
         if (empty($request['banner_id'])) {
             $request->validate([
                 'image_car' => 'required|array|min:3',
@@ -172,6 +178,9 @@ class BannerController extends Controller
 
     public function brandList()
     {
+        $this->authorizePermission('brands_and_vacation_view');
+
+        $this->authorizePermission('');
         $brand_info = Frontend::with('frontendImage')->where('data_keys','brand-section')->first();
         $brand_titles = !empty($brand_info['data_values']) ? json_decode($brand_info['data_values'],true) : [];
         $brand_image = !empty($brand_info->frontendImage) ? $brand_info->frontendImage : null;
@@ -181,6 +190,7 @@ class BannerController extends Controller
 
     public function brandSave(Request $request)
     {
+        $this->authorizePermission('brands_and_vacation_create');
 
         $request->validate([
             'vacation_description.*' => 'required|string|max:255',
@@ -264,6 +274,8 @@ class BannerController extends Controller
 
     public function iprInfo()
     {
+
+        $this->authorizePermission('important_points_view');
         $ipr_info = Frontend::where('data_keys','ipr-info-section')->first();
         $ipr_data = !empty($ipr_info['data_values']) ? json_decode($ipr_info['data_values'],true) : [];
         $ipr_id = !empty($ipr_info['id']) ? $ipr_info['id'] : null;
@@ -272,6 +284,9 @@ class BannerController extends Controller
 
     public function iprSave(Request $request)
     {
+
+        $this->authorizePermission('important_points_update');
+
         $request->validate([
             'price_plan' => 'required|string',
             'price_description' => 'required|string',
@@ -304,6 +319,8 @@ class BannerController extends Controller
 
     public function generalList()
     {
+        $this->authorizePermission('general_settings_view');
+
         $general = Frontend::where('data_keys','general-setting')->first();
         $referral_code = AdminDetail::where('role',1)->value('referral_code');
         return view('admin.general.list',compact('general','referral_code'));
@@ -311,6 +328,8 @@ class BannerController extends Controller
 
     public function generalSave(Request $request)
     {
+        $this->authorizePermission('general_settings_update');
+
         $request->validate([
             'minimum_hours' => 'required|numeric',
             'maximum_hours' => 'required|numeric|gt:minimum_hours',
