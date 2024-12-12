@@ -2,7 +2,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="riskModalLabel">Reschedule Delivery Date</h5>
+                <h5 class="modal-title" id="riskModalLabel">Reschedule Pickup Date</h5>
             </div>
             <div class="modal-body">
                 <form id="risk-form" novalidate>
@@ -17,7 +17,7 @@
                     <div id="comments-list" class="mb-3"></div>
 
                     <div class="form-group">
-                        <label for="delivery_date">Delivery Date</label>
+                        <label for="delivery_date">Pickup Date</label>
                         <input type="text" class="form-control" id="delivery_date" name="delivery_date" required>
                         <div class="invalid-feedback">
                             Please provide a valid delivery date.
@@ -29,7 +29,7 @@
                     </div>
 
                     <button type="button" id="calculate_price" class="btn btn-info">Calculate Price</button>
-                    <button type="button" id="close_pop" class="btn btn-danger float-right">OK</button>
+                    <button type="button" id="close_pop" class="btn btn-danger float-right">Close</button>
                     <button type="submit" class="btn btn-primary d-none" id="reschedule_pay">Pay</button>
                 </form>
             </div>
@@ -109,7 +109,7 @@
                     </div>
                 </form>
             </div>
-            <button type="button" id="details_close_pop" class="btn btn-danger float-right">OK</button>
+            <button type="button" id="details_close_pop" class="btn btn-danger float-right">Close</button>
         </div>
     </div>
 </div>
@@ -143,11 +143,9 @@
                             You must accept the terms and conditions before proceeding.
                         </div>
                     </div>
-
-
                     <button type="submit" class="btn btn-danger mt-3" id="confirm_cancel_btn" disabled>Confirm Cancellation</button>
-                    <button type="button" id="cancel_close_pop" class="btn btn-danger float-right">OK</button>
                 </form>
+                <button type="button" id="cancel_close_pop" class="btn btn-danger  float-right">Close</button>
             </div>
         </div>
     </div>

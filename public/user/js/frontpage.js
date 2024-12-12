@@ -265,6 +265,7 @@ $(document).ready(function(){
 
 document.addEventListener("DOMContentLoaded", function () {
     let selectedDate1 = "", selectedTime1 = "", selectedDate2 = "", selectedTime2 = "";
+    const duration = $('#front_duration').val();
     calculateTimeDifference();
     function calculateTimeDifference() {
         const dateTime1 = $('#dateTimeInput1').val();
@@ -290,6 +291,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const minHours = parseInt($('#minimum_days').val());
         const maxHours = parseInt($('#maximum_days').val());
+
         if (totalHours < minHours) {
             setDurationError(`Minimum ${minHours} hours required`);
             $('#find_car').prop('disabled', true);
@@ -347,7 +349,7 @@ document.addEventListener("DOMContentLoaded", function () {
         disable: [
             date => date < new Date().setHours(0, 0, 0, 0)
         ],
-
+        maxDate: duration,
         onChange: function (selectedDates, dateStr) {
             selectedDate1 = dateStr;
             disablePastTimes(document.getElementById('timeTabContent1'), selectedDate1); // Disable past times
@@ -364,6 +366,7 @@ document.addEventListener("DOMContentLoaded", function () {
         disable: [
             date => date < new Date().setHours(0, 0, 0, 0)
         ],
+        maxDate: duration,
         onChange: function (selectedDates, dateStr) {
             selectedDate2 = dateStr;
             disablePastTimes(document.getElementById('timeTabContent2'), selectedDate2); // Disable past times

@@ -1,17 +1,31 @@
 <section class="other-heads-bg py-4">
     <header>
         <div class="container">
-            <div class="row">
-                <div class="col-12 col-md-7 d-flex justify-content-between">
-                    <div class="mt-2">
+            <div>
+                <div class="d-flex justify-content-between">
+                    <div class="my-auto">
                         {{--                    <button class="border-2 rounded-pill px-3 py-2 me-3 back-btn"><i class="fa fa-angle-left text-white fs-18"></i></button>--}}
                         <a href="{{ url()->previous() }}" class="border-2 rounded-pill px-3 py-2 me-3 back-btn">
                             <i class="fa fa-angle-left text-white fs-18"></i>
                         </a>
                     </div>
                     <div class="text-white text-center my-auto fs-5">Car Booking</div>
-                </div>
-                <div class="col-12 col-md-5">
+                    <div>
+                        <ul class="navbar-nav navbar-light w-100 text-end text-lg-start">
+                            <li class="nav-item ps-0 ps-lg-0 my-auto">
+                                <div id="login_button" style="display: {{ Auth::check() ? 'none' : 'block' }};">
+                                    <button type="button" class="btn border bg-white text-blue rounded-pill me-1" id="login_user">Sign-In</button>
+                                    <button type="button" class="btn bg-blue text-white rounded-pill" id="register_user">Sign-Up</button>
+                                </div>
+                                <div id="after_login_button" class="mt-1 mb-2 nav-link d-flex " style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
+                                    <a href="{{ route('user.profile') }}" class="bg-white p-2 rounded-pill text-dark text-center my-auto ms-2 text-decoration-none fs-13 fw-600">View profile</a>
+                                    <div class="ms-2">
+                                        <p class="text-white p-2 rounded-pill bg-blue m-0 my-1 w-fit rounded-3 f-16 px-2 fs-13 fw-600" id="user_name">{{ !empty(Auth::user()->name) ? ucfirst(Auth::user()->name) : ''  }}</p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
 
                 </div>
             </div>
@@ -385,14 +399,14 @@
 
                         </div>
                         <p class="fs-16 fw-500 mt-2"> Enter manually</p>
-                        <input id="delivery-city" type="text" placeholder="Search city" class="form-control current_delivery_address">
+                        <input id="delivery-city" type="text" placeholder="Enter Your Delivery Location" class="form-control current_delivery_address">
                         <p class="text-danger" id="outside_area"></p>
                         <input type="hidden" id="dly_latitude" name="dly_latitude">
                         <input type="hidden" id="dly_longitude" name="dly_longitude">
                         <input type="hidden" id="dly_address" name="dly_address">
                         <p class="text-danger" id="delivery_outside_area"></p>
                         <div class="d-flex">
-                            <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="delivery_address">Save Drop Address</button>
+                            <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="delivery_address">Confirm Location</button>
                             <button type="button" class="btn fs-16 my-drop-button mt-4 mx-2 w-50 w-lg-25" id="same_address">Same as Pickup Location</button>
                             <button type="button" class="btn fs-16 my-current-button rounded-pill mt-4 w-50 w-lg-25" id="drop_current_location">Current Location</button>
                         </div>
@@ -406,13 +420,13 @@
                             <div id="custom_map" style="height: 500px; width: 100%;"></div>
                         </div>
                         <p class="fs-16 fw-500 mt-2"> Enter manually</p>
-                        <input id="custom-city" type="text" placeholder="Search city" class="form-control current_pickup_address">
+                        <input id="custom-city" type="text" placeholder="Enter your return location" class="form-control current_pickup_address">
                         <input type="hidden" id="pic_latitude" name="pic_latitude" >
                         <input type="hidden" id="pic_longitude" name="pic_longitude" >
                         <input type="hidden" id="pic_address" name="pic_address" >
                         <p class="text-danger" id="pickup_outside_area"></p>
                         <div class="d-flex">
-                            <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="conform_address">Conform address</button>
+                            <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25" id="conform_address">Conform Location</button>
                             <button type="button" class="btn fs-16 my-current-button rounded-pill mt-4 w-50 w-lg-25" id="pick_current_location">Current Location</button>
                         </div>
                     </div>
