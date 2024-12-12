@@ -103,11 +103,12 @@
                     <div class="r2dc-card-bg p-3">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <div class="bg-white rounded-pill w-fit px-1 fw-500 fs-15 my-auto">
+                                <div class="bg-white rounded-pill w-fit px-1 fw-500 fs-15 my-auto"
+                                     style="display: @if ($general_section['show_bookmarks'] == 1) unset @else none @endif !important">
                                     <i class="fas fa-star" style="color:#E66742;"></i> 4.5
                                 </div>
                             </div>
-                            <div>
+                            <div   style="display: @if ($general_section['show_bookmarks'] == 1) unset @else none @endif !important">
                                 <div class="save-icon my-auto">
                                     <i class="fas fa-bookmark text-blue"></i>
                                 </div>

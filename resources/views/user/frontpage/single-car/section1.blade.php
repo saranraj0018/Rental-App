@@ -39,7 +39,7 @@
             <div class="col-12 col-lg-6">
                 <div class="card p-3 bdr-30 h-100">
                     <div class="d-flex justify-content-between"
-                        style="display: @if ($_setting['show_bookmarks'] == 1) flex @else none @endif !important">
+                        style="display: @if ($general_section['show_bookmarks'] == 1) flex @else none @endif !important">
                         <div>
                             <div class="bg-white rounded-pill w-fit px-1 fw-500 fs-15 my-auto">
                                 <i class="fas fa-star" style="color:#E66742;"></i> 4.5

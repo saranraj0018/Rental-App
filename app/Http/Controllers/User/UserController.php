@@ -78,10 +78,11 @@ class UserController extends Controller
     public function listCars() {
         $date = ['start_date' => Session::get('start_date'), 'end_date' =>  Session::get('end_date')];
         $city_list = City::where('city_status', 1)->pluck('name', 'code');
-
+        $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
+        $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
         $car_models = self::getAvailableCars();
         $festival_days = Holiday::pluck('event_date')->toArray();
-        return view('user.frontpage.list-cars.list',compact('car_models','festival_days','date','city_list'));
+        return view('user.frontpage.list-cars.list',compact('car_models','festival_days','date','city_list','timing_setting'));
     }
 
     public static function getAvailableCars()

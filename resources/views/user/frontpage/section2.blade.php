@@ -16,7 +16,7 @@
                                 <p class="fs-12 fs-mb-11 mb-1 h-40px">
                                     {!! $item->description !!}
                                 </p>
-                                <div class="card blue-bg p-2 text-white d-flex">
+                                <div class="card blue-bg w-50 p-2 text-white d-flex">
                                     <div class="d-flex">
                                         <img src="{{ asset('user/img/Vector.png') }}" alt="Bagde Percentage"
                                             class="img-fluid d-block badge-perc me-1 me-lg-2">

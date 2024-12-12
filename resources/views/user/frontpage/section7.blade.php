@@ -1,4 +1,4 @@
-<section class="my-4" style="display: @if ($_setting['show_bookmarks'] == 1) inherit @else none @endif">
+<section class="my-4" style="display: @if (!empty($timing_setting['show_bookmarks']) && $timing_setting['show_bookmarks'] == 1) inherit @else none @endif">
     <div class="container">
         <div class="row g-4">
             <div class="col-12 col-lg-5 bg-grey h-100 p-3 bdr-20">
