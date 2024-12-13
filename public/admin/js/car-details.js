@@ -121,7 +121,7 @@ $(function () {
                 $.each(data, function(index, item) {
                     tbody.append(`
                 <tr>
-                    <td>${item.id}</td>
+                     <td>${index + 1}</td>
                     <td>${item.car_model ? item.car_model.model_name : ''} -
                     <a href="javascript:void(0)" class="edit_model" data-id="${item.car_model ? item.car_model.id : 0}"
                            data-producer="${item.car_model ? item.car_model.producer : ''}"

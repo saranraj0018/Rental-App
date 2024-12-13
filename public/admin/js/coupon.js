@@ -152,7 +152,7 @@ $(function () {
 
                     tbody.append(`
                 <tr>
-                    <td>${item.id}</td>
+                      <td>${index + 1}</td>
                     <td>${item.title}</td>
                     <td>${item.amount}</td>
                     <td>${item.type == 1 ? 'Percentage' : 'Fixed'}</td>

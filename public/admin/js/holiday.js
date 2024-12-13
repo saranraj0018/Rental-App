@@ -168,7 +168,7 @@ $(function () {
                 $.each(data.holiday, function(index, item) {
                     tbody.append(`
                 <tr>
-                    <td>${item.id}</td>
+                     <td>${index + 1}</td>
                     <td>${item.event_name}</td>
                     <td>${formatDate(item.event_date)}</td>
                    <td>${item.user ? item.user.email : ''}</td>
