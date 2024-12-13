@@ -162,8 +162,15 @@
                         <thead>
                             <tr>
                                 <th>Booking<br>Type</th>
-                                <th>Risk</th>
-                                <th>Done</th>
+
+                                @if (in_array('hub_risk_status', getAdminPermissions()) || in_array('hub_risk_comments', getAdminPermissions()))
+                                    <th>Risk</th>
+                                @endif
+
+                                @if (in_array('hub_risk_status', getAdminPermissions()))
+                                    <th>Done</th>
+                                @endif
+
                                 <th>Time</th>
                                 <th>
                                     <input type="text" id="customer_name" name="customer_name" class="form-control"
@@ -175,22 +182,25 @@
                                         placeholder="Registration Number"></th>
                                 <th>Address</th>
 
-                                @if (in_array('hub_view_user_details', getAdminPermissions()))
-                                    <th>User Details</th>
-                                @endif
+                                <th>User Details</th>
                                 <th>D/L Number</th>
                                 <th><input type="text" id="booking_id" name="booking_id" class="form-control"
                                         style="padding: 0%    ;" placeholder="Booking ID"></th>
-                                @if (in_array('hub_reschedule', getAdminPermissions()))
+
                                     <th>Reschedule</th>
-                                @endif
 
                                 <th>Security Dep</th>
                                 <th>Amount</th>
-                                <th>Action</th>
+                                @if (in_array('hub_cancel_booking', getAdminPermissions()))
+                                    <th>Action</th>
+                                @endif
+
                             </tr>
                         </thead>
                         <tbody>
+
+
+
                             @if (!empty($bookings) && $bookings->isNotEmpty())
                                 @foreach ($bookings as $item)
                                     @php
@@ -208,21 +218,36 @@
                                     <tr
                                         class="@if ($item->risk == 1 && $item->status != 2) bg-light-red @elseif($item->status == 2) bg-light-green @endif">
                                         <td> {!! $item->booking_type == 'pickup' ? '<h3>P</h3>' : '<h3>D</h3>' !!}</td>
-                                        <td>
-                                            <div class="d-flex justify-content-center">
-                                                <input type="checkbox" class="risk-checkbox" data-id="{{ $item->id }}"
-                                                    @if ($item->risk == 1) checked @endif>
-                                            </div>
-                                            <br>
-                                            <button class="btn btn-warning open-risk-modal" data-id="{{ $item->id }}"
-                                                data-commend="{{ json_encode($comments) }}">
-                                                <h3>i</h3>
-                                            </button>
-                                        </td>
-                                        <td class="d-flex justify-content-center">
-                                            <input type="checkbox" class="done-checkbox" data-id="{{ $item->id }}"
-                                                @if ($item->status == 2) checked @endif>
-                                        </td>
+
+                                        @if (in_array('hub_risk_status', getAdminPermissions()) || in_array('risk_comments', getAdminPermissions()))
+                                            <td>
+
+                                                @if (in_array('hub_risk_status', getAdminPermissions()))
+                                                    <div class="d-flex justify-content-center">
+                                                        <input type="checkbox" class="risk-checkbox"
+                                                            data-id="{{ $item->id }}"
+                                                            @if ($item->risk == 1) checked @endif>
+                                                    </div>
+                                                    <br>
+                                                @endif
+
+                                                @if (in_array('risk_comments', getAdminPermissions()))
+                                                    <button class="btn btn-warning open-risk-modal"
+                                                        data-id="{{ $item->id }}"
+                                                        data-commend="{{ json_encode($comments) }}">
+                                                        <h3>i</h3>
+                                                    </button>
+                                                @endif
+
+                                            </td>
+                                        @endif
+
+                                        @if (in_array('hub_risk_status', getAdminPermissions()))
+                                            <td class="d-flex justify-content-center">
+                                                <input type="checkbox" class="done-checkbox" data-id="{{ $item->id }}"
+                                                    @if ($item->status == 2) checked @endif>
+                                            </td>
+                                        @endif
                                         <td>{{ $item->booking_type == 'pickup' ? showDateTime($item->end_date) : showDateTime($item->start_date) }}<br>
                                             @if (!empty($item->reschedule_date))
                                                 <p class="text-danger">{{ showDateTime($item->reschedule_date) }}</p>
@@ -232,23 +257,21 @@
                                         <td>{{ $car_model->model_name ?? 'Dummy Car' }}</td>
                                         <td>{{ $booking_details->register_number ?? '' }}</td>
                                         <td class="truncate-text" title="{{ $item->address }}">{{ $item->address }}</td>
+                                        <td>
+                                            <button class="btn btn-warning user-details-modal"
+                                                data-id="{{ $item->user_id }}" data-mobile="{{ $item->user->mobile }}"
+                                                data-booking="{{ !empty($item->user->bookings->count()) ? $item->user->bookings->count() / 2 : 0 }}"
+                                                data-aadhaar_number="{{ $item->user->aadhaar_number }}">
+                                                User details
+                                            </button>
+                                        </td>
 
-                                        @if (in_array('hub_view_user_details', getAdminPermissions()))
-                                            <td>
-                                                <button class="btn btn-warning user-details-modal"
-                                                    data-id="{{ $item->user_id }}" data-mobile="{{ $item->user->mobile }}"
-                                                    data-booking="{{ !empty($item->user->bookings->count()) ? $item->user->bookings->count() / 2 : 0 }}"
-                                                    data-aadhaar_number="{{ $item->user->aadhaar_number }}">
-                                                    User details
-                                                </button>
-                                            </td>
-                                        @endif
                                         <td>{{ $item->user->driving_licence ?? '' }}</td>
                                         <td>{{ $item->booking_id }}</td>
 
-                                        @if (in_array('hub_reschedule', getAdminPermissions()))
-                                            <td>{{ showDateTime($item->reschedule_date ?? ($item->booking_type == 'pickup' ? $item->end_date : $item->start_date)) }}
-                                                <br>
+                                        <td>{{ showDateTime($item->reschedule_date ?? ($item->booking_type == 'pickup' ? $item->end_date : $item->start_date)) }}
+                                            <br>
+                                            @if (in_array('hub_reschedule', getAdminPermissions()))
                                                 <button class="btn btn-warning edit-booking-date"
                                                     data-id="{{ $item->id }}"
                                                     data-booking_type="{{ $item->booking_type }}"
@@ -257,26 +280,23 @@
                                                     data-car_id="{{ $item->car_id ?? 0 }}">
                                                     Edit
                                                 </button>
-                                            </td>
-                                        @endif
+                                            @endif
+                                        </td>
 
                                         <td>{{ $car_model->dep_amount ?? 0 }}</td>
 
-                                        @if (in_array('hub_view_amount_details', getAdminPermissions()))
-                                            <td>
-                                                <button class="btn btn-warning amount-modal"
-                                                    data-id="{{ $item->booking_id }}"
-                                                    data-week_days_amount="{{ $booking_payment_details['week_days_amount'] ?? 0 }}"
-                                                    data-week_end_amount="{{ $booking_payment_details['week_end_amount'] ?? 0 }}"
-                                                    data-festival_amount="{{ $booking_payment_details['festival_amount'] ?? 0 }}"
-                                                    data-delivery_fee="{{ $item->delivery_fee ?? '' }}"
-                                                    data-dep_fee="{{ $car_model->dep_amount ?? '' }}"
-                                                    data-coupon="{{ $booking_coupon->discount ?? '' }}"
-                                                    data-type="{{ $booking_coupon->type ?? '' }}">
-                                                    Amount Details
-                                                </button>
-                                            </td>
-                                        @endif
+                                        <td>
+                                            <button class="btn btn-warning amount-modal" data-id="{{ $item->booking_id }}"
+                                                data-week_days_amount="{{ $booking_payment_details['week_days_amount'] ?? 0 }}"
+                                                data-week_end_amount="{{ $booking_payment_details['week_end_amount'] ?? 0 }}"
+                                                data-festival_amount="{{ $booking_payment_details['festival_amount'] ?? 0 }}"
+                                                data-delivery_fee="{{ $item->delivery_fee ?? '' }}"
+                                                data-dep_fee="{{ $car_model->dep_amount ?? '' }}"
+                                                data-coupon="{{ $booking_coupon->discount ?? '' }}"
+                                                data-type="{{ $booking_coupon->type ?? '' }}">
+                                                Amount Details
+                                            </button>
+                                        </td>
 
 
                                         @if (in_array('hub_cancel_booking', getAdminPermissions()))
@@ -285,7 +305,6 @@
                                                     data-id="{{ $item->booking_id }}">Cancel Order</button>
                                             </td>
                                         @endif
-
                                     </tr>
                                 @endforeach
                             @else

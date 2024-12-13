@@ -120,11 +120,16 @@ $(function () {
                     tbody.append(`
                 <tr class="${item.risk === 1 ? 'bg-light-red' : item.status === 2 ? 'bg-light-green' : ''}">
                     <td>${item.booking_type === 'pickup' ? '<h2>P</h2>' : '<h2>D</h2>'}</td>
+
+                    ${permissions.includes('booking_revert') ? `
+
                     <td>
                        <button class="btn btn-warning revert" data-id="${item.id}">
                         Revert
                         </button>
                     </td>
+                    ` : ''}
+
                     <td>${formatDateTime(item.start_date)}<br>
 <p class="text-danger">${rescheduleDate}</p></td>
                     <td>${item.user ? item.user.name : ''}</td>
