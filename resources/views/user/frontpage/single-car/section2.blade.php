@@ -1,33 +1,33 @@
-<section class="my-4">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 col-lg-6 d-none d-lg-block">
-                <div class="card p-3 bdr-30">
-                    <p class="fs-18 fw-500">Sanitised and safe cars</p>
+{{--<section class="my-4">--}}
+{{--    <div class="container">--}}
+{{--        <div class="row">--}}
+{{--            <div class="col-12 col-lg-6 d-none d-lg-block">--}}
+{{--                <div class="card p-3 bdr-30">--}}
+{{--                    <p class="fs-18 fw-500">Sanitised and safe cars</p>--}}
 
-                    <div class="row p-0">
-                        <div class="col-3 d-flex flex-column">
-                            <img src="{{ asset('user/img/car-booking/Vector.png') }}" alt="" class="img-fluid mx-auto my-2">
-                            <p class="fs-14 fw-500 text-center lh-sm">Full Car<br> Sanitization</p>
-                        </div>
-                        <div class="col-3 d-flex flex-column">
-                            <img src="{{ asset('user/img/car-booking/doorstep-delivery 1.png') }}" alt="" class="img-fluid mx-auto my-2">
-                            <p class="fs-14 fw-500 text-center lh-sm">Full Car<br> Sanitization</p>
-                        </div>
-                        <div class="col-3 d-flex flex-column">
-                            <img src="{{ asset('user/img/car-booking/Frame.png') }}" alt="" class="img-fluid mx-auto my-2">
-                            <p class="fs-14 fw-500 text-center lh-sm">Full Car<br> Sanitization</p>
-                        </div>
-                        <div class="col-3 d-flex flex-column">
-                            <img src="{{ asset('user/img/car-booking/Capa_1.png') }}" alt="" class="img-fluid mx-auto my-2">
-                            <p class="fs-14 fw-500 text-center lh-sm">Full Car<br> Sanitization</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+{{--                    <div class="row p-0">--}}
+{{--                        <div class="col-3 d-flex flex-column">--}}
+{{--                            <img src="{{ asset('user/img/car-booking/Vector.png') }}" alt="" class="img-fluid mx-auto my-2">--}}
+{{--                            <p class="fs-14 fw-500 text-center lh-sm">Full Car<br> Sanitization</p>--}}
+{{--                        </div>--}}
+{{--                        <div class="col-3 d-flex flex-column">--}}
+{{--                            <img src="{{ asset('user/img/car-booking/doorstep-delivery 1.png') }}" alt="" class="img-fluid mx-auto my-2">--}}
+{{--                            <p class="fs-14 fw-500 text-center lh-sm">Full Car<br> Sanitization</p>--}}
+{{--                        </div>--}}
+{{--                        <div class="col-3 d-flex flex-column">--}}
+{{--                            <img src="{{ asset('user/img/car-booking/Frame.png') }}" alt="" class="img-fluid mx-auto my-2">--}}
+{{--                            <p class="fs-14 fw-500 text-center lh-sm">Full Car<br> Sanitization</p>--}}
+{{--                        </div>--}}
+{{--                        <div class="col-3 d-flex flex-column">--}}
+{{--                            <img src="{{ asset('user/img/car-booking/Capa_1.png') }}" alt="" class="img-fluid mx-auto my-2">--}}
+{{--                            <p class="fs-14 fw-500 text-center lh-sm">Full Car<br> Sanitization</p>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</section>--}}
 
 <section class="my-4 bg-grey py-4">
     <div class="container">
@@ -103,11 +103,12 @@
                     <div class="r2dc-card-bg p-3">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <div class="bg-white rounded-pill w-fit px-1 fw-500 fs-15 my-auto">
+                                <div class="bg-white rounded-pill w-fit px-1 fw-500 fs-15 my-auto"
+                                     style="display: @if ($general_section['show_bookmarks'] == 1) unset @else none @endif !important">
                                     <i class="fas fa-star" style="color:#E66742;"></i> 4.5
                                 </div>
                             </div>
-                            <div>
+                            <div   style="display: @if ($general_section['show_bookmarks'] == 1) unset @else none @endif !important">
                                 <div class="save-icon my-auto">
                                     <i class="fas fa-bookmark text-blue"></i>
                                 </div>

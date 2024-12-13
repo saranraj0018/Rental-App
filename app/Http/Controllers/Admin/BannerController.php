@@ -16,18 +16,14 @@ class BannerController extends Controller
     use FaqTrait;
     public function view()
     {
-
         $this->authorizePermission('banner_section_view');
-
         $frontend = Frontend::with('frontendImage')->where('data_keys','section1-image-car')->first();
         return view('admin.banner.section1', compact('frontend'));
     }
 
     public function save(Request $request)
     {
-
         $this->authorizePermission('banner_section_update');
-
         if (empty($request['banner_id'])) {
             $request->validate([
                 'image_car' => 'required|array|min:3',
@@ -180,7 +176,6 @@ class BannerController extends Controller
     {
         $this->authorizePermission('brands_and_vacation_view');
 
-        $this->authorizePermission('');
         $brand_info = Frontend::with('frontendImage')->where('data_keys','brand-section')->first();
         $brand_titles = !empty($brand_info['data_values']) ? json_decode($brand_info['data_values'],true) : [];
         $brand_image = !empty($brand_info->frontendImage) ? $brand_info->frontendImage : null;
@@ -231,8 +226,8 @@ class BannerController extends Controller
                     $file->storeAs('vacation-section/', $vacation_image, 'public');
                     $vac_image->name = $vacation_image;
                 }
-                $vac_image->title = $request['vacation_url_'.$index];
-                $vac_image->description = $request['vacation_description_'.$index];
+                $vac_image->title = $request['vacation_url_' . $index];
+                $vac_image->description = $request['vacation_description_' . $index];
                 $vac_image->save();
 
             }
@@ -242,51 +237,45 @@ class BannerController extends Controller
 
 
                 if (!empty($request['brand_id']) && !empty($index_or_id)) {
-                $car_image = FrontendImage::find($index_or_id);
-                if (empty($car_image)) {
+                    $car_image = FrontendImage::find($index_or_id);
+                    if (empty($car_image)) {
+                        $car_image = new FrontendImage();
+                        $car_image->slug = 'brand-image';
+                        $car_image->frontend_id = $frontend->id;
+                    }
+                } else {
                     $car_image = new FrontendImage();
                     $car_image->slug = 'brand-image';
                     $car_image->frontend_id = $frontend->id;
                 }
-            }  else {
-                    $car_image = new FrontendImage();
-                    $car_image->slug = 'brand-image';
-                    $car_image->frontend_id = $frontend->id;
-            }
-            if ($request->hasFile("car_image_$index_or_id")) {
-                $file = $request->file("car_image_$index_or_id");
-                $brand_image = uniqid() . '_' . $file->getClientOriginalName();
-                $file->storeAs('brand-section/', $brand_image, 'public');
-                $car_image->name = $brand_image;
-                $car_image->save();
-            }
+                if ($request->hasFile("car_image_$index_or_id")) {
+                    $file = $request->file("car_image_$index_or_id");
+                    $brand_image = uniqid() . '_' . $file->getClientOriginalName();
+                    $file->storeAs('brand-section/', $brand_image, 'public');
+                    $car_image->name = $brand_image;
+                    $car_image->save();
+                }
             }
         }
         return response()->json(['success' => 'Brand And Vacation saved successfully']);
     }
 
-    public function delete($id)
-    {
+    public function delete($id) {
         $frontend = FrontendImage::find($id);
         $frontend->delete();
         return response()->json(['success' => 'Deleted Image successfully']);
     }
 
-    public function iprInfo()
-    {
-
+    public function iprInfo() {
         $this->authorizePermission('important_points_view');
-        $ipr_info = Frontend::where('data_keys','ipr-info-section')->first();
-        $ipr_data = !empty($ipr_info['data_values']) ? json_decode($ipr_info['data_values'],true) : [];
+        $ipr_info = Frontend::where('data_keys', 'ipr-info-section')->first();
+        $ipr_data = !empty($ipr_info['data_values']) ? json_decode($ipr_info['data_values'], true) : [];
         $ipr_id = !empty($ipr_info['id']) ? $ipr_info['id'] : null;
-        return view('admin.ipr-info.list',compact('ipr_data','ipr_id'));
+        return view('admin.ipr-info.list', compact('ipr_data', 'ipr_id'));
     }
 
-    public function iprSave(Request $request)
-    {
-
+    public function iprSave(Request $request) {
         $this->authorizePermission('important_points_update');
-
         $request->validate([
             'price_plan' => 'required|string',
             'price_description' => 'required|string',
@@ -299,7 +288,7 @@ class BannerController extends Controller
         ]);
 
         $data = [
-            'point_title'=> $request['point_title'],
+            'point_title' => $request['point_title'],
             'price_plan' => $request['price_plan'],
             'price_description' => $request['price_description'],
             'fuel' => $request['fuel'],
@@ -309,7 +298,7 @@ class BannerController extends Controller
             'car_key' => $request['car_key'],
             'car_key_description' => $request['car_key_description'],
         ];
-        $frontend = !empty($request['ipr_info_id'])  ? Frontend::find($request['ipr_info_id']) : new Frontend();
+        $frontend = !empty($request['ipr_info_id']) ? Frontend::find($request['ipr_info_id']) : new Frontend();
         $frontend->data_keys = 'ipr-info-section';
         $frontend->data_values = json_encode($data);
         $frontend->save();
@@ -317,24 +306,23 @@ class BannerController extends Controller
         return response()->json(['success' => 'Important Points section saved successfully']);
     }
 
-    public function generalList()
-    {
+    public function generalList() {
         $this->authorizePermission('general_settings_view');
-
-        $general = Frontend::where('data_keys','general-setting')->first();
-        $referral_code = AdminDetail::where('role',1)->value('referral_code');
-        return view('admin.general.list',compact('general','referral_code'));
+        $general = Frontend::where('data_keys', 'general-setting')->first();
+        $referral_code = AdminDetail::where('role', 1)->value('referral_code');
+        return view('admin.general.list', compact('general', 'referral_code'));
     }
 
-    public function generalSave(Request $request)
-    {
-        $this->authorizePermission('general_settings_update');
+    public function generalSave(Request $request) {
 
+        $this->authorizePermission('general_settings_update');
         $request->validate([
             'minimum_hours' => 'required|numeric',
             'maximum_hours' => 'required|numeric|gt:minimum_hours',
             'delivery_fee' => 'required|numeric',
             'show_duration' => 'required|numeric',
+            'show_bookmarks' => 'required',
+
         ], [
             'maximum_hours.gt' => 'The maximum hours must be greater than the minimum hours.',
         ]);
@@ -355,10 +343,10 @@ class BannerController extends Controller
             $year = (int)$request['show_duration'];
             $duration = Carbon::now()->addYears($year)->format('d-m-Y');
         } elseif ($request['duration_type'] == 'months') {
-            $month = (int)$request['show_duration'];
-            $duration = Carbon::now()->addMonths($month)->format('d-m-Y');;
+            $month = (int) $request['show_duration'];
+            $duration = Carbon::now()->addMonths($month)->format('d-m-Y');
+            ;
         }
-
 
         $data = [
             'minimum_hours' => $request['minimum_hours'],
@@ -371,9 +359,10 @@ class BannerController extends Controller
             'duration_type' => $request['duration_type'] ?? 0,
             'total_minimum_hours' => $minimum_hours,
             'total_maximum_hours' => $maximum_hours,
+            'show_bookmarks' => $request['show_bookmarks'] ?? 0,
         ];
 
-        $frontend = !empty($request['general_id'])  ? Frontend::find($request['general_id']) : new Frontend();
+        $frontend = !empty($request['general_id']) ? Frontend::find($request['general_id']) : new Frontend();
         $frontend->data_keys = 'general-setting';
         $frontend->data_values = json_encode($data);
         $frontend->save();

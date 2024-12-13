@@ -29,9 +29,9 @@ class SwapController extends Controller
 
     public function table()
     {
-        $swap_cars = SwapCar::with('user', 'car.carModel', 'swapCar.carModel')->paginate(10);
+        $swap_cars = SwapCar::with('user', 'car.carModel', 'swapCar.carModel')
+            ->orderBy('created_at', 'desc')->paginate(10);
         return view('admin.swap-cars.table', compact('swap_cars'));
-
     }
 
 

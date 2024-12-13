@@ -78,10 +78,11 @@ class UserController extends Controller
     public function listCars() {
         $date = ['start_date' => Session::get('start_date'), 'end_date' =>  Session::get('end_date')];
         $city_list = City::where('city_status', 1)->pluck('name', 'code');
-
+        $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
+        $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
         $car_models = self::getAvailableCars();
         $festival_days = Holiday::pluck('event_date')->toArray();
-        return view('user.frontpage.list-cars.list',compact('car_models','festival_days','date','city_list'));
+        return view('user.frontpage.list-cars.list',compact('car_models','festival_days','date','city_list','timing_setting'));
     }
 
     public static function getAvailableCars()
@@ -275,30 +276,43 @@ class UserController extends Controller
         $request->validate([
             'user_name' => 'required|string|max:255',
             'user_mobile' => 'required|numeric|digits:10',
+            'user_email' => 'required|email',
             'aadhaar_number' => 'required|digits:12',
             'driving_licence' => 'required',
             'other_documents' => 'nullable|mimes:jpg,png,pdf|max:2048',
         ]);
+
+
         $auth_id = Auth::id() ?? 0;
         $user = User::find($auth_id);
         $user->name = $request['user_name'];
         $user->mobile = $request['user_mobile'];
+        $user->email = $request['user_email'];
         $user->aadhaar_number = $request['aadhaar_number'];
         $user->driving_licence = $request['driving_licence'];
         $user->save();
 
+        return response()->json(['success' => true, 'message' => 'User Profile updated successfully']);
+
+    }
+
+    public function updateUserDocument(Request $request)
+    {
         $uniq_id =  Str::random(6);
 
         if ($request->hasFile('other_documents') && !empty($request['other_documents'])) {
-            $user_docs = new UserDocument();
-            $img_name = $request->file('other_documents')->getClientOriginalName();
-            $img_name = $uniq_id . '_' . $img_name;
-            $request->other_documents->storeAs('user-documents/', $img_name, 'public');
-            $user_docs->image_name =  $img_name;
-            $user_docs->user_id = Auth::id();
-            $user_docs->save();
+            foreach ($request->file('other_documents') as $file) {
+                $img_name = $file->getClientOriginalName();
+                $img_name = $uniq_id . '_' . $img_name;
+                $file->storeAs('user-documents/', $img_name, 'public');
+                $user_docs = new UserDocument();
+                $user_docs->image_name = $img_name;
+                $user_docs->user_id = Auth::id();
+                $user_docs->save();
+            }
+            return response()->json(['success' => true, 'message' => 'User Profile updated successfully']);
         }
-        return response()->json(['success' => true, 'message' => 'User Profile updated successfully']);
+        return response()->json(['success' => false, 'message' => 'User Profile updated Failed']);
 
     }
 

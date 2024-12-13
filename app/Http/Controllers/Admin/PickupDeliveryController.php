@@ -60,8 +60,8 @@ class PickupDeliveryController extends BaseController {
                 $query->where('risk', 1)
                     ->where('status', 1);
             })
-            ->orderBy('start_date', 'asc')
-            ->orderBy('end_date', 'asc')
+            ->orderBy('start_date')
+            ->orderBy('end_date',)
             ->paginate(20);
     }
 
@@ -365,7 +365,12 @@ class PickupDeliveryController extends BaseController {
             $query->where('city_code', $request->input('hub_type'));
         }
         // Paginate the results
-        $bookings = $query->paginate($perPage);
+        $bookings = $query->orderByRaw("
+            CASE
+                WHEN booking_type = 'delivery' THEN start_date
+                WHEN booking_type = 'pickup' THEN end_date
+            END ASC
+        ")->paginate($perPage);
         return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Data Fetch successfully']);
 
     }

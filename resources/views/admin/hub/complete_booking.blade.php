@@ -130,14 +130,14 @@
                             <th>Revert</th>
                             <th>Time</th>
                             <th>
-                                <input type="text" id="customer_name" name="customer_name" class="form-control" placeholder="Name">
+                                <input type="text" id="complete_customer_name" name="complete_customer_name" class="form-control" placeholder="Name">
                             </th>
-                            <th> <input type="text" id="car_model" name="car_model" class="form-control" placeholder="Model" style="padding: 0%;"></th>
-                            <th><input type="text" id="register_number" name="register_number" class="form-control" placeholder="Registration Number"></th>
+                            <th> <input type="text" id="complete_car_model" name="complete_car_model" class="form-control" placeholder="Model" style="padding: 0%;"></th>
+                            <th><input type="text" id="complete_register_number" name="complete_register_number" class="form-control" placeholder="Registration Number"></th>
                             <th>Address</th>
                             <th>User Details</th>
                             <th>D/L Number</th>
-                            <th><input type="text" id="booking_id" name="booking_id" class="form-control" style="padding: 0%    ;" placeholder="Booking ID"></th>
+                            <th><input type="text" id="complete_booking_id" name="complete_booking_id" class="form-control" style="padding: 0%    ;" placeholder="Booking ID"></th>
                             <th>Reschedule</th>
                             <th>Security Dep</th>
                             <th>Amount</th>
