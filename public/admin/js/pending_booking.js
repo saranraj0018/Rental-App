@@ -34,7 +34,7 @@ $(function () {
 
                 },
                 success: function(response) {
-                    updateBookingTable(response.data) // Populate table with new data
+                    updateBookingTable(response.data, response.permissions) // Populate table with new data
                 },
                 error: function(xhr) {
                     alertify.error('Something Went Wrong');
@@ -145,7 +145,7 @@ $(function () {
                 success: function(response) {
                     $('#cancelModal').modal('hide');
                     alertify.success('Booking has been cancelled successfully.');
-                    updateBookingTable(response.data);
+                    updateBookingTable(response.data, response.permissions);
                 },
                 error: function(xhr) {
                     alertify.error('Failed to cancel the booking. Please try again.');
@@ -166,7 +166,7 @@ $(function () {
                 success: function(response) {
                     if (response.data) {
                         alertify.success(response.message);
-                        updateBookingTable(response.data);
+                        updateBookingTable(response.data, response.permissions);
                     } else {
                         alertify.error('Failed to update status.');
                     }
@@ -197,7 +197,7 @@ $(function () {
             return `${formattedDate} ${formattedTime}`;
         }
 
-        function updateBookingTable(data) {
+        function updateBookingTable(data, permissions) {
             let tbody = $('#pending_table tbody');
             tbody.empty(); // Clear existing rows
 

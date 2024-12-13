@@ -83,7 +83,7 @@ $(function () {
                 success: function(response) {
                     $('#cancelModal').modal('hide');
                     alertify.success('Booking has been cancelled successfully.');
-                    updateBookingTable(response.data);
+                    updateBookingTable(response.data, response.permissions);
                 },
                 error: function(xhr) {
                     alertify.error('Failed to cancel the booking. Please try again.');
@@ -304,7 +304,7 @@ $(function () {
                 success: function(response) {
                     if (response.data) {
                         alertify.success(response.message);
-                        updateBookingTable(response.data);
+                        updateBookingTable(response.data, response.permissions);
                     } else {
                         alertify.error('Failed to update status.');
                     }
@@ -403,7 +403,7 @@ $(function () {
                 success: function(response) {
                     $('#riskModal').modal('hide');
                     alertify.success('Comment saved successfully!');
-                    updateBookingTable(response.data);
+                    updateBookingTable(response.data, response.permissions);
                 },
                 error: function(xhr, status, error) {
                     alertify.error(error);
@@ -435,7 +435,7 @@ $(function () {
                 success: function(response) {
                     $('#date_model').modal('hide');
                     alertify.success(response.success);
-                    updateBookingTable(response.data);
+                    updateBookingTable(response.data, response.permissions);
                 },
                 error: function(xhr, status, error) {
                     alertify.error(error);
@@ -443,7 +443,7 @@ $(function () {
             });
         });
 
-        function updateBookingTable(data) {
+        function updateBookingTable(data,permissions) {
             let tbody = $('#booking_table tbody');
             tbody.empty(); // Clear existing rows
 
@@ -567,7 +567,7 @@ $(function () {
                     status:status
                 },
                 success: function(response) {
-                    updateBookingTable(response.data)
+                    updateBookingTable(response.data, response.permissions)
                     updatePagination(response);
                 },
                 error: function(xhr) {

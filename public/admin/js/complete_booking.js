@@ -26,7 +26,7 @@ $(function () {
                     hub_type:hub_type
                 },
                 success: function(response) {
-                    updateBookingTable(response.data) // Populate table with new data
+                    updateBookingTable(response.data, response.permissions) // Populate table with new data
                 },
                 error: function() {
                     alertify.error('Something Went Wrong');
@@ -64,7 +64,7 @@ $(function () {
                 },
                 success: function(response) {
                     if (response.data){
-                        updateBookingTable(response.data)
+                        updateBookingTable(response.data, response.permissions)
                     } else {
                         alertify.error('Data Not Found');
                     }
@@ -96,7 +96,7 @@ $(function () {
             return `${formattedDate} ${formattedTime}`;
         }
 
-        function updateBookingTable(data) {
+        function updateBookingTable(data,permissions) {
             let tbody = $('#complete_booking_table tbody');
             tbody.empty(); // Clear existing rows
 

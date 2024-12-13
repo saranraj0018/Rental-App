@@ -26,7 +26,7 @@ $(function () {
                     status:status
                 },
                 success: function(response) {
-                    updateBookingTable(response.data) // Populate table with new data
+                    updateBookingTable(response.data, response.permissions) // Populate table with new data
                 },
                 error: function(xhr) {
                     alertify.error('Something Went Wrong');

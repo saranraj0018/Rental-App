@@ -151,7 +151,7 @@ $(function () {
                     booking_id: booking_id
                 },
                 success: function (response) {
-                    updateSwapTable(response.data) // Populate table with new data
+                    updateSwapTable(response.data, response.permissions) // Populate table with new data
                 },
                 error: function (xhr) {
                     alertify.error('Something Went Wrong');
@@ -159,7 +159,7 @@ $(function () {
             });
         }
 
-        function updateSwapTable(data) {
+        function updateSwapTable(data, permissions) {
             let tbody = $('#swap_table tbody');
             tbody.empty(); // Clear existing rows
 
