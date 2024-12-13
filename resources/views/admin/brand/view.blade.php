@@ -8,7 +8,10 @@
                 <span id="brand_title">{{ $brand_titles['brand_title'] ?? 'Popular Brands' }}</span>
                 <i class="fas fa-pencil-alt"></i>
                 <input type="text" class="editable-input d-none" id="brand_title_input" name="brand_title" value="{{ $brand_titles['brand_title'] ?? 'Popular Brands' }}">
+
+                @if (in_array('brands_and_vacation_create', getAdminPermissions()))
                 <button id="add-car-btn" class="btn btn-primary ml-auto d-flex" type="button">Add Car</button>
+                @endif
             </div>
         </div>
         {{--        Brand Edit section --}}
@@ -73,7 +76,11 @@
                 <span id="vacation_trip">{{ $brand_titles['vacation_trip'] ?? 'Where to next vacation trip?' }}</span>
                 <i class="fas fa-pencil-alt"></i>
                 <input type="text" class="editable-input d-none" id="vacation_trip_input" name="vacation_trip" value="{{ $brand_titles['vacation_trip'] ?? 'Where to next vacation trip?' }}">
-                <button id="add-vacation-btn" class="btn btn-primary ml-auto d-flex"  type="button">Add Vacation</button>
+
+                @if (in_array('brands_and_vacation_create', getAdminPermissions()))
+                    <button id="add-vacation-btn" class="btn btn-primary ml-auto d-flex"  type="button">Add Vacation</button>
+                @endif
+
             </div>
         </div>
         @if(!empty($brand_id) && !empty($brand_image))
@@ -151,7 +158,11 @@
                 </script>
             </div>
         @endif
+
+
+        @if (in_array('brands_and_vacation_create', getAdminPermissions()))
         <button type="submit" id="vacation_submit" class="btn btn-primary btn-block">Submit</button>
+        @endif
     </form>
     <div class="container-fluid py-4 px-5 mx-3">
         <!-- Delete Confirmation Modal -->

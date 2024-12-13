@@ -29,9 +29,7 @@ use Razorpay\Api\Api;
 class PickupDeliveryController extends BaseController {
     public function list(Request $request) {
 
-        // dd($this->getData());
-
-        $this->authorizePermission('hub_list');
+        $this->authorizePermission('hub_view');
         //  $bookings = self::getBooking();
         $city_list = City::where('city_status', 1)->pluck('name', 'code');
         return view('admin.hub.list', compact('city_list', ));
@@ -39,6 +37,7 @@ class PickupDeliveryController extends BaseController {
 
 
     public static function getBooking() {
+
         $timeLimit = now()->addHours(48);
         return Booking::with(['user', 'details', 'comments', 'user.bookings'])
             ->where('status', 1)
@@ -67,6 +66,9 @@ class PickupDeliveryController extends BaseController {
     }
 
     public function rescheduleDate(Request $request) {
+
+        $this->authorizePermission('hub_reschedule');
+
         $request->validate([
             'booking_id' => 'required|numeric',
             'car_id' => 'required|numeric',
@@ -131,6 +133,7 @@ class PickupDeliveryController extends BaseController {
     }
 
     public static function checkAvailability($startDate, $endDate, $carId, $model_id) {
+
         $availableCars = [];
 
         if (!empty($startDate) && !empty($endDate) && !empty($carId)) {
@@ -180,6 +183,7 @@ class PickupDeliveryController extends BaseController {
 
 
     public function riskCommends(Request $request) {
+
         $request->validate([
             'booking_id' => 'required|numeric',
             'commends' => 'required',
@@ -194,6 +198,7 @@ class PickupDeliveryController extends BaseController {
     }
 
     public function riskStatus(Request $request) {
+
         $request->validate([
             'booking_id' => 'required|numeric',
             'status' => 'required',
@@ -217,6 +222,10 @@ class PickupDeliveryController extends BaseController {
     }
 
     public function riskStatusPending(Request $request) {
+
+        $this->authorizePermission('hub_reschedule');
+
+
         $request->validate([
             'booking_id' => 'required|numeric',
             'status' => 'required',
@@ -253,6 +262,10 @@ class PickupDeliveryController extends BaseController {
     }
 
     public function bookingPendingCancel(Request $request) {
+
+        $this->authorizePermission('hub_cancel_booking');
+
+
         $request->validate([
             'booking_id' => 'required',
             'reason' => 'required|string|max:255',
@@ -279,6 +292,9 @@ class PickupDeliveryController extends BaseController {
     }
 
     public function bookingCancel(Request $request) {
+
+        $this->authorizePermission('hub_cancel_booking');
+
         $request->validate([
             'booking_id' => 'required',
             'reason' => 'required|string|max:255',
@@ -360,6 +376,7 @@ class PickupDeliveryController extends BaseController {
     }
 
     public function calculatePrice(Request $request) {
+
         if (!empty($request['car_model_id']) && !empty($request['start_date']) && !empty($request['end_date'])) {
 
             $car_model = CarModel::where('car_model_id', $request['car_model_id'])->first();
@@ -427,6 +444,7 @@ class PickupDeliveryController extends BaseController {
     }
 
     public static function createBooking(Request $request) {
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users',
@@ -547,6 +565,7 @@ class PickupDeliveryController extends BaseController {
 
 
     public static function carAvailablity($model_id, $start_date, $end_date, $hub_id = 0) {
+
         if (!empty($model_id)) {
             $details = CarDetails::where('model_id', $model_id);
             if (!empty($hub_id)) {
@@ -580,12 +599,16 @@ class PickupDeliveryController extends BaseController {
         return [];
     }
     public function bookingComplete() {
+
+        $this->authorizePermission('booking_completed_view');
         // $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',2)->paginate(20);
         $city_list = City::where('city_status', 1)->pluck('name', 'code');
         return view('admin.hub.complete_booking', compact('city_list'));
     }
 
     public function bookingPending() {
+
+        $this->authorizePermission('booking_pending_view');
         // $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',2)->paginate(20);
         $city_list = City::where('city_status', 1)->pluck('name', 'code');
         return view('admin.hub.pending_booking', compact('city_list'));
@@ -650,6 +673,7 @@ class PickupDeliveryController extends BaseController {
     }
 
     public function revertBooking(Request $request) {
+
         if (empty($request['booking_id'])) {
             return response()->json(['data' => [], 'message' => 'Data Fetch Failed']);
         }
@@ -660,6 +684,8 @@ class PickupDeliveryController extends BaseController {
     }
 
     public function bookingCancelList() {
+        $this->authorizePermission('booking_cancel_view');
+
         // $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',3)->paginate(20);
         $city_list = City::where('city_status', 1)->pluck('name', 'code');
         return view('admin.hub.cancel_booking', compact('city_list'));
@@ -676,6 +702,8 @@ class PickupDeliveryController extends BaseController {
      * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function export(Request $request) {
+        $this->authorizePermission('hub_export');
+
         $ext = $request->query('v');
         $dataset = $this->getData();
 

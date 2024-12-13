@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController as Controller;
 use App\Models\Frontend;
 use Illuminate\Http\Request;
 
@@ -10,13 +10,15 @@ class SettingController extends Controller
 {
     public function view($section)
     {
+
+        $this->authorizePermission('others_view');
         $item = !empty($section) ? Frontend::where('data_keys', $section)->first() : [];
         return view('admin.setting.view', compact('item', 'section'));
     }
 
     public function update(Request $request)
     {
-
+        $this->authorizePermission('others_update');
         $request->validate([
             'content' => 'required',
             'section' => 'required',

@@ -3,16 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\User as ExportsUser;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
-class UserController extends Controller {
+class UserController extends BaseController {
     public function list() {
+
+        $this->authorizePermission('user_view');
+
         $user = User::with('userDoc')->orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.user.list', compact('user'));
+        $permissions = getAdminPermissions();
+        return view('admin.user.list', compact('user', 'permissions'));
     }
 
     public function search(Request $request) {
@@ -25,16 +29,13 @@ class UserController extends Controller {
     }
 
 
-
-
-
-
     /**
      * Export data for History
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function users_export(Request $request) {
+        $this->authorizePermission('user_export');
         $ext = $request->query('v');
         $dataset = $this->getData();
 
@@ -55,6 +56,7 @@ class UserController extends Controller {
      * @param string $type
      */
     protected function getData() {
+        $this->authorizePermission('user_export');
 
         return User::with('userDoc')->orderBy('created_at', 'desc')->get([
             'name',

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController as Controller;
 use App\Models\Available;
 use App\Models\CarDetails;
 use App\Models\CarModel;
@@ -14,11 +14,15 @@ class AvailableController extends Controller
 {
     public function availableList()
     {
+        $this->authorizePermission('car_availablity_view');
         $car_available = Available::all();
         $car_model = CarModel::pluck('model_name','car_model_id');
         $city_list = City::where('city_status',1)->pluck('name','code');
         return view('admin.car-available.show',compact('car_available','car_model','city_list'));
     }
+
+
+
 
     public function available(Request $request)
     {

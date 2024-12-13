@@ -20,7 +20,7 @@ class CarDetailsController extends BaseController {
 
     public function list(Request $request) {
 
-        $this->authorizePermission('car_list_tab');
+        $this->authorizePermission('car_listing_view');
         $permissions = getAdminPermissions();
         $car_list = CarDetails::with('carModel', 'city', 'carModel.carDoc')->orderBy('created_at', 'desc')->paginate(20);
         $car_models = CarModel::all(['car_model_id', 'model_name']);
@@ -31,6 +31,9 @@ class CarDetailsController extends BaseController {
 
 
     public function history_list(Request $request) {
+
+        $this->authorizePermission('car_listing_view_history');
+
         $type = $request->query('type');
         $this->authorizePermission('car_list_history');
         $car_list = CarDetailsHistory::with('carDetails')->where('type', '=', $type)->paginate(10);
@@ -49,6 +52,9 @@ class CarDetailsController extends BaseController {
      */
     public function history_list_export(Request $request) {
 
+
+        $this->authorizePermission('car_listing_view_history');
+
         $type = $request->query('type');
         $ext = $request->query('v');
         $dataset = $this->getData($type);
@@ -65,10 +71,10 @@ class CarDetailsController extends BaseController {
 
 
     public function save(Request $request) {
-        $this->authorizePermission('car_list_add');
+        $this->authorizePermission('car_listing_create_car');
 
         if (!empty($request['car_id'])) {
-            $this->authorizePermission('car_list_edit');
+            $this->authorizePermission('car_listing_update');
         }
         $request->validate([
             'hub_city' => 'required',
@@ -96,10 +102,10 @@ class CarDetailsController extends BaseController {
 
     public function saveModels(Request $request) {
 
-        $this->authorizePermission('car_list_add_model');
+        $this->authorizePermission('car_listing_create_model');
 
         if (!empty($request['model_id'])) {
-            $this->authorizePermission('car_list_model_edit');
+            $this->authorizePermission('car_listing_update');
         }
 
         if (empty($request['model_id'])) {
@@ -178,7 +184,7 @@ class CarDetailsController extends BaseController {
     }
 
     public function delete($id) {
-        $this->authorizePermission('car_list_delete');
+        $this->authorizePermission('car_listing_delete');
         $delete_car = CarDetails::find($id);
         $delete_car->delete();
         $cars = CarDetails::with('carModel', 'city')->orderBy('created_at', 'desc')->get();

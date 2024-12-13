@@ -94,6 +94,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/calculate/swap/car', [SwapController::class, 'swapCarCalculate'])->name('calculate.swap.car');
         Route::post('/payment/link', [SwapController::class, 'sendPayment'])->name('send.payment');
 
+
         // User Role list
         Route::get('/user-role/list', [RoleController::class, 'list'])->name('user-role.list');
         Route::post('/user-role/save', [RoleController::class, 'save'])->name('user-role.save');
@@ -105,11 +106,14 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/banner', [BannerController::class, 'view'])->name('banner.list');
         Route::post('/banner/save', [BannerController::class, 'save'])->name('banner.save');
 
+
         //Coupon Section
         Route::get('/coupon/list', [CouponController::class, 'list'])->name('coupon.list');
         Route::post('/coupon/save', [CouponController::class, 'save'])->name('coupon.save');
         Route::delete('/coupon/{id?}/delete', [CouponController::class, 'delete'])->name('coupon.delete');
         Route::get('/coupon/search', [CouponController::class, 'search'])->name('coupon.search');
+
+
 
         // Front-end Car - Info Section
         Route::get('/car-info', [BannerController::class, 'carInfo'])->name('car-info.view');
@@ -120,17 +124,23 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/brand/save', [BannerController::class, 'brandSave'])->name('brand.save');
         Route::delete('/brand/{id?}/delete', [BannerController::class, 'delete'])->name('brand.delete');
 
+
+
         // Faq list
         Route::get('/faq/list', [BannerController::class, 'faqList'])->name('faq.list');
         Route::post('/faq/save', [BannerController::class, 'faqSave'])->name('faq.save');
         Route::delete('/faq/{id?}/delete', [BannerController::class, 'faqDelete'])->name('faq.delete');
         Route::get('/faq/search', [BannerController::class, 'search'])->name('faq.search');
+
         $allowedSections = ['policy', 'terms', 'shipping','refunds','pricing','cancel'];
 
         foreach ($allowedSections as $section) {
             Route::get("/{$section}/list", [SettingController::class, 'view'])->name("{$section}.list")->defaults('section', $section);
             Route::post("/{$section}/editable", [SettingController::class, 'update'])->name("{$section}.store")->defaults('section', $section);
         }
+
+
+
         // Map Section
         Route::get('/city-map', [MapController::class, 'show'])->name('city.map');
         Route::post('/save-area', [MapController::class, 'store'])->name('area.store');
@@ -154,9 +164,11 @@ Route::group(['prefix' => 'admin'], function () {
         Route::delete('/city/{id?}/delete', [CityController::class, 'delete'])->name('city.delete');
         //        Route::get('/holiday/search', [HolidayController::class, 'search'])->name('holiday.search');
 
+
         // Front-end Banner Section
         Route::get('/general', [BannerController::class, 'generalList'])->name('general.list');
         Route::post('/general/save', [BannerController::class, 'generalSave'])->name('general.save');
+
 
         Route::get('/car-available', [AvailableController::class, 'availableList'])->name('car-available.list');
         Route::get('/check-available', [AvailableController::class, 'available'])->name('available');

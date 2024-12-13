@@ -14,6 +14,8 @@ class CouponController extends BaseController
      */
     public function list(Request $request)
     {
+
+        $this->authorizePermission('coupon_view');
         $coupons = Coupon::with('user')->orderBy('created_at', 'desc')->paginate(5);
         return view('admin.coupon.list', compact('coupons'));
     }
@@ -23,6 +25,9 @@ class CouponController extends BaseController
      */
     public function save(Request $request)
     {
+
+        $this->authorizePermission('coupon_create');
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
@@ -71,13 +76,20 @@ class CouponController extends BaseController
 
     }
 
+
+
     public function delete($id)
     {
+
+
+        $this->authorizePermission('coupon_delete');
         $coupon = Coupon::find($id);
         $coupon->delete();
         $coupon_list = Coupon::with('user')->orderBy('created_at', 'desc')->paginate(5);
         return response()->json(['data'=> ['coupon' => $coupon_list->items(), 'pagination' => $coupon_list->links()->render()],'success' => 'Coupon Deleted successfully']);
     }
+
+
 
     public function search(Request $request)
     {

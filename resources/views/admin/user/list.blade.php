@@ -74,10 +74,13 @@
                     <h1>User</h1>
                 </div>
 
-                <div class="col-sm-6 text-right">
-                    <a href="{{ route('user.list.export') }}?v=csv" class="btn btn-primary ">Export CSV</a>
-                    <a href="{{ route('user.list.export') }}?v=pdf" class="btn btn-primary ">Export PDF</a>
-                </div>
+
+                @if (in_array('user_export', $permissions))
+                    <div class="col-sm-6 text-right">
+                        <a href="{{ route('user.list.export') }}?v=csv" class="btn btn-primary ">Export CSV</a>
+                        <a href="{{ route('user.list.export') }}?v=pdf" class="btn btn-primary ">Export PDF</a>
+                    </div>
+                @endif
             </div>
         </div>
         <!-- /.container-fluid -->
@@ -106,7 +109,9 @@
                                 <th>Aadhaar Number</th>
                                 <th>Driving Licence</th>
                                 <th>Update At</th>
-                                <th>Action</th>
+                                @if (in_array('user_view_docs', $permissions))
+                                    <th>Action</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -120,17 +125,21 @@
                                         <td>{{ $item->aadhaar_number ?? '' }}</td>
                                         <td>{{ $item->driving_licence ?? '' }}</td>
                                         <td>{{ showDateTime($item->updated_at) }}</td>
-                                        <td><a href="#" class="user_view text-primary w-4 h-4 mr-1"
-                                                data-id="{{ $item->id }}"
-                                                data-images="{{ json_encode($item->userDoc->pluck('image_name')) }}">
-                                                <svg class="filament-link-icon w-4 h-4 mr-1"
-                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                    fill="currentColor" aria-hidden="true">
-                                                    <path
-                                                        d="M12 4.5c4.636 0 8.604 3.094 10.314 7.5-1.71 4.406-5.678 7.5-10.314 7.5S3.396 16.406 1.686 12C3.396 7.594 7.364 4.5 12 4.5zm0 2.25a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5zM12 9a3 3 0 110 6 3 3 0 010-6z" />
-                                                </svg>
-                                            </a>
-                                        </td>
+
+                                        @if (in_array('user_view_docs', $permissions))
+                                            <td><a href="#" class="user_view text-primary w-4 h-4 mr-1"
+                                                    data-id="{{ $item->id }}"
+                                                    data-images="{{ json_encode($item->userDoc->pluck('image_name')) }}">
+                                                    <svg class="filament-link-icon w-4 h-4 mr-1"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        fill="currentColor" aria-hidden="true">
+                                                        <path
+                                                            d="M12 4.5c4.636 0 8.604 3.094 10.314 7.5-1.71 4.406-5.678 7.5-10.314 7.5S3.396 16.406 1.686 12C3.396 7.594 7.364 4.5 12 4.5zm0 2.25a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5zM12 9a3 3 0 110 6 3 3 0 010-6z" />
+                                                    </svg>
+                                                </a>
+                                            </td>
+                                        @endif
+
                                     </tr>
                                 @endforeach
                             @else

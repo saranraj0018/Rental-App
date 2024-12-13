@@ -1,4 +1,5 @@
-<div class="modal fade" id="add_user_role" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
+<div class="modal fade" id="add_user_role" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -28,9 +29,180 @@
 </div>
 
 
-{{--Edit User Role with permission--}}
+@php
 
-<div class="modal fade" id="edit_user_role" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
+    $permissions = [
+        [
+            'name' => 'User',
+            'slug' => 'user',
+            'permissions' => [
+                'view' => 'View User List',
+                'view_docs' => 'View User Documents',
+                'export' => 'Export User Data',
+            ],
+        ],
+
+        [
+            'name' => 'City List',
+            'slug' => 'city_list',
+            'permissions' => [
+                'view' => 'View City List',
+                'create' => 'Create City',
+                'update' => 'Update City',
+                'delete' => 'Delete City',
+            ],
+        ],
+
+        [
+            'name' => 'Cities Map',
+            'slug' => 'cities_map',
+            'permissions' => [
+                'view' => 'View Cities Map',
+                'create' => 'Create Cities Map',
+            ],
+        ],
+
+        [
+            'name' => 'Car Listing',
+            'slug' => 'car_listing',
+            'permissions' => [
+                'view' => 'View Car List',
+                'view_history' => 'View Car History',
+                'create_car' => 'Create Car',
+                'create_model' => 'Create Car Model',
+                'update' => 'Update Car/Model',
+                'delete' => 'Delete Car/Model',
+            ],
+        ],
+
+        [
+            'name' => 'Car Block',
+            'slug' => 'car_block',
+            'permissions' => [
+                'view' => 'View Car Block',
+                'create' => 'Create Car Block',
+                'update' => 'Update Car Block',
+            ],
+        ],
+
+        [
+            'name' => 'Car Availability',
+            'slug' => 'car_availablity',
+            'permissions' => [
+                'view' => 'View Car Availability',
+            ],
+        ],
+
+        [
+            'name' => 'Roles and Permissions',
+            'slug' => 'roles',
+            'permissions' => [
+                'view' => 'View Roles',
+                'create' => 'Create Roles',
+                'update' => 'Update Roles',
+                'delete' => 'Delete Roles',
+            ],
+        ],
+
+        [
+            'name' => 'Holidays',
+            'slug' => 'holidays',
+            'permissions' => [
+                'view' => 'View Holidays',
+                'create' => 'Create Holidays',
+                'update' => 'Update Holidays',
+                'delete' => 'Delete Holidays',
+            ],
+        ],
+
+        [
+            'name' => 'General Settings',
+            'slug' => 'general_settings',
+            'permissions' => [
+                'view' => 'View General Settings',
+                'update' => 'Update General Settings',
+            ],
+        ],
+
+        [
+            'name' => 'Banner Section',
+            'slug' => 'banner_section',
+            'permissions' => [
+                'view' => 'View Banner Section',
+                'update' => 'Update Banner Section',
+            ],
+        ],
+
+        [
+            'name' => 'Coupons',
+            'slug' => 'coupon',
+            'permissions' => [
+                'view' => 'View Coupons',
+                'create' => 'Create Coupons',
+                'update' => 'Update Coupons',
+                'delete' => 'Delete Coupons',
+            ],
+        ],
+
+        [
+            'name' => 'Real-Time Information',
+            'slug' => 'real_time_information',
+            'permissions' => [
+                'view' => 'View Real-Time Information',
+                'update' => 'Update Real-Time Information',
+            ],
+        ],
+
+        [
+            'name' => 'FAQs',
+            'slug' => 'faq',
+            'permissions' => [
+                'view' => 'View FAQs',
+                'create' => 'Create FAQs',
+                'update' => 'Update FAQs',
+                'delete' => 'Delete FAQs',
+            ],
+        ],
+
+        [
+            'name' => 'Others',
+            'slug' => 'others',
+            'permissions' => [
+                'view' => 'View Others',
+                'update' => 'Update Others',
+            ],
+        ],
+
+        [
+            'name' => 'Important Points',
+            'slug' => 'important_points',
+            'permissions' => [
+                'view' => 'View Important Points',
+                'update' => 'Update Important Points',
+            ],
+        ],
+
+        [
+            'name' => 'Hub and Booking Management',
+            'slug' => 'hub',
+            'permissions' => [
+                'export' => 'Export Hub Data',
+                'create' => 'Create Hub',
+                'view_user_details' => 'View User Details',
+                'reschedule' => 'Reschedule Hub',
+                'view_amount_details' => 'View Hub Amount Details',
+                'cancel_booking' => 'Cancel Hub Booking',
+                'booking_cancel' => 'View Cancelled Bookings',
+                'booking_pending' => 'View Pending Bookings',
+                'booking_completed' => 'View Completed Bookings',
+            ],
+        ],
+    ];
+
+@endphp
+
+<div class="modal fade" id="edit_user_role" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -45,129 +217,31 @@
                         <label for="register_number">User</label>
                         <input type="text" class="form-control" id="user_role" disabled>
                     </div>
-                    <div class="form-row mt-2">
-                        <div class="form-group col-md-12">
-                            <label for="roles">Car Listing:</label>
-                            <div id="roles">
-                                <!-- Example checkboxes -->
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="car_list_tab" value="car_list_tab" name="role[]">
-                                    <label class="form-check-label" for="car_list_tab">
-                                        Car Listing Tab
-                                    </label>
-                                </div>
 
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="car_list_add" value="car_list_add" name="role[]">
-                                    <label class="form-check-label" for="car_list_add">
-                                        Add-cars
-                                    </label>
+                    <div class="mt-5">
+                        @foreach ($permissions as $perm)
+                            <div class="form-row mt-2">
+                                <div class="form-group col-md-12">
+                                    <label for="roles">{{ $perm['name'] }}</label>
+                                    <div id="roles">
+                                        @foreach ($perm['permissions'] as $guard)
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input perm" type="checkbox"
+                                                    id="{{ $perm['slug'] . '_' . array_keys($perm['permissions'], $guard)[0] }}"
+                                                    name="role[]"
+                                                    value="{{ $perm['slug'] . '_' . array_keys($perm['permissions'], $guard)[0] }}">
+                                                <label class="form-check-label"
+                                                    for="{{ $perm['slug'] . '_' . array_keys($perm['permissions'], $guard)[0] }}">
+                                                    {{ $guard }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="car_list_add_model" value="car_list_add_model" name="role[]">
-                                    <label class="form-check-label" for="car_list_add_model">
-                                        Add-models
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="car_list_edit" id="car_list_edit" name="role[]">
-                                    <label class="form-check-label" for="car_list_edit">
-                                        Edit-cars
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="car_list_model_edit" id="car_list_model_edit" name="role[]">
-                                    <label class="form-check-label" for="car_list_model_edit">
-                                        Edit-cars-model
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="car_list_delete" id="car_list_delete" name="role[]">
-                                    <label class="form-check-label" for="car_list_delete">
-                                        Delete-cars
-                                    </label>
-                                </div>
-                                <!-- Add more checkboxes as needed -->
                             </div>
-                        </div>
+                        @endforeach
                     </div>
-                    <div class="form-row mt-2">
-                        <div class="form-group col-md-12">
-                            <label for="roles">Car Availability:</label>
-                            <div id="roles">
-                                <!-- Example checkboxes -->
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="car_bk_tab" id="car_bk_tab" name="role[]">
-                                    <label class="form-check-label" for="car_bk_tab">
-                                        Car Availability Tab
-                                    </label>
-                                </div>
-
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="car_av_add" id="car_av_add" name="role[]">
-                                    <label class="form-check-label" for="car_av_add">
-                                        Add-cars-block
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="car_av_edit" id="car_av_edit" name="role[]">
-                                    <label class="form-check-label" for="car_av_edit">
-                                        Edit-cars-block
-                                    </label>
-                                </div>
-                                <!-- Add more checkboxes as needed -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row mt-2">
-                        <div class="form-group col-md-12">
-                            <label for="roles">Role:</label>
-                            <div id="roles">
-                                <!-- Example checkboxes -->
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="role_tab" id="role_tab" name="role[]">
-                                    <label class="form-check-label" for="role_tab">
-                                        User Role Tab
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="role_add" id="role_add" name="role[]">
-                                    <label class="form-check-label" for="role_add">
-                                        Add-role
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="role_edit" id="role_edit" name="role[]">
-                                    <label class="form-check-label" for="role_edit">
-                                        Edit-role
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="role_delete" id="role_delete"  name="role[]">
-                                    <label class="form-check-label" for="role_delete">
-                                        Delete-role
-                                    </label>
-                                </div>
-                                <!-- Add more checkboxes as needed -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row mt-2">
-                        <div class="form-group col-md-12">
-                            <label for="roles">Hub:</label>
-                            <div id="roles">
-                                <!-- Example checkboxes -->
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="hub_list" id="hub_list" name="role[]">
-                                    <label class="form-check-label" for="hub_list">
-                                        Hub List Tab
-                                    </label>
-                                </div>
-                                <!-- Add more checkboxes as needed -->
-                            </div>
-                        </div>
-                    </div>
-                    <input type="hidden" id="role_id"  name="role_id">
+                    <input type="hidden" id="role_id" name="role_id">
                     <div class="form-row mt-3">
                         <div class="form-group col-md-6">
                             <button type="submit" id="update_user_role" class="btn btn-primary mb-2">Save</button>
@@ -199,4 +273,3 @@
         </div>
     </div>
 </div>
-
