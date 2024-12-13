@@ -14,6 +14,12 @@ class CarBlock extends Model {
 
 
 
+    public function details() {
+        return $this->belongsTo(CarDetails::class, 'car_register_number', 'register_number');
+    }
+
+
+
 
 
     protected static function boot() {

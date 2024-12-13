@@ -17,14 +17,14 @@
                 <!-- Add icons to the links using the .nav-icon class
                     with font-awesome or any other icon font library -->
 
-                @if (in_array('dashboard_view', $permissions))
+                {{-- @if (in_array('dashboard_view', $permissions)) --}}
                     <li class="nav-item">
-                        <a href="dashboard.html" class="nav-link">
+                        <a href="{{ route('admin.dashboard') }}" class="nav-link">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>Dashboard</p>
                         </a>
                     </li>
-                @endif
+                {{-- @endif  --}}
                 @if (in_array('hub_view', $permissions))
                     <li class="nav-item">
                         <a href="{{ route('pickup-delivery.list') }}" class="nav-link">
