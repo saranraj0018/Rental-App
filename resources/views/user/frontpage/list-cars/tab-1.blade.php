@@ -4,7 +4,7 @@
             <div class="container">
                 <div class="ac-car-active bdr-20 mb-3">
                     <div class="float-end p-3"
-                        style="display: @if ($_setting['show_bookmarks'] == 1) inherit @else none @endif">
+                        style="display: @if ($timing_setting['show_bookmarks'] == 1) inherit @else none @endif">
                         <div class="save-icon my-auto">
                             <i class="fas fa-bookmark text-blue"></i>
                         </div>
@@ -20,7 +20,7 @@
                         <div class="col-5 my-auto">
                             <div class="ms-4">
                                 <div class="d-flex"
-                                    style="display: @if ($_setting['show_bookmarks'] == 1) flex @else none @endif !important">
+                                    style="display: @if ($timing_setting['show_bookmarks'] == 1) flex @else none @endif !important">
                                     <div class="bg-white rounded-pill w-fit px-1 fw-600 fs-12 my-auto px-2 py-1">
                                         <i class="fas fa-star" style="color:#E66742;"></i> 4.5
                                     </div>

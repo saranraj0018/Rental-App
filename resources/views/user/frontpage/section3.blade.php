@@ -18,7 +18,7 @@
                         <div class="item">
                             <div class="r2dc-card-bg p-3">
                                 <div class="d-flex justify-content-between"
-                                    style="display: @if ($_setting['show_bookmarks'] == 1) flex @else none @endif !important">
+                                    style="display: @if (!empty($timing_setting['show_bookmarks']) && $timing_setting['show_bookmarks'] == 1) flex @else none @endif !important">
                                     <div class="d-flex">
                                         <div class="bg-white rounded-pill w-fit px-2 py-1 fw-500 fs-15 my-auto">
                                             <i class="fas fa-star" style="color:#E66742;"></i> 4.5

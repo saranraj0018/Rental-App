@@ -201,6 +201,7 @@
 
             if ("{{ $data['show_bookmarks'] }}" == '1') {
                 $('#toggle-button').toggleClass('on');
+
             }
 
             if ($('#toggle-button').hasClass('on')) {
@@ -209,6 +210,9 @@
             } else {
                 $('#toggle-button').css('background-color', 'red');
             }
+            $('#toggle-button').find('.label.off').toggle(!$('#toggle-button').hasClass('on'));
+            $('#toggle-button').find('.label.on').toggle($('#toggle-button').hasClass('on'));
+            $('#toggle-value').val("{{ $data['show_bookmarks'] }}");
         });
 
 

@@ -6,7 +6,7 @@
                      <div class="col-6 col-lg-4 mb-4">
                          <div class="r2dc-card-bg p-3">
                              <div class="d-flex justify-content-between"
-                                 style="display: @if ($_setting['show_bookmarks'] == 1) flex @else none @endif !important">
+                                 style="display: @if ($timing_setting['show_bookmarks'] == 1) flex @else none @endif !important">
                                  <div>
                                      <div class="bg-white rounded-pill w-fit px-1 fw-500 fs-15 my-auto">
                                          <i class="fas fa-star" style="color:#E66742;"></i> 4.5
