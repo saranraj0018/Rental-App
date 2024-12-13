@@ -53,7 +53,7 @@
                         @if(filled($user_role))
                             @foreach($user_role as $item)
                                 <tr>
-                                    <td>{{ $item->id }}</td>
+                                    <td>{{$loop->iteration}}</td>
                                     <td>{{ $item->user_role }}</td>
                                     <td>{{ $item->user->email ?? '' }}</td>
                                     <td>{{ showDateTime($item->updated_at) }}</td>

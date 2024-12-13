@@ -186,15 +186,22 @@
             'name' => 'Hub and Booking Management',
             'slug' => 'hub',
             'permissions' => [
+              'view' => 'View Hub Data',
                 'export' => 'Export Hub Data',
                 'create' => 'Create Hub',
                 'view_user_details' => 'View User Details',
                 'reschedule' => 'Reschedule Hub',
                 'view_amount_details' => 'View Hub Amount Details',
                 'cancel_booking' => 'Cancel Hub Booking',
-                'booking_cancel' => 'View Cancelled Bookings',
-                'booking_pending' => 'View Pending Bookings',
-                'booking_completed' => 'View Completed Bookings',
+            ],
+        ],
+        [
+            'name' => 'Bookings',
+            'slug' => 'booking',
+            'permissions' => [
+                'completed_view' => 'Booking Complete',
+                'pending_view' => 'Booking Pending',
+                'cancel_view' => 'Booking Cancel',
             ],
         ],
     ];

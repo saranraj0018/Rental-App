@@ -203,9 +203,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            if ("{{ $data['show_bookmarks'] }}" == '1') {
-                $('#toggle-button').toggleClass('on');
 
+            if ( "{{ !empty($data['show_bookmarks']) }}") {
+                $('#toggle-button').toggleClass('on');
             }
 
             if ($('#toggle-button').hasClass('on')) {
@@ -216,7 +216,7 @@
             }
             $('#toggle-button').find('.label.off').toggle(!$('#toggle-button').hasClass('on'));
             $('#toggle-button').find('.label.on').toggle($('#toggle-button').hasClass('on'));
-            $('#toggle-value').val("{{ $data['show_bookmarks'] }}");
+            $('#toggle-value').val("{{ !empty($data['show_bookmarks']) }}");
         });
 
 

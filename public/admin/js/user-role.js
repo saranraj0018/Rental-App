@@ -77,17 +77,6 @@ $(function () {
             modal.modal('show');
         });
 
-
-        // $('.perm').on('change', (e) => {
-        //     if (e.target.checked) {
-        //         e.target.value = '1'; // Set value to 1 if checked
-        //     } else {
-        //         e.target.value = '0'; // Set value to 0 if unchecked
-        //     }
-        // });
-
-
-
         $('#user_role_edit_form').on('submit', function (e) {
             e.preventDefault();
             // $('#update_user_role').prop('disabled', true);  // Disable submit button during AJAX
@@ -121,15 +110,15 @@ $(function () {
             } else {
                 window.history.pushState(null, '', '/admin/user-role/list?page=' + 1);
                 $.each(data.role, function (index, item) {
-                    let editPermission = permission.includes('role_edit');
-                    let deletePermission = permission.includes('role_delete');
+                    let editPermission = permission.includes('roles_update');
+                    let deletePermission = permission.includes('roles_delete');
 
                     tbody.append(`
                 <tr>
-                    <td>${item.id}</td>
+                      <td>${index + 1}</td>
                     <td>${item.user_role}</td>
                     <td>${item.user ? item.user.email : ''}</td>
-                    <td>${item.created_at}</td>
+                    <td>${formatDateTime(item.created_at)}</td>
                     <td>
                         ${editPermission ? `
                             <a href="javascript:void(0)" class="role_edit"
@@ -159,6 +148,10 @@ $(function () {
                     $(this).attr('href', newBaseUrl); // Set the new URL
                 });
             }
+        }
+        function formatDateTime(dateString) {
+            let date = new Date(dateString);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
         }
         // Delete Car
         let deleteId;

@@ -76,7 +76,7 @@
                             @if (filled($car_list))
                                 @foreach ($car_list as $item)
                                     <tr>
-                                        <td>{{ $item->id }}</td>
+                                        <td>{{$loop->iteration}}</td>
                                         <td>{{ $item->carModel->model_name ?? '' }}
                                             @if (in_array('car_list_model_edit', $permissions) && !empty($item->carModel))
                                                 - <a href="javascript:void(0)" class="edit_model"
