@@ -184,6 +184,8 @@ class PickupDeliveryController extends BaseController {
 
     public function riskCommends(Request $request) {
 
+        $this->authorizePermission('hub_risk_comments');
+
         $request->validate([
             'booking_id' => 'required|numeric',
             'commends' => 'required',
@@ -223,8 +225,7 @@ class PickupDeliveryController extends BaseController {
 
     public function riskStatusPending(Request $request) {
 
-        $this->authorizePermission('hub_reschedule');
-
+        $this->authorizePermission('hub_risk_status');
 
         $request->validate([
             'booking_id' => 'required|numeric',
@@ -264,7 +265,6 @@ class PickupDeliveryController extends BaseController {
     public function bookingPendingCancel(Request $request) {
 
         $this->authorizePermission('hub_cancel_booking');
-
 
         $request->validate([
             'booking_id' => 'required',
@@ -444,6 +444,10 @@ class PickupDeliveryController extends BaseController {
     }
 
     public static function createBooking(Request $request) {
+
+        $this->authorizePermission('hub_create');
+
+
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -673,6 +677,8 @@ class PickupDeliveryController extends BaseController {
     }
 
     public function revertBooking(Request $request) {
+
+        $this->authorizePermission('booking_revert');
 
         if (empty($request['booking_id'])) {
             return response()->json(['data' => [], 'message' => 'Data Fetch Failed']);

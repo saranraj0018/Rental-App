@@ -77,7 +77,7 @@ $(function () {
                     data: $(this).serialize(),
                     success: function(response) {
                         $('#create_car').modal('hide');
-                        updateTable(response.data);
+                        updateTable(response.data, response.permissions);
                         alertify.success(response.success);
                     },
                     error: function(response) {
@@ -110,7 +110,7 @@ $(function () {
 
 
         });
-        function updateTable(data) {
+        function updateTable(data,permissions) {
             let tbody = $('#car_table tbody');
             tbody.empty(); // Clear existing rows
 
@@ -147,7 +147,9 @@ $(function () {
                     <td>${item.city ? item.city.name : ''}</td>
                     <td>${item.created_at}</td>
                     <td>
-                                    <a href="javascript:void(0)" class="btnEdit" data-id="${item.id}"
+
+                    ${permissions.includes('car_listing_update') ? `
+                    <a href="javascript:void(0)" class="btnEdit" data-id="${item.id}"
                            data-hub="${item.city_code}"
                            data-model="${item.model_id}"
                            data-register_number="${item.register_number}"
@@ -156,11 +158,14 @@ $(function () {
                                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
                                         </svg>
                                     </a>
+                                    ` : ''}
+                                    ${permissions.includes('car_listing_delete') ? `
                                     <a href="#"  class="delete_btn text-danger w-4 h-4 mr-1" data-id="${item.id}">
                                         <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                             <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                                         </svg>
                                     </a>
+                                    ` : ''}
                                 </td>
                 </tr>
             `                   );
@@ -250,7 +255,7 @@ $(function () {
                 type: 'DELETE',
                 success: function(response) {
                     $('#deleteModal').modal('hide');  // Hide the modal
-                    updateTable(response.data);
+                    updateTable(response.data, response.permissions);
                     alertify.success(response.success);
 
                 },
@@ -347,7 +352,7 @@ $(function () {
                 success: function(response) {
                     // Clear existing table rows
                     $('#car_table tbody').empty();
-                    updateTable(response.data);
+                    updateTable(response.data, response.permissions);
                     // Populate table with new data
                 },
                 error: function(xhr) {

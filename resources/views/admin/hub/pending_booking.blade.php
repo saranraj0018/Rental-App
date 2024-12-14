@@ -133,8 +133,14 @@
                         <thead>
                         <tr>
                             <th>Booking<br>Type</th>
+                            @if (in_array('hub_risk_status', getAdminPermissions()) || in_array('hub_risk_comments', getAdminPermissions()))
                             <th>Risk</th>
+                            @endif
+
+                            @if (in_array('hub_risk_status', getAdminPermissions()))
                             <th>Done</th>
+                            @endif
+
                             <th>Time</th>
                             <th>
                                 <input type="text" id="customer_name" name="customer_name" class="form-control" placeholder="Name">
@@ -148,7 +154,10 @@
                             <th>Reschedule</th>
                             <th>Security Dep</th>
                             <th>Amount</th>
+
+                            @if (in_array('hub_cancel_booking', getAdminPermissions()))
                             <th>Action</th>
+                            @endif
                         </tr>
                         </thead>
                         <tbody>

@@ -46,7 +46,7 @@ $(function () {
                     name_search: name_search
                 },
                 success: function(response) {
-                    updateHolidayTable(response.data) // Populate table with new data
+                    updateHolidayTable(response.data, response.permissions) // Populate table with new data
                 },
                 error: function(xhr) {
                     alertify.error('Something Went Wrong');

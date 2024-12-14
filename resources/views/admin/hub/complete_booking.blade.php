@@ -127,7 +127,10 @@
                         <thead>
                         <tr>
                             <th>Booking<br>Type</th>
+                            @if (in_array('booking_revert', getAdminPermissions()))
+
                             <th>Revert</th>
+                            @endif
                             <th>Time</th>
                             <th>
                                 <input type="text" id="complete_customer_name" name="complete_customer_name" class="form-control" placeholder="Name">

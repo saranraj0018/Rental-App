@@ -26,7 +26,7 @@ $(function () {
                     hub_type:hub_type
                 },
                 success: function(response) {
-                    updateBookingTable(response.data) // Populate table with new data
+                    updateBookingTable(response.data, response.permissions) // Populate table with new data
                 },
                 error: function() {
                     alertify.error('Something Went Wrong');
@@ -64,7 +64,7 @@ $(function () {
                 },
                 success: function(response) {
                     if (response.data){
-                        updateBookingTable(response.data)
+                        updateBookingTable(response.data, response.permissions)
                     } else {
                         alertify.error('Data Not Found');
                     }
@@ -96,7 +96,7 @@ $(function () {
             return `${formattedDate} ${formattedTime}`;
         }
 
-        function updateBookingTable(data) {
+        function updateBookingTable(data,permissions) {
             let tbody = $('#complete_booking_table tbody');
             tbody.empty(); // Clear existing rows
 
@@ -120,11 +120,16 @@ $(function () {
                     tbody.append(`
                 <tr class="${item.risk === 1 ? 'bg-light-red' : item.status === 2 ? 'bg-light-green' : ''}">
                     <td>${item.booking_type === 'pickup' ? '<h2>P</h2>' : '<h2>D</h2>'}</td>
+
+                    ${permissions.includes('booking_revert') ? `
+
                     <td>
                        <button class="btn btn-warning revert" data-id="${item.id}">
                         Revert
                         </button>
                     </td>
+                    ` : ''}
+
                     <td>${formatDateTime(item.start_date)}<br>
 <p class="text-danger">${rescheduleDate}</p></td>
                     <td>${item.user ? item.user.name : ''}</td>
