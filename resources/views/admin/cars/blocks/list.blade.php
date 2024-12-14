@@ -18,7 +18,7 @@
             margin-left: 50px !important;
         }
     </style>
-    
+
     <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
@@ -106,6 +106,9 @@
                                                     </svg>
                                                 </a>
                                             @endif
+
+                                            @if (in_array('car_block_delete', $permissions))
+
                                             <a href="#" class="delete_block_model text-danger w-4 h-4 mr-1"
                                                 data-id="{{ $item->id }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1"
@@ -116,6 +119,7 @@
                                                         clip-rule="evenodd"></path>
                                                 </svg>
                                             </a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
