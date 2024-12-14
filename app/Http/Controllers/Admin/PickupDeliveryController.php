@@ -315,6 +315,7 @@ class PickupDeliveryController extends BaseController {
         if (!empty($request->input('booking_id'))) {
             $booking = Booking::with(['user', 'details', 'comments', 'user.bookings'])
                 ->where('city_code', $request['hub_type'] ?? 632)
+                ->where('status', $request['status'])
                 ->where('booking_id', $request->input('booking_id'));
 
             $bookings = $booking->paginate($perPage);
@@ -444,10 +445,6 @@ class PickupDeliveryController extends BaseController {
     }
 
     public static function createBooking(Request $request) {
-
-        $this->authorizePermission('hub_create');
-
-
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -692,7 +689,7 @@ class PickupDeliveryController extends BaseController {
     public function bookingCancelList() {
         $this->authorizePermission('booking_cancel_view');
 
-        // $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',3)->paginate(20);
+         $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',3)->paginate(20);
         $city_list = City::where('city_status', 1)->pluck('name', 'code');
         return view('admin.hub.cancel_booking', compact('city_list'));
     }

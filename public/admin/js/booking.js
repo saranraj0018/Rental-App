@@ -163,7 +163,6 @@ $(function () {
                     },
                     success: function (response) {
                         if (response.success) {
-                            console.log(response)
                             $('#model_name').text(response.car_model.model_name ?? '');
                             $('#total_days').text(response.total_days ?? 0);
                             $('#total_hours').text(response.total_hours ?? 0);

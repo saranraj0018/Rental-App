@@ -27,7 +27,6 @@ $(function () {
 
     $('#login_payment').on('click', function() {
         let text = $(this).text();
-        console.log(text)
        if (text === 'Login To Proceed Payment'){
            $('#mobileModal').modal('show');
        }
@@ -149,8 +148,6 @@ $(function () {
                             let element = $('#' + key);
                             // For other form controls
                             element.addClass('is-invalid');
-                            console.log(value[0])
-                            console.log(key)
                             // Display the error message
                             element.siblings('.invalid-feedback').text(value[0]);
                         });

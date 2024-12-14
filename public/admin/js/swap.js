@@ -121,13 +121,11 @@ $(function () {
             e.preventDefault();
             let booking_id = $('#booking_id').val();
             let amount = $('#amount').val();
-            console.log(amount)
             $.ajax({
                 url: '/admin/payment/link',
                 type: 'POST',
                 data: { booking_id : booking_id,amount :amount},
                 success: function (data) {
-                    console.log(data)
                     if (data.success) {
                         $('#payment_success').text(data.success);
                     } else {

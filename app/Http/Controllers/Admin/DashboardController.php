@@ -15,26 +15,12 @@ class DashboardController extends Controller {
     public function view() {
         return view('admin.dashboard', ['hubs' => City::where('city_status', 1)->where('name', '!=', '')->pluck('name')->toArray()]);
     }
-
-
-    /**
-     * {
-     data: ['1','2'],
-     label: 'Available Cars',
-     backgroundColor: 'rgba(73, 80, 87, 0.5)',
-     borderColor: 'rgba(73, 80, 87, 1)',
-     borderWidth: 1
-     *  }
-     */
-
-
-
     public function dataset(Request $request) {
 
         $hub = $request->query('hub');
 
         # get available list
-        $_available = Available::where('start_date', '>=', now())->pluck('car_id')->toArray();
+        $_available = Available::where('start_date', '>=', now())->pluck('car_id','id')->toArray();
         $_blocked = CarBlock::where('start_date', '>=', now())->pluck('car_register_number')->toArray();
 
         # get cars list
@@ -42,9 +28,9 @@ class DashboardController extends Controller {
 
         $main = collect($cars)->map(function ($car) use ($_available, $_blocked) {
             return [
-                'id' => $car['id'],
+                'id' => !empty($car['id']) ? $car['id'] : 0,
                 "city" => !empty($car["city"]["name"]) ? $car["city"]["name"] : '',
-                "booked" => in_array('id', $_available),
+                "booked" => in_array($car['id'], $_available),
                 "blocked" => in_array('register_number', $_blocked)
             ];
         })->filter(fn($hub) => $hub["city"] != "");

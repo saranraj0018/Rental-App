@@ -118,7 +118,6 @@
                 let selectedCity = $(this).val();
                 if (cityCoords[selectedCity]) {
                     const coords = cityCoords[selectedCity];
-                    console.log(coords)
                     if (Number.isFinite(coords.lat) && Number.isFinite(coords.lng)) {
                         map.setCenter({
                             lat: coords.lat,

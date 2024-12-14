@@ -46,7 +46,6 @@ $(function () {
 
                     const bookings = response.bookings;
                     if (!Array.isArray(bookings)) {
-                        console.error('Expected bookings to be an array:', bookings);
                         return;
                     }
 
@@ -129,7 +128,6 @@ $(function () {
                 },
 
                 error: function(xhr) {
-                    console.error('Error fetching data:', xhr);
                     alert('An error occurred while fetching registration numbers.');
                 }
             });

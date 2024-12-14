@@ -255,7 +255,6 @@ $(function () {
                         coupon_code: coupon_search
                     },
                     success: function(response) {
-                        console.log(response)
                         updateCouponTable(response.data, response.permissions) // Populate table with new data
                     },
                     error: function(xhr) {
