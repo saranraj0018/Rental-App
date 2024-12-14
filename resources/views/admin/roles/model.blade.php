@@ -82,6 +82,7 @@
                 'view' => 'View Car Block',
                 'create' => 'Create Car Block',
                 'update' => 'Update Car Block',
+                'delete' => 'Delete Car Block',
             ],
         ],
 

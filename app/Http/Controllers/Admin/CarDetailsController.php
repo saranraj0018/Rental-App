@@ -51,7 +51,6 @@ class CarDetailsController extends BaseController {
      */
     public function history_list_export(Request $request) {
 
-
         $this->authorizePermission('car_listing_view_history');
 
         $type = $request->query('type');
