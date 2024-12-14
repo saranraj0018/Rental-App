@@ -32,6 +32,14 @@
 @php
 
     $permissions = [
+    [
+            'name' => 'Dashboard',
+            'slug' => 'dashboard',
+            'permissions' => [
+                'view' => 'View Dashboard',
+
+            ],
+        ],
         [
             'name' => 'User',
             'slug' => 'user',

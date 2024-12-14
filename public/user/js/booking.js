@@ -71,7 +71,7 @@ $(function () {
         flatpickr("#delivery_date", {
             minDate: "today",
             enableTime: true,
-            dateFormat: "d-m-Y | H:i",
+            dateFormat: "d-m-Y H:i",
             time_24hr: true,
             minuteIncrement: 30, // 30-minute intervals
             allowInput: true,
@@ -81,7 +81,7 @@ $(function () {
             const endDate = $('#end_date').val();
             const model_id = $('#model_id').val();
             const date = $('#delivery_date').val();
-            let deliveryDate = date.replace(/\|/g, '').trim();
+            let deliveryDate = date.replace(/\|/g,'').trim();
 
             if (!deliveryDate) {
                 $('#delivery_date').addClass('is-invalid');

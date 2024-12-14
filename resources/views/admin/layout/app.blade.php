@@ -21,18 +21,9 @@
     <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}">
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-        integrity="sha512-zR2Th8GQP4h1sAMe89xYJnIrV4eKVd0O32nK+BmYC0857BNY6xCr1G0h+QMIm20AKs+WvL6MyZ7SMB1rSjM0RDJmVP"
-        crossorigin="anonymous" />
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-zR2Th8GQP4h1sAMe89xYJnIrV4eKVd0O32nK+BmYC0857BNY6xCr1G0h+QMIm20AKs+WvL6MyZ7SMB1rSjM0RDJmVP" crossorigin="anonymous"/>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
-
-
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
@@ -112,6 +103,8 @@
     <script src="{{ asset('admin/plugins/moment/moment.min.js') }}"></script>
     <script src="{{ asset('admin/plugins/bootstrap-4-master/build/js/tempusdominus-bootstrap-4.min.js') }}"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('admin/js/demo.js') }}"></script>
     <script type="text/javascript">

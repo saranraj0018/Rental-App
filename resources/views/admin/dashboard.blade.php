@@ -115,7 +115,7 @@
                     @endforeach
                 </select>
             </div>
-            <button type="button" class="btn btn-secondary px-2" id="searchBtn">
+            <button type="button" class="btn btn-secondary px-2 p-1 mb-3" id="searchBtn">
                 <i class="fas fa-search" style="color: white;"></i>
             </button>
         </form>
@@ -146,22 +146,26 @@
 
 @section('customJs')
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const hubFilter = document.getElementById('hubFilter');
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hubFilter = document.getElementById('hubFilter');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        // Set CSRF token for axios
-        axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+            // Set CSRF token for axios
+            axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
 
-        // Fetch and load dashboard data
-        function loadDashboardData(hub = 'all') {
-            axios.get(`{{ url('/') }}/admin/dashboard/dataset`, { params: { hub } })
-                .then(response => {
-                    const data = response.data;
+            // Chart instances
+            let barChartInstance = null;
+            let pieChartInstance = null;
 
-                    // Update the cards with data
-                    document.getElementById('dashboardCards').innerHTML = `
+            // Fetch and load dashboard data
+            function loadDashboardData(hub = 'all') {
+                axios.get(`{{ url('/') }}/admin/dashboard/dataset`, { params: { hub } })
+                    .then(response => {
+                        const data = response.data;
+
+                        // Update the cards with data
+                        document.getElementById('dashboardCards').innerHTML = `
                         <div class="col-md-3">
                             <div class="card">
                                 <div class="card-body">
@@ -200,61 +204,73 @@
                         </div>
                     `;
 
-                    // Update the charts with data
-                    const barChartData = {
-                        labels: data.hubs_list,
-                        datasets: [{
-                            label: 'Available Cars',
-                            data: data.hubs_available,
+                        // Update the bar chart data
+                        const barChartData = {
+                            labels: data.hubs_list,
+                            datasets: [{
+                                label: 'Available Cars',
+                                data: data.hubs_available,
+                            }, {
+                                label: 'Booked Cars',
+                                data: data.hubs_booked,
+                            }, {
+                                label: 'Blocked Cars',
+                                data: data.hubs_blocked,
+                            }]
+                        };
 
-                        }, {
-                            label: 'Booked Cars',
-                            data: data.hubs_booked,
+                        // Destroy the existing bar chart if it exists
+                        if (barChartInstance) {
+                            barChartInstance.destroy();
+                        }
 
-                        }, {
-                            label: 'Blocked Cars',
-                            data: data.hubs_blocked,
+                        // Create a new bar chart
+                        const barChartCanvas = document.getElementById('barChart').getContext('2d');
+                        barChartInstance = new Chart(barChartCanvas, {
+                            type: 'bar',
+                            data: barChartData,
+                            options: { scales: { y: { beginAtZero: true } } }
+                        });
 
-                        }]
-                    };
+                        // Update the pie chart data
+                        const pieChartData = {
+                            labels: data.hubs_list,
+                            datasets: [{
+                                label: 'Bookings',
+                                data: data.hubs_available_list,
+                            }]
+                        };
 
-                    const pieChartData = {
-                        labels: data.hubs_list,
-                        datasets: [{
-                            label: 'Bookings',
-                            data: data.hubs_available_list,
-                        }]
-                    };
+                        // Destroy the existing pie chart if it exists
+                        if (pieChartInstance) {
+                            pieChartInstance.destroy();
+                        }
 
-                    // Create the bar chart
-                    const barChartCanvas = document.getElementById('barChart').getContext('2d');
-                    new Chart(barChartCanvas, {
-                        type: 'bar',
-                        data: barChartData,
-                        options: { scales: { y: { beginAtZero: true } } }
+                        // Create a new pie chart
+                        const pieChartCanvas = document.getElementById('pieChart').getContext('2d');
+                        pieChartInstance = new Chart(pieChartCanvas, {
+                            type: 'pie',
+                            data: pieChartData
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching dashboard data:", error);
                     });
+            }
 
-                    // Create the pie chart
-                    const pieChartCanvas = document.getElementById('pieChart').getContext('2d');
-                    new Chart(pieChartCanvas, { type: 'pie', data: pieChartData });
-                })
-                .catch(error => {
-                    console.error("Error fetching dashboard data:", error);
-                });
-        }
+            // Initial data load
+            loadDashboardData();
 
-        // Initial data load
-        loadDashboardData();
+            // Reload dashboard data on filter change
+            hubFilter.addEventListener('change', function() {
+                loadDashboardData(hubFilter.value);
+            });
 
-        // On filter change, reload the dashboard data
-        hubFilter.addEventListener('change', function() {
-            loadDashboardData(hubFilter.value);
+            // Trigger search button click to reload data
+            document.getElementById('searchBtn').addEventListener('click', function() {
+                loadDashboardData(hubFilter.value);
+            });
         });
+    </script>
 
-        // Optional: Trigger search button click if needed
-        document.getElementById('searchBtn').addEventListener('click', function() {
-            loadDashboardData(hubFilter.value);
-        });
-    });
-</script>
 @endsection
