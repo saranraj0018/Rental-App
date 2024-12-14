@@ -23,8 +23,13 @@ class SwapController extends Controller
     public int $amount = 0;
     public function list()
     {
+
+        $this->authorizePermission('swap_cars_view');
         $city_list = City::where('city_status',1)->pluck('name','code');
-        return view('admin.swap-cars.show',compact('city_list'));
+
+        $permissions = getAdminPermissions();
+
+        return view('admin.swap-cars.show',compact('city_list', 'permissions'));
     }
 
     public function table()
@@ -37,6 +42,10 @@ class SwapController extends Controller
 
     public function getBookingDate(Request $request)
     {
+
+
+        $this->authorizePermission('swap_cars_search');
+
         $data = [];
         if (!empty($request['booking_id'])){
             $booking = Booking::where('booking_id',$request['booking_id'])->where('status',1)->get();
@@ -210,14 +219,14 @@ class SwapController extends Controller
 
     public function searchHistory(Request $request)
     {
+        $this->authorizePermission('swap_cars_history');
         $query = SwapCar::with('user', 'car.carModel', 'swapCar.carModel');
 
         if (!empty($request['booking_id'])) {
             $query->where('booking_id', 'like', '%' .  $request['booking_id']. '%');
         }
-        $swap_list = $query->paginate(10);
+        $swap_list = $query->orderBy('created_at', 'desc')->paginate(10);
         return response()->json(['data'=> ['swap' => $swap_list->items(),'pagination' => $swap_list->links()->render()]]);
-
     }
 
 }

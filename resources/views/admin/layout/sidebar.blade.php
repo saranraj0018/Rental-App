@@ -122,14 +122,14 @@
                     </li>
                 @endif
 
-                {{-- @if (in_array('user_view', $permissions)) --}}
+                @if (in_array('swap_cars_view', $permissions))
                 <li class="nav-item">
                     <a href="{{ route('car-swap.list') }}" class="nav-link">
                         <i class="nav-icon fas fa fa-map"></i>
                         <p>Swap Cars</p>
                     </a>
                 </li>
-                {{-- @endif --}}
+                @endif
 
 
                 @if (in_array('roles_view', $permissions))
@@ -160,11 +160,6 @@
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-
-
-
-
-
 
 
 
