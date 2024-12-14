@@ -35,7 +35,6 @@ class CarDetailsController extends BaseController {
         $this->authorizePermission('car_listing_view_history');
 
         $type = $request->query('type');
-        $this->authorizePermission('car_list_history');
         $car_list = CarDetailsHistory::with('carDetails')->where('type', '=', $type)->paginate(10);
         return view('admin.cars.history', compact('car_list'));
     }
