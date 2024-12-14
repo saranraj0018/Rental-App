@@ -93,6 +93,17 @@
             ],
         ],
 
+
+        [
+            'name' => 'Swap Cars',
+            'slug' => 'swap_cars',
+            'permissions' => [
+                'view' => 'Swap Cars View',
+                'search' => 'Swap Cars Search',
+                'history' => 'Swap Cars History',
+            ],
+        ],
+
         [
             'name' => 'Roles and Permissions',
             'slug' => 'roles',
@@ -150,6 +161,16 @@
             'permissions' => [
                 'view' => 'View Real-Time Information',
                 'update' => 'Update Real-Time Information',
+            ],
+        ],
+
+
+        [
+            'name' => 'Brands and Vacation',
+            'slug' => 'brands_and_vacation',
+            'permissions' => [
+                'view' => 'View Brands and Vacation',
+                "create" => "Create brands and Vacation"
             ],
         ],
 

@@ -63,10 +63,10 @@
                                         <td>{{ block_type()[$item->block_type] ?? '' }}</td>
                                         <td>{{ reason_type()[$item->reason] ?? '' }}</td>
                                         <td>{{ $item->user->email ?? '' }}</td>
-                                        <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i A') }}</td>
+                                        <td>{{ !$item->created_at ? '' : Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i A') }}</td>
                                         <td>{{ $item->register_number }}</td>
-                                        <td>{{ Carbon\Carbon::parse($item->start_date)->format('d-m-Y') }}</td>
-                                        <td>{{ Carbon\Carbon::parse($item->end_date)->format('d-m-Y') }}</td>
+                                        <td>{{ !$item->created_at ? '' :  Carbon\Carbon::parse($item->start_date)->format('d-m-Y') }}</td>
+                                        <td>{{ !$item->created_at ? '' :  Carbon\Carbon::parse($item->end_date)->format('d-m-Y') }}</td>
                                     </tr>
                                 @endforeach
                             @else

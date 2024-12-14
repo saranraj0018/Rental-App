@@ -120,8 +120,7 @@
                             </div>
 
                             <div class="form-group col-md-3">
-                                <label class="form-control-label font-weight-bold" for="show_duration">Show Booking
-                                    Duration</label>
+                                <label class="form-control-label font-weight-bold" for="show_duration">Pre-Bookings Allowed Until</label>
                                 <div class="input-group">
                                     <input type="number" class="form-control" id="show_duration" name="show_duration"
                                         placeholder="1" value="{{ $data['show_duration'] ?? 0 }}">
@@ -175,7 +174,7 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-3">
-                                <label class="form-control-label font-weight-bold" for="inputPassword4">Booking Duration
+                                <label class="form-control-label font-weight-bold" for="inputPassword4">Create Booking After (Hours)
                                 </label>
                                 <div>
                                     <input type="text" class="form-control" id="booking_duration"

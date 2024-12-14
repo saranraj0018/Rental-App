@@ -6,9 +6,12 @@
                 <div class="col-sm-6">
                     <h1>Swap Cars </h1>
                 </div>
+
+                @if (in_array('swap_cars_history', $permissions))
                 <div class="col-sm-6 text-right">
                     <a href="{{ route('car-swap.table') }}" class="btn btn-primary mb-3" id="add_role" role="button">Swap History</a>
                 </div>
+                @endif
             </div>
         </div>
         <!-- /.container-fluid -->
@@ -41,9 +44,14 @@
                 <label for="booking_id_3">End Date</label>
                 <input type="text" id="end_date" class="form-control" placeholder="End Date" disabled>
             </div>
+
+            @if (in_array('swap_cars_search', $permissions))
+
             <div class="form-group col-md-3">
                     <button type="submit" class="btn btn-secondary" id="search_cars" style="margin-top: 30px" disabled>Search Available Cars</button>
             </div>
+            @endif
+
         </div>
     </section>
 
