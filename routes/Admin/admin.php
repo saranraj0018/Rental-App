@@ -40,6 +40,7 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::group(['middleware' => 'admin.auth'], function () {
         Route::get('/dashboard', [DashboardController::class, 'view'])->name('admin.dashboard');
+        Route::get('/dashboard/dataset', [DashboardController::class, 'dataset']);
         Route::get('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
         // Pickup-delivery list

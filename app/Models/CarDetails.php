@@ -61,6 +61,10 @@ class CarDetails extends Model {
     }
 
 
+    public function blocks() {
+        return $this->hasMany(CarBlock::class, 'car_register_number', 'register_number');
+    }
+
 
 
     public function carModel() {
@@ -74,5 +78,11 @@ class CarDetails extends Model {
 
     public function city() {
         return $this->belongsTo(City::class, 'city_code', 'code');
+    }
+
+
+
+    public function isAvailable() {
+        return Available::where('start_date', '>=', now())->pluck('id');
     }
 }
