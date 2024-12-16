@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Mail\BookingCancelledMail;
 use App\Models\Available;
 use App\Models\Booking;
 use App\Models\BookingDetail;
@@ -15,6 +16,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\BookingConfirmed;
+use App\Mail\NofiyBookingConfrimedMail;
+use App\Mail\NotifyBookingCancelledMail;
+use App\Mail\NotifyBookingConfirmedMail;
+use App\Models\AdminDetail;
 use Illuminate\Support\Facades\Mail;
 use Twilio\Rest\Client;
 use Razorpay\Api\Api;
@@ -110,11 +115,15 @@ class PaymentController extends Controller
         $user->pick_location = null;
         $user->save();
 
+        $admin = AdminDetail::where('role', '=', 1)->first();
+
         // Send booking confirmation email
-        Mail::to(Auth::user()->email)->send(new BookingConfirmed($delivery_booking));
+        Mail::to(Auth::user()->email)->send(new BookingConfirmed(auth()->user()->name, $delivery_booking));
+        Mail::to($admin->email)->send(new NotifyBookingConfirmedMail([]));
 
         // Send SMS via Twilio
         self::sendSMS(Auth::user()->mobile, $delivery_booking->booking_id);
+        self::sendSMSToAdmin($admin->mobile_number, $delivery_booking->booking_id);
 
         session()->forget(['booking_details.car_id','booking_details.city_id',
             'booking_details.start_date','booking_details.end_date','delivery.lat',
@@ -190,6 +199,21 @@ class PaymentController extends Controller
         );
     }
 
+
+
+    public static function sendSMSToAdmin($phone, $booking_id)
+    {
+        $client = new Client(config('services.twilio_sms.sid'), config('services.twilio_sms.token'));
+        // Send SMS
+        $client->messages->create(
+            '+91' . $phone,
+            [
+                'from' =>config('services.twilio_sms.mobile_number'),
+                'body' => "New Booking Alert!, A user has made a booking, and the payment is complete. Booking Details: User: " . auth()?->user()?->name . " Booking ID: $booking_id. Log in to the admin panel for more details."
+            ]
+        );
+    }
+
     public function calculatePrice(Request $request)
     {
         $request->validate([
@@ -251,17 +275,26 @@ class PaymentController extends Controller
         if (empty($booking_id)) {
             return response()->json(['success' => false]);
         }
+
         $bookings = Booking::where('booking_id',$booking_id)->where('booking_type','pickup')->where('status',2)->first();
 
         if (!empty($bookings)) {
             return response()->json(['success' => false]);
         }
 
-        Booking::where('booking_id', $booking_id)
-            ->update([
-                'notes' => $request['cancel_reason'],
-                'status' => 3,
-            ]);
+        $booking = Booking::where('booking_id', $booking_id);
+
+        // dd($booking->with('user')->get()->first()->user);
+        Mail::to(auth('admin')->user()->email)->send(new NotifyBookingCancelledMail($booking->get()->first()));
+        Mail::to($booking->with('user')->get()->first()->user->email)->send(new BookingCancelledMail($booking->get()->first()));
+
+        twilio()->send("Hai there, your booking has been cancelled for booking id (" . $booking->get()->first()->booking_id . ")")->to('+91' . $booking->get()->first()->user->mobile);
+        twilio()->send()->to('+91' . auth('admin')->user()->mobile_number);
+
+        $booking->update([
+            'notes' => $request['cancel_reason'],
+            'status' => 3,
+        ]);
 
         return response()->json(['success' => true]);
     }
