@@ -8,7 +8,9 @@ use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\UserController;
 use App\Mail\BookingCancelledMail;
 use App\Mail\BookingConfirmed;
+use App\Mail\BookingReScheduleMail;
 use App\Mail\NotifyBookingCancelledMail;
+use App\Mail\NotifyBookingReScheduleMail;
 use App\Models\Available;
 use App\Models\Booking;
 use App\Models\BookingDetail;
@@ -79,12 +81,12 @@ class PickupDeliveryController extends BaseController {
             'end_date' => 'required|date',
         ]);
 
+        // dd($request->all());
         $booking = Booking::find($request['booking_id']);
 
         $booking->reschedule_date = formDateTime($request['end_date']);
         $booking->save();
         $availableCars = self::checkAvailability($request['start_date'], $request['end_date'], $request['car_id'], $request['model_id']);
-
 
         if (!empty($availableCars['booking_details'])) {
             // Counter for available cars
@@ -129,9 +131,15 @@ class PickupDeliveryController extends BaseController {
             }
         }
 
+        Mail::to($booking->user->email)->send(new BookingReScheduleMail($booking));
+        Mail::to(auth('admin')->user()->email)->send(new NotifyBookingReScheduleMail($booking));
+
+        twilio()->send("Hello there, Your Booking for: booking id - $booking->booking_id, has been rescheduled to the date: $booking->reschedule_date")->to('+91' . $booking?->user?->mobile);
+
+        twilio()->send("Hello there, Booking for Customer: $booking->user->name, with Booking id - $booking->booking_id, has been rescheduled to the date: $booking->reschedule_date")->to('+91' . auth('admin')?->user()?->mobile_number);
+
         $bookings = self::getBooking();
         return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'success' => 'Reschedule date Update successfully']);
-
     }
 
     public static function checkAvailability($startDate, $endDate, $carId, $model_id) {

@@ -415,12 +415,15 @@ $(function () {
         $('#booking_date').on('submit', function (e) {
             e.preventDefault();
             let bookingId = $('#date_booking_id').val();
-            let start_date = $('#date_start_date').val();
-            let end_date = $('#end_date').val();
+            let start_date = $('#date_start_date').val().replaceAll('/', '-');
+            let end_date = $('#end_date').val().replaceAll('/', '-');
             let booking_type = $('#date_booking_type').val();
             let model_id = $('#model_id').val();
             let car_id = $('#car_id').val();
 
+            console.log(start_date, end_date);
+
+            // return false;
             $.ajax({
                 url: '/admin/reschedule/date',
                 method: 'POST',

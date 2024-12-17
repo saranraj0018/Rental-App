@@ -43,7 +43,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/dashboard/dataset', [DashboardController::class, 'dataset']);
         Route::get('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
-        // Pickup-delivery list
+    // Pickup-delivery list
         Route::get('/pickup-delivery/list', [PickupDeliveryController::class, 'list'])->name('pickup-delivery.list');
         Route::get('/pickup-delivery/list/export', [PickupDeliveryController::class, 'export'])->name('pickup-delivery.list.export');
         Route::post('/reschedule/date', [PickupDeliveryController::class, 'rescheduleDate'])->name('pickup-delivery.reschedule');

@@ -181,7 +181,7 @@
                         if (data.success) {
                             alert('Payment successful!');
                             $('#reschedule_model').modal('hide');
-                            window.location.reload();
+                         //   window.location.reload();
                         } else {
                             alert('Payment failed. Please try again.');
                         }

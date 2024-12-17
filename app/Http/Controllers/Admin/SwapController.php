@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController as Controller;
 use App\Http\Controllers\User\UserController;
+use App\Mail\NofityCarSwappedMail;
 use App\Models\Available;
 use App\Models\Booking;
 use App\Models\BookingDetail;
@@ -17,54 +18,49 @@ use Razorpay\Api\Api;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 
-class SwapController extends Controller
-{
+class SwapController extends Controller {
 
     public int $amount = 0;
-    public function list()
-    {
+    public function list() {
 
         $this->authorizePermission('swap_cars_view');
-        $city_list = City::where('city_status',1)->pluck('name','code');
+        $city_list = City::where('city_status', 1)->pluck('name', 'code');
 
         $permissions = getAdminPermissions();
 
-        return view('admin.swap-cars.show',compact('city_list', 'permissions'));
+        return view('admin.swap-cars.show', compact('city_list', 'permissions'));
     }
 
-    public function table()
-    {
+    public function table() {
         $swap_cars = SwapCar::with('user', 'car.carModel', 'swapCar.carModel')
             ->orderBy('created_at', 'desc')->paginate(10);
         return view('admin.swap-cars.table', compact('swap_cars'));
     }
 
 
-    public function getBookingDate(Request $request)
-    {
+    public function getBookingDate(Request $request) {
 
 
         $this->authorizePermission('swap_cars_search');
 
         $data = [];
-        if (!empty($request['booking_id'])){
-            $booking = Booking::where('booking_id',$request['booking_id'])->where('status',1)->get();
+        if (!empty($request['booking_id'])) {
+            $booking = Booking::where('booking_id', $request['booking_id'])->where('status', 1)->get();
 
-            foreach ($booking as $booking){
-                if (!empty($booking && $booking->status==1 && $booking->booking_type == 'delivery')) {
+            foreach ($booking as $booking) {
+                if (!empty($booking && $booking->status == 1 && $booking->booking_type == 'delivery')) {
                     $data['start_date'] = !empty($booking->reschedule_date) ? $booking->reschedule_date : $booking->start_date;
-                } elseif (!empty($booking && $booking->status==1 && $booking->booking_type == 'pickup')) {
-                    $data['end_date'] =  $booking->booking_type == 'pickup' &&  !empty($booking->reschedule_date) ? $booking->reschedule_date : $booking->end_date;
+                } elseif (!empty($booking && $booking->status == 1 && $booking->booking_type == 'pickup')) {
+                    $data['end_date'] = $booking->booking_type == 'pickup' && !empty($booking->reschedule_date) ? $booking->reschedule_date : $booking->end_date;
                 }
             }
-            return response()->json(['data'=> $data,'success' => 'Data Fetching Successfully.']);
+            return response()->json(['data' => $data, 'success' => 'Data Fetching Successfully.']);
 
         }
-        return response()->json(['data'=> $data,'success' => 'Data Found.']);
+        return response()->json(['data' => $data, 'success' => 'Data Found.']);
     }
 
-    public static function availableCars(Request $request)
-    {
+    public static function availableCars(Request $request) {
         $data = [
             'available_cars' => [],
             'booked_cars' => [],
@@ -76,7 +72,7 @@ class SwapController extends Controller
             $end_date = Carbon::parse($request['end_date']);
 
 
-            $car_list = CarDetails::with('carModel')->where('city_code',$request['hub_list'])->get();
+            $car_list = CarDetails::with('carModel')->where('city_code', $request['hub_list'])->get();
 
             foreach ($car_list as $car) {
                 // Check if the car is booked during the requested period
@@ -89,7 +85,7 @@ class SwapController extends Controller
                                     ->where('next_booking', '>=', $end_date);
                             });
                     })
-                ->exists();
+                    ->exists();
                 // Add car to the respective list based on its availability
                 if ($isBooked) {
                     $data['booked_cars'][] = $car;
@@ -104,44 +100,53 @@ class SwapController extends Controller
         return response()->json(['data' => $data, 'success' => 'Data Found.']);
     }
 
-    public function swapCar(Request $request)
-    {
-        if (!empty($request['booking_id']) && !empty($request['car_id'])){
-            $old_booking = Booking::where('booking_id',$request['booking_id'])->first();
+    public function swapCar(Request $request) {
+        if (!empty($request['booking_id']) && !empty($request['car_id'])) {
+            $old_booking = Booking::where('booking_id', $request['booking_id'])->first();
 
-            Booking::where('booking_id',$request['booking_id'])->where('status',1)->update(['car_id' => $request['car_id']]);
 
-           $car_details = CarDetails::with('carModel')->find($request['car_id']);
-           BookingDetail::where('booking_id',$request['booking_id'])->update(['car_details' => json_encode($car_details)]);
+            $booking = Booking::where('booking_id', $request['booking_id'])->where('status', 1);
+            $booking->update(['car_id' => $request['car_id']]);
 
-           if (!empty($request['start_date']) && !empty($request['end_date'])) {
-               $available = new Available();
-               $available->car_id = $request['car_id'];
-               $available->model_id = $car_details->carModel->car_model_id ?? 0;
-               $available->booking_id = $request['booking_id'];
-               $available->register_number = $car_details->register_number;
-               $available->start_date = $request['start_date'];
-               $available->end_date = $request['end_date'];
-               $available->booking_type = 1;
-               $available->save();
+            $_booking = $booking->get()->first();
 
-               $available = new SwapCar();
-               $available->booking_id = $request['booking_id'];
-               $available->user_id =  Auth::guard('admin')->id();
-               $available->car_id = !empty($old_booking->car_id) ? $old_booking->car_id : 0;
-               $available->swap_car_id = $request['car_id'];
-               $available->save();
-           }
 
-            return response()->json(['success'=> true,'message' => 'Data Saved Successfully.']);
+            $car_details = CarDetails::with('carModel')->find($request['car_id']);
+            BookingDetail::where('booking_id', $request['booking_id'])->update(['car_details' => json_encode($car_details)]);
+
+            if (!empty($request['start_date']) && !empty($request['end_date'])) {
+                $available = new Available();
+                $available->car_id = $request['car_id'];
+                $available->model_id = $car_details->carModel->car_model_id ?? 0;
+                $available->booking_id = $request['booking_id'];
+                $available->register_number = $car_details->register_number;
+                $available->start_date = $request['start_date'];
+                $available->end_date = $request['end_date'];
+                $available->booking_type = 1;
+                $available->save();
+
+                $available = new SwapCar();
+                $available->booking_id = $request['booking_id'];
+                $available->user_id = Auth::guard('admin')->id();
+                $available->car_id = !empty($old_booking->car_id) ? $old_booking->car_id : 0;
+                $available->swap_car_id = $request['car_id'];
+                $available->save();
+            }
+
+
+
+            Mail::to(auth('admin')->user()->email)->send(new NofityCarSwappedMail($_booking));
+
+            twilio()->send("Hello there, Car Swapped for the Customer: ( $_booking->user->name ) - Booking ID: ( $_booking->booking_id )")->to('+91' . auth('admin')->user()->mobile_number);
+
+            return response()->json(['success' => true, 'message' => 'Data Saved Successfully.']);
         }
-        return response()->json(['success'=> false,'message' => 'Data not Found .']);
+        return response()->json(['success' => false, 'message' => 'Data not Found .']);
 
     }
 
 
-    public function swapCarCalculate(Request $request)
-    {
+    public function swapCarCalculate(Request $request) {
         if (!empty($request['booking_id']) && !empty($request['car_id']) && !empty($request['start_date']) && !empty($request['end_date'])) {
 
             $booking_price = Payment::where('booking_id', $request['booking_id'])
@@ -150,16 +155,16 @@ class SwapController extends Controller
                 ->sum('amount');
 
             $car_details = CarDetails::find($request['car_id']);
-            $prices = ['festival' =>  $car_details->carModel->peak_reason_surge ?? 0,
+            $prices = ['festival' => $car_details->carModel->peak_reason_surge ?? 0,
                 'weekend' => $car_details->carModel->weekend_surge ?? 0,
-                'weekday' =>  $car_details->carModel->price_per_hour ?? 0];
+                'weekday' => $car_details->carModel->price_per_hour ?? 0];
 
             $swap_price = UserController::calculatePrice($prices, showDateformat($request['start_date']), showDateformat($request['end_date']));
 
-            $total_price =  $booking_price < $swap_price['total_price'] ? $swap_price['total_price'] - $booking_price : $booking_price;
+            $total_price = $booking_price < $swap_price['total_price'] ? $swap_price['total_price'] - $booking_price : $booking_price;
 
             session(['swap_total_price' => $swap_price], ['final_total_price' => $total_price]);
-                    $this->amount = $total_price;
+            $this->amount = $total_price;
 
             return response()->json([
                 'success' => true,
@@ -174,10 +179,9 @@ class SwapController extends Controller
             ]);
 
         }
-        return response()->json(['success' => 'false','message' => 'Data not Found .']);
+        return response()->json(['success' => 'false', 'message' => 'Data not Found .']);
     }
-    public function sendPayment(Request $request)
-    {
+    public function sendPayment(Request $request) {
         if (!empty($request['booking_id']) && !empty($request['amount'])) {
             $booking = Booking::with('user')->where('booking_id', $request['booking_id'])->first();
             $booking->user->email;
@@ -187,7 +191,7 @@ class SwapController extends Controller
             $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
 
             try {
-                $uniqueReceiptId = 'rcptid_' .  rand(100000, 999999); // Generate a unique receipt ID using the booking ID
+                $uniqueReceiptId = 'rcptid_' . rand(100000, 999999); // Generate a unique receipt ID using the booking ID
 
                 $response = $api->invoice->create([
                     'type' => 'link',
@@ -217,16 +221,15 @@ class SwapController extends Controller
         return response()->json(['error' => 'Failed to create payment link: '], 500);
     }
 
-    public function searchHistory(Request $request)
-    {
+    public function searchHistory(Request $request) {
         $this->authorizePermission('swap_cars_history');
         $query = SwapCar::with('user', 'car.carModel', 'swapCar.carModel');
 
         if (!empty($request['booking_id'])) {
-            $query->where('booking_id', 'like', '%' .  $request['booking_id']. '%');
+            $query->where('booking_id', 'like', '%' . $request['booking_id'] . '%');
         }
         $swap_list = $query->orderBy('created_at', 'desc')->paginate(10);
-        return response()->json(['data'=> ['swap' => $swap_list->items(),'pagination' => $swap_list->links()->render()]]);
+        return response()->json(['data' => ['swap' => $swap_list->items(), 'pagination' => $swap_list->links()->render()]]);
     }
 
 }

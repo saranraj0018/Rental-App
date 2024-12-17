@@ -250,7 +250,6 @@ class PaymentController extends Controller
         $booking_id = $request['booking_id'];
         $payment_id = $request['payment_id'];
 
-
         $payment = new Payment();
         $payment->payment_id = $payment_id;
         $payment->booking_id = $booking_id;
@@ -286,10 +285,13 @@ class PaymentController extends Controller
 
         // dd($booking->with('user')->get()->first()->user);
         Mail::to(auth('admin')->user()->email)->send(new NotifyBookingCancelledMail($booking->get()->first()));
+
         Mail::to($booking->with('user')->get()->first()->user->email)->send(new BookingCancelledMail($booking->get()->first()));
 
+        $booking_data = $booking->get()->first()->booking_id;
+
         twilio()->send("Hai there, your booking has been cancelled for booking id (" . $booking->get()->first()->booking_id . ")")->to('+91' . $booking->get()->first()->user->mobile);
-        twilio()->send()->to('+91' . auth('admin')->user()->mobile_number);
+        twilio()->send("Hello there, The booking with the id of - $booking_data has been cancelled")->to('+91' . auth('admin')->user()->mobile_number);
 
         $booking->update([
             'notes' => $request['cancel_reason'],
