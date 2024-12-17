@@ -156,6 +156,8 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     $(document).on('click', '#reschedule_pay', function(e) {
+
+        e.preventDefault();
         let total_price = {{ session('reschedule_total_price') ?? 0 }};
         let bookingId = $('#booking_id').val();
 

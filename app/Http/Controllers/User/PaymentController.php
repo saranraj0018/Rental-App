@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Mail\BookingCancelledMail;
+use App\Mail\NotifyBookingReScheduleMail;
 use App\Models\Available;
 use App\Models\Booking;
 use App\Models\BookingDetail;
@@ -16,6 +17,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\BookingConfirmed;
+use App\Mail\BookingReScheduleMail;
 use App\Mail\NofiyBookingConfrimedMail;
 use App\Mail\NotifyBookingCancelledMail;
 use App\Mail\NotifyBookingConfirmedMail;
@@ -262,6 +264,14 @@ class PaymentController extends Controller
         $booking = Booking::where('booking_id',$booking_id)->where('booking_type','pickup')->first();
         $booking->reschedule_date = !empty(session('delivery_date')) ? formDate(session('delivery_date')) : '';
         $booking->save();
+
+        $admin = AdminDetail::where('role', '=', 1)->first();
+        Mail::to($booking->user->email)->send(new BookingReScheduleMail($booking));
+        Mail::to($admin->email)->send(new NotifyBookingReScheduleMail($booking));
+
+        twilio()->send("Hello there, Your Booking for: booking id - $booking->booking_id, has been rescheduled to the date: $booking->reschedule_date")->to('+91' . $booking?->user?->mobile);
+
+        twilio()->send("Hello there, Booking for Customer: $booking->user->name, with Booking id - $booking->booking_id, has been rescheduled to the date: $booking->reschedule_date")->to('+91' . $admin->mobile_number);
 
         session()->forget(['reschedule_total_price','delivery_date']);
             return response()->json(['success' => true]);
