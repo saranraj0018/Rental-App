@@ -517,7 +517,7 @@ Valam Team")->to('+91' . $mobile);
 
             if ($last_booking) {
                 // Increment the last booking ID by 1
-                $new_booking_id = $last_booking->id + 1;
+                $new_booking_id = $last_booking->booking_id + 1;
             } else {
                 // Start from 100001 if no booking exists
                 $new_booking_id = 100001;
