@@ -7,7 +7,7 @@
                 </p>
             </div>
             <div>
-                <button class="btn text-blue fs-16 fs-mb-12 fw-500">View All <i class="fas fa-chevron-right"></i></button>
+                <button class="btn text-blue fs-16 fs-mb-12 fw-500 book_now">View All <i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
         @if (!empty($section3))

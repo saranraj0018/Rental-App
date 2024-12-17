@@ -57,7 +57,7 @@
                 </p>
             </div>
             <div>
-                <button class="btn text-blue fs-16 fs-mb-12 fw-500">View All <i class="fas fa-chevron-right"></i></button>
+                <a href="{{ url('/') }}/user/faq" class="btn text-blue fs-16 fs-mb-12 fw-500">View All <i class="fas fa-chevron-right"></i></a>
             </div>
         </div>
 
