@@ -28,6 +28,9 @@ class CarBlock extends Model {
 
         // Hook into the "created" event
         static::created(function ($model) {
+
+            dd($model);
+
             CarBlockHistory::insert([
                 "action" => 'created',
                 "block_type" => $model->block_type,

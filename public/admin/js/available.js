@@ -70,7 +70,8 @@ $(function () {
                                                 (bookingType === '6') ? 'gray' :
                                                     (bookingType === '7') ? 'brown' : 'green';
                         let tempDate = new Date(startDate); // Clone startDate to avoid mutation
-
+                        console.log(tempDate);
+                        
                         while (tempDate <= endDate) {
                             const dayIndex = calculateDayIndex(tempDate);
 
