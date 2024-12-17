@@ -1,7 +1,11 @@
 <?php
 
 
+
+use Twilio\Rest\Client;
 use Carbon\Carbon;
+
+
 function hubList(): array
 {
     return ['632' => 'coimbatore'];
@@ -59,3 +63,39 @@ function showDate($date, $format = 'd/m/Y')
 }
 
 
+
+
+if (!function_exists('twilio')) {
+    /**
+     * Initialize the Twilio Client and provide a fluent API.
+     *
+     * @return object
+     */
+    function twilio() {
+        $client = app('twilio');
+
+        return new class ($client) {
+            protected $client;
+            protected $message;
+            protected $to;
+
+            public function __construct(Client $client) {
+                $this->client = $client;
+            }
+
+            public function send(string $message) {
+                $this->message = $message;
+                return $this;
+            }
+
+            public function to(string $recipient) {
+                $this->to = $recipient;
+
+                return $this->client->messages->create($this->to, [
+                    'from' => config('twilio.phone_number'),
+                    'body' => $this->message,
+                ]);
+            }
+        };
+    }
+}

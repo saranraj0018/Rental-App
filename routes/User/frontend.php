@@ -7,6 +7,8 @@ use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\LocationController;
 
 
+
+
 Route::get('/', [UserController::class,'view'])->name('home');
 Route::view('/test', 'dummy')->name('dummy');
 

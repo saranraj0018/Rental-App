@@ -199,11 +199,13 @@ $(function () {
                 return;
             }
             let amount = $('#user_amount').val();
-            $('#user_payment_link').prop('disabled', true);
+            let mobile = $('#mobile').val();
+
+            // $('#user_payment_link').prop('disabled', true);
             $.ajax({
                 url: '/admin/user-payment/link',
                 type: 'POST',
-                data: { email: email, amount: amount },
+                data: { email: email, amount: amount, mobile: mobile },
                 success: function (data) {
                     if (data.success) {
                         $('#payment_success').text(data.success);
@@ -227,7 +229,7 @@ $(function () {
             let fields = [
                 { id: '#name', wrapper: true, condition: (val) => val === '' },
                 { id: '#email', wrapper: true, condition: (val) => val === '' },
-                { id: '#mobile', wrapper: true, condition: (val) => val === '' },
+                { id: '#mobile', wrapper: true, condition: (val) => val == '' },
                 { id: '#pickup_location', wrapper: true, condition: (val) => val === '' },
                 { id: '#drop_location', wrapper: true, condition: (val) => val === '' },
                 { id: '#license_number', wrapper: true, condition: (val) => val === '' },
@@ -413,12 +415,15 @@ $(function () {
         $('#booking_date').on('submit', function (e) {
             e.preventDefault();
             let bookingId = $('#date_booking_id').val();
-            let start_date = $('#date_start_date').val();
-            let end_date = $('#end_date').val();
+            let start_date = $('#date_start_date').val().replaceAll('/', '-');
+            let end_date = $('#end_date').val().replaceAll('/', '-');
             let booking_type = $('#date_booking_type').val();
             let model_id = $('#model_id').val();
             let car_id = $('#car_id').val();
 
+            console.log(start_date, end_date);
+
+            // return false;
             $.ajax({
                 url: '/admin/reschedule/date',
                 method: 'POST',

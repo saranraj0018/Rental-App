@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Fluent;
 
 class DashboardController extends Controller {
+
+
     public function view() {
         return view('admin.dashboard', ['hubs' => City::where('city_status', 1)->where('name', '!=', '')->pluck('name')->toArray()]);
     }
@@ -21,8 +23,11 @@ class DashboardController extends Controller {
 
         # get available list
         $_available = Available::where('start_date', '>=', now())->pluck('car_id','id')->toArray();
-        $_blocked = CarBlock::where('start_date', '>=', now())->pluck('car_register_number')->toArray();
+        $_blocked = CarBlock::where('start_date', '>=', now()->tz('Asia/Kolkata'))->pluck('car_register_number')->toArray();
 
+
+
+        // dd(CarBlock::where);
         # get cars list
         $cars = CarDetails::with('city')->get()->toArray();
 
@@ -31,7 +36,7 @@ class DashboardController extends Controller {
                 'id' => !empty($car['id']) ? $car['id'] : 0,
                 "city" => !empty($car["city"]["name"]) ? $car["city"]["name"] : '',
                 "booked" => in_array($car['id'], $_available),
-                "blocked" => in_array('register_number', $_blocked)
+                "blocked" => in_array($car['register_number'], $_blocked)
             ];
         })->filter(fn($hub) => $hub["city"] != "");
 
@@ -39,6 +44,9 @@ class DashboardController extends Controller {
         if($hub != 'all') {
             $main = $main->filter(fn($item) => $item["city"] == $hub);
         }
+
+        // dd($main);
+
 
         $dataset = new Fluent();
         $dataset->available_cars = $main->filter(fn($car) => !$car['booked'] && !$car['blocked'])->count();

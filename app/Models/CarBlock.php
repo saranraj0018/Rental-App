@@ -36,6 +36,7 @@ class CarBlock extends Model {
                 "start_date" => $model->start_date,
                 "end_date" => $model->end_date,
                 'created_by' => auth()->guard('admin')->id(),
+                'created_at' => now()->tz('Asia/Kolkata'),
             ]);
         });
 
@@ -49,6 +50,7 @@ class CarBlock extends Model {
                 "start_date" => $model->start_date,
                 "end_date" => $model->end_date,
                 'created_by' => auth()->guard('admin')->id(),
+                'created_at' => now()->tz('Asia/Kolkata'),
             ]);
         });
 
@@ -63,7 +65,7 @@ class CarBlock extends Model {
                 "start_date" => $model->start_date,
                 "end_date" => $model->end_date,
                 'created_by' => auth()->guard('admin')->id(),
-
+                'created_at' => now()->tz('Asia/Kolkata'),
             ]);
         });
     }

@@ -6,7 +6,11 @@ use App\Exports\Hub;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\UserController;
+use App\Mail\BookingCancelledMail;
 use App\Mail\BookingConfirmed;
+use App\Mail\BookingReScheduleMail;
+use App\Mail\NotifyBookingCancelledMail;
+use App\Mail\NotifyBookingReScheduleMail;
 use App\Models\Available;
 use App\Models\Booking;
 use App\Models\BookingDetail;
@@ -61,7 +65,7 @@ class PickupDeliveryController extends BaseController {
                     ->where('status', 1);
             })
             ->orderBy('start_date')
-            ->orderBy('end_date',)
+            ->orderBy('end_date', )
             ->paginate(20);
     }
 
@@ -77,12 +81,12 @@ class PickupDeliveryController extends BaseController {
             'end_date' => 'required|date',
         ]);
 
+        // dd($request->all());
         $booking = Booking::find($request['booking_id']);
 
         $booking->reschedule_date = formDateTime($request['end_date']);
         $booking->save();
         $availableCars = self::checkAvailability($request['start_date'], $request['end_date'], $request['car_id'], $request['model_id']);
-
 
         if (!empty($availableCars['booking_details'])) {
             // Counter for available cars
@@ -127,9 +131,15 @@ class PickupDeliveryController extends BaseController {
             }
         }
 
+        Mail::to($booking->user->email)->send(new BookingReScheduleMail($booking));
+        Mail::to(auth('admin')->user()->email)->send(new NotifyBookingReScheduleMail($booking));
+
+        twilio()->send("Hello there, Your Booking for: booking id - $booking->booking_id, has been rescheduled to the date: $booking->reschedule_date")->to('+91' . $booking?->user?->mobile);
+
+        twilio()->send("Hello there, Booking for Customer: $booking->user->name, with Booking id - $booking->booking_id, has been rescheduled to the date: $booking->reschedule_date")->to('+91' . auth('admin')?->user()?->mobile_number);
+
         $bookings = self::getBooking();
         return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'success' => 'Reschedule date Update successfully']);
-
     }
 
     public static function checkAvailability($startDate, $endDate, $carId, $model_id) {
@@ -299,12 +309,23 @@ class PickupDeliveryController extends BaseController {
             'booking_id' => 'required',
             'reason' => 'required|string|max:255',
         ]);
-        Booking::where('booking_id', $request['booking_id'])
-            ->update([
-                'notes' => $request['cancel_reason'],
-                'status' => 3,
-            ]);
-        $bookings = self::getBooking();
+
+        $booking = Booking::where('booking_id', $request['booking_id']);
+
+        $booking->update([
+            'notes' => $request['cancel_reason'],
+            'status' => 3,
+        ]);
+
+        // dd($booking->with('user')->get()->first()->user);
+        Mail::to(auth('admin')->user()->email)->send(new NotifyBookingCancelledMail($booking->get()->first()));
+        Mail::to($booking->with('user')->get()->first()->user->email)->send(new BookingCancelledMail($booking->get()->first()));
+
+
+        twilio()->send("Hai there, your booking has been cancelled for booking id (" . $booking->get()->first()->booking_id . ")")->to('+91' . $booking->get()->first()->user->mobile);
+        twilio()->send()->to('+91' . auth('admin')->user()->mobile_number);
+
+            $bookings = self::getBooking();
         return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Booking cancelled successfully']);
     }
 
@@ -405,10 +426,14 @@ class PickupDeliveryController extends BaseController {
     }
 
     public function sendUserPayment(Request $request) {
+
+
+
         if (!empty($request['email']) && !empty($request['amount'])) {
 
             $amount = $request['amount'] * 100; // Amount in paise (e.g., ₹1000 = 100000)
             $email = $request['email'];
+            $mobile = $request['mobile'];
 
             $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
 
@@ -431,10 +456,23 @@ class PickupDeliveryController extends BaseController {
                 ]);
 
                 $paymentLink = $response->short_url;
+                // dd(1);
+                // Mail::to($email)->send(new \App\Mail\PaymentDetails($amount, $paymentLink));
 
-                // Send email with the payment link
-                Mail::to($email)->send(new \App\Mail\PaymentDetails($amount, $paymentLink));
+                # send mail to admin
+                Mail::to(auth('admin')->user()->email)->send(new \App\Mail\NotifyManualBookingGeneratedMail(user: $request['email']));
 
+                twilio()->send("Manual Payment Created, Booked for: $email, Payment URI send to customer")->to('+91' . auth('admin')?->user()?->mobile_number);
+
+                twilio()->send("Dear Customer, Thank you for choosing our service!
+
+  Payment Details: Total Amount: ₹ $amount
+  Complete your payment here: $paymentLink
+
+For questions, contact us anytime.
+
+Best regards,
+Valam Team")->to('+91' . $mobile);
                 return response()->json(['success' => 'Payment link created and sent successfully.']);
             } catch (\Exception $e) {
                 return response()->json(['error' => 'Failed to create payment link: ' . $e->getMessage()], 500);
@@ -479,7 +517,7 @@ class PickupDeliveryController extends BaseController {
 
             if ($last_booking) {
                 // Increment the last booking ID by 1
-                $new_booking_id = $last_booking->id + 1;
+                $new_booking_id = $last_booking->booking_id + 1;
             } else {
                 // Start from 100001 if no booking exists
                 $new_booking_id = 100001;
@@ -512,7 +550,15 @@ class PickupDeliveryController extends BaseController {
             $delivery_booking->delivery_fee = $data['delivery_fee'] ?? '';
             $delivery_booking->status = 1;
             $delivery_booking->save();
-            Mail::to($user->email)->send(new BookingConfirmed($delivery_booking));
+
+            Mail::to($user->email)->send(new BookingConfirmed($request['name'], $delivery_booking));
+            Mail::to(auth('admin')->user()->email)->send(new \App\Mail\NotifyManualBookingConfirmedMail(user: $request->email));
+
+            twilio()->send("Manual Payment Completed, Booking made for: $request->email")->to('+91' . auth('admin')?->user()?->mobile_number);
+
+            twilio()->send("Dear Customer, Thank you for choosing our service!, your booking has been confirmed, For questions, contact us anytime.
+Best regards,
+Valam Team")->to('+91' . $request->mobile);
 
             $car_details = CarDetails::with('carModel')->find($available_car->id);
 
@@ -689,7 +735,7 @@ class PickupDeliveryController extends BaseController {
     public function bookingCancelList() {
         $this->authorizePermission('booking_cancel_view');
 
-         $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',3)->paginate(20);
+        $bookings = Booking::with(['user', 'details', 'comments', 'user.bookings'])->where('status', 3)->paginate(20);
         $city_list = City::where('city_status', 1)->pluck('name', 'code');
         return view('admin.hub.cancel_booking', compact('city_list'));
     }

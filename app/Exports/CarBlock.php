@@ -71,8 +71,8 @@ class CarBlock implements FromCollection, WithHeadings, WithMapping {
     public function map($row): array {
         return [
             $row->action,
-            block_type()[$row->block_type],
-            reason_type()[$row->reason],
+            !empty(block_type()[$row->block_type]) ? block_type()[$row->block_type] : "",
+            !empty(reason_type()[$row->reason]) ?  reason_type()[$row->reason] : "",
             $row->user->email,
             $row->created_at,
             $row->register_number,

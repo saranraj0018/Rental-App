@@ -34,7 +34,7 @@
                         <div id="time-buttons" class="d-flex justify-content-between flex-wrap container">
                             <!-- Time Buttons for 24 hours with 30-minute intervals -->
                             <!-- You can keep the buttons here as in the original code -->
-                            <button class="btn btn-outline-primary time-btn me-2 mb-2 p-1 submitDateTime1"
+                            {{-- <button class="btn btn-outline-primary time-btn me-2 mb-2 p-1 submitDateTime1"
                                     data-time="00:00" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#dateTimeModal2">00:00</button>
                             <button class="btn btn-outline-primary time-btn me-2 mb-2 p-1 submitDateTime1"
                                     data-time="00:30" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#dateTimeModal2">00:30</button>
@@ -49,7 +49,7 @@
                             <button class="btn btn-outline-primary time-btn me-2 mb-2 p-1 submitDateTime1"
                                     data-time="03:00" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#dateTimeModal2">03:00</button>
                             <button class="btn btn-outline-primary time-btn me-2 mb-2 p-1 submitDateTime1"
-                                    data-time="03:30" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#dateTimeModal2">03:30</button>
+                                    data-time="03:30" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#dateTimeModal2">03:30</button> --}}
                             <button class="btn btn-outline-primary time-btn me-2 mb-2 p-1 submitDateTime1"
                                     data-time="04:00" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#dateTimeModal2">04:00</button>
                             <button class="btn btn-outline-primary time-btn me-2 mb-2 p-1 submitDateTime1"
@@ -176,7 +176,7 @@
                     </div>
                     <div class="tab-pane fade p-3" id="timeTabContent2" role="tabpanel" aria-labelledby="time-tab2">
                         <div id="time-buttons" class="d-flex justify-content-between flex-wrap container">
-                            <button class="btn btn-outline-primary time-btn me-2 mb-2 p-1 submitDateTime2"
+                            {{-- <button class="btn btn-outline-primary time-btn me-2 mb-2 p-1 submitDateTime2"
                                     data-time="00:00">00:00</button>
                             <button class="btn btn-outline-primary time-btn me-2 mb-2 p-1 submitDateTime2"
                                     data-time="00:30">00:30</button>
@@ -191,7 +191,7 @@
                             <button class="btn btn-outline-primary time-btn me-2 mb-2 p-1 submitDateTime2"
                                     data-time="03:00">03:00</button>
                             <button class="btn btn-outline-primary time-btn me-2 mb-2 p-1 submitDateTime2"
-                                    data-time="03:30">03:30</button>
+                                    data-time="03:30">03:30</button> --}}
                             <button class="btn btn-outline-primary time-btn me-2 mb-2 p-1 submitDateTime2"
                                     data-time="04:00">04:00</button>
                             <button class="btn btn-outline-primary time-btn me-2 mb-2 p-1 submitDateTime2"

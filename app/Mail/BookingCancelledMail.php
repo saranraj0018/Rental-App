@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\AdminDetail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -9,46 +10,39 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class BookingConfirmed extends Mailable
-{
+class BookingCancelledMail extends Mailable {
     use Queueable, SerializesModels;
 
-    public $bookingDetails;
-    public $_name;
+    public $booking;
+    public $admin;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($_name, $bookingDetails)
-    {
-        $this->bookingDetails = $bookingDetails;
-        $this->_name = $_name;
+    public function __construct($booking) {
+        $this->booking = $booking;
+        $this->admin = AdminDetail::where('role', '=', 1)->first();
     }
 
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
+    public function envelope(): Envelope {
         return new Envelope(
-            subject: 'Booking Confirmed',
+            subject: 'Booking Cancelled',
         );
-    }
-
-    public function build()
-    {
-        return $this->subject('Booking Confirmation')
-            ->view('emails.booking_confirmation')
-            ->with('bookingDetails', $this->bookingDetails);
     }
 
     /**
      * Get the message content definition.
      */
-    public function content(): Content
-    {
+    public function content(): Content {
         return new Content(
-            view: 'user.frontpage.booking.mail',
+            view: 'admin.hub.user-booking-cancelled-mail',
+            with: [
+                'admin' => $this->admin,
+                'booking' => $this->booking,
+            ],
         );
     }
 
@@ -57,8 +51,7 @@ class BookingConfirmed extends Mailable
      *
      * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
-    public function attachments(): array
-    {
+    public function attachments(): array {
         return [];
     }
 }

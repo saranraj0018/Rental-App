@@ -98,7 +98,7 @@
                             @endif
                         @endforeach
                     @endif
-                    <button class="btn fs-16 mt-3 fac-button">Find a car</button>
+                    <button class="btn fs-16 mt-3 fac-button book_now">Find a car</button>
                 </div>
             </div>
             <div class="col-12 col-lg-6">

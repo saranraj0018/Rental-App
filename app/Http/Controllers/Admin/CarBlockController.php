@@ -191,7 +191,7 @@ class CarBlockController extends BaseController {
         $dataset = $this->getData();
 
         if ($ext == 'csv') {
-            return Excel::download(new ExportsCarBlock(type: $ext, dataset: $dataset), 'user-export.csv');
+            return Excel::download(new ExportsCarBlock(type: $ext, dataset: $dataset), 'car-block-export.csv');
         }
 
         $pdf = Pdf::loadView('admin.cars.blocks.pdf', ["dataset" => $dataset]);

@@ -25,6 +25,8 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+
 </head>
 
 <body class="hold-transition sidebar-mini">
