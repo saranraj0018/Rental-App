@@ -390,7 +390,11 @@ $(function () {
         });
         // Handle risk comment form submission
         $('#risk-form').on('submit', function (e) {
+
             e.preventDefault();
+
+            return false;
+
             let bookingId = $('#risk-booking-id').val();
             let commends = $('#risk-comment').val();
 
@@ -501,13 +505,12 @@ $(function () {
                     <td>${bookingDetails.register_number || ''}</td>
                     <td class="truncate-text" title="${item.address}">${item.address}</td>
                     <td>
-                        <button class="btn btn-warning user-details-modal" data-id="${item.user_id}" data-mobile="${item.user.mobile}" data-booking="${item.user.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item.user.aadhaar_number}">
+                        <button class="btn btn-warning user-details-modal" data-id="${item?.user_id}" data-mobile="${item?.user?.mobile}" data-booking="${item?.user?.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item?.user?.aadhaar_number}">
                             User details
                         </button>
                     </td>
-                    <td>${item.user ? item.user.driving_licence : ''}</td>
+                    <td>${item?.user ? item?.user?.driving_licence : ''}</td>
                     <td>${item.booking_id}</td>
-
 
                     <td>${mainDate}<br>
                     ${permissions.includes('hub_reschedule') ? `
