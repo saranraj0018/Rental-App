@@ -1,6 +1,0 @@
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=valamcars_cpnet
-DB_USERNAME=valamcars_rental
-DB_PASSWORD=Valam@2802
