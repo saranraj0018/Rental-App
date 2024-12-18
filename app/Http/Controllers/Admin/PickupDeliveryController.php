@@ -280,11 +280,20 @@ class PickupDeliveryController extends BaseController {
             'booking_id' => 'required',
             'reason' => 'required|string|max:255',
         ]);
-        Booking::where('booking_id', $request['booking_id'])
-            ->update([
+
+        $booking = Booking::where('booking_id', $request['booking_id']);
+
+        $booking->update([
                 'notes' => $request['cancel_reason'],
                 'status' => 3,
             ]);
+
+
+            $booking_data = $booking->get()->first()->booking_id;
+
+            twilio()->send("Hai there, your booking has been cancelled for booking id (" . $booking_data . ")")->to('+91' . $booking->get()->first()->user->mobile);
+            twilio()->send("Hello there, The booking with the id of - $booking_data has been cancelled")->to('+91' . auth('admin')->user()->mobile_number);
+
         $query = Booking::with(['user', 'details', 'comments', 'user.bookings'])
             ->where('status', 1) // Filter by status = 1
             ->where('city_code', $booking->city_code ?? 632) // Default city_code filter
