@@ -46,10 +46,7 @@
 
             // Initialize the map
             map = new google.maps.Map(document.getElementById('map'), {
-                center: {
-                    lat: 11.0168,
-                    lng: 76.9558
-                }, // Coimbatore
+                center: { lat: 11.0168, lng: 76.9558 }, // Coimbatore
                 zoom: 12,
             });
 
@@ -57,11 +54,11 @@
             const input = document.getElementById('search-city');
             searchBox = new google.maps.places.SearchBox(input);
 
-            map.addListener('bounds_changed', function() {
+            map.addListener('bounds_changed', function () {
                 searchBox.setBounds(map.getBounds());
             });
 
-            searchBox.addListener('places_changed', function() {
+            searchBox.addListener('places_changed', function () {
                 const places = searchBox.getPlaces();
                 if (places.length === 0) return;
 
@@ -110,8 +107,9 @@
 
                 polygon.coordinates = coordinates;
             });
-
-
+            const cityCoords = @json($city_list->mapWithKeys(function ($city) {
+        return [$city->code => ['name' => $city->name, 'lat' => (float)$city->latitude, 'lng' => (float)$city->longitude]];
+    }));
 
             // Dropdown to fetch and display saved polygons for a city
             $('#city-select').change(function() {
@@ -119,36 +117,24 @@
                 if (cityCoords[selectedCity]) {
                     const coords = cityCoords[selectedCity];
                     if (Number.isFinite(coords.lat) && Number.isFinite(coords.lng)) {
-                        map.setCenter({
-                            lat: coords.lat,
-                            lng: coords.lng
-                        });
+                        map.setCenter({lat: coords.lat, lng: coords.lng});
                         map.setZoom(12);
                     }
-
-                    const cityCoords = @json($city_list->mapWithKeys(fn($city) => [
-                        $city->code => ['name' => $city->name, 'lat' => (float) $city->latitude, 'lng' => (float) $city->longitude]]));
 
                     $.ajax({
                         url: '/admin/get-city-coordinates',
                         method: 'GET',
-                        data: {
-                            city: selectedCity
-                        },
+                        data: { city: selectedCity },
                         success: function(response) {
                             if (typeof response === 'string') response = JSON.parse(response);
 
-                            if (Array.isArray(response)) {
-                                if (window.currentPolygons) window.currentPolygons.forEach(p => p
-                                    .setMap(null));
+                            if (Array.isArray(response?.data)) {
+                                if (window.currentPolygons) window.currentPolygons.forEach(p => p.setMap(null));
                                 window.currentPolygons = [];
 
-                                response.forEach(coords => {
+                                response?.data.forEach(coords => {
                                     const polygon = new google.maps.Polygon({
-                                        paths: coords.map(coord => ({
-                                            lat: parseFloat(coord.lat),
-                                            lng: parseFloat(coord.lng)
-                                        })),
+                                        paths: coords.map(coord => ({ lat: parseFloat(coord.lat), lng: parseFloat(coord.lng) })),
                                         strokeColor: '#FF0000',
                                         strokeOpacity: 0.8,
                                         strokeWeight: 2,
