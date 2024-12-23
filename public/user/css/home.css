@@ -194,6 +194,12 @@ button[type="button"][role="presentation"].owl-next {
     font-size: 16px;
 }
 
+.navbar-nav .my-nav a:hover {
+    background-color: #136FFD;
+    border-radius: 20px;
+}
+
+
 .navbar-light .navbar-brand {
     color: #2196f3;
 }
@@ -737,4 +743,8 @@ button.accordion-button.collapsed {
 
 .flatpickr-time .numInputWrapper {
     height: 60px;
+}
+
+.numInputWrapper span {
+    width: 20px;
 }
