@@ -1,13 +1,15 @@
-
 .w-fit {
     width: fit-content;
 }
-.w-60{
-    width:60%;
+
+.w-60 {
+    width: 60%;
 }
+
 .bdr-10 {
     border-radius: 10px;
 }
+
 .bdr-15 {
     border-radius: 15px;
 }
@@ -28,29 +30,36 @@
 .text-blue {
     color: #123984;
 }
-.btn-blue-border{
-    border:1px solid #123984;
-    color:#123984;
+
+.btn-blue-border {
+    border: 1px solid #123984;
+    color: #123984;
     transition: all 0.3s;
 }
-.btn-blue-border:hover{
-    background-color:#123984;
-    color:white;
+
+.btn-blue-border:hover {
+    background-color: #123984;
+    color: white;
     transition: all 0.3s;
 }
+
 .btn-blue-border:focus {
     background-color: #123984 !important;
-    color:white;
+    color: white;
 }
+
 .fs-24 {
     font-size: 24px;
 }
+
 .fs-20 {
     font-size: 20px;
 }
+
 .fs-22 {
     font-size: 22px;
 }
+
 .fs-18 {
     font-size: 18px;
 }
@@ -67,6 +76,7 @@
     font-size: 14px;
     line-height: 20px;
 }
+
 .fs-13 {
     font-size: 13px;
     line-height: 20px;
@@ -85,9 +95,14 @@
     font-weight: 600;
 }
 
-input.form-control.my-hub{
+.bg-trans-white {
+    background-color: ;
+}
+
+input.form-control.my-hub {
     background: white !important;
 }
+
 .my-button {
     background-color: #123984 !important;
     color: white !important;
@@ -99,26 +114,32 @@ input.form-control.my-hub{
     color: #123984;
     border-radius: 30px;
 }
+
 .my-current-button {
     background-color: #f1f1f1;
     color: #525252;
     border-radius: 30px;
 }
+
 .my-button:hover {
     background-color: #123984;
     color: white;
 }
+
 .image-card img {
     object-fit: cover;
     width: 100%;
     height: 200px;
 }
-.dark-blue-bg{
+
+.dark-blue-bg {
     background-color: #06183E;
 }
+
 .abt-os-blue {
     background-color: #123984;
 }
+
 .sold-button {
     background-color: #000000;
     color: white;
@@ -190,15 +211,20 @@ button[type="button"][role="presentation"].owl-next {
 button.navbar-toggler {
     background-color: white;
 }
-.btn.disabled, .btn:disabled {
+
+.btn.disabled,
+.btn:disabled {
     opacity: 0.65;
     background: #e4e4e4 !important;
     color: black !important;
-    border:none !important;
+    border: none !important;
 }
-.btn.disabled , .btn:disabled i{
+
+.btn.disabled,
+.btn:disabled i {
     color: black !important;
 }
+
 .header-bg {
     background: url("../img/Group\ 35493.png");
     background-position: center center;
@@ -244,10 +270,12 @@ button.navbar-toggler {
     width: fit-content;
     background-color: #ffffff21;
 }
+
 .carousel-indicators [data-bs-target] {
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
 }
+
 .section-1-bg {
     background: url("../img/Banner\ \(16\).png");
     background-position: center center;
@@ -262,7 +290,7 @@ button.navbar-toggler {
     background-size: cover;
 }
 
-button.btn.fs-16.mt-3.fac-button{
+button.btn.fs-16.mt-3.fac-button {
     border: 2px solid #E66742;
     color: white;
     border-radius: 30px;
@@ -333,6 +361,9 @@ span#basic-addon1 {
 /*--------------HOME-SECTION-1---------------*/
 
 /*--------------HOME-SECTION-2---------------*/
+.form-control:focus {
+    box-shadow: none;
+}
 
 .sec-2 .item {
     background: url("../img/card-bg.png");
@@ -340,12 +371,13 @@ span#basic-addon1 {
     background-repeat: no-repeat;
     background-size: cover;
     fill: #FFF;
-    filter:drop-shadow(0px 2.19px 4.38px rgba(62, 113, 225, 0.10)) drop-shadow(0px 8.03px 8.03px rgba(62, 113, 225, 0.09)) drop-shadow(0px -3.481px 1.95px rgba(62, 113, 225, 0.05)) drop-shadow(0px 31.389px 12.409px rgba(62, 113, 225, 0.01)) drop-shadow(0px 49.638px 13.869px rgba(62, 113, 225, 0.00));
+    filter: drop-shadow(0px 2.19px 4.38px rgba(62, 113, 225, 0.10)) drop-shadow(0px 8.03px 8.03px rgba(62, 113, 225, 0.09)) drop-shadow(0px -3.481px 1.95px rgba(62, 113, 225, 0.05)) drop-shadow(0px 31.389px 12.409px rgba(62, 113, 225, 0.01)) drop-shadow(0px 49.638px 13.869px rgba(62, 113, 225, 0.00));
 }
 
 .home-demo h2 {
     color: #000000;
 }
+
 .owl-nav button:hover {
     background: #123984 !important;
     color: white;
@@ -387,32 +419,41 @@ span#basic-addon1 {
     width: 20% !important;
     height: 20% !important;
 }
+
 .badge-perc-2 {
     width: 30px !important;
     height: 30px !important;
 }
-.copy-btn{
+
+.copy-btn {
     background-color: #123984;
-    color:white;
-    border-radius:10px;
+    color: white;
+    border-radius: 10px;
 }
-.copy-btn:hover{
-    color:white;
+
+.copy-btn:hover {
+    color: white;
 }
-.h-40px{
+
+.h-40px {
     height: 40px;
 }
-.h-35{
-    height:35px !important;
+
+.h-35 {
+    height: 35px !important;
 }
-.city-option{
+
+.city-option {
     transition: all 0.2s;
 }
-.city-option:hover{
-    background:#123984 !important; ;
-    color:white;
+
+.city-option:hover {
+    background: #123984 !important;
+    ;
+    color: white;
     transition: all 0.2s;
 }
+
 /*--------------HOME-SECTION-2---------------*/
 
 /*--------------HOME-SECTION-3---------------*/
@@ -441,14 +482,15 @@ span#basic-addon1 {
     border-radius: 30px;
 }
 
-.save-icon-active{
+.save-icon-active {
     background: #123984;
     padding: 5px 10px 2px 10px;
     border-radius: 30px;
-    color:white !important;
+    color: white !important;
 }
-.save-icon-active *{
-    color:white !important;
+
+.save-icon-active * {
+    color: white !important;
 }
 
 /*--------------HOME-SECTION-3---------------*/
@@ -463,6 +505,7 @@ span#basic-addon1 {
 .bdr-ryt-grey {
     border-right: 1px solid #CECECE;
 }
+
 /*--------------HOME-SECTION-4---------------*/
 
 /*--------------HOME-SECTION-5---------------*/
@@ -486,10 +529,11 @@ span#basic-addon1 {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-    padding:28px 0;
+    padding: 28px 0;
 }
-.ltt-bg *{
-    padding-left:5px;
+
+.ltt-bg * {
+    padding-left: 5px;
 }
 
 .badge-perc-2 {
@@ -502,11 +546,13 @@ span#basic-addon1 {
     border-radius: 20px;
     height: 277px;
 }
-.car-fits{
-    height:216px;
-    width:394px;
-    margin-top:-20px;
+
+.car-fits {
+    height: 216px;
+    width: 394px;
+    margin-top: -20px;
 }
+
 /*--------------HOME-SECTION-6---------------*/
 
 /*--------------HOME-SECTION-7---------------*/
@@ -518,16 +564,19 @@ span#basic-addon1 {
 .bg-grey {
     background: #f6f6f6;
 }
-.bg-my-light-blue{
-    background:#b9e0ff;
+
+.bg-my-light-blue {
+    background: #b9e0ff;
 }
 
-.progress{
-    height:8px !important;
+.progress {
+    height: 8px !important;
 }
-.progress-bar{
+
+.progress-bar {
     background-color: #E66742;
 }
+
 /*--------------HOME-SECTION-7---------------*/
 
 /*--------------HOME-SECTION-8---------------*/
@@ -556,92 +605,112 @@ span#basic-addon1 {
 button.accordion-button.collapsed {
     border-radius: 15px;
 }
+
 /*--------------HOME-SECTION-8---------------*/
 
 /*--------------HOME-SECTION-9---------------*/
-.vt-img{
+.vt-img {
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    height:151px;
-    width:251px !important;
+    height: 151px;
+    width: 251px !important;
 }
+
 .vt-bg {
     background-color: #EEF7FF;
 }
+
 .back-btn {
     background-color: #4161a6;
     border: 1px solid rgba(255, 255, 255, 0.57);
 }
-.profile-bg{
+
+.profile-bg {
     background-color: #f9fafb;
 }
+
 .border-dotted {
-    border: 1px dashed #bdbdbd; /* Change color and size as needed */
+    border: 1px dashed #bdbdbd;
+    /* Change color and size as needed */
 }
 
-.booking-header{
+.booking-header {
     background: url('../img/Banner (16).png');
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 
-.heart-icon{
-    width:80%;
+.heart-icon {
+    width: 80%;
 }
-.bg-blue{
+
+.bg-blue {
     background-color: #123984;
 }
-.booking-table{
+
+.booking-table {
     background-color: #f9fafb;
     border-radius: 10px;
 }
 
-.booking-table tr td:nth-child(1){
+.booking-table tr td:nth-child(1) {
     padding-right: 50px;
 }
-.nav-pills .nav-link, .nav-pills .show>.nav-link{
-    color:#123984;
+
+.nav-pills .nav-link,
+.nav-pills .show>.nav-link {
+    color: #123984;
     background-color: white !important;
 }
+
 /*--------------HOME-SECTION-9---------------*/
 
 .back-btn {
     background-color: #4161a6;
     border: 1px solid rgba(255, 255, 255, 0.57);
 }
-.b-confirm-bg{
+
+.b-confirm-bg {
     background-image: url('../assets/Booking\ Confermation.png');
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
 }
-.bg-blue{
+
+.bg-blue {
     background-color: #123984 !important;
 }
-.check-icon{
-    height:10%;
-    width:10%;
+
+.check-icon {
+    height: 10%;
+    width: 10%;
 }
-.my-bc{
+
+.my-bc {
     box-shadow: 0px 0px 14.629px 0px #D3E8FF;
     border-radius: 27.429px;
     border: 0.914px solid #FFF;
-    width:50%;
+    width: 50%;
 }
-.m-minus-top-48{
-margin-top:-46px !important;
+
+.m-minus-top-48 {
+    margin-top: -46px !important;
 }
-.bg-light-blue{
-    background-color:#A7CBFF;
+
+.bg-light-blue {
+    background-color: #A7CBFF;
 }
+
 .bg-lightblue {
     background-color: #EEF7FF;
     padding: 5px 15px 5px 8px;
 }
+
 .date-modal-width {
     width: 20%;
 }
+
 .my-blue-btn:hover {
     color: var(--bs-btn-hover-color);
     background-color: #123984 !important;
