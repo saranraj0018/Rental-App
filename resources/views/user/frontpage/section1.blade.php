@@ -32,20 +32,21 @@
                             <div class="collapse navbar-collapse ms-5" id="mobile_nav">
                                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right"></ul>
                                 <ul
-                                    class="navbar-nav navbar-light w-100 ms-0 ms-lg-5 ps-0 ps-lg-5 text-end text-lg-start">
-                                    <li class="nav-item ms-0 ms-lg-5 pe-0 pe-lg-1 ps-lg-5 my-auto"><a
-                                            class="nav-link text-white fw-bold" href="{{ route('home') }}">Home</a></li>
-                                    <li class="nav-item my-auto"><a class="nav-link text-white fw-bold"
+                                    class="navbar-nav navbar-light w-100 ms-0 ms-lg-4 ps-0 ps-lg-5 text-end text-lg-start">
+                                    <li class="nav-item ms-0 ms-lg-3 pe-0 pe-lg-1 ps-lg-5 my-auto"><a
+                                            class="nav-link text-white fw-normal" href="{{ route('home') }}">Home</a>
+                                    </li>
+                                    <li class="nav-item my-auto"><a class="nav-link text-white fw-normal"
                                             href="{{ route('about') }}">About</a></li>
                                     <li class="nav-item my-auto" id="booking_button"
                                         style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
-                                        <a class="nav-link text-white fw-bold"
+                                        <a class="nav-link text-white fw-normal"
                                             href="{{ route('booking.history') }}">Booking</a>
                                     </li>
-                                    <li class="nav-item my-auto"><a class="nav-link text-white fw-bold"
+                                    <li class="nav-item my-auto"><a class="nav-link text-white fw-normal"
                                             href="{{ route('faq') }}">FAQ</a></li>
                                     <li class="nav-item me-0 me-lg-3 pe-0 pe-lg-2 my-auto"><a
-                                            class="nav-link text-white fw-bold me-0 me-lg-1"
+                                            class="nav-link text-white fw-normal me-0 me-lg-1"
                                             href="{{ route('contact') }}">Contact-us</a></li>
                                     <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0 my-auto">
 
@@ -60,10 +61,10 @@
                                         <div id="after_login_button" class="mt-1 mb-2 nav-link"
                                             style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
                                             <a href="{{ route('user.profile') }}"
-                                                class="text-white text-center my-auto ms-2 text-decoration-none fs-13 fw-600">View
+                                                class="text-white text-center my-auto ms-2 text-decoration-none fs-13">View
                                                 profile</a>
                                             <div class="d-flex d-lg-block justify-content-end">
-                                                <p class="text-white m-0 my-1 border-blue w-fit rounded-3 f-16 px-2 fs-13 fw-600"
+                                                <p class="text-white m-0 my-1 border-blue w-fit rounded-3 f-16 px-2 fs-13"
                                                     id="user_name">
                                                     {{ !empty(Auth::user()->name) ? ucfirst(Auth::user()->name) : '' }}
                                                 </p>

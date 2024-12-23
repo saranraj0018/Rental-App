@@ -708,11 +708,33 @@ button.accordion-button.collapsed {
 }
 
 .date-modal-width {
-    width: 20%;
+    width: fit-content;
 }
 
 .my-blue-btn:hover {
     color: var(--bs-btn-hover-color);
     background-color: #123984 !important;
     border-color: var(--bs-btn-hover-border-color);
+}
+
+.flatpickr-time {
+    line-height: 60px !important;
+    max-height: 80px !important;
+}
+
+.flatpickr-calendar.hasTime .flatpickr-time {
+    height: 60px !important;
+    border-top: 1px solid #e6e6e6;
+}
+
+.flatpickr-time input {
+    font-size: 20px;
+}
+
+.flatpickr-time input {
+    height: 60px;
+}
+
+.flatpickr-time .numInputWrapper {
+    height: 60px;
 }
