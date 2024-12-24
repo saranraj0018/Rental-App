@@ -59,7 +59,7 @@
                                                     profile</a>
                                                 <div class="d-flex d-lg-block justify-content-end">
                                                     <p class="text-white m-0 my-1 border-blue w-fit rounded-3 f-16 ps-2 fs-13"
-                                                        id="user_name">
+                                                        id="user_names">
                                                         {{ !empty(Auth::user()->name) ? ucfirst(Auth::user()->name) : '' }}
                                                     </p>
                                                 </div>
@@ -89,7 +89,24 @@
         </header>
     </section>
 
-    <form id="user_profile">
+    <form id="user_profile" x-data="{
+        documents: JSON.parse('{{ auth()->user()->documents ?? '[]' }}'),
+
+        create() {
+            this.documents.push({
+                title: '',
+                value: ''
+            });
+        },
+
+        remove(index) {
+            this.documents.splice(index, 1);
+        }
+    }">
+
+        <input type="hidden" :value="JSON.stringify(documents.filter(doc => doc.title != ''))" name="documents"
+            id="documents">
+
         <section class="my-5">
 
             <div class="my-4">
@@ -136,21 +153,7 @@
             <p id="profile_message" class="text-success text-center"></p>
         </section>
 
-        <section class="my-5" x-data="{
-            documents: [],
-
-            create() {
-                this.documents.push({
-                    title: 'Document Name',
-                    value: ''
-                });
-            },
-
-            remove(index) {
-                this.documents.splice(index, 1);
-            }
-
-        }">
+        <section class="my-5">
             <div class="container profile-bg">
                 <div class="row">
                     <div class="col-12 col-lg-6">
@@ -179,23 +182,36 @@
                                 placeholder="Aadhaar Number" value="{{ Auth::user()->aadhaar_number ?? '' }}">
                         </div>
                     </div>
+                </div>
+            </div>
 
+            <div class="container mt-5 p-2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h1 class="fs-5 fw-500">Add Other Documents</h1>
+                    <button @click.prevent="create" type="button" class="btn btn-sm btn-outline-primary w-10"><i
+                            class="fa fa-plus"></i>
+                        Add New ID</button>
+                </div>
+                <div class="d-flex mt-3 p-1 justify-content-start flex-wrap gap-2">
                     <template x-for="(document, index) in documents" :key="index">
-                        <div class="col-12 col-lg-6">
-                            <div class="d-flex justify-content-between">
-                                <div class="fs-5 fw-500 mb-1" x-text="document?.title">
+                        <div class="mt-4 mx-1 p-3 bg-light bdr-20" style="width: 500px !important">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="fs-5 fw-500 mb-3">
+                                    <input type="text" x-model="document.title" class="fs-14 form-control">
                                 </div>
-
-                                <button class="btn"></button>
+                                <div>
+                                    <button @click="() => remove(index)" class="btn btn-outline-danger btn-sm"><i
+                                            class="fa fa-close"></i></button>
+                                </div>
                             </div>
                             <div class="fs-14 mb-3">
                                 Your uploaded documents can be removed or updated anytime.
                             </div>
 
                             <div class="border-dotted bdr-20 p-4">
-                                <label for="aadhaar" class="fs-14 fw-500" x-text="document?.title"></label>
-                                <input type="number" id="aadhaar_number" name="aadhaar_number"
-                                    class="fs-14 form-control" x-model="document?.value" placeholder="Aadhaar Number">
+                                <label for="" class="fs-14 fw-500" x-text="document.title"></label>
+                                <input type="text" class="fs-14 form-control" x-model="document.value"
+                                    placeholder="Your Document Number">
                             </div>
                         </div>
                     </template>
@@ -219,7 +235,7 @@
                 <div class="mb-3">
                     <label for="document-upload" class="form-label">Upload Additional Documents</label>
                     <div id="file-input-container" class="d-flex flex-wrap gap-2">
-                        <!-- Placeholder for dynamic file input elements -->
+
                     </div>
                 </div>
 
@@ -231,7 +247,8 @@
                                     <img src="{{ asset('/storage/user-documents/' . $image->image_name) }}"
                                         class="card-img-top" alt="Image">
                                     <button class="btn btn-danger btn-sm delete-image position-absolute"
-                                        data-id="{{ $image->id }}" style="top: 5px; right: 5px;">
+                                        data-id="{{ $image->id }}"
+                                        style="top: 5px; right: 5px; background: rgb(187, 46, 46); width: 25px !important">
                                         &times;
                                     </button>
                                 </div>

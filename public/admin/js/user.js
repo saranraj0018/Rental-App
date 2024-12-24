@@ -1,6 +1,6 @@
 $(function () {
     'use strict'
-    $(document).ready(function() {
+    $(document).ready(function () {
 
         function updateHolidayTable(data) {
             let tbody = $('#user_table tbody');
@@ -10,7 +10,7 @@ $(function () {
                 tbody.append(`<tr><td colspan="10" class="text-center">Record Not Found</td></tr>`);
             } else {
                 // Loop through the data and append rows
-                $.each(data.user, function(index, item) {
+                $.each(data.user, function (index, item) {
                     tbody.append(`
                 <tr>
                     <td>${item.id}</td>
@@ -20,14 +20,13 @@ $(function () {
                    <td>${item.aadhaar_number ? item.aadhaar_number : ''}</td>
                    <td>${item.driving_licence ? item.driving_licence : ''}</td>
                     <td>${formatDateTime(item.updated_at)}</td>
-
                 </tr>
             `);
                 });
             }
         }
 
-// Helper function to format dates
+        // Helper function to format dates
         function formatDateTime(dateString) {
             let date = new Date(dateString);
             return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
@@ -45,10 +44,10 @@ $(function () {
                 data: {
                     name_search: name_search
                 },
-                success: function(response) {
+                success: function (response) {
                     updateHolidayTable(response.data, response.permissions) // Populate table with new data
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     alertify.error('Something Went Wrong');
                 }
             });
@@ -65,34 +64,55 @@ $(function () {
 
             // Get images array from data-images attribute
             let images = $(this).data('images');
+            const documents = $(this).data('documents');
+
+            // console.log(documents);
+            // return false;
+
 
             // Clear any existing images in the modal
             $('#image_gallery').empty();
+            $('#documents').empty();
 
             if (images && images.length > 0) {
                 images.forEach((imageName, index) => {
                     if (imageName) {
                         let imageUrl = `${assetBasePath}/${imageName}`;
                         $('#image_gallery').append(`
-                    <div class="col-md-4 mb-3 text-center">
+                    <div class="mb-3 text-center d-flex" style="flex-direction: column;">
                         <label class="form-label">Document ${index + 1}</label>
-                        <img src="${imageUrl}" alt="Document Image" class="img-fluid border rounded" style="max-height: 200px; object-fit: cover;">
+                        <img src="${imageUrl}" alt="Document Image" class="img-fluid border rounded" style="height: 300px; width: 300px; object-fit: cover;">
                     </div>
                 `);
                     }
                 });
             } else {
                 $('#image_gallery').append(`
-            <div class="col-12 text-center">
-                <p class="text-muted">No images available</p>
-            </div>
-        `);
+                    <div class="col-12 text-center">
+                        <p class="text-muted">No images available</p>
+                    </div>
+                `);
+            }
+
+
+            if (documents && documents.length) {
+                documents?.map((document) => {
+                    if (document?.title) {
+                        $('#documents').append(`
+                            <div>
+                            <h6 class="text-bold mb-0">${document.title}</h6>
+                            <p class="">${document.value}</p>
+                            </div>
+                            `);
+                    }
+                });
+            } else {
+                $('#documents').append(`
+                    <div class="col-12 text-center">
+                        <p class="text-muted">No Data available</p>
+                    </div>
+                `);
             }
         });
-
-
-
-
-
     });
 });

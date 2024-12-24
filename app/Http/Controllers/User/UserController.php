@@ -272,8 +272,8 @@ class UserController extends Controller {
             'aadhaar_number' => 'required|digits:12',
             'driving_licence' => 'required',
             'other_documents' => 'nullable|mimes:jpg,png,pdf|max:2048',
+            'documents' => 'required|string',
         ]);
-
 
         $auth_id = Auth::id() ?? 0;
         $user = User::find($auth_id);
@@ -282,6 +282,7 @@ class UserController extends Controller {
         $user->email = $request['user_email'];
         $user->aadhaar_number = $request['aadhaar_number'];
         $user->driving_licence = $request['driving_licence'];
+        $user->documents = $request['documents'];
         $user->save();
 
         return response()->json(['success' => true, 'message' => 'User Profile updated successfully']);

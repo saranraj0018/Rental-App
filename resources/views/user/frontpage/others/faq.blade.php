@@ -244,7 +244,7 @@
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#collapseOne_{{ $item->id }}" aria-expanded="true"
                                     aria-controls="collapseOne">
-                                    {{ $value->question ?? '' }}
+                                    {{ $loop->iteration . '.  ' . $value->question ?? '' }}
                                 </button>
                             </h2>
                             <div id="collapseOne_{{ $item->id }}" class="accordion-collapse collapse"
