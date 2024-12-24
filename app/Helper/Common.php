@@ -54,7 +54,13 @@ function showDateTime($date, $format = 'd/m/Y h:i:s A')
 
 function showDateformat($date, $format = 'd-m-Y H:i')
 {
-    return Carbon::parse($date)->format($format);
+    try {
+        // Attempt to parse the date
+        return Carbon::parse($date)->format($format);
+    } catch (\Exception $e) {
+        // Return an empty string or a fallback value on failure
+        return '';
+    }
 }
 
 function showDate($date, $format = 'd/m/Y')

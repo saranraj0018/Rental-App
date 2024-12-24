@@ -80,12 +80,22 @@ class PickupDeliveryController extends BaseController {
             'start_date' => 'required|date',
             'end_date' => 'required|date',
         ]);
-
+        $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
+        $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
         // dd($request->all());
         $booking = Booking::find($request['booking_id']);
 
         $booking->reschedule_date = formDateTime($request['end_date']);
         $booking->save();
+
+        if ($booking->booking_type == 'delivery') {
+            Available::where('booking_id', $booking->booking_id)->update(['end_date' => formDateTime($request['start_date'])]);
+        } else {
+            $next_booking = Carbon::parse(formDateTime($request['end_date']))->addHours($timing_setting['booking_duration'] ?? 3);
+            Available::where('booking_id', $booking->booking_id)->update(['end_date' => formDateTime($request['end_date']) , 'next_booking' => formDateTime($next_booking)]);
+        }
+
+
         $availableCars = self::checkAvailability($request['start_date'], $request['end_date'], $request['car_id'], $request['model_id']);
 
         if (!empty($availableCars['booking_details'])) {
@@ -114,7 +124,7 @@ class PickupDeliveryController extends BaseController {
                         $car_available->booking_id = $booking->booking_id;
                         $car_available->start_date = formDateTime($request['start_date']);
                         $car_available->end_date = formDateTime($request['end_date']);
-                        $car_available->next_booking = Carbon::parse(formDateTime($request['end_date']))->addHours(3);
+                        $car_available->next_booking = Carbon::parse(formDateTime($request['end_date']))->addHours($timing_setting['booking_duration'] ?? 3);
                         $car_available->booking_type = 1;
                         $car_available->save();
 
@@ -343,16 +353,26 @@ class PickupDeliveryController extends BaseController {
         // Set the number of items per page
         $perPage = $request->input('per_page', 20);
 
-        if (!empty($request->input('booking_id'))) {
+        if (!empty($request->input('booking_id')) && !empty($request['hub_type'])) {
             $booking = Booking::with(['user', 'details', 'comments', 'user.bookings'])
-                ->where('city_code', $request['hub_type'] ?? 632)
-                ->where('status', $request['status'])
+                ->where('city_code', $request['hub_type'])
                 ->where('booking_id', $request->input('booking_id'));
 
             $bookings = $booking->paginate($perPage);
             return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Data Fetch successfully']);
 
         }
+
+        if (!empty($request['status']) && ($request['status'] == 2 || $request['status'] == 3)) {
+            $booking = Booking::with(['user', 'details', 'comments', 'user.bookings'])
+                ->where('city_code', $request['hub_type'])
+                ->where('status', $request['status']);
+
+            $bookings = $booking->paginate($perPage);
+            return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Data Fetch successfully']);
+
+        }
+
 
         $timeLimit = now()->addHours(48);
         $query = Booking::with(['user', 'details', 'comments', 'user.bookings'])
