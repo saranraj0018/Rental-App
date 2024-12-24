@@ -129,7 +129,8 @@
                                         @if (in_array('user_view_docs', $permissions))
                                             <td><a href="#" class="user_view text-primary w-4 h-4 mr-1"
                                                     data-id="{{ $item->id }}"
-                                                    data-images="{{ json_encode($item->userDoc->pluck('image_name')) }}">
+                                                    data-images="{{ json_encode($item->userDoc->pluck('image_name')) }}"
+                                                    data-documents="{{ $item->documents }}">
                                                     <svg class="filament-link-icon w-4 h-4 mr-1"
                                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                         fill="currentColor" aria-hidden="true">

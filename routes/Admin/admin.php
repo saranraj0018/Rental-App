@@ -43,7 +43,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/dashboard/dataset', [DashboardController::class, 'dataset']);
         Route::get('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
-    // Pickup-delivery list
+        // Pickup-delivery list
         Route::get('/pickup-delivery/list', [PickupDeliveryController::class, 'list'])->name('pickup-delivery.list');
         Route::get('/pickup-delivery/list/export', [PickupDeliveryController::class, 'export'])->name('pickup-delivery.list.export');
         Route::post('/reschedule/date', [PickupDeliveryController::class, 'rescheduleDate'])->name('pickup-delivery.reschedule');
@@ -133,7 +133,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::delete('/faq/{id?}/delete', [BannerController::class, 'faqDelete'])->name('faq.delete');
         Route::get('/faq/search', [BannerController::class, 'search'])->name('faq.search');
 
-        $allowedSections = ['policy', 'terms', 'shipping','refunds','pricing','cancel'];
+        $allowedSections = ['policy', 'terms', 'shipping', 'refunds', 'pricing', 'cancel'];
 
         foreach ($allowedSections as $section) {
             Route::get("/{$section}/list", [SettingController::class, 'view'])->name("{$section}.list")->defaults('section', $section);
@@ -141,17 +141,14 @@ Route::group(['prefix' => 'admin'], function () {
         }
 
 
-
         // Map Section
         Route::get('/city-map', [MapController::class, 'show'])->name('city.map');
         Route::post('/save-area', [MapController::class, 'store'])->name('area.store');
         Route::get('/get-city-coordinates', [MapController::class, 'getCityCoordinates'])->name('area.Coordinates');
 
-
         // Front-end Car - Info Section
         Route::get('/ipr-info', [BannerController::class, 'iprInfo'])->name('ipr-info.view');
         Route::post('/ipr-info/save', [BannerController::class, 'iprSave'])->name('ipr-info.save');
-
 
         //Holidays Section
         Route::get('/holiday/list', [HolidayController::class, 'list'])->name('holidays.list');

@@ -10,14 +10,14 @@
                         </div>
                     </div>
                     <div class="row gx-3 p-3">
-                        <div class="col-5">
+                        <div class="col-3">
                             <div class="d-block">
                                 <img src="{{ asset('storage/car_image/' . $model->carModel->car_image ?? '') }}"
                                     alt="cars" class="img-fluid w-100">
                             </div>
                         </div>
 
-                        <div class="col-5 my-auto">
+                        <div class="col-7 my-auto">
                             <div class="ms-4">
                                 <div class="d-flex"
                                     style="display: @if ($timing_setting['show_bookmarks'] == 1) flex @else none @endif !important">
