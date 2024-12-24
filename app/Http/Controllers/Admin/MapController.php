@@ -47,7 +47,7 @@ class MapController extends Controller {
         $coordinates = $areas->map(function ($area) {
             return json_decode($area->coordinates, true); // Decode each area’s coordinates
         });
-        return response()->json($coordinates);
+        return response()->json(['data' => $coordinates]);
     }
 
 

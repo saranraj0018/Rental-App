@@ -36,7 +36,7 @@
                     <div class="d-flex justify-content-between">
                         <div class="input-group" style="width: 250px;">
                             <label for="booking_id">
-                            </label><input type="text" id="booking_id" name="booking_id" class="form-control" placeholder="Booking ID....">
+                            </label><input type="text" id="history_booking_id" name="history_booking_id" class="form-control" placeholder="Booking ID....">
                         </div>
                     </div>
                 </div>
