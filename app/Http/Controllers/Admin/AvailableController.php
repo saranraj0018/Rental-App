@@ -20,28 +20,30 @@ class AvailableController extends Controller {
     }
 
 
-
-
     public function available(Request $request) {
         if (empty($request['model_id']) || empty($request['city_code'])) {
             return ['bookings' => []];
         }
         $model_id = $request['model_id'];
         $city_code = $request['city_code'];
-        $week_offset = $request['week_offset'];
-
+        $week_offset = $request['week_offset'];;
+        $startDate = now()->addDays(intval($week_offset) * 7)->format('Y-m-d');
+        $endDate = now()->addDays(intval($week_offset) * 7 + 6)->format('Y-m-d');
+        $startDate = Carbon::parse($startDate)->startOfDay(); // Ensure start of day
+        $endDate = Carbon::parse($endDate)->endOfDay();
         // Fetch car details with related bookings
-        $carDetails = CarDetails::with(['availableBookings' => function ($query) use ($week_offset) {
-            // $startDate = now()->addDays($week_offset * 7);
-            // $endDate = $startDate->copy()->addDays(6);
-
-            // $query->whereBetween('start_date', [$startDate, $endDate]);
-            $startDate = now()->addDays($week_offset * 7)->toDateString(); // Convert to date (YYYY-MM-DD)
-            $endDate = now()->addDays($week_offset * 7 + 6)->toDateString(); // Convert to date (YYYY-MM-DD)
-
-            // Modify the query to compare dates only
-            $query->whereRaw('DATE(start_date) BETWEEN ? AND ?', [$startDate, $endDate]);
-        }])->where('city_code', $city_code)->where('model_id', $model_id)->get();
+        $carDetails = CarDetails::with(['availableBookings' => function ($query) use ($startDate, $endDate) {
+            $query->where(function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('start_date', [$startDate, $endDate]) // Booking starts within the range
+                ->orWhereBetween('end_date', [$startDate, $endDate]) // Booking ends within the range
+                ->orWhere(function ($query) use ($startDate, $endDate) {
+                    $query->where('start_date', '<=', $startDate) // Booking starts before the range
+                    ->where('end_date', '>=', $endDate);   // and ends after the range
+                });
+            });
+        }])->where('city_code', $city_code)
+            ->where('model_id', $model_id)
+            ->get();
 
         $bookings = [];
 

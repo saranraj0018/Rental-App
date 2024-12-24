@@ -262,8 +262,14 @@ class PaymentController extends Controller
         $payment->save();
 
         $booking = Booking::where('booking_id',$booking_id)->where('booking_type','pickup')->first();
-        $booking->reschedule_date = !empty(session('delivery_date')) ? formDate(session('delivery_date')) : '';
+        $booking->reschedule_date = !empty(session('delivery_date')) ? formDateTime(session('delivery_date')) : '';
         $booking->save();
+
+        $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
+        $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
+        $next_booking = Carbon::parse(formDateTime(session('delivery_date')))->addHours($timing_setting['booking_duration'] ?? 3);
+        Available::where('booking_id', $booking->booking_id)->update(['end_date' => formDateTime(session('delivery_date')) , 'next_booking' => formDateTime($next_booking)]);
+
 
         $admin = AdminDetail::where('role', '=', 1)->first();
         Mail::to($booking->user->email)->send(new BookingReScheduleMail($booking));

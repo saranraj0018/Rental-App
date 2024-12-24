@@ -45,7 +45,9 @@ class SwapController extends Controller {
 
         $data = [];
         if (!empty($request['booking_id'])) {
-            $booking = Booking::where('booking_id', $request['booking_id'])->where('status', 1)->get();
+            $booking = Booking::where('booking_id', $request['booking_id'])
+                ->where('city_code', $request['city_code'])
+                ->where('status', 1)->get();
 
             foreach ($booking as $booking) {
                 if (!empty($booking && $booking->status == 1 && $booking->booking_type == 'delivery')) {
@@ -101,22 +103,25 @@ class SwapController extends Controller {
     }
 
     public function swapCar(Request $request) {
-        if (!empty($request['booking_id']) && !empty($request['car_id'])) {
+        $car_id = !empty($request['car_id']) ?$request['car_id'] : $request['old_car_id'];
+        if (!empty($request['booking_id']) && !empty($car_id)) {
+
+            $car_id = !empty($request['car_id']) ?$request['car_id'] : $request['old_car_id'];
             $old_booking = Booking::where('booking_id', $request['booking_id'])->first();
 
 
             $booking = Booking::where('booking_id', $request['booking_id'])->where('status', 1);
-            $booking->update(['car_id' => $request['car_id']]);
+            $booking->update(['car_id' => $car_id]);
 
             $_booking = $booking->get()->first();
 
 
-            $car_details = CarDetails::with('carModel')->find($request['car_id']);
+            $car_details = CarDetails::with('carModel')->find($car_id);
             BookingDetail::where('booking_id', $request['booking_id'])->update(['car_details' => json_encode($car_details)]);
 
             if (!empty($request['start_date']) && !empty($request['end_date'])) {
                 $available = new Available();
-                $available->car_id = $request['car_id'];
+                $available->car_id = $car_id;
                 $available->model_id = $car_details->carModel->car_model_id ?? 0;
                 $available->booking_id = $request['booking_id'];
                 $available->register_number = $car_details->register_number;
@@ -129,7 +134,7 @@ class SwapController extends Controller {
                 $available->booking_id = $request['booking_id'];
                 $available->user_id = Auth::guard('admin')->id();
                 $available->car_id = !empty($old_booking->car_id) ? $old_booking->car_id : 0;
-                $available->swap_car_id = $request['car_id'];
+                $available->swap_car_id = $car_id;
                 $available->save();
             }
 
