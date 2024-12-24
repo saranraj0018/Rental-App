@@ -11,7 +11,7 @@
 @endphp
 
 
-<section class="section-1-bg pb-3">
+<section class="section-1-bg pb-3" x-data>
     <header>
         <section>
             <div class="container-fluid p-3">
@@ -19,7 +19,10 @@
                     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
                         <div class="container d-flex justify-content-between">
                             <div class="d-flex justify-content-between mobile-head-width">
-                                <img src="{{ asset('user/img/Logo (4).png') }}" alt="Site-Logo" class="img-fluid d-block">
+                                <a href="{{ route('home') }}">
+                                    <img src="{{ asset('user/img/Logo (4).png') }}" alt="Site-Logo"
+                                        class="img-fluid d-block">
+                                </a>
                                 <div class="my-auto h-100">
                                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                                         data-target="#mobile_nav" aria-controls="mobile_nav" aria-expanded="false"
@@ -97,6 +100,7 @@
 
 
     <div class="container py-5 d-none d-lg-block">
+
         <div class="row">
             <div class="col-12 col-lg-6">
                 <h1 class="fs-1 text-white fw-500">{!! $title !!}</h1>
@@ -128,7 +132,12 @@
                             @endif
                         @endforeach
                     @endif
-                    <button class="btn fs-16 mt-3 fac-button book_now">Find a car</button>
+                    <button class="btn fs-16 mt-3 fac-button"
+                        @click.prevent="() => {
+                        $('#cityModal').modal('show')
+                    }">Find
+                        a
+                        car</button>
                 </div>
             </div>
             <div class="col-12 col-lg-6">
@@ -144,8 +153,8 @@
 
                         </div>
                         <div class="carousel-item">
-                            <img src="{{ asset('storage/section1-image-car/' . $image3) }}" class="d-block w-100 mb-5"
-                                alt="Slide 1">
+                            <img src="{{ asset('storage/section1-image-car/' . $image3) }}"
+                                class="d-block w-100 mb-5" alt="Slide 1">
                         </div>
                     </div>
                     <!-- Pagination Dots -->
@@ -201,7 +210,7 @@
                             <i class=" text-white fa-solid fa-calendar-days"></i>
                         </span>
                         <input type="text" class="form-control fs-14 my-hub" id="dateTimeInput1"
-                            placeholder="Select first date and time" data-bs-toggle="modal"
+                            placeholder="Select Start Date" data-bs-toggle="modal"
                             value="{{ session('start_date') }}" data-bs-target="#dateTimeModal1" readonly
                             style="font-size:13px;">
                     </div>
@@ -213,9 +222,8 @@
                             <i class=" text-white fa-solid fa-calendar-days"></i>
                         </span>
                         <input type="text" class="form-control fs-14 my-hub" id="dateTimeInput2"
-                            placeholder="Select second date and time" data-bs-toggle="modal"
-                            value="{{ session('end_date') }}" data-bs-target="#dateTimeModal2" readonly
-                            style="font-size:13px;">
+                            placeholder="Select End Date" data-bs-toggle="modal" value="{{ session('end_date') }}"
+                            data-bs-target="#dateTimeModal2" readonly style="font-size:13px;">
                     </div>
                 </div>
                 <div class="col-12 col-lg-2 d-flex justify-content-center d-lg-block my-auto">

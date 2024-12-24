@@ -1,5 +1,4 @@
 <section class="section-1-bg pb-3">
-
     <header>
         <section>
             <div class="container-fluid p-3">
@@ -7,7 +6,10 @@
                     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
                         <div class="container d-flex justify-content-between">
                             <div class="d-flex justify-content-between mobile-head-width">
-                                <img src="{{ asset('user/img/Logo (4).png') }}" alt="Site-Logo" class="img-fluid d-block">
+                                <a href="{{ route('home') }}">
+                                    <img src="{{ asset('user/img/Logo (4).png') }}" alt="Site-Logo"
+                                        class="img-fluid d-block">
+                                </a>
                                 <div class="my-auto h-100">
                                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                                         data-target="#mobile_nav" aria-controls="mobile_nav" aria-expanded="false"
