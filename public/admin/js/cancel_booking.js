@@ -114,7 +114,7 @@ $(function () {
             return `${formattedDate} ${formattedTime}`;
         }
 
-        function updateBookingTable(data) {
+        function updateBookingTable(data,permissions) {
             let tbody = $('#cancel_booking_table tbody');
             tbody.empty(); // Clear existing rows
 
@@ -154,7 +154,7 @@ $(function () {
                     <td>${bookingDetails.register_number || ''}</td>
                     <td class="truncate-text" title="${item.address}">${item.address}</td>
                     <td>
-                        <button class="btn btn-warning user-details-modal" data-id="${item.user_id}" data-mobile="${item.user.mobile}" data-booking="${item.user.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item.user.aadhaar_number}">
+                        <button class="btn btn-warning user-details-modal" data-id="${item.user_id}" data-mobile="${item.user ? item.user.mobile : ''}" data-booking="${item.user.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item.user ? item.user.aadhaar_number : ''}">
                             User details
                         </button>
                     </td>

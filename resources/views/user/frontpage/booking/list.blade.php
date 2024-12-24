@@ -110,6 +110,8 @@
                                         $model_details = !empty($car->car_details) ? json_decode($car->car_details) : [];
                                         $payment_details = !empty($car->payment_details) ? json_decode($car->payment_details) : [];
                                         $coupon_details = !empty($car->coupon) ? json_decode($car->coupon) : [];
+                                        $booking_end_date = ($details->booking_type === 'pickup' && !empty($details->reschedule_date))  ?
+                                        $details->reschedule_date : $details->end_date;
 
                                     @endphp
                                 <tr>
@@ -142,7 +144,7 @@
                                             End Date
                                         </div>
                                         <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                            {{ !empty($details->reschedule_date) ? showDateTime($details->reschedule_date) : showDateTime($details->end_date) ?? '' }}
+                                            {{ showDateTime($booking_end_date) }}
                                         </div>
                                     </td>
                                     <td class="pt-4">
@@ -161,7 +163,7 @@
                                         @endphp
                                         @if ($endDate->gt($currentDateTime))
                                         <button class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none edit_date"
-                                                data-end_date="{{showDateformat($details->end_date) ?? ''}}" data-booking_id="{{$details->booking_id ?? ''}}"
+                                                data-end_date="{{showDateformat($booking_end_date) ?? ''}}" data-booking_id="{{$details->booking_id ?? ''}}"
                                                 data-model_id="{{ $model_details->car_model->id ?? '' }}">Edit</button>
                                         @endif
                                         <button class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none details"
