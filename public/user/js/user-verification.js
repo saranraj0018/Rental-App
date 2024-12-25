@@ -25,29 +25,29 @@ $(function () {
         }
     }
 
-    $('#login_payment').on('click', function() {
+    $('#login_payment').on('click', function () {
         let text = $(this).text();
-       if (text === 'Login To Proceed Payment'){
-           $('#mobileModal').modal('show');
-       }
+        if (text === 'Login To Proceed Payment') {
+            $('#mobileModal').modal('show');
+        }
     });
 
-    $('#login_user').on('click', function() {
+    $('#login_user').on('click', function () {
         $('#mobileModal').modal('show');
     });
 
-    $('#register_user').on('click', function() {
+    $('#register_user').on('click', function () {
         $('#registerModal').modal('show');
     });
     // Send OTP form
-    $('#user-otp').on('submit', function(e) {
+    $('#user-otp').on('submit', function (e) {
         e.preventDefault();
         if (validateField({ id: '#mobile_number', condition: (val) => val === '' })) {
             $.ajax({
                 url: '/user/send-otp', // Update with your route
                 method: 'POST',
                 data: $(this).serialize(),
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
                         $('#mobileModal').modal('hide');
                         $('#otpModal').modal('show');
@@ -56,7 +56,32 @@ $(function () {
                         alert(response.message); // You may replace this with a modal if preferred
                     }
                 },
-                error: function(xhr) {
+                error: function (xhr) {
+                    handleAjaxErrors(xhr, '#mobile_number');
+                }
+            });
+        }
+    });
+
+
+
+    $('#resend-otp').on('click', function (e) {
+
+        const mobileNumber = $('#mobile_number_otp2').val();
+
+        e.preventDefault();
+        if (mobileNumber !== '') {
+            $.ajax({
+                url: '/user/send-otp', // Update with your route
+                method: 'POST',
+                data: { mobile_number: mobileNumber },
+                success: function (response) {
+                    if (response.success) {
+                    } else {
+                        alert(response.message); // You may replace this with a modal if preferred
+                    }
+                },
+                error: function (xhr) {
                     handleAjaxErrors(xhr, '#mobile_number');
                 }
             });
@@ -64,14 +89,14 @@ $(function () {
     });
 
     // Verify OTP form
-    $('#verification_otp').on('submit', function(e) {
+    $('#verification_otp').on('submit', function (e) {
         e.preventDefault();
         if (validateField({ id: '#verification_code', condition: (val) => val === '' })) {
             $.ajax({
                 url: '/user/verify-otp', // Update with your route
                 method: 'POST',
                 data: $(this).serialize(),
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
                         $('#otpModal').modal('hide');
                         $('#login_button').hide();
@@ -86,7 +111,7 @@ $(function () {
                         $('#otp_error').text('Invalid OTP');
                     }
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     handleAjaxErrors(xhr, '#verification_code');
                 }
             });
@@ -94,7 +119,7 @@ $(function () {
     });
 
     // Back button functionality
-    $('.back-button').click(function() {
+    $('.back-button').click(function () {
         const prevModal = $(this).data('prev');
         if (prevModal === 1) {
             $('#otpModal').modal('hide');
@@ -106,14 +131,14 @@ $(function () {
     });
 
     // Show registration form
-    $('.register-link').click(function() {
+    $('.register-link').click(function () {
         $('#mobileModal').modal('hide');
         $('#registerModal').modal('show');
         // $('#user_document').modal('show');
     });
 
     // User Registration form
-    $('#user_registration').on('submit', function(e) {
+    $('#user_registration').on('submit', function (e) {
         e.preventDefault();
         const fields = [
             { id: '#user_name_', condition: (val) => val === '' },
@@ -131,7 +156,7 @@ $(function () {
                 url: '/user/register', // Update with your route
                 method: 'POST',
                 data: $(this).serialize(),
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
                         $('#registerModal').modal('hide');
                         $('#mobileModal').modal('show');
@@ -139,7 +164,7 @@ $(function () {
                         alert(response.message);
                     }
                 },
-                error: function(response) {
+                error: function (response) {
                     if (response.responseJSON && response.responseJSON.errors) {
                         let errors = response.responseJSON.errors;
                         $('.form-control').removeClass('is-invalid');
@@ -215,7 +240,7 @@ $(function () {
     }
 
     // User Registration form
-    $('#user_documentation').on('submit', function(e) {
+    $('#user_documentation').on('submit', function (e) {
         e.preventDefault();
         const fields = [
             { id: '#aadhaar_number', condition: (val) => val === '' },
@@ -236,14 +261,14 @@ $(function () {
                 data: formData,
                 processData: false, // Required for jQuery to send the data properly
                 contentType: false, // Required to handle file uploads correctly
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
                         $('#user_document').modal('hide');
                     } else {
                         alert(response.message);
                     }
                 },
-                error: function(response) {
+                error: function (response) {
                     if (response.responseJSON && response.responseJSON.errors) {
                         let errors = response.responseJSON.errors;
                         $('.form-control').removeClass('is-invalid');
