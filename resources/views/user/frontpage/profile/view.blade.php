@@ -225,14 +225,14 @@
             <div class="container mt-5 ">
                 <h4 class="mb-4">Documents List</h4>
                 <p id="document_message" class="text-success text-center"></p>
-                <div class="d-flex justify-content-end">
+                <div class="d-flex justify-content-start justify-content-md-end ">
                     <button type="submit"
                         class="btn my-blue-btn blue-bg text-white rounded-pill h-35 fs-6">Upload</button>
                     <button type="button" id="add-file-button"
                         class="border-0 text-blue ms-2 btn btn-primary bg-my-light-blue rounded-pill h-35">Add
                         Document</button>
                 </div>
-                <div class="mb-3">
+                <div class="my-5">
                     <label for="document-upload" class="form-label">Upload Additional Documents</label>
                     <div id="file-input-container" class="d-flex flex-wrap gap-2">
 
