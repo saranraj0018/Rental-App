@@ -470,12 +470,12 @@
                         <input type="hidden" id="dly_longitude" name="dly_longitude">
                         <input type="hidden" id="dly_address" name="dly_address">
                         <p class="text-danger" id="delivery_outside_area"></p>
-                        <div class="d-flex">
-                            <button type="button" class="btn fs-16 my-button mt-4 w-50 w-lg-25"
+                        <div class="d-block d-lg-flex">
+                            <button type="button" class="btn fs-16 my-button mt-4 w-100 w-lg-25"
                                 id="delivery_address">Confirm Location</button>
-                            <button type="button" class="btn fs-16 my-drop-button mt-4 mx-2 w-50 w-lg-25"
+                            <button type="button" class="btn fs-16 my-drop-button mt-4 mx-2 w-100 w-lg-25"
                                 id="same_address">Same as Pickup Location</button>
-                            <button type="button" class="btn fs-16 my-current-button rounded-pill mt-4 w-50 w-lg-25"
+                            <button type="button" class="btn fs-16 my-current-button rounded-pill mt-4 w-100 w-lg-25"
                                 id="drop_current_location">Current Location</button>
                         </div>
                     </div>
