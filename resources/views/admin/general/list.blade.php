@@ -120,7 +120,8 @@
                             </div>
 
                             <div class="form-group col-md-3">
-                                <label class="form-control-label font-weight-bold" for="show_duration">Pre-Bookings Allowed Until</label>
+                                <label class="form-control-label font-weight-bold" for="show_duration">Pre-Bookings Allowed
+                                    Until</label>
                                 <div class="input-group">
                                     <input type="number" class="form-control" id="show_duration" name="show_duration"
                                         placeholder="1" value="{{ $data['show_duration'] ?? 0 }}">
@@ -158,7 +159,9 @@
                                 </div>
                                 <div class="invalid-feedback">Please Enter Delivery Fee.</div>
                             </div>
-                            <div class="form-group col-md-5" style="height: 100%; margin: 40px 0 0 0">
+
+
+                            <div class="form-group col-md-3" style="height: 100%; margin: 40px 0 0 0">
                                 <div class="d-flex">
                                     {{-- <div class="my-auto"> --}}
                                     {{-- </div> --}}
@@ -171,10 +174,23 @@
                                     <label for="title">Show Bookmarks</label>
                                 </div>
                             </div>
+
+                            <div class="form-group col-md-5" style="height: 100%; margin: 40px 0 0 0">
+                                <div class="d-flex">
+                                    <div class="toggle-wrapper mx-2" id="toggle-blog-button">
+                                        <div class="label off">OFF</div>
+                                        <div class="toggle-switch"></div>
+                                        <div class="label on" style="display: none;">ON</div>
+                                    </div>
+                                    <input type="hidden" name="show_blog" id="toggle-blog-value" value="0">
+                                    <label for="title">Show Blog</label>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-3">
-                                <label class="form-control-label font-weight-bold" for="inputPassword4">Create Booking After (Hours)
+                                <label class="form-control-label font-weight-bold" for="inputPassword4">Create Booking
+                                    After (Hours)
                                 </label>
                                 <div>
                                     <input type="text" class="form-control" id="booking_duration"
@@ -188,9 +204,9 @@
 
 
                         @if (in_array('general_settings_update', getAdminPermissions()))
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary btn-block btn-lg">Update</button>
-                        </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block btn-lg">Update</button>
+                            </div>
                         @endif
                     </form>
                 </div>
@@ -203,7 +219,7 @@
         document.addEventListener('DOMContentLoaded', function() {
 
 
-            if ( "{{ !empty($data['show_bookmarks']) }}") {
+            if ("{{ !empty($data['show_bookmarks']) }}") {
                 $('#toggle-button').toggleClass('on');
             }
 
@@ -213,9 +229,26 @@
             } else {
                 $('#toggle-button').css('background-color', 'red');
             }
+
             $('#toggle-button').find('.label.off').toggle(!$('#toggle-button').hasClass('on'));
             $('#toggle-button').find('.label.on').toggle($('#toggle-button').hasClass('on'));
             $('#toggle-value').val("{{ !empty($data['show_bookmarks']) }}");
+
+
+
+            if ("{{ !empty($data['show_blog']) }}") {
+                $('#toggle-blog-button').toggleClass('on');
+            }
+
+            if ($('#toggle-blog-button').hasClass('on')) {
+                $('#toggle-blog-button').css('background-color', 'green');
+                $('#toggle-blog-value').val('1');
+            } else {
+                $('#toggle-blog-button').css('background-color', 'red');
+            }
+            $('#toggle-blog-button').find('.label.off').toggle(!$('#toggle-blog-button').hasClass('on'));
+            $('#toggle-blog-button').find('.label.on').toggle($('#toggle-blog-button').hasClass('on'));
+            $('#toggle-blog-value').val("{{ !empty($data['show_blog']) }}");
         });
 
 
@@ -234,8 +267,27 @@
             $('#toggle-value').val(value);
         });
 
+
+        $('#toggle-blog-button').on('click', function() {
+            $(this).toggleClass('on');
+            let value;
+            if ($(this).hasClass('on')) {
+                $(this).css('background-color', 'green');
+                value = 1;
+            } else {
+                $(this).css('background-color', 'red');
+                value = 0;
+            }
+
+            $(this).find('.label.off').toggle(!$(this).hasClass('on'));
+            $(this).find('.label.on').toggle($(this).hasClass('on'));
+            $('#toggle-blog-value').val(value);
+        });
+
+
         // Initially set the button to red color using jQuery
         $('#toggle-button').css('background-color', 'red');
+        $('#toggle-blog-button').css('background-color', 'red');
     </script>
 
 

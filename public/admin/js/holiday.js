@@ -1,191 +1,231 @@
 $(function () {
-    'use strict'
-    $(document).ready(function() {
-        loadDatePickers()
+    "use strict";
+    $(document).ready(function () {
+        loadDatePickers();
         function loadDatePickers() {
-
             $('input[name="event_start_date"]').daterangepicker({
                 singleDatePicker: true,
-                startDate: moment().startOf('hour'),
-                minDate: moment().startOf('day'),
+                startDate: moment().startOf("hour"),
+                minDate: moment().startOf("day"),
                 locale: {
-                    format: 'DD-MM-YYYY'
-                }
+                    format: "DD-MM-YYYY",
+                },
             });
 
             $('input[name="event_end_date"]').daterangepicker({
                 singleDatePicker: true,
-                startDate: moment().startOf('hour'),
-                minDate: moment().startOf('day'),
+                startDate: moment().startOf("hour"),
+                minDate: moment().startOf("day"),
                 locale: {
-                    format: 'DD-MM-YYYY'
-                }
+                    format: "DD-MM-YYYY",
+                },
             });
             $('input[name="event_date"]').daterangepicker({
                 singleDatePicker: true,
-                startDate: moment().startOf('hour'),
-                minDate: moment().startOf('day'),
+                startDate: moment().startOf("hour"),
+                minDate: moment().startOf("day"),
                 locale: {
-                    format: 'DD-MM-YYYY'
-                }
+                    format: "DD-MM-YYYY",
+                },
             });
-
         }
 
-        $('#add_holiday').click(function() {
-            $('#event_name').val(" ");
-            $('#event_start_date').val(" ");
-            $('#event_end_date').val(" ");
-            $('#description').val(" ");
-            $('#holiday_label').text("Create Holidays");
-            $('#holiday_model').modal('show');
-            $('#save_holiday').text("Submit");
+        $("#add_holiday").click(function () {
+            $("#event_name").val(" ");
+            $("#event_start_date").val(" ");
+            $("#event_end_date").val(" ");
+            $("#description").val(" ");
+            $("#holiday_label").text("Create Holidays");
+            $("#holiday_model").modal("show");
+            $("#save_holiday").text("Submit");
         });
 
-        $('#holiday_form').on('submit', function(e) {
+        $("#holiday_form").on("submit", function (e) {
             e.preventDefault();
             let isValid = true;
             let fields = [
-                { id: '#event_name', wrapper: true, condition: (val) => val === '' },
-                { id: '#event_start_date', wrapper: true, condition: (val) => val === '' },
-                { id: '#event_end_date', wrapper: true, condition: (val) => val === '' },
+                {
+                    id: "#event_name",
+                    wrapper: true,
+                    condition: (val) => val === "",
+                },
+                {
+                    id: "#event_start_date",
+                    wrapper: true,
+                    condition: (val) => val === "",
+                },
+                {
+                    id: "#event_end_date",
+                    wrapper: true,
+                    condition: (val) => val === "",
+                },
             ];
 
-            fields.forEach(field => {
+            fields.forEach((field) => {
                 let element = $(field.id);
                 let value = element.val();
                 if (field.condition(value)) {
-                    element.addClass('is-invalid');
+                    element.addClass("is-invalid");
                     isValid = false;
                 } else {
-                    element.removeClass('is-invalid');
+                    element.removeClass("is-invalid");
                 }
             });
 
             if (isValid) {
-                $('#save_holiday').prop('disabled', true);  // Disable submit button during AJAX
+                $("#save_holiday").prop("disabled", true); // Disable submit button during AJAX
                 $.ajax({
-                    url: '/admin/holiday/save',
-                    type: 'POST',
+                    url: "/admin/holiday/save",
+                    type: "POST",
                     data: $(this).serialize(),
-                    success: function(response) {
-                        $('#holiday_model').modal('hide');
-                        updateHolidayTable(response.data, response.permissions)
+                    success: function (response) {
+                        $("#holiday_model").modal("hide");
+                        updateHolidayTable(response.data, response.permissions);
                         alertify.success(response.success);
                     },
-                    error: function(response) {
-                        if (response.responseJSON && response.responseJSON.errors) {
+                    error: function (response) {
+                        if (
+                            response.responseJSON &&
+                            response.responseJSON.errors
+                        ) {
                             let errors = response.responseJSON.errors;
-                            $('.form-control').removeClass('is-invalid');
-                            $('.invalid-feedback').empty();
+                            $(".form-control").removeClass("is-invalid");
+                            $(".invalid-feedback").empty();
                             $.each(errors, function (key, value) {
-                                let element = $('#' + key);
+                                let element = $("#" + key);
                                 // For other form controls
-                                element.addClass('is-invalid');
+                                element.addClass("is-invalid");
                                 // Display the error message
-                                element.siblings('.invalid-feedback').text(value[0]);
+                                element
+                                    .siblings(".invalid-feedback")
+                                    .text(value[0]);
                             });
                         }
                     },
-                    complete: function() {
-                        $('#save_holiday').prop('disabled', false);  // Re-enable the submit button
-                    }
+                    complete: function () {
+                        $("#save_holiday").prop("disabled", false); // Re-enable the submit button
+                    },
                 });
             }
         });
 
-        $('#edit_holiday_form').on('submit', function(e) {
+        $("#edit_holiday_form").on("submit", function (e) {
             e.preventDefault();
             let isValid = true;
             let fields = [
-                { id: '#edit_event_name', wrapper: true, condition: (val) => val === '' },
-                { id: '#event_date', wrapper: true, condition: (val) => val === '' },
+                {
+                    id: "#edit_event_name",
+                    wrapper: true,
+                    condition: (val) => val === "",
+                },
+                {
+                    id: "#event_date",
+                    wrapper: true,
+                    condition: (val) => val === "",
+                },
             ];
 
-            fields.forEach(field => {
+            fields.forEach((field) => {
                 let element = $(field.id);
                 let value = element.val();
                 if (field.condition(value)) {
-                    element.addClass('is-invalid');
+                    element.addClass("is-invalid");
                     isValid = false;
                 } else {
-                    element.removeClass('is-invalid');
+                    element.removeClass("is-invalid");
                 }
             });
 
             if (isValid) {
-                $('#edit_holiday').prop('disabled', true);  // Disable submit button during AJAX
+                $("#edit_holiday").prop("disabled", true); // Disable submit button during AJAX
                 $.ajax({
-                    url: '/admin/holiday/save',
-                    type: 'POST',
+                    url: "/admin/holiday/save",
+                    type: "POST",
                     data: $(this).serialize(),
-                    success: function(response) {
-                        $('#edit_holiday_model').modal('hide');
-                        updateHolidayTable(response.data, response.permissions)
+                    success: function (response) {
+                        $("#edit_holiday_model").modal("hide");
+                        updateHolidayTable(response.data, response.permissions);
                         alertify.success(response.success);
                     },
-                    error: function(response) {
-                        if (response.responseJSON && response.responseJSON.errors) {
+                    error: function (response) {
+                        if (
+                            response.responseJSON &&
+                            response.responseJSON.errors
+                        ) {
                             let errors = response.responseJSON.errors;
-                            $('.form-control').removeClass('is-invalid');
-                            $('.invalid-feedback').empty();
-                            $('#edit_holiday').prop('disabled', false);
+                            $(".form-control").removeClass("is-invalid");
+                            $(".invalid-feedback").empty();
+                            $("#edit_holiday").prop("disabled", false);
                             $.each(errors, function (key, value) {
-                                let element = $('#' + key);
+                                let element = $("#" + key);
                                 // For other form controls
-                                element.addClass('is-invalid');
+                                element.addClass("is-invalid");
                                 // Display the error message
-                                element.siblings('.invalid-feedback').text(value[0]);
+                                element
+                                    .siblings(".invalid-feedback")
+                                    .text(value[0]);
                             });
                         }
                     },
-                    complete: function() {
-                        $('#save_holiday').prop('disabled', false);  // Re-enable the submit button
-                    }
+                    complete: function () {
+                        $("#save_holiday").prop("disabled", false); // Re-enable the submit button
+                    },
                 });
             }
         });
 
         // Edit Holiday
-        $('#holiday_table').on('click', '.holiday_edit', function() {
-            $('#save_holiday').prop('disabled', false);
-            let modal = $('#edit_holiday_model');
-            modal.find('#edit_event_name').val($(this).data('event_name'));
-            modal.find('#event_date').val($(this).data('event_date'));
-            modal.find('#edit_description').val($(this).data('description'));
-            modal.find('input[name=holiday_id]').val($(this).data('id'));
-            modal.modal('show');
+        $("#holiday_table").on("click", ".holiday_edit", function () {
+            $("#save_holiday").prop("disabled", false);
+            let modal = $("#edit_holiday_model");
+            modal.find("#edit_event_name").val($(this).data("event_name"));
+            modal.find("#event_date").val($(this).data("event_date"));
+            modal.find("#edit_description").val($(this).data("description"));
+            modal.find("input[name=holiday_id]").val($(this).data("id"));
+            modal.modal("show");
         });
 
         function updateHolidayTable(data, permissions) {
-            let tbody = $('#holiday_table tbody');
+            let tbody = $("#holiday_table tbody");
             tbody.empty(); // Clear existing rows
 
             if (data.holiday.length === 0) {
-                tbody.append(`<tr><td colspan="10" class="text-center">Record Not Found</td></tr>`);
+                tbody.append(
+                    `<tr><td colspan="10" class="text-center">Record Not Found</td></tr>`
+                );
             } else {
                 // Loop through the data and append rows
-                $.each(data.holiday, function(index, item) {
+                $.each(data.holiday, function (index, item) {
                     tbody.append(`
                 <tr>
                      <td>${index + 1}</td>
                     <td>${item.event_name}</td>
                     <td>${formatDate(item.event_date)}</td>
-                   <td>${item.user ? item.user.email : ''}</td>
+                   <td>${item.user ? item.user.email : ""}</td>
                     <td>${formatDateTime(item.updated_at)}</td>
                     <td>
-                    ${permissions.includes('holidays_update') ? `
+                    ${
+                        permissions.includes("holidays_update")
+                            ? `
 
-                        <a href="javascript:void(0)" class="holiday_edit" data-id="${item.id}"
-                            data-event_name="${item.event_name}" data-description="${item.notes}"
+                        <a href="javascript:void(0)" class="holiday_edit" data-id="${
+                            item.id
+                        }"
+                            data-event_name="${
+                                item.event_name
+                            }" data-description="${item.notes}"
                             data-event_date="${formatDate(item.event_date)}" >
                             <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
                             </svg>
                         </a>
-` : ''}
+`
+                            : ""
+                    }
 
-                        ${permissions.includes('holidays_delete') ? `
+                        ${
+                            permissions.includes("holidays_delete")
+                                ? `
 
                         <a href="#" class="holiday_delete text-danger w-4 h-4 mr-1" data-id="${item.id}">
                             <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -193,7 +233,9 @@ $(function () {
                             </svg>
                         </a>
 
-                        ` : ''}
+                        `
+                                : ""
+                        }
                     </td>
                 </tr>
             `);
@@ -201,56 +243,55 @@ $(function () {
             }
         }
 
-// Helper function to format dates
+        // Helper function to format dates
         function formatDateTime(dateString) {
             let date = new Date(dateString);
-            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            return date.toLocaleDateString() + " " + date.toLocaleTimeString();
         }
         function formatDate(dateString) {
             let date = new Date(dateString);
-            return date.toLocaleDateString();
+            return date.toLocaleDateString("en-GB");
         }
 
         // Delete Car
         let deleteId;
-        $('#holiday_table').on('click', '.holiday_delete', function() {
-            deleteId = $(this).data('id');  // Capture the ID of the item to delete
-            $('#delete_holiday').modal('show');  // Show the modal
+        $("#holiday_table").on("click", ".holiday_delete", function () {
+            deleteId = $(this).data("id"); // Capture the ID of the item to delete
+            $("#delete_holiday").modal("show"); // Show the modal
         });
 
-        $('#confirm_delete').on('click', function() {
+        $("#confirm_delete").on("click", function () {
             $.ajax({
                 url: `/admin/holiday/${deleteId}/delete`,
-                type: 'DELETE',
-                success: function(response) {
-                    $('#delete_holiday').modal('hide');  // Hide the modal
-                    updateHolidayTable(response.data, response.permissions)
+                type: "DELETE",
+                success: function (response) {
+                    $("#delete_holiday").modal("hide"); // Hide the modal
+                    updateHolidayTable(response.data, response.permissions);
                     alertify.success(response.success);
-
                 },
-                error: function(response) {
-                    alertify.error('Something Went Wrong');
-                }
+                error: function (response) {
+                    alertify.error("Something Went Wrong");
+                },
             });
         });
 
         function fetchData() {
-            let holiday_search = $('#holiday_search').val();
+            let holiday_search = $("#holiday_search").val();
             $.ajax({
-                url: '/admin/holiday/search', // Define this route in your web.php
-                type: 'GET',
+                url: "/admin/holiday/search", // Define this route in your web.php
+                type: "GET",
                 data: {
-                    holiday_search: holiday_search
+                    holiday_search: holiday_search,
                 },
-                success: function(response) {
-                    updateHolidayTable(response.data, response.permissions) // Populate table with new data
+                success: function (response) {
+                    updateHolidayTable(response.data, response.permissions); // Populate table with new data
                 },
-                error: function(xhr) {
-                    alertify.error('Something Went Wrong');
-                }
+                error: function (xhr) {
+                    alertify.error("Something Went Wrong");
+                },
             });
         }
 
-        $('#holiday_search').on('keyup', fetchData);
+        $("#holiday_search").on("keyup", fetchData);
     });
 });

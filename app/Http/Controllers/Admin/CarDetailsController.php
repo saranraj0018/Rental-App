@@ -23,7 +23,7 @@ class CarDetailsController extends BaseController {
         $this->authorizePermission('car_listing_view');
         $permissions = getAdminPermissions();
         $car_list = CarDetails::with('carModel', 'city', 'carModel.carDoc')->orderBy('created_at', 'desc')->paginate(20);
-        $car_models = CarModel::all(['car_model_id', 'model_name']);
+        $car_models = CarModel::orderBy('model_name', 'asc')->get(['car_model_id', 'model_name']);
         $city_list = City::where('city_status', 1)->pluck('name', 'code');
         return view('admin.cars.list', compact('car_list', 'car_models', 'permissions', 'city_list'));
     }

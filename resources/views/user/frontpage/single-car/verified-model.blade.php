@@ -84,8 +84,6 @@
                                 <input type="hidden" name="mobile_number2" id="mobile_number_otp2"
                                     :value="mobileNumber">
                                 <div class="mb-3">
-
-
                                     <p x-show="!otpResend" class="form-label fs-12 fw-500 text-secondary text-center">
                                         Enter the OTP sent to
                                         <span class="text-dark fw-500" id="userPhone">+91 - 8554569487</span>
@@ -106,7 +104,7 @@
                                 </div>
                                 <button type="submit" class="btn my-button next-button w-100">Verify Code</button>
                                 <button x-show="!otpResend" id="resend-otp" @click="resendOTP" type="button"
-                                    style="color: rgb(9, 58, 163); background: transparent; border: none; outline: none; font-size: .9em; width: 100%; text-align: center; margin-top: 1em">+
+                                    style="color: rgb(9, 58, 163); background: transparent; border: none; outline: none; font-size: .9em; width: 100%; text-align: center; margin-top: 1em">
                                     Resend
                                     OTP</button>
                             </form>

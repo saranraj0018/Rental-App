@@ -21,12 +21,18 @@
     <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}">
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@700&display=swap"
+        rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-
+    <style>
+        .apply-min-width {
+            min-width: 200px !important;
+            padding: .5em !important;
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini">

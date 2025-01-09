@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="container mb-3 py-5">
-                    <h1 class="display-1 fw-bold text-white text-center">SHIPPING</h1>
+                    <h1 class="display-1 fw-bold text-white text-center">BLOG</h1>
                 </div>
             </section>
 
@@ -68,7 +68,7 @@
                         </nav>
                     </div>
                     <div class="container mb-3 py-5">
-                        <h1 class="display-5 fw-bold text-white text-center">SHIPPING</h1>
+                        <h1 class="display-5 fw-bold text-white text-center">BLOG</h1>
                     </div>
                 </div>
             </section>
@@ -87,9 +87,10 @@
 
         </header>
         @php
-            $item = \App\Models\Frontend::where('data_keys', 'shipping')->first();
+            $item = \App\Models\Frontend::where('data_keys', 'blog')->first();
         @endphp
     </section>
+
     <section class="my-5">
         <div class="container">
             <div>

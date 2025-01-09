@@ -364,8 +364,9 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="cancel-reason" class="text-danger">Please choose the your Booking Pick And Drop Date
-                        And Time</label>
+                    <label for="cancel-reason" class="text-danger">Please choose your booking city, pick-up and
+                        drop-off
+                        date and time.</label>
                 </div>
             </div>
             <div class="modal-footer">
