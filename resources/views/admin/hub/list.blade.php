@@ -173,21 +173,22 @@
 
                                 <th>Time</th>
                                 <th>
-                                    <input type="text" id="customer_name" name="customer_name" class="form-control"
-                                        placeholder="Name">
+                                    <input type="text" id="customer_name" name="customer_name"
+                                        class="form-control apply-min-width" placeholder="Name">
                                 </th>
-                                <th> <input type="text" id="car_model" name="car_model" class="form-control"
-                                        placeholder="Model" style="padding: 0%;"></th>
-                                <th><input type="text" id="register_number" name="register_number" class="form-control"
-                                        placeholder="Registration Number"></th>
+                                <th> <input type="text" id="car_model" name="car_model"
+                                        class="form-control apply-min-width" placeholder="Model" style="padding: 0%;"></th>
+                                <th><input type="text" id="register_number" name="register_number"
+                                        class="form-control apply-min-width" placeholder="Registration Number"></th>
                                 <th>Address</th>
 
                                 <th>User Details</th>
                                 <th>D/L Number</th>
-                                <th><input type="text" id="booking_id" name="booking_id" class="form-control"
-                                        style="padding: 0%    ;" placeholder="Booking ID"></th>
+                                <th><input type="text" id="booking_id" name="booking_id"
+                                        class="form-control apply-min-width" style="padding: 0%    ;"
+                                        placeholder="Booking ID"></th>
 
-                                    <th>Reschedule</th>
+                                <th>Reschedule</th>
 
                                 <th>Security Dep</th>
                                 <th>Amount</th>
@@ -198,8 +199,6 @@
                             </tr>
                         </thead>
                         <tbody>
-
-
 
                             @if (!empty($bookings) && $bookings->isNotEmpty())
                                 @foreach ($bookings as $item)

@@ -32,12 +32,11 @@
 @php
 
     $permissions = [
-    [
+        [
             'name' => 'Dashboard',
             'slug' => 'dashboard',
             'permissions' => [
                 'view' => 'View Dashboard',
-
             ],
         ],
         [
@@ -80,6 +79,7 @@
                 'create_model' => 'Create Car Model',
                 'update' => 'Update Car/Model',
                 'delete' => 'Delete Car/Model',
+                'update_model' => 'Update Car Model',
             ],
         ],
 
@@ -101,7 +101,6 @@
                 'view' => 'View Car Availability',
             ],
         ],
-
 
         [
             'name' => 'Swap Cars',
@@ -132,6 +131,7 @@
                 'create' => 'Create Holidays',
                 'update' => 'Update Holidays',
                 'delete' => 'Delete Holidays',
+                'history' => 'View Holiday History',
             ],
         ],
 
@@ -161,6 +161,7 @@
                 'create' => 'Create Coupons',
                 'update' => 'Update Coupons',
                 'delete' => 'Delete Coupons',
+                'history' => 'View Coupon History',
             ],
         ],
 
@@ -173,13 +174,12 @@
             ],
         ],
 
-
         [
             'name' => 'Brands and Vacation',
             'slug' => 'brands_and_vacation',
             'permissions' => [
                 'view' => 'View Brands and Vacation',
-                "create" => "Create brands and Vacation"
+                'create' => 'Create brands and Vacation',
             ],
         ],
 

@@ -18,12 +18,12 @@
                     with font-awesome or any other icon font library -->
 
                 {{-- @if (in_array('dashboard_view', $permissions)) --}}
-                    <li class="nav-item">
-                        <a href="{{ route('admin.dashboard') }}" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>Dashboard</p>
-                        </a>
-                    </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.dashboard') }}" class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
                 {{-- @endif  --}}
                 @if (in_array('hub_view', $permissions))
                     <li class="nav-item">
@@ -35,34 +35,31 @@
                 @endif
 
                 @if (in_array('booking_completed_view', $permissions))
-
-                <li class="nav-item">
-                    <a href="{{ route('complete.booking') }}" class="nav-link">
-                        <i class="nav-icon fas fa-file-alt"></i>
-                        <p>Booking Complete</p>
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a href="{{ route('complete.booking') }}" class="nav-link">
+                            <i class="nav-icon fas fa-file-alt"></i>
+                            <p>Booking Complete</p>
+                        </a>
+                    </li>
                 @endif
 
                 @if (in_array('booking_pending_view', $permissions))
-
-                <li class="nav-item">
-                    <a href="{{ route('pending.booking') }}" class="nav-link">
-                        <i class="nav-icon fas fa-file-alt"></i>
-                        <p>Booking Pending</p>
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a href="{{ route('pending.booking') }}" class="nav-link">
+                            <i class="nav-icon fas fa-file-alt"></i>
+                            <p>Booking Pending</p>
+                        </a>
+                    </li>
                 @endif
 
 
                 @if (in_array('booking_cancel_view', $permissions))
-
-                <li class="nav-item">
-                    <a href="{{ route('cancel.booking.list') }}" class="nav-link">
-                        <i class="nav-icon fas fa-file-alt"></i>
-                        <p>Booking Cancel</p>
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a href="{{ route('cancel.booking.list') }}" class="nav-link">
+                            <i class="nav-icon fas fa-file-alt"></i>
+                            <p>Booking Cancel</p>
+                        </a>
+                    </li>
                 @endif
 
 
@@ -123,12 +120,12 @@
                 @endif
 
                 @if (in_array('swap_cars_view', $permissions))
-                <li class="nav-item">
-                    <a href="{{ route('car-swap.list') }}" class="nav-link">
-                        <i class="nav-icon fas fa fa-map"></i>
-                        <p>Swap Cars</p>
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a href="{{ route('car-swap.list') }}" class="nav-link">
+                            <i class="nav-icon fas fa fa-map"></i>
+                            <p>Swap Cars</p>
+                        </a>
+                    </li>
                 @endif
 
 
@@ -226,6 +223,16 @@
                                 <a href="{{ route('policy.list', ['section' => 'policy']) }}" class="nav-link">
                                     <i class="fas fa-truck nav-icon"></i>
                                     <p>Privacy Policy</p>
+                                </a>
+                            </li>
+                        @endif
+
+
+                        @if (in_array('others_view', $permissions))
+                            <li class="nav-item">
+                                <a href="{{ route('blog.list', ['section' => 'blog']) }}" class="nav-link">
+                                    <i class="fas fa-truck nav-icon"></i>
+                                    <p>Blog</p>
                                 </a>
                             </li>
                         @endif

@@ -66,6 +66,7 @@
                         <table id="car_table" class="table table-hover text-nowrap">
                             <thead>
                                 <tr>
+                                    <th>S. no</th>
                                     <th>Action</th>
                                     <th>Car Model ID</th>
                                     <th>Car Model Name</th>
@@ -79,6 +80,7 @@
                                 @if (filled($car_list))
                                     @foreach ($car_list as $item)
                                         <tr>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>{{ $item?->action }}</td>
                                             <td>{{ $item?->car_model_id }}</td>
                                             <td>{{ $item?->model_name }}</td>

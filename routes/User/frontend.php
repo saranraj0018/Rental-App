@@ -2,19 +2,19 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\CouponController;
-Use App\Http\Controllers\User\OTPController;
+use App\Http\Controllers\User\OTPController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\LocationController;
 
 
 
 
-Route::get('/', [UserController::class,'view'])->name('home');
+Route::get('/', [UserController::class, 'view'])->name('home');
 Route::view('/test', 'dummy')->name('dummy');
 
 Route::post('/update-location', [UserController::class, 'updateLocation']);
 
-Route::get('/search-car/list', [UserController::class,'listCars'])->name('search-car.list');
+Route::get('/search-car/list', [UserController::class, 'listCars'])->name('search-car.list');
 Route::get('/book/{model_id?}', [UserController::class, 'bookingCar'])->name('book.car');
 
 Route::post('user/send-otp', [OTPController::class, 'sendOTP'])->name('send.otp');
@@ -27,10 +27,10 @@ Route::get('user/check-auth', function () {
 Route::middleware(['auth'])->group(function () {
 
     Route::post('user/check-location', [LocationController::class, 'checkLocation']);
-    Route::get('/user/verify-document', [OTPController::class,'verifyDocument'])->name('verify.document');
-    Route::get('/user/verify-booking', [OTPController::class,'verifyBooking'])->name('verify.booking');
+    Route::get('/user/verify-document', [OTPController::class, 'verifyDocument'])->name('verify.document');
+    Route::get('/user/verify-booking', [OTPController::class, 'verifyBooking'])->name('verify.booking');
 
-    Route::post('user/apply-coupon', [CouponController::class,'applyCoupon'])->name('apply.coupon');
+    Route::post('user/apply-coupon', [CouponController::class, 'applyCoupon'])->name('apply.coupon');
     Route::post('user/remove-coupon', [CouponController::class, 'removeCoupon'])->name('remove.coupon');
 
     // upload documents
@@ -44,6 +44,7 @@ Route::middleware(['auth'])->group(function () {
     // upload documents
     Route::get('user/profile', [UserController::class, 'profile'])->name('user.profile');
     Route::post('user/document/update', [UserController::class, 'updateUser'])->name('update.user');
+    Route::post('user/document/update/docs', [UserController::class, 'updateUserDocs'])->name('update.user-docs');
     Route::post('user/document', [UserController::class, 'updateUserDocument'])->name('update.user.document');
     Route::post('user/logout', [UserController::class, 'logout'])->name('user.logout');
     Route::get('booking/history', [PaymentController::class, 'bookingHistory'])->name('booking.history');
@@ -60,6 +61,7 @@ Route::view('user/cancellation', '.user.frontpage.others.cancellation')->name('c
 Route::view('user/pricing', '.user.frontpage.others.pricing')->name('pricing');
 Route::view('user/faq', '.user.frontpage.others.faq')->name('faq');
 Route::view('user/privacy-policy', '.user.frontpage.others.privacy-policy')->name('privacy-policy');
+Route::view('user/blog', '.user.frontpage.others.blog')->name('blog');
 Route::view('user/refund', '.user.frontpage.others.refund')->name('refund');
 Route::view('user/shipping', '.user.frontpage.others.shipping')->name('shipping');
 Route::view('user/terms-and-conditions', '.user.frontpage.others.terms-and-conditions')->name('terms-and-conditions');

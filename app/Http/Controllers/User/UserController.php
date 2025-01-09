@@ -29,8 +29,10 @@ class UserController extends Controller {
         $car_info = Frontend::with('frontendImage')->where('data_keys', 'car-info-section')->first();
         $section4 = !empty($car_info['data_values']) ? json_decode($car_info['data_values'], true) : [];
         $brand_info = Frontend::with('frontendImage')->where('data_keys', 'brand-section')->first();
+
         $section8 = !empty($brand_info['data_values']) ? json_decode($brand_info['data_values'], true) : [];
         $brand_image = !empty($brand_info->frontendImage) ? $brand_info->frontendImage : null;
+
         $car_image = !empty($car_info->frontendImage) ? $car_info->frontendImage : null;
         $faq_items = Frontend::where('data_keys', 'faq-section')->orderBy('created_at', 'desc')->get()->take(5);
         $general_setting = Frontend::where('data_keys', 'faq-section')->orderBy('created_at', 'desc')->get();
@@ -75,11 +77,12 @@ class UserController extends Controller {
     public function listCars() {
         $date = ['start_date' => Session::get('start_date'), 'end_date' => Session::get('end_date')];
         $city_list = City::where('city_status', 1)->pluck('name', 'code');
+        $section2 = Coupon::all();
         $setting = Frontend::where('data_keys', 'general-setting')->orderBy('created_at', 'desc')->first();
         $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'], true) : [];
         $car_models = self::getAvailableCars();
         $festival_days = Holiday::pluck('event_date')->toArray();
-        return view('user.frontpage.list-cars.list', compact('car_models', 'festival_days', 'date', 'city_list', 'timing_setting'));
+        return view('user.frontpage.list-cars.list', compact('car_models', 'festival_days', 'date', 'city_list', 'timing_setting', 'section2'));
     }
 
     public static function getAvailableCars() {
@@ -272,7 +275,6 @@ class UserController extends Controller {
             'aadhaar_number' => 'required|digits:12',
             'driving_licence' => 'required',
             'other_documents' => 'nullable|mimes:jpg,png,pdf|max:2048',
-            'documents' => 'required|string',
         ]);
 
         $auth_id = Auth::id() ?? 0;
@@ -287,6 +289,21 @@ class UserController extends Controller {
 
         return response()->json(['success' => true, 'message' => 'User Profile updated successfully']);
 
+    }
+
+
+
+    public function updateUserDocs(Request $request) {
+        $request->validate([
+            'documents' => 'required|string',
+        ]);
+
+        $auth_id = Auth::id() ?? 0;
+        $user = User::find($auth_id);
+        $user->documents = $request['documents'];
+        $user->save();
+
+        return response()->json(['success' => true, 'message' => 'User Profile updated successfully']);
     }
 
     public function updateUserDocument(Request $request) {

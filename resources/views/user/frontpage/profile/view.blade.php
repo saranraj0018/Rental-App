@@ -24,62 +24,7 @@
 
                                 <div class="collapse navbar-collapse ms-5" id="mobile_nav">
                                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right"></ul>
-                                    <ul
-                                        class="navbar-nav navbar-light w-100 ms-0 ms-lg-4 ps-0 ps-lg-5 text-end text-lg-start">
-                                        <li class="nav-item my-nav ms-0 ms-lg-3 pe-0 pe-lg-1 ps-lg-5 my-auto"><a
-                                                class="nav-link text-white fw-normal" href="{{ route('home') }}">Home</a>
-                                        </li>
-                                        <li class="nav-item my-nav my-auto"><a class="nav-link text-white fw-normal"
-                                                href="{{ route('about') }}">About</a></li>
-                                        <li class="nav-item my-nav my-auto" id="booking_button"
-                                            style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
-                                            <a class="nav-link text-white fw-normal"
-                                                href="{{ route('booking.history') }}">Booking</a>
-                                        </li>
-                                        <li class="nav-item my-nav my-auto"><a class="nav-link text-white fw-normal"
-                                                href="{{ route('faq') }}">FAQ</a></li>
-                                        <li class="nav-item my-nav me-0 me-lg-3 pe-0 pe-lg-2 my-auto"><a
-                                                class="nav-link text-white fw-normal me-0 me-lg-1"
-                                                href="{{ route('contact') }}">Contact-us</a></li>
-                                        <li class="nav-item ms-0 ms-lg-4 ps-0 ps-lg-0 my-auto">
-
-                                            <div id="login_button" style="display: {{ Auth::check() ? 'none' : 'block' }};"
-                                                class="ms-0 ms-lg-5 ps-0 ps-lg-5">
-                                                <button type="button"
-                                                    class="btn border border-1 border-white text-white rounded-pill me-1 ms-0 ms-lg-5"
-                                                    id="login_user">Sign-In</button>
-                                                <button type="button" class="btn bg-primary text-white rounded-pill"
-                                                    id="register_user">Sign-Up</button>
-                                            </div>
-
-                                            <div id="after_login_button" class="mt-1 mb-2 py-0 px-4 bg-white rounded-pill"
-                                                style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
-                                                <div class="d-flex d-lg-block justify-content-end">
-                                                    <p class="text-dark m-0 border-blue w-fit rounded-3 f-12 fw-500"
-                                                        id="user_name">
-                                                        {{ !empty(Auth::user()->name) ? ucfirst(Auth::user()->name) : '' }}
-                                                    </p>
-                                                </div>
-                                                <a href="{{ route('user.profile') }}"
-                                                    class="text-blue text-decoration-none fs-12 fw-500">View
-                                                    profile</a>
-                                                <div>
-
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0 my-auto " id="logout_button"
-                                            style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
-                                            <form id="logout-form" action="{{ route('user.logout') }}" method="POST"
-                                                style="display: none;">
-                                                @csrf
-                                            </form>
-                                            <but href="#" class="text-decoration-none"
-                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                                <i class="fa fa-sign-out text-white me-1 fs-5"></i>
-                                            </but>
-                                        </li>
-                                    </ul>
+                                    @include('user.frontpage.menus')
                                 </div>
                             </div>
                         </nav>
@@ -89,23 +34,9 @@
         </header>
     </section>
 
-    <form id="user_profile" x-data="{
-        documents: JSON.parse('{{ auth()->user()->documents ?? '[]' }}'),
+    <form id="user_profile">
 
-        create() {
-            this.documents.push({
-                title: '',
-                value: ''
-            });
-        },
 
-        remove(index) {
-            this.documents.splice(index, 1);
-        }
-    }">
-
-        <input type="hidden" :value="JSON.stringify(documents.filter(doc => doc.title != ''))" name="documents"
-            id="documents">
 
         <section class="my-5">
 
@@ -184,42 +115,67 @@
                     </div>
                 </div>
             </div>
+        </section>
+    </form>
 
-            <div class="container mt-5 p-2">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h1 class="fs-5 fw-500">Add Other Documents</h1>
+    <form x-data="{
+        documents: JSON.parse('{{ auth()->user()->documents ?? '[]' }}'),
+
+        create() {
+            this.documents.push({
+                title: '',
+                value: ''
+            });
+        },
+
+        remove(index) {
+            this.documents.splice(index, 1);
+        },
+    }" id="user_profile_docs">
+
+        <input type="hidden" :value="JSON.stringify(documents.filter(doc => doc.title != ''))" name="documents"
+            id="documents">
+
+        <div class="container mt-5 p-2">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="fs-5 fw-500">Add Other Documents</h1>
+                <div>
+
                     <button @click.prevent="create" type="button" class="btn btn-sm btn-outline-primary w-10"><i
                             class="fa fa-plus"></i>
                         Add New ID</button>
-                </div>
-                <div class="d-flex mt-3 p-1 justify-content-start flex-wrap gap-2">
-                    <template x-for="(document, index) in documents" :key="index">
-                        <div class="mt-4 mx-1 p-3 bg-light bdr-20" style="width: 500px !important">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="fs-5 fw-500 mb-3">
-                                    <input type="text" x-model="document.title" class="fs-14 form-control">
-                                </div>
-                                <div>
-                                    <button @click="() => remove(index)" class="btn btn-outline-danger btn-sm"><i
-                                            class="fa fa-close"></i></button>
-                                </div>
-                            </div>
-                            <div class="fs-14 mb-3">
-                                Your uploaded documents can be removed or updated anytime.
-                            </div>
 
-                            <div class="border-dotted bdr-20 p-4">
-                                <label for="" class="fs-14 fw-500" x-text="document.title"></label>
-                                <input type="text" class="fs-14 form-control" x-model="document.value"
-                                    placeholder="Your Document Number">
-                            </div>
-                        </div>
-                    </template>
+                    <button type="submit" class="btn btn-sm btn-primary w-10"><i class="fa fa-plus"></i>
+                        Save Documents</button>
                 </div>
             </div>
+            <div class="d-flex mt-3 p-1 justify-content-start flex-wrap gap-2">
+                <template x-for="(document, index) in documents" :key="index">
+                    <div class="mt-4 mx-1 p-3 bg-light bdr-20" style="width: 500px !important">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="fs-5 fw-500 mb-3">
+                                <input type="text" x-model="document.title" class="fs-14 form-control">
+                            </div>
+                            <div>
+                                <button @click="() => remove(index)" class="btn btn-outline-danger btn-sm"><i
+                                        class="fa fa-close"></i></button>
+                            </div>
+                        </div>
+                        <div class="fs-14 mb-3">
+                            Your uploaded documents can be removed or updated anytime.
+                        </div>
 
-        </section>
+                        <div class="border-dotted bdr-20 p-4">
+                            <label for="" class="fs-14 fw-500" x-text="document.title"></label>
+                            <input type="text" class="fs-14 form-control" x-model="document.value"
+                                placeholder="Your Document Number">
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
     </form>
+
     <section>
         <form id="user_document">
             <div class="container mt-5 ">

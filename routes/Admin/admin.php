@@ -110,6 +110,7 @@ Route::group(['prefix' => 'admin'], function () {
 
         //Coupon Section
         Route::get('/coupon/list', [CouponController::class, 'list'])->name('coupon.list');
+        Route::get('/coupon/history/list', [CouponController::class, 'history'])->name('coupon.history');
         Route::post('/coupon/save', [CouponController::class, 'save'])->name('coupon.save');
         Route::delete('/coupon/{id?}/delete', [CouponController::class, 'delete'])->name('coupon.delete');
         Route::get('/coupon/search', [CouponController::class, 'search'])->name('coupon.search');
@@ -133,7 +134,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::delete('/faq/{id?}/delete', [BannerController::class, 'faqDelete'])->name('faq.delete');
         Route::get('/faq/search', [BannerController::class, 'search'])->name('faq.search');
 
-        $allowedSections = ['policy', 'terms', 'shipping', 'refunds', 'pricing', 'cancel'];
+        $allowedSections = ['policy', 'terms', 'shipping', 'refunds', 'pricing', 'cancel', 'blog'];
 
         foreach ($allowedSections as $section) {
             Route::get("/{$section}/list", [SettingController::class, 'view'])->name("{$section}.list")->defaults('section', $section);
@@ -152,6 +153,7 @@ Route::group(['prefix' => 'admin'], function () {
 
         //Holidays Section
         Route::get('/holiday/list', [HolidayController::class, 'list'])->name('holidays.list');
+        Route::get('/holiday/history/list', [HolidayController::class, 'history'])->name('holidays.history');
         Route::post('/holiday/save', [HolidayController::class, 'save'])->name('holiday.save');
         Route::delete('/holiday/{id?}/delete', [HolidayController::class, 'delete'])->name('holiday.delete');
         Route::get('/holiday/search', [HolidayController::class, 'search'])->name('holiday.search');
@@ -160,8 +162,6 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/city/list', [CityController::class, 'list'])->name('city.list');
         Route::post('/city/save', [CityController::class, 'save'])->name('city.save');
         Route::delete('/city/{id?}/delete', [CityController::class, 'delete'])->name('city.delete');
-        //        Route::get('/holiday/search', [HolidayController::class, 'search'])->name('holiday.search');
-
 
         // Front-end Banner Section
         Route::get('/general', [BannerController::class, 'generalList'])->name('general.list');

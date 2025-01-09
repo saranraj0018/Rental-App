@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\BaseController;
 use App\Models\Coupon;
 use App\Models\Holiday;
+use App\Models\HolidayHistory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,13 +15,18 @@ class HolidayController extends BaseController {
      * Display a listing of the resource.
      */
     public function list(Request $request) {
-
-
         $this->authorizePermission('holidays_view');
-
 
         $holidays = Holiday::with('user')->orderBy('created_at', 'desc')->paginate(20);
         return view('admin.holiday.list', compact('holidays'));
+    }
+
+
+    public function history(Request $request) {
+        $this->authorizePermission('holidays_history');
+
+        $holidays = HolidayHistory::orderBy('created_at', 'desc')->paginate(20);
+        return view('admin.holiday.history', compact('holidays'));
     }
 
     public function save(Request $request) {
