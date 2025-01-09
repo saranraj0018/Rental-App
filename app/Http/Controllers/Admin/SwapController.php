@@ -45,7 +45,7 @@ class SwapController extends Controller {
 
         $data = [];
         if (!empty($request['booking_id'])) {
-            $booking = Booking::where('booking_id', $request['booking_id'])
+            $booking = Booking::with('Car')->where('booking_id', $request['booking_id'])
                 ->where('city_code', $request['city_code'])
                 ->where('status', 1)->get();
 
@@ -55,6 +55,12 @@ class SwapController extends Controller {
                 } elseif (!empty($booking && $booking->status == 1 && $booking->booking_type == 'pickup')) {
                     $data['end_date'] = $booking->booking_type == 'pickup' && !empty($booking->reschedule_date) ? $booking->reschedule_date : $booking->end_date;
                 }
+                 if (!empty($booking->car_id)){
+                    $car = CarDetails::with('carModel')->find($booking->car_id);
+                     $data['car_name'] = !empty($car->carModel) ? $car->carModel->model_name : 'Dummy Car';
+                     $data['register_number'] = !empty($car->register_number) ? $car->register_number : '0000';
+                 }
+
             }
             return response()->json(['data' => $data, 'success' => 'Data Fetching Successfully.']);
 

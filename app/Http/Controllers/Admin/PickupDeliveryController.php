@@ -87,9 +87,8 @@ class PickupDeliveryController extends BaseController {
 
         $booking->reschedule_date = formDateTime($request['end_date']);
         $booking->save();
-
         if ($booking->booking_type == 'delivery') {
-            Available::where('booking_id', $booking->booking_id)->update(['end_date' => formDateTime($request['start_date'])]);
+            Available::where('booking_id', $booking->booking_id)->update(['start_date' => formDateTime($request['end_date'])]);
         } else {
             $next_booking = Carbon::parse(formDateTime($request['end_date']))->addHours($timing_setting['booking_duration'] ?? 3);
             Available::where('booking_id', $booking->booking_id)->update(['end_date' => formDateTime($request['end_date']) , 'next_booking' => formDateTime($next_booking)]);

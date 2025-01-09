@@ -154,7 +154,7 @@
                                                             Starting Date
                                                         </div>
                                                         <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                                            {{ showDateTime($details->start_date) ?? '' }}
+                                                            {{ showDateformat($details->start_date) ?? '' }}
                                                         </div>
                                                     </td>
                                                     <td class="pt-4">
@@ -162,7 +162,7 @@
                                                             End Date
                                                         </div>
                                                         <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                                            {{ showDateTime($booking_end_date) }}
+                                                            {{ showDateformat($booking_end_date) }}
                                                         </div>
                                                     </td>
                                                     <td class="pt-4">
@@ -275,7 +275,7 @@
                                                             Starting Date
                                                         </div>
                                                         <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                                            {{ showDateTime($details->start_date) ?? '' }}
+                                                            {{ showDateformat($details->start_date) ?? '' }}
                                                         </div>
                                                     </td>
                                                     <td class="pt-4">
@@ -283,7 +283,7 @@
                                                             End Date
                                                         </div>
                                                         <div class="fs-14 text-secondary fs-mb-10 mt-1 mt-lg-2">
-                                                            {{ !empty($details->reschedule_date) ? showDateTime($details->reschedule_date) : showDateTime($details->end_date) ?? '' }}
+                                                            {{ !empty($details->reschedule_date) ? showDateformat($details->reschedule_date) : showDateformat($details->end_date) ?? '' }}
                                                         </div>
                                                     </td>
                                                     <td class="pt-4">

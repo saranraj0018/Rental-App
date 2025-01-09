@@ -21,6 +21,7 @@
         @if (in_array('cities_map_create', $permissions))
         <!-- Save button -->
         <button id="save-area" class="btn btn-primary mt-3">Save Area</button>
+            <button id="clear-polygons" class="btn btn-danger mt-3">Clear Polygons</button>
         @endif
     </div>
 
@@ -147,6 +148,20 @@
                             }
                         },
                     });
+                }
+            });
+
+            // Clear button functionality
+            // Handle the clear button click
+            $('#clear-polygons').click(function() {
+                if (window.currentPolygons && window.currentPolygons.length > 0) {
+                    window.currentPolygons.forEach((polygon) => {
+                        polygon.setMap(null); // Remove each polygon from the map
+                    });
+                    window.currentPolygons = []; // Reset the array
+                    alertify.success('All polygons have been cleared!');
+                } else {
+                    alertify.error('No polygons to clear.');
                 }
             });
 
