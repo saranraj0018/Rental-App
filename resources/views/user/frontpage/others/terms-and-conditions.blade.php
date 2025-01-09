@@ -5,32 +5,7 @@
     <section>
         <header>
             <section class="booking-header">
-                <div class="container-fluid p-3">
-                    <div class="container bg-head-grey rounded-pill p-1 rounded-sm-3 my-head-round">
-                        <nav class="navbar navbar-expand-lg navbar-light sticky-top">
-                            <div class="container d-flex justify-content-between">
-                                <div class="d-flex justify-content-between mobile-head-width">
-                                    <a href="{{ route('home') }}">
-                                        <img src="{{ asset('user/img/Logo (4).png') }}" alt="Site-Logo"
-                                            class="img-fluid d-block">
-                                    </a>
-                                    <div class="my-auto h-100">
-                                        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                                            data-target="#mobile_nav" aria-controls="mobile_nav" aria-expanded="false"
-                                            aria-label="Toggle navigation">
-                                            <span class="navbar-toggler-icon"></span>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div class="collapse navbar-collapse ms-5" id="mobile_nav">
-                                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right"></ul>
-                                    @include('user.frontpage.menus')
-                                </div>
-                            </div>
-                        </nav>
-                    </div>
-                </div>
+                @include('user.frontpage.menus')
                 <div class="container mb-3 py-5">
                     <h1 class="display-1 fw-bold text-white text-center">TERMS & CONDITIONS</h1>
                 </div>
