@@ -129,8 +129,8 @@
         <div class="container filter-input-bg bg-white p-3 d-flex align-items-center justify-content-center">
             <div class="row">
                 <div class="col-12 col-lg-3 my-lg-0">
-                    <label class="fs-16 fw-500">City</label>
-                    <div class="input-group">
+                    <label class="fs-16 fw-500 text-center w-100">City</label>
+                    <div class="input-group my-grps">
                         <span class="input-group-text" id="basic-addon1">
                             <i class=" text-white fa-solid fa-location-dot"></i>
                         </span>
@@ -146,8 +146,8 @@
                     </div>
                 </div>
                 <div class="col-12 col-lg-4 my-1 mt-2 my-lg-0">
-                    <label class="fs-16 fw-500">Starting Date</label>
-                    <div class="input-group">
+                    <label class="fs-16 fw-500 text-center w-100">Starting Date</label>
+                    <div class="input-group my-grps">
                         <span class="input-group-text" id="basic-addon1">
                             <i class=" text-white fa-solid fa-calendar-days"></i>
                         </span>
@@ -158,8 +158,8 @@
                     </div>
                 </div>
                 <div class="col-12 col-lg-3 mt-2 mb-2 my-lg-0">
-                    <label class="fs-16 fw-500">Ending Date</label>
-                    <div class="input-group">
+                    <label class="fs-16 fw-500 text-center w-100">Ending Date</label>
+                    <div class="input-group my-grps">
                         <span class="input-group-text" id="basic-addon1">
                             <i class=" text-white fa-solid fa-calendar-days"></i>
                         </span>

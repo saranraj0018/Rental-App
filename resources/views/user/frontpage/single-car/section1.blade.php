@@ -26,7 +26,7 @@
                                         profile</a>
 
                                     <div class="ms-2">
-                                        <p class="text-white p-2 rounded-pill bg-blue m-0 my-1 w-fit rounded-3 f-16 px-2 fs-13 fw-600"
+                                        <p class="text-white p-2 rounded-pill bg-primary m-0 my-1 w-fit rounded-3 f-16 px-2 fs-13 fw-600"
                                             id="user_name">
                                             {{ !empty(Auth::user()->name) ? ucfirst(Auth::user()->name) : '' }}</p>
                                     </div>
@@ -69,7 +69,7 @@
                                 @foreach ($image_list as $image)
                                     <div class="item">
                                         <img src="{{ asset('storage/car_other_image/' . $image->name) }}" alt="car-logo"
-                                            class="img-fluid">
+                                            class="img-fluid cb-car-img">
                                     </div>
                                 @endforeach
                             @endif

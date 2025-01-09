@@ -32,30 +32,30 @@
                                 </div>
                                 <div class="d-block">
                                     <img src="{{ asset('storage/car_image/' . $item->carModel->car_image ?? '') }}"
-                                        alt="Cars" class="img-fluid w-75 mx-auto">
+                                        alt="Cars" class="img-fluid w-75 mx-auto car-list-image">
                                 </div>
                             </div>
-                            <div class="r2dc-card-content-bg p-3">
+                            <div class="r2dc-card-content-bg py-2 px-3">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <p class="fs-15 fw-600 m-0">
+                                        <p class="fs-5 fw-600 m-0">
                                             {{ $item->carModel->model_name ?? '' }}
                                         </p>
-                                        <p class="d-flex text-secondary fs-12">
+                                        <p class="d-flex text-secondary fs-12 m-0">
                                             <img src="{{ asset('user/img/iconTransmission.png') }}" alt="icon"
-                                                class="img-fluid me-1"> {{ $item->carModel->transmission ?? '' }}
+                                                class="img-fluid my-auto me-1"> {{ $item->carModel->transmission ?? '' }}
                                             <img src="{{ asset('user/img/iconSeat.png') }}" alt="icon"
-                                                class="img-fluid mx-1">
+                                                class="img-fluid my-auto mx-1">
                                             {{ $item->carModel->seat . ' Seats' ?? '' }}
                                         </p>
-                                    </div>
-                                    <div>
-                                        <p class="fs-15 fw-600 mb-2">
+                                        <p class="fs-5 fw-600">
                                             ₹ {{ $item->carModel->price_per_hour ?? '' }} <span class="fw-500 fs-12">per
-                                                hours</span>
+                                                hour</span>
                                         </p>
+                                    </div>
+                                    <div class="my-auto">
                                         <button type="button" value="{{ $item->id }}" id="car_book_id"
-                                            class="my-button btn btn-lg fs-14 float-end book_now">Book now</button>
+                                            class="my-button btn btn-lg fs-16 py-2 px-3 float-end book_now">Book now</button>
                                     </div>
                                 </div>
                             </div>

@@ -13,7 +13,7 @@
                         <div class="col-3">
                             <div class="d-block">
                                 <img src="{{ asset('storage/car_image/' . $model->carModel->car_image ?? '') }}"
-                                    alt="cars" class="img-fluid w-100">
+                                    alt="cars" class="img-fluid w-100 car-list-image-for-grid">
                             </div>
                         </div>
 
@@ -37,13 +37,13 @@
 
                                 <p class="d-flex text-secondary fs-12">
                                     <img src="{{ asset('user/img/search-result/iconTransmission.png') }}" alt="icon"
-                                        class="img-fluid me-1 conf-icon"> {{ $model->carModel->transmission ?? '' }}
+                                        class="img-fluid me-1 conf-icon my-auto"> {{ $model->carModel->transmission ?? '' }}
                                     <img src="{{ asset('user/img/search-result/iconSeat.png') }}" alt="icon"
-                                        class="img-fluid mx-1 conf-icon ms-3"> {{ $model->carModel->seat . ' Seats' }}
+                                        class="img-fluid mx-1 conf-icon my-auto ms-4"> {{ $model->carModel->seat . ' Seats' }}
                                     <img src="{{ asset('user/img/search-result/material-symbols-light_air.png') }}"
-                                        alt="icon" class="img-fluid mx-1 conf-icon ms-3">AC
+                                        alt="icon" class="img-fluid mx-1 conf-icon my-auto ms-4">AC
                                     <img src="{{ asset('user/img/search-result/streamline_gas-station-fuel-petroleum.png') }}"
-                                        alt="icon" class="img-fluid mx-1 conf-icon ms-3">
+                                        alt="icon" class="img-fluid mx-1 conf-icon my-auto ms-4">
                                     {{ $model->carModel->fuel_type }}
                                 </p>
                             </div>
@@ -64,11 +64,11 @@
                                         session('end_date'),
                                     );
                                 @endphp
-                                <div class="fs-3 fw-600"> ₹{{ $price_list['total_price'] ?? '' }}</div>
+                                <div class="fs-4 fw-600 text-center w-75"> ₹{{ $price_list['total_price'] ?? '' }}</div>
                             </div>
                             @if ($model['booking_status'] === 'available')
                                 <a href="{{ route('book.car', ['model_id' => $model->id]) }}"
-                                    class="btn my-button p-1 px-3 w-75">Book now</a>
+                                    class="btn my-button py-2 px-3 w-75">Book now</a>
                             @elseif ($model['booking_status'] === 'sold')
                                 <button type="button" class="sold-button btn btn-lg fs-14 float-end">Sold</button>
                             @endif

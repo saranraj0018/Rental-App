@@ -13,6 +13,8 @@ $(function () {
                     if (response.data) {
                         $('#start_date').val(response.data.start_date);
                         $('#end_date').val(response.data.end_date);
+                        $('#car_name').val(response.data.car_name);
+                        $('#car_number').val(response.data.register_number);
                         $('#search_cars').prop('disabled',false);
                     }
                 },
