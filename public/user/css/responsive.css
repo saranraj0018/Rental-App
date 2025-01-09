@@ -40,7 +40,7 @@
         width: 100%;
     }
     .mobile-head-width img{
-         width: 20% !important;
+         width: 100% !important;
      }
 
 }
@@ -166,7 +166,7 @@
     .mobile-head-width{
         width: 100%;
     }.mobile-head-width img{
-         width: 40% !important;
+         width: 70% !important;
      }
     .badge-perc-2 {
         width: 20px !important;

@@ -3,8 +3,8 @@
          <div class="row">
              @if (!empty($car_models))
                  @foreach ($car_models as $key => $model)
-                     <div class="col-6 col-lg-4 mb-4">
-                         <div class="r2dc-card-bg p-3">
+                     <div class="col-6 col-lg-4 mb-4 px-2">
+                         <div class="r2dc-card-bg py-2 px-3">
                              <div class="d-flex justify-content-between"
                                  style="display: @if ($timing_setting['show_bookmarks'] == 1) flex @else none @endif !important">
                                  <div>
@@ -12,35 +12,32 @@
                                          <i class="fas fa-star" style="color:#E66742;"></i> 4.5
                                      </div>
                                  </div>
-                                 <div>
+                                 {{-- <div>
                                      <div class="save-icon my-auto">
                                          <i class="fas fa-bookmark text-blue"></i>
                                      </div>
-                                 </div>
+                                 </div> --}}
                              </div>
                              <div class="d-block">
                                  <img src="{{ asset('storage/car_image/' . $model->carModel->car_image ?? '') }}"
-                                     alt="Cars" class="img-fluid w-100 mx-auto">
+                                     alt="Cars" class="img-fluid w-100 mx-auto car-list-image">
                              </div>
                          </div>
 
-                         <div class="r2dc-card-content-bg p-3">
+                         <div class="r2dc-card-content-bg py-2 px-3">
                              <div class="d-flex justify-content-between">
-                                 <div>
-                                     <p class="fs-16 fw-600 m-0">
+                                <div>
+                                     <p class="fs-5 fw-600 mb-1">
                                          {{ $model->carModel->model_name ?? '' }}
                                      </p>
 
-                                     <p class="d-flex text-secondary fs-12">
+                                     <p class="d-flex text-secondary fs-12 m-0">
                                          <img src="{{ asset('user/img/iconTransmission.png') }}" alt="icon"
-                                             class="img-fluid me-1">{{ $model->carModel->transmission ?? '' }}
+                                             class="img-fluid my-auto me-1">{{ $model->carModel->transmission ?? '' }}
                                          <img src="{{ asset('user/img/iconSeat.png') }}" alt="icon"
-                                             class="img-fluid mx-1"> {{ $model->carModel->seat . ' Seats' }}
+                                             class="img-fluid my-auto mx-1"> {{ $model->carModel->seat . ' Seats' }}
                                      </p>
-                                 </div>
-                                 <div>
                                      @php
-
                                          $prices = [
                                              'festival' => $model->carModel->peak_reason_surge ?? 0,
                                              'weekend' => $model->carModel->weekend_surge ?? 0,
@@ -52,17 +49,19 @@
                                              session('end_date'),
                                          );
                                      @endphp
-                                     <p class="fs-15 fw-600 mb-2">
+                                     <p class="fs-5 fw-600 mb-2">
                                          ₹{{ $price_list['total_price'] ?? '' }}
                                      </p>
+                                </div>
+                                <div class="my-auto">
                                      @if ($model['booking_status'] === 'available')
                                          <a href="{{ route('book.car', ['model_id' => $model->id]) }}"
-                                             class="btn my-button fs-14">Book now</a>
+                                             class="btn my-button fs-16 py-2 px-3">Book now</a>
                                      @elseif ($model['booking_status'] === 'sold')
                                          <button type="button"
                                              class="sold-button btn btn-lg fs-14 float-end">Sold</button>
                                      @endif
-                                 </div>
+                                </div>
                              </div>
                          </div>
                      </div>
