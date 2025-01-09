@@ -48,31 +48,34 @@
                                     </li>
                                     <li class="nav-item my-nav my-auto"><a class="nav-link text-white fw-normal"
                                             href="{{ route('faq') }}">FAQ</a></li>
-                                    <li class="nav-item my-nav me-0 me-lg-3 pe-0 pe-lg-2 my-auto"><a
+                                    <li class="nav-item my-nav my-auto"><a
                                             class="nav-link text-white fw-normal me-0 me-lg-1"
                                             href="{{ route('contact') }}">Contact-us</a></li>
-                                    <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0 my-auto">
+                                    <li class="nav-item my-nav me-0 me-lg-3 pe-0 pe-lg-2 my-auto"><a
+                                            class="nav-link text-white fw-normal me-0 me-lg-1"
+                                            href="{{ route('contact') }}">Blog</a></li>
+                                    <li class="nav-item ms-0 ms-lg-4 ps-0 ps-lg-0 my-auto">
 
                                         <div id="login_button" style="display: {{ Auth::check() ? 'none' : 'block' }};"
                                             class="ms-0 ms-lg-5 ps-0 ps-lg-5">
                                             <button type="button"
-                                                class="btn border border-white text-white fw-bold rounded-pill me-1 ms-0 ms-lg-5"
+                                                class="btn border border-1 border-white text-white rounded-pill me-1 ms-0 ms-lg-5"
                                                 id="login_user">Sign-In</button>
-                                            <button type="button" class="btn bg-blue text-white fw-bold rounded-pill"
+                                            <button type="button" class="btn bg-primary text-white rounded-pill"
                                                 id="register_user">Sign-Up</button>
                                         </div>
 
-                                        <div id="after_login_button" class="mt-1 mb-2 nav-link"
+                                        <div id="after_login_button" class="mt-1 mb-2 py-0 px-4 bg-white rounded-pill"
                                             style="display: {{ Auth::check() ? 'block' : 'none !important' }};">
-                                            <a href="{{ route('user.profile') }}"
-                                                class="text-white text-center my-auto ms-2 text-decoration-none fs-13">View
-                                                profile</a>
                                             <div class="d-flex d-lg-block justify-content-end">
-                                                <p class="text-white m-0 my-1 border-blue w-fit rounded-3 f-16 ps-2 fs-13"
+                                                <p class="text-dark m-0 border-blue w-fit rounded-3 f-12 fw-500"
                                                     id="user_name">
                                                     {{ !empty(Auth::user()->name) ? ucfirst(Auth::user()->name) : '' }}
                                                 </p>
                                             </div>
+                                            <a href="{{ route('user.profile') }}"
+                                                class="text-blue text-decoration-none fs-12 fw-500">View
+                                                profile</a>
                                             <div>
 
                                             </div>
@@ -187,8 +190,8 @@
         <div class="container filter-input-bg bg-white p-3 d-flex align-items-center justify-content-center">
             <div class="row">
                 <div class="col-12 col-lg-3 my-lg-0">
-                    <label class="fs-16 fw-500">City</label>
-                    <div class="input-group">
+                    <label class="fs-16 fw-500 text-center w-100">City</label>
+                    <div class="input-group my-grps">
                         <span class="input-group-text" id="basic-addon1">
                             <i class=" text-white fa-solid fa-location-dot"></i>
                         </span>
@@ -204,8 +207,8 @@
                     </div>
                 </div>
                 <div class="col-12 col-lg-4 my-1 mt-2 my-lg-0">
-                    <label class="fs-16 fw-500">Starting Date</label>
-                    <div class="input-group">
+                    <label class="fs-16 fw-500 text-center w-100">Starting Date</label>
+                    <div class="input-group my-grps">
                         <span class="input-group-text" id="basic-addon1">
                             <i class=" text-white fa-solid fa-calendar-days"></i>
                         </span>
@@ -216,8 +219,8 @@
                     </div>
                 </div>
                 <div class="col-12 col-lg-3 mt-2 mb-2 my-lg-0">
-                    <label class="fs-16 fw-500">Ending Date</label>
-                    <div class="input-group">
+                    <label class="fs-16 fw-500 text-center w-100">Ending Date</label>
+                    <div class="input-group my-grps">
                         <span class="input-group-text" id="basic-addon1">
                             <i class=" text-white fa-solid fa-calendar-days"></i>
                         </span>

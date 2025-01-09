@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-12 col-lg-4 my-lg-0">
                     <label class="fs-16 fw-500">City</label>
-                    <div class="input-group">
+                    <div class="input-group my-grps">
                         <span class="input-group-text" id="basic-addon1">
                             <i class=" text-white fa-solid fa-location-dot"></i>
                         </span>
@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-12 col-lg-3 my-1 mt-2 my-lg-0">
                     <label class="fs-16 fw-500">Starting Date</label>
-                    <div class="input-group">
+                    <div class="input-group my-grps">
                         <span class="input-group-text" id="basic-addon1">
                             <i class=" text-white fa-solid fa-calendar-days"></i>
                         </span>
@@ -33,7 +33,7 @@
                 </div>
                 <div class="col-12 col-lg-3 mt-2 mb-2 my-lg-0">
                     <label class="fs-16 fw-500">Ending Date</label>
-                    <div class="input-group">
+                    <div class="input-group my-grps">
                         <span class="input-group-text" id="basic-addon1">
                             <i class=" text-white fa-solid fa-calendar-days"></i>
                         </span>

@@ -13,7 +13,7 @@
                         @php
                             $city = !empty($city_list) ? $city_list->toArray() : [];
                         @endphp
-                        Available Cars In {{ array_key_exists(session('city_id'), $city) ? $city[session('city_id')] : '' }}
+                        Available Cars In <span class="fs-4 text-blue"> {{ array_key_exists(session('city_id'), $city) ? $city[session('city_id')] : '' }}</span>
                     </p>
                 </div>
                 <div>
