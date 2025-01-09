@@ -32,22 +32,30 @@
             </div>
         </div>
         <div class="form-row">
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-2">
                 <label for="booking_id_1">Booking ID </label>
                 <input type="number" id="booking_id" class="form-control" name="booking_id_1" placeholder="Enter Booking ID">
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-2">
                 <label for="booking_id_2">Start Date</label>
                 <input type="text" id="start_date" class="form-control" placeholder="Start Date" disabled>
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-2">
                 <label for="booking_id_3">End Date</label>
                 <input type="text" id="end_date" class="form-control" placeholder="End Date" disabled>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="car_name">Car Name</label>
+                <input type="text" id="car_name" class="form-control" placeholder="Car Name" disabled>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="car_number">Car Number</label>
+                <input type="text" id="car_number" class="form-control" placeholder="Car Number" disabled>
             </div>
 
             @if (in_array('swap_cars_search', $permissions))
 
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-2">
                     <button type="submit" class="btn btn-secondary" id="search_cars" style="margin-top: 30px" disabled>Search Available Cars</button>
             </div>
             @endif

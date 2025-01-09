@@ -48,7 +48,9 @@
                             <th>Booking Id</th>
                             <th>Email</th>
                             <th>Booking Car</th>
-                            <th>Swap Car</th>
+                            <th>Booking Register No</th>
+                            <th>Swap Car </th>
+                            <th>Swap Car Register No</th>
                             <th>Create At</th>
                         </tr>
                         </thead>
@@ -60,7 +62,9 @@
                                     <td>{{ $item->booking_id }}</td>
                                     <td>{{ $item->user->email ?? '' }}</td>
                                     <td>{{ $item->car->carModel->model_name ?? '' }}</td>
+                                    <td>{{ $item->car->register_number ?? '' }}</td>
                                     <td>{{ $item->swapCar->carModel->model_name ?? '' }}</td>
+                                    <td>{{ $item->swapCar->register_number ?? '' }}</td>
                                     <td>{{ showDateTime($item->updated_at) }}</td>
                                 </tr>
                             @endforeach
