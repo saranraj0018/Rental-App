@@ -58,7 +58,7 @@
         #car-details-table th {
             background-color: #f2f2f2; /* Optional: Set a light gray background for header */
         }
-        /* Sticky column styles */
+         /* Sticky column styles */
         th:first-child,
         td:first-child {
             position: sticky;

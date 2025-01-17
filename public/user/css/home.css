@@ -451,6 +451,7 @@ span#basic-addon1 {
     color: white;
     border-radius: 10px;
 }
+
 .copy-btn:hover {
     color: white;
     background-color: #4081ff;
@@ -716,7 +717,9 @@ button.accordion-button.collapsed {
     width: 50%;
 }
 
-
+/*.m-minus-top-48 {*/
+/*    margin-top: -46px !important;*/
+/*}*/
 
 .bg-light-blue {
     background-color: #A7CBFF;
@@ -779,3 +782,9 @@ button.accordion-button.collapsed {
     object-fit: contain;
     height:170px;
 }
+
+.mobile-head-width img{
+     width: clamp(120px, 120px, 80px) !important;
+}
+
+

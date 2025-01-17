@@ -16,44 +16,33 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 
-class CarDetailsController extends BaseController {
+class CarDetailsController extends BaseController
+{
 
-    public function list(Request $request) {
-
+    public function list(Request $request)
+    {
         $this->authorizePermission('car_listing_view');
         $permissions = getAdminPermissions();
-        $car_list = CarDetails::with('carModel', 'city', 'carModel.carDoc')->orderBy('created_at', 'desc')->paginate(20);
-        $car_models = CarModel::orderBy('model_name', 'asc')->get(['car_model_id', 'model_name']);
-        $city_list = City::where('city_status', 1)->pluck('name', 'code');
-        return view('admin.cars.list', compact('car_list', 'car_models', 'permissions', 'city_list'));
+        $car_list =  CarDetails::with('carModel','city','carModel.carDoc')->orderBy('created_at', 'desc')->paginate(20);
+        $car_models = CarModel::orderBy('model_name', 'asc')->get(['car_model_id','model_name']);
+        $city_list = City::where('city_status',1)->pluck('name','code');
+        return view('admin.cars.list',compact('car_list','car_models','permissions','city_list'));
     }
-
-
-
+    
     public function history_list(Request $request) {
-
         $this->authorizePermission('car_listing_view_history');
-        // dd(1);
         $type = $request->query('type');
-        $car_list = CarDetailsHistory::with('carDetails')->where('type', '=', $type)->orderBy('id', 'desc')->paginate(10);
-
+        $car_list = CarDetailsHistory::with('carDetails')->where('type', '=', $type)->orderBy('id', 'desc')->paginate(20);
         return view('admin.cars.history', compact('car_list'));
     }
-
-
-
-
-
-
-    /**
+    
+     /**
      * Export data for History
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function history_list_export(Request $request) {
-
-        $this->authorizePermission('car_listing_view_history');
-
+       $this->authorizePermission('car_listing_view_history');
         $type = $request->query('type');
         $ext = $request->query('v');
         $dataset = $this->getData($type);
@@ -66,11 +55,9 @@ class CarDetailsController extends BaseController {
         return $pdf->download('car-details-models-export.pdf');
     }
 
-
-
-
-    public function save(Request $request) {
-        $this->authorizePermission('car_listing_create_car');
+    public function save(Request $request)
+    {
+         $this->authorizePermission('car_listing_create_car');
 
         if (!empty($request['car_id'])) {
             $this->authorizePermission('car_listing_update');
@@ -87,33 +74,35 @@ class CarDetailsController extends BaseController {
             'current_km' => 'required|numeric',
         ]);
 
-        $car_details = !empty($request['car_id']) ? CarDetails::find($request['car_id']) : new CarDetails();
+         $car_details = !empty($request['car_id']) ? CarDetails::find($request['car_id']) :  new CarDetails();
         $car_details->city_code = $request['hub_city'];
         $car_details->model_id = $request['car_model'];
         $car_details->register_number = $request['register_number'];
         $car_details->current_km = $request['current_km'];
         $car_details->save();
 
-        $cars = CarDetails::with('carModel', 'city')->orderBy('created_at', 'desc')->get();
-        return response()->json(['data' => $cars, 'success' => 'Car details saved successfully']);
+        $cars = CarDetails::with('carModel','city')->orderBy('created_at', 'desc')->get();
+        return response()->json(['data'=> $cars,'success' => 'Car details saved successfully']);
     }
 
 
-    public function saveModels(Request $request) {
+    public function saveModels(Request $request)
+    {
 
-        $this->authorizePermission('car_listing_create_model');
+          $this->authorizePermission('car_listing_create_model');
 
         if (!empty($request['model_id'])) {
             $this->authorizePermission('car_listing_update');
         }
-
-        if (empty($request['model_id'])) {
+        
+          if (empty($request['model_id'])) {
             $request->validate([
                 'car_image' => 'required|mimes:jpg,png',
                 'car_other_image' => 'required|array|min:2',
                 'car_other_image.*' => 'mimes:jpg,png',
             ]);
         }
+
 
         $request->validate([
             'producer' => 'required|max:144',
@@ -133,18 +122,16 @@ class CarDetailsController extends BaseController {
             'dep_amount' => 'required|numeric',
             'extra_hours_charge' => 'required',
             'day_km' => 'required',
-
+          
         ]);
-        $uniq_id = Str::random(15);
+        $uniq_id =  Str::random(15);
 
         if (!empty($request['model_id'])) {
             $car_models = CarModel::find($request['model_id']);
-
         } else {
             $car_models = new CarModel();
             $car_models->car_model_id = $uniq_id;
         }
-
         $car_models->producer = $request['producer'];
         $car_models->model_name = $request['model_name'];
         $car_models->seat = $request['seats'];
@@ -163,7 +150,7 @@ class CarDetailsController extends BaseController {
             $img_name = $request->file('car_image')->getClientOriginalName();
             $img_name = $uniq_id . '_' . $img_name;
             $request->car_image->storeAs('car_image/', $img_name, 'public');
-            $car_models->car_image = $img_name;
+            $car_models->car_image =  $img_name;
         }
         $car_models->save();
 
@@ -171,32 +158,34 @@ class CarDetailsController extends BaseController {
             foreach ($request['car_other_image'] as $image) {
                 $img_name = $image->getClientOriginalName();
                 $img_name = $uniq_id . '_' . $img_name;
-                $image->storeAs('car_other_image/', $img_name, 'public');
-                $car_documents = !empty($request['model_id']) ? CarDocument::where('model_id', $request['model_id'])->first()
+                $image->storeAs('car_other_image/',  $img_name, 'public');
+                $car_documents =  !empty($request['model_id']) ? CarDocument::where('model_id',$request['model_id'])->first()
                     : new CarDocument();
                 $car_documents->name = $img_name;
                 $car_documents->model_id = $car_models->id;
-                $car_documents->save();
+                 $car_documents->save();
+
             }
         }
         return response()->json(['success' => 'Car Models saved successfully']);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $this->authorizePermission('car_listing_delete');
         $delete_car = CarDetails::find($id);
         $delete_car->delete();
-        $cars = CarDetails::with('carModel', 'city')->orderBy('created_at', 'desc')->get();
-        return response()->json(['data' => $cars, 'success' => 'Car details saved successfully']);
+        $cars = CarDetails::with('carModel','city')->orderBy('created_at', 'desc')->get();
+        return response()->json(['data'=> $cars,'success' => 'Car details saved successfully']);
     }
 
-
-    public function search(Request $request) {
+    public function search(Request $request)
+    {
         $keyword = $request->get('keyword');
-        $query = CarDetails::with('carModel', 'city');
+        $query = CarDetails::with('carModel','city');
         if (!empty($keyword)) {
             // Concatenate search conditions if keyword is provided
-            $query->where(function ($q) use ($keyword) {
+            $query->where(function($q) use ($keyword) {
                 $q->where('model_id', 'LIKE', "%$keyword%")
                     ->orWhere('register_number', 'LIKE', "%$keyword%")
                     ->orWhereHas('carModel', function ($query) use ($keyword) {
@@ -211,13 +200,8 @@ class CarDetailsController extends BaseController {
             'data' => $car_list,
         ]);
     }
-
-
-
-
-
-
-
+    
+    
     /**
      * Get Data for History
      * @param string $type

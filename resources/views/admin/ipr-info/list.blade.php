@@ -90,9 +90,7 @@
                     </div>
                 </div>
             </div>
-
-
-            @if (in_array('important_points_update', getAdminPermissions()))
+              @if (in_array('important_points_update', getAdminPermissions()))
             <button type="submit" id="ipr_info_submit" class="btn btn-primary btn-block">Submit</button>
             @endif
         </div>

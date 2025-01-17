@@ -8,10 +8,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable {
+class User extends Authenticatable
+{
     use HasApiTokens, HasFactory, Notifiable;
 
-    public function userDoc() {
+    public function userDoc()
+    {
         return $this->hasMany(UserDocument::class, 'user_id');
     }
 
@@ -24,7 +26,7 @@ class User extends Authenticatable {
         'name',
         'email',
         'password',
-        'documents'
+         'documents'
     ];
 
     /**
@@ -47,7 +49,8 @@ class User extends Authenticatable {
         'password' => 'hashed',
     ];
 
-    public function bookings() {
+    public function bookings()
+    {
         return $this->hasMany(Booking::class);
     }
 }

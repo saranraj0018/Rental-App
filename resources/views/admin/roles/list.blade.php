@@ -36,7 +36,18 @@
         <!-- Default box -->
         <div class="container-fluid">
             <div class="card">
-
+                {{--                <div class="card-header">--}}
+                {{--                    <div class="d-flex justify-content-between">--}}
+                {{--                        <div class="input-group" style="width: 250px;">--}}
+                {{--                            <input type="text" id="search_item" name="keyword" class="form-control" placeholder="Search">--}}
+                {{--                            <div class="input-group-append">--}}
+                {{--                                <button type="button" id="searchBtn" class="btn btn-default">--}}
+                {{--                                    <i class="fas fa-search"></i>--}}
+                {{--                                </button>--}}
+                {{--                            </div>--}}
+                {{--                        </div>--}}
+                {{--                    </div>--}}
+                {{--                </div>--}}
                 <div class="card-body table-responsive p-0">
                     <table id="role_table" class="table table-hover text-nowrap">
                         <thead>
@@ -58,7 +69,8 @@
                                     <td>{{ $item->user->email ?? '' }}</td>
                                     <td>{{ showDateTime($item->updated_at) }}</td>
                                     <td>
-                                        @if(in_array('roles_update',$permissions) && $item->id !== 1)
+                                        <!--&& $item->id !== 1-->
+                                        @if(in_array('roles_update',$permissions) )
                                             <a href="javascript:void(0)" class="role_edit" data-id="{{ $item->id }}"  data-role="{{ $item->user_role }}" data-user_permission="{{ $item->permissions }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\Booking;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\Booking;
 use Twilio\Rest\Client;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class OTPController extends Controller
@@ -100,8 +100,8 @@ class OTPController extends Controller
 
         return response()->json(['success' => true,'message' => 'Document is Already Verify successful!']);
     }
-
-    public function verifyBooking()
+    
+     public function verifyBooking()
     {
         $startDateTime = Carbon::parse(session('booking_details.start_date')); // Assuming you have start_date_time field
         $endDateTime = Carbon::parse(session('booking_details.end_date')); //

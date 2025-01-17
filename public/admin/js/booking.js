@@ -1,7 +1,7 @@
 $(function () {
     'use strict'
-    $(document).ready(function () {
-        $('select.form-select, select.form-control').each(function () {
+    $(document).ready(function() {
+        $('select.form-select, select.form-control').each(function() {
             if ($(this).hasClass('is-invalid')) {
                 $(this).closest('.bootstrap-select').addClass('is-invalid');
             } else {
@@ -9,7 +9,8 @@ $(function () {
             }
         });
 
-        $('input[name="end_date"]').daterangepicker({
+
+     $('input[name="end_date"]').daterangepicker({
             timePicker: true,
             singleDatePicker: true,
             timePickerIncrement: 30,
@@ -45,7 +46,7 @@ $(function () {
             }
         });
         // Edit Pickup/delivery
-        $('#booking_table').on('click', '.booking_edit', function () {
+        $('#booking_table').on('click', '.booking_edit', function() {
             let modal = $('#booking_model');
             modal.find('#event_name').val($(this).data('event_name'));
             modal.find('#event_date').val($(this).data('event_date'));
@@ -54,13 +55,13 @@ $(function () {
             modal.modal('show');
         });
 
-        $('#booking_table').on('click', '.cancel_booking', function () {
+        $('#booking_table').on('click', '.cancel_booking', function() {
             let booking_id = $(this).data('id');
             $('#cancel-booking-id').val(booking_id);
             $('#cancelModal').modal('show');
         });
 
-        $('#cancel-booking-form').on('submit', function (e) {
+        $('#cancel-booking-form').on('submit', function(e) {
             e.preventDefault();
             let bookingId = $('#cancel-booking-id').val();
             let reason = $('#cancel-reason').val().trim();
@@ -80,35 +81,35 @@ $(function () {
                     booking_id: bookingId,
                     reason: reason,
                 },
-                success: function (response) {
+                success: function(response) {
                     $('#cancelModal').modal('hide');
                     alertify.success('Booking has been cancelled successfully.');
-                    updateBookingTable(response.data, response.permissions);
+                    updateBookingTable(response.data,response.permissions);
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     alertify.error('Failed to cancel the booking. Please try again.');
                 }
             });
         });
 
 
-        $('#create_booking').click(function () {
+        $('#create_booking').click(function() {
             $('#hub_list').selectpicker('refresh');
             $('#create_user_booking').modal('show');
         });
 
-        $('#car_available').on('click', function (e) {
+        $('#car_available').on('click', function(e) {
             e.preventDefault();
 
             let start_date = $('#user_start_date').val();
             let end_date = $('#user_end_date').val();
             let hub_list = $('#hub_list').val();
 
-            if (!start_date && !end_date) {
+            if (!start_date && !end_date){
                 alertify.warning('please Choose Start and End Date');
                 return;
             }
-            if (!hub_list) {
+            if (!hub_list){
                 alertify.warning('please Choose City');
                 return;
             }
@@ -122,13 +123,13 @@ $(function () {
                         end_date: end_date,
                         hub_list: hub_list,
                     },
-                    success: function (response) {
+                    success: function(response) {
                         if (response.success && response.data.length > 0) {
                             let carSelect = $('#user_car_model');
                             carSelect.empty(); // Clear existing options
                             carSelect.append('<option value="">Select Car Model</option>');
-                            $.each(response.data, function (index, car) {
-                                carSelect.append('<option value="' + car.car_model.car_model_id + '">' + car.car_model.model_name + '</option>');
+                            $.each(response.data, function(index, car) {
+                                    carSelect.append('<option value="' + car.car_model.car_model_id + '">' + car.car_model.model_name + '</option>');
                             });
                             carSelect.selectpicker('refresh');
 
@@ -138,8 +139,8 @@ $(function () {
                             alertify.error('No cars available for the selected dates.');
                         }
 
-                    },
-                    error: function (xhr) {
+                     },
+                    error: function(xhr) {
                         alertify.error('Failed to cancel the booking. Please try again.');
                     }
                 });
@@ -148,7 +149,7 @@ $(function () {
         });
 
 
-        $('#user_car_model').on('change', function () {
+        $('#user_car_model').on('change', function() {
             let carModelId = $(this).val();
             let start_date = $('#user_start_date').val();
             let end_date = $('#user_end_date').val();
@@ -161,9 +162,9 @@ $(function () {
                         start_date: start_date,
                         end_date: end_date,
                     },
-                    success: function (response) {
+                    success: function(response) {
                         if (response.success) {
-                            $('#model_name').text(response.car_model.model_name ?? '');
+                            $('#model_name').text(response.car_model.model_name?? '');
                             $('#total_days').text(response.total_days ?? 0);
                             $('#total_hours').text(response.total_hours ?? 0);
                             $('#user_week_days_amount').text(response.week_days_amount ?? 0);
@@ -173,14 +174,14 @@ $(function () {
                             $('#user_delivery_fee').text(response.delivery_fee ?? 0);
                             $('#security_dep').text(response.car_model.dep_amount ?? 0);
                             let finalTotalPrice = parseFloat(response.total_price) + parseFloat(response.delivery_fee) + parseFloat(response.car_model.dep_amount);
-                            $('#final_total_price').text(finalTotalPrice.toFixed(2) ?? 0);
+                            $('#final_total_price').text(finalTotalPrice.toFixed(2)?? 0);
                             $('#price_list_section').show();
                             $('#user_amount').val(finalTotalPrice);
                         } else {
                             $('#price_list').html('<p>No price information available.</p>');
                         }
                     },
-                    error: function () {
+                    error: function() {
                         alertify.error('Failed to retrieve price information. Please try again.');
                     }
                 });
@@ -194,18 +195,17 @@ $(function () {
             e.preventDefault();
             let email = $('#email').val();
 
-            if (!email) {
+            if (!email){
                 alertify.warning('please enter email Address');
                 return;
             }
             let amount = $('#user_amount').val();
-            let mobile = $('#mobile').val();
-
-            // $('#user_payment_link').prop('disabled', true);
+              let mobile = $('#mobile').val();
+            $('#user_payment_link').prop('disabled', true);
             $.ajax({
                 url: '/admin/user-payment/link',
                 type: 'POST',
-                data: { email: email, amount: amount, mobile: mobile },
+                  data: { email: email, amount: amount, mobile: mobile },
                 success: function (data) {
                     if (data.success) {
                         $('#payment_success').text(data.success);
@@ -217,19 +217,19 @@ $(function () {
                 error: function () {
                     alertify.error('An error occurred while fetching the data.');
                 },
-                complete: function () {
+                complete: function() {
                     $('#user_payment_link').prop('disabled', false);
                 }
             });
         });
 
-        $('#user_booking_form').on('submit', function (e) {
+        $('#user_booking_form').on('submit', function(e) {
             e.preventDefault();
             let isValid = true;
             let fields = [
                 { id: '#name', wrapper: true, condition: (val) => val === '' },
                 { id: '#email', wrapper: true, condition: (val) => val === '' },
-                { id: '#mobile', wrapper: true, condition: (val) => val == '' },
+                { id: '#mobile', wrapper: true, condition: (val) => val === '' },
                 { id: '#pickup_location', wrapper: true, condition: (val) => val === '' },
                 { id: '#drop_location', wrapper: true, condition: (val) => val === '' },
                 { id: '#license_number', wrapper: true, condition: (val) => val === '' },
@@ -254,12 +254,12 @@ $(function () {
                     url: '/admin/user/save',
                     type: 'POST',
                     data: $(this).serialize(),
-                    success: function (response) {
+                    success: function(response) {
                         $('#create_user_booking').modal('hide');
                         alertify.success(response.success);
                         window.location.reload();
                     },
-                    error: function (response) {
+                    error: function(response) {
                         if (response.responseJSON && response.responseJSON.errors) {
                             let errors = response.responseJSON.errors;
                             $('.form-control').removeClass('is-invalid');
@@ -273,36 +273,36 @@ $(function () {
                             });
                         }
                     },
-                    complete: function () {
+                    complete: function() {
                         $('#save_holiday').prop('disabled', false);  // Re-enable the submit button
                     }
                 });
             }
         });
 
-        $('#booking_table').on('change', '.risk-checkbox', function () {
+        $('#booking_table').on('change', '.risk-checkbox', function() {
             let booking_id = $(this).data('id');
             let status = $(this).is(':checked') ? 1 : 2;
             let note = 'risk'
-            updatetable(booking_id, status, note)
+            updatetable(booking_id,status,note)
         });
-        $('#booking_table').on('change', '.done-checkbox', function () {
+        $('#booking_table').on('change', '.done-checkbox', function() {
             let booking_id = $(this).data('id');
             let status = $(this).is(':checked') ? 2 : 1;
             let note = 'complete'
-            updatetable(booking_id, status, note)
+            updatetable(booking_id,status,note)
         });
 
-        function updatetable(booking_id, status, note) {
+        function updatetable(booking_id, status,note) {
             $.ajax({
                 url: '/admin/risk-status', // Replace with your route URL
                 method: 'POST',
                 data: {
                     booking_id: booking_id,
                     status: status,
-                    note: note
+                    note:note
                 },
-                success: function (response) {
+                success: function(response) {
                     if (response.data) {
                         alertify.success(response.message);
                         updateBookingTable(response.data, response.permissions);
@@ -310,15 +310,15 @@ $(function () {
                         alertify.error('Failed to update status.');
                     }
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     alertify.error('AJAX error:', error);
                 }
             });
         }
 
 
-        $('#booking_table').on('click', '.open-risk-modal', function () {
-            $('#risk-comment').val(' ');
+        $('#booking_table').on('click', '.open-risk-modal', function() {
+               $('#risk-comment').val(' ');
             let bookingId = $(this).data('id');
             let commend = $(this).data('commend');
             // Parse the comments if they are not already an array
@@ -331,7 +331,7 @@ $(function () {
 
             // Loop through the comments and add them to the comments list
             if (comments.length > 0) {
-                comments.forEach(function (comment, index) {
+                comments.forEach(function(comment, index) {
                     // Convert the created_at string into a Date object
                     let createdAt = new Date(comment.created_at);
                     // Format the date as 'hour:minute AM/PM, month day'
@@ -358,14 +358,14 @@ $(function () {
             $('#riskModal').modal('show');
         });
 
-        $('#booking_table').on('click', '.user-details-modal', function () {
+        $('#booking_table').on('click', '.user-details-modal', function() {
             $('#user_mobile').val($(this).data('mobile'));
             $('#user_aadhaar').val($(this).data('aadhaar_number'));
             $('#booking_count').text($(this).data('booking'));
             $('#user_model').modal('show');
         });
-
-        $('#booking_table').on('click', '.edit-booking-date', function () {
+        
+              $('#booking_table').on('click', '.edit-booking-date', function() {
             $('#date_booking_id').val($(this).data('id'));
             $('#date_booking_type').val($(this).data('booking_type'));
             $('#date_start_date').val($(this).data('start_date'));
@@ -375,7 +375,7 @@ $(function () {
             $('#date_model').modal('show');
         });
 
-        $('#booking_table').on('click', '.amount-modal', function () {
+        $('#booking_table').on('click', '.amount-modal', function() {
             let total = $(this).data('week_days_amount') + $(this).data('week_end_amount') + $(this).data('festival_amount');
             $('#booking_id').val($(this).data('id'));
             $('#week_days_amount').text($(this).data('week_days_amount'));
@@ -389,12 +389,8 @@ $(function () {
             $('#amount_modal').modal('show');
         });
         // Handle risk comment form submission
-        $('#risk-form').on('submit', function (e) {
-
+        $('#risk-form').on('submit', function(e) {
             e.preventDefault();
-
-            return false;
-
             let bookingId = $('#risk-booking-id').val();
             let commends = $('#risk-comment').val();
 
@@ -405,18 +401,18 @@ $(function () {
                     booking_id: bookingId,
                     commends: commends
                 },
-                success: function (response) {
+                success: function(response) {
                     $('#riskModal').modal('hide');
                     alertify.success('Comment saved successfully!');
-                    updateBookingTable(response.data, response.permissions);
+                    updateBookingTable(response.data,response.permissions);
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     alertify.error(error);
                 }
             });
         });
 
-        $('#booking_date').on('submit', function (e) {
+        $('#booking_date').on('submit', function(e) {
             e.preventDefault();
             let bookingId = $('#date_booking_id').val();
             let start_date = $('#date_start_date').val().replaceAll('/', '-');
@@ -425,9 +421,6 @@ $(function () {
             let model_id = $('#model_id').val();
             let car_id = $('#car_id').val();
 
-            console.log(start_date, end_date);
-
-            // return false;
             $.ajax({
                 url: '/admin/reschedule/date',
                 method: 'POST',
@@ -440,25 +433,25 @@ $(function () {
                     car_id: car_id,
 
                 },
-                success: function (response) {
+                success: function(response) {
                     $('#date_model').modal('hide');
                     alertify.success(response.success);
-                    updateBookingTable(response.data, response.permissions);
+                    updateBookingTable(response.data,response.permissions);
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     alertify.error(error);
                 }
             });
         });
 
-        function updateBookingTable(data, permissions) {
+        function updateBookingTable(data,permissions) {
             let tbody = $('#booking_table tbody');
             tbody.empty(); // Clear existing rows
 
             if (data.bookings.length === 0) {
                 tbody.append(`<tr><td colspan="15" class="text-center">Record Not Found</td></tr>`);
             } else {
-                $.each(data.bookings, function (index, item) {
+                $.each(data.bookings, function(index, item) {
                     // Parse booking details and payment details if they exist
                     let bookingDetails = (item.details && item.details.length > 0)
                         ? JSON.parse(item.details[0].car_details || '{}')
@@ -479,8 +472,7 @@ $(function () {
                     tbody.append(`
                 <tr class="${item.risk === 1 ? 'bg-light-red' : item.status === 2 ? 'bg-light-green' : ''}">
                     <td>${item.booking_type === 'pickup' ? '<h2>P</h2>' : '<h2>D</h2>'}</td>
-
-                    ${(permissions.includes('hub_risk_status') || permissions.includes('hub_risk_comments')) ? `
+                     ${(permissions.includes('hub_risk_status') || permissions.includes('hub_risk_comments')) ? `
                         <td>
                             ${permissions.includes('hub_risk_status') ? `<div class="d-flex justify-content-center">
                                 <input type="checkbox" class="risk-checkbox" data-id="${item.id}" ${item.risk === 1 ? 'checked' : ''}>
@@ -500,8 +492,8 @@ $(function () {
                     </td>
                     ` : ''}
                     <td>${mainDate}<br>${rescheduleDate}</td>
-                    <td>${item.user ? item.user.name : ''}</td>
-                     <td>${item.user ? item.user.mobile : ""}</td>
+                    <td>${item?.user ? item?.user?.name : ''}</td>
+                    <td>${item.user ? item.user.mobile : ""}</td>
                     <td>${carModel.model_name || ''}</td>
                     <td>${bookingDetails.register_number || ''}</td>
                     <td class="truncate-text" title="${item.address}">${item.address}</td>
@@ -512,9 +504,8 @@ $(function () {
                     </td>
                     <td>${item?.user ? item?.user?.driving_licence : ''}</td>
                     <td>${item.booking_id}</td>
-
                     <td>${mainDate}<br>
-                    ${permissions.includes('hub_reschedule') ? `
+                        ${permissions.includes('hub_reschedule') ? `
                         <button class="btn btn-warning edit-booking-date" data-id="${item.id}"
                         data-booking_type="${item.booking_type}"
                         data-model_id="${carModel.car_model_id || ''}"
@@ -530,7 +521,6 @@ $(function () {
                             Amount Details
                         </button>
                     </td>
-
                     ${permissions.includes('hub_cancel_booking') ? `
                     <td>
                         <button class="btn btn-danger cancel_booking" data-id="${item.booking_id}">
@@ -546,7 +536,7 @@ $(function () {
 
 
 
-        // Helper function to format dates
+// Helper function to format dates
         function formatDateTime(dateString) {
             let date = new Date(dateString);
 
@@ -575,7 +565,7 @@ $(function () {
             const customerName = $('#customer_name').val();
             const bookingType = $('#booking_type').val();
             const hub_type = $('#hub_type').val();
-            let status = 1;
+               let status = 1;
             $.ajax({
                 url: '/admin/booking/search',
                 type: 'GET',
@@ -586,13 +576,13 @@ $(function () {
                     customer_name: customerName,
                     booking_type: bookingType,
                     hub_type: hub_type,
-                    status: status
+                     status:status
                 },
-                success: function (response) {
+                success: function(response) {
                     updateBookingTable(response.data, response.permissions)
                     updatePagination(response);
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     alertify.error('Something Went Wrong');
                 }
             });
@@ -614,7 +604,7 @@ $(function () {
                 }
             }
         }
-        $('#car_model, #register_number, #booking_id, #customer_name, #booking_type, #hub_type').on('input change', function () {
+        $('#car_model, #register_number, #booking_id, #customer_name, #booking_type, #hub_type').on('input change', function() {
             fetchData();
         });
     });

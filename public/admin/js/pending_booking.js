@@ -34,14 +34,13 @@ $(function () {
 
                 },
                 success: function(response) {
-                    updateBookingTable(response.data, response.permissions) // Populate table with new data
+                    updateBookingTable(response.data, response.permissions)  // Populate table with new data
                 },
                 error: function(xhr) {
                     alertify.error('Something Went Wrong');
                 }
             });
         }
-
         $('#pending_table').on('click', '.user-details-modal', function() {
             $('#user_mobile').val($(this).data('mobile'));
             $('#user_aadhaar').val($(this).data('aadhaar_number'));
@@ -62,7 +61,7 @@ $(function () {
         });
 
         $('#pending_table').on('click', '.open-risk-modal', function() {
-            $('#risk-comment').val(' ');
+               $('#risk-comment').val(' ');
             let bookingId = $(this).data('id');
             let commend = $(this).data('commend');
             // Parse the comments if they are not already an array
@@ -145,7 +144,7 @@ $(function () {
                 success: function(response) {
                     $('#cancelModal').modal('hide');
                     alertify.success('Booking has been cancelled successfully.');
-                    updateBookingTable(response.data, response.permissions);
+                   updateBookingTable(response.data, response.permissions) 
                 },
                 error: function(xhr) {
                     alertify.error('Failed to cancel the booking. Please try again.');
@@ -166,7 +165,7 @@ $(function () {
                 success: function(response) {
                     if (response.data) {
                         alertify.success(response.message);
-                        updateBookingTable(response.data, response.permissions);
+                        updateBookingTable(response.data, response.permissions) 
                     } else {
                         alertify.error('Failed to update status.');
                     }
@@ -223,26 +222,21 @@ $(function () {
                         : formatDateTime(item.start_date);
 
                     tbody.append(`
-
                 <tr class="${item.risk === 1 ? 'bg-light-red' : item.status === 2 ? 'bg-light-green' : ''}">
                     <td>${item.booking_type === 'pickup' ? '<h2>P</h2>' : '<h2>D</h2>'}</td>
-
-                    ${(permissions.includes('hub_risk_status') || permissions.includes('hub_risk_comments')) ? `
-
+                      ${(permissions.includes('hub_risk_status') || permissions.includes('hub_risk_comments')) ? `
                     <td>
-
-                    ${permissions.includes('hub_risk_status') ? `
+                     ${permissions.includes('hub_risk_status') ? `
                         <div class="d-flex justify-content-center">
                             <input type="checkbox" class="risk-checkbox" data-id="${item.id}" ${item.risk === 1 ? 'checked' : ''}>
                         </div>
                         <br>
-                        ` : ''}
-
-                    ${permissions.includes('hub_risk_commands') ? `
+                         ` : ''}
+                           ${permissions.includes('hub_risk_commands') ? `
                         <button class="btn btn-warning open-risk-modal" data-id="${item.id}" data-commend='${JSON.stringify(commends).replace(/'/g, "&apos;")}'>
                             <h5>i</h5>
                         </button>
-                    ` : ''}
+                     ` : ''}
                     </td>
                     ` : ''}
 
@@ -251,12 +245,10 @@ $(function () {
                     <td class="d-flex justify-content-center">
                         <input type="checkbox" class="done-checkbox" data-id="${item.id}" ${item.status == 2 ? 'checked' : ''}>
                     </td>
-
-                    ` : ''}
-
+                     ` : ''}
                     <td>${mainDate}<br>${rescheduleDate}</td>
                     <td>${item.user ? item.user.name : ''}</td>
-                     <td>${item.user ? item.user.mobile : ""}</td>
+                    <td>${item.user ? item.user.mobile : ""}</td>
                     <td>${carModel.model_name || ''}</td>
                     <td>${bookingDetails.register_number || ''}</td>
                     <td class="truncate-text" title="${item.address}">${item.address}</td>
@@ -277,14 +269,13 @@ $(function () {
                             Amount Details
                         </button>
                     </td>
-
-                    ${permissions.includes('hub_cancel_booking') ? `
+                      ${permissions.includes('hub_cancel_booking') ? `
                     <td>
                         <button class="btn btn-danger cancel_booking" data-id="${item.booking_id}">
                             Cancel Order
                         </button>
                     </td>
-` : ''}
+                    ` : ''}
                 </tr>
             `);
                 });

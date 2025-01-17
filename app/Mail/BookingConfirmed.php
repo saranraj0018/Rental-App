@@ -13,8 +13,7 @@ class BookingConfirmed extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $bookingDetails;
-    public $_name;
+    public $bookingDetails , $_name;
 
     /**
      * Create a new message instance.
@@ -24,6 +23,7 @@ class BookingConfirmed extends Mailable
         $this->bookingDetails = $bookingDetails;
         $this->_name = $_name;
     }
+
 
     /**
      * Get the message envelope.

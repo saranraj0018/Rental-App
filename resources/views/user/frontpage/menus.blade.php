@@ -1,6 +1,14 @@
 
-
-
+<style>
+    .mobile-head-width {
+     width: 10% !important;
+}
+@media only screen and (max-width:768px) {
+ .mobile-head-width {
+     width: 100% !important;
+}   
+}
+</style>
 <div class="container-fluid p-3">
     <div class="container bg-head-grey rounded-pill p-1 rounded-sm-3 my-head-round">
         <nav class="navbar navbar-expand-lg navbar-light sticky-top">
@@ -22,14 +30,14 @@
                 <div class="collapse navbar-collapse ms-5" id="mobile_nav">
                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right"></ul>
 
-                    <ul class="navbar-nav navbar-light w-100 ms-0 ms-lg-4 ps-0 ps-lg-5 text-end text-lg-start">
+                    <ul class="navbar-nav navbar-light w-100 text-end text-lg-start ps-0 ps-lg-5 ms-0 ms-lg-3">
                         <li class="nav-item my-nav ms-0 ms-lg-4 pe-0 pe-lg-0 my-auto"><a class="nav-link text-white fw-normal"
                                 href="{{ route('home') }}">Home</a>
                         </li>
                         <li class="nav-item my-nav my-auto"><a class="nav-link text-white fw-normal" href="{{ route('about') }}">About</a>
                         </li>
 
-                        <li
+                        <li style="display: @if (!empty($timing_setting['show_blog']) && $timing_setting['show_blog'] == 1) unset @else none @endif !important"
                             class="nav-item my-nav my-auto"><a class="nav-link text-white fw-normal" href="{{ route('blog') }}">Blog</a>
                         </li>
 
@@ -43,7 +51,7 @@
                                 class="nav-link text-white fw-normal me-0 me-lg-0" href="{{ route('contact') }}">Contact-us</a></li>
 
 
-                        <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0 my-auto d-flex d-lg-block justify-content-end">
+                          <li class="nav-item ms-0 ms-lg-3 ps-0 ps-lg-0 my-auto d-flex d-lg-block justify-content-end">
 
                             <div id="login_button" style="display: {{ Auth::check() ? 'none' : 'block' }};"
                                 class="ms-0 ms-lg-5 ps-0 ps-lg-5">

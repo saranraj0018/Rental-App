@@ -39,7 +39,7 @@
                             <label class="form-check-label" for="reserve">LT-RESERVE</label>
                         </div>
                     </div>
-                    <div class="form-row">
+                     <div class="form-row">
                         <div class="form-group col-md-3">
                             <label for="start_date"></label>
                             <div class="input-group" id="datetimepicker">

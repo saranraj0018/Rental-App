@@ -84,6 +84,8 @@
                                 <input type="hidden" name="mobile_number2" id="mobile_number_otp2"
                                     :value="mobileNumber">
                                 <div class="mb-3">
+
+
                                     <p x-show="!otpResend" class="form-label fs-12 fw-500 text-secondary text-center">
                                         Enter the OTP sent to
                                         <span class="text-dark fw-500" id="userPhone">+91 - 8554569487</span>
@@ -92,7 +94,7 @@
                                     <p x-show="otpResend" class="form-label fs-12 fw-500 text-secondary text-center">OTP
                                         has been resent to
                                         <span class="text-dark fw-500" x-text="mobileNumber">+91 - 8554569487</span>,
-                                        request for next OPT in <span x-text="timer"></span> seconds
+                                        request for next OTP in <span x-text="timer"></span> seconds
                                     </p>
 
                                     <input type="number" class="form-control bg-grey form-bdr" id="verification_code"

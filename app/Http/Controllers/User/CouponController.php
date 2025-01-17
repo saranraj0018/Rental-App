@@ -12,12 +12,12 @@ class CouponController extends Controller
 {
     public function applyCoupon(Request $request)
     {
-        if (!Auth::check()){
+        
+         if (!Auth::check()){
             return response()->json([
                 'message' => 'please login The Account',
             ]);
         }
-
         $coupon = !empty($request['coupon']) ? Coupon::where('code', $request['coupon'])->first() : 0 ;
         if (!empty($coupon) && $coupon->status == 1) {
             Session::put('coupon', [

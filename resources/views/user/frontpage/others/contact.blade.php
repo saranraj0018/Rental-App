@@ -5,6 +5,7 @@
     <section>
         <header>
             <section class="booking-header">
+    
                 <header>
                     <section>
                         @include('user.frontpage.menus')
@@ -14,7 +15,7 @@
 
 
                 <div class="text-center text-white py-5">
-                    <div class="display-1 fw-500 mb-3">CONTACT US</div>
+                    <div class="fs-1 fw-500 mb-3">CONTACT US</div>
                     <div class="fs-16">We are ready to provide right solution <br>accordion to your needs</div>
                 </div>
             </section>
@@ -95,9 +96,8 @@
                                     Head Office
                                 </div>
                                 <div class="fs-16">
-                                    No 593 , Valam self driving cars
-                                    Avinashi road, Goldwins
-                                    Coimbatore -641 014
+                                     No: 593, Avinashi Road, 
+                                     Goldwins, Coimbatore – 641014 .
                                 </div>
                             </div>
                         </div>
@@ -109,8 +109,8 @@
                                 <div class="fs-5 fw-500 text-blue">
                                     Email Us
                                 </div>
-                                <a class="fs-16 text-decoration-none text-dark" href="mailto:jr.webdev@rankuhigher.in">
-                                    jr.webdev@rankuhigher.in
+                                <a class="fs-16 text-decoration-none text-dark" href="mailto:Care@valamcars.com">
+                                    Care@valamcars.com
                                 </a>
                             </div>
                         </div>
@@ -122,12 +122,8 @@
                                 <div class="fs-5 fw-500 text-blue">
                                     Call Us
                                 </div>
-                                <a class="fs-16 text-decoration-none text-dark" href="tel:7094053462">
-                                    Phone : 7094053462
-                                </a><br>
-                                <a class="fs-16 text-decoration-none text-dark" href="tel:0422-7094053462">
-
-                                    Fax : 0422-7094053462
+                                <a class="fs-16 text-decoration-none text-dark" href="tel:9363065901">
+                                    Phone : +91 9363065901
                                 </a>
                             </div>
                         </div>

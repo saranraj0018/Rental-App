@@ -77,7 +77,7 @@ class AdminAuthController extends Controller
         $admin = new AdminDetail();
         $admin->user_name = $request['user_name'];
         $admin->email = $request['email'];
-        $admin->password = Hash::make($request['user_name']);
+        $admin->password = Hash::make($request['password']);
         $admin->role = $request['role'];
         $admin->mobile_number = $request['mobile_number'];
         $admin->referral_code = $request['referral_code'];

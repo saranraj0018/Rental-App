@@ -162,6 +162,7 @@
             <form id="user_booking_form">
                 <div class="modal-header">
                     <h5 class="modal-title" id="bookingModalLabel">Booking Details</h5>
+                  
                 </div>
                 <div class="modal-body">
                     <!-- Form fields with horizontal layout -->
@@ -240,7 +241,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                         <div class="col-md-3">
                             <label for="hub_list" class="form-label">Hub List </label>
                             <select class="form-select" id="hub_list" name="hub_list" data-live-search="true">
                                 <option disabled selected>Select City</option>
@@ -287,6 +288,7 @@
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" id="user_payment_link">Send Payment Link</button>
                     <button type="submit" class="btn btn-primary">Save User</button>
+                  
                 </div>
             </form>
         </div>

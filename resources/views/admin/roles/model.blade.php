@@ -1,5 +1,4 @@
-<div class="modal fade" id="add_user_role" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="add_user_role" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -29,14 +28,16 @@
 </div>
 
 
+
 @php
 
     $permissions = [
-        [
+     [
             'name' => 'Dashboard',
             'slug' => 'dashboard',
             'permissions' => [
                 'view' => 'View Dashboard',
+              
             ],
         ],
         [
@@ -93,15 +94,7 @@
                 'delete' => 'Delete Car Block',
             ],
         ],
-
-        [
-            'name' => 'Car Availability',
-            'slug' => 'car_availablity',
-            'permissions' => [
-                'view' => 'View Car Availability',
-            ],
-        ],
-
+        
         [
             'name' => 'Swap Cars',
             'slug' => 'swap_cars',
@@ -109,6 +102,14 @@
                 'view' => 'Swap Cars View',
                 'search' => 'Swap Cars Search',
                 'history' => 'Swap Cars History',
+            ],
+        ],
+
+        [
+            'name' => 'Car Availability',
+            'slug' => 'car_availablity',
+            'permissions' => [
+                'view' => 'View Car Availability',
             ],
         ],
 
@@ -131,7 +132,7 @@
                 'create' => 'Create Holidays',
                 'update' => 'Update Holidays',
                 'delete' => 'Delete Holidays',
-                'history' => 'View Holiday History',
+                  'history' => 'View Holiday History',
             ],
         ],
 
@@ -161,7 +162,7 @@
                 'create' => 'Create Coupons',
                 'update' => 'Update Coupons',
                 'delete' => 'Delete Coupons',
-                'history' => 'View Coupon History',
+                  'history' => 'View Coupon History',
             ],
         ],
 
@@ -173,13 +174,12 @@
                 'update' => 'Update Real-Time Information',
             ],
         ],
-
-        [
+ [
             'name' => 'Brands and Vacation',
             'slug' => 'brands_and_vacation',
             'permissions' => [
                 'view' => 'View Brands and Vacation',
-                'create' => 'Create brands and Vacation',
+                "create" => "Create brands and Vacation"
             ],
         ],
 
@@ -239,6 +239,8 @@
     ];
 
 @endphp
+
+{{--Edit User Role with permission--}}
 
 <div class="modal fade" id="edit_user_role" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel"
     aria-hidden="true">
@@ -312,3 +314,4 @@
         </div>
     </div>
 </div>
+

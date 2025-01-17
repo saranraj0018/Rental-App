@@ -8,10 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class CarDetails extends Model {
     use HasFactory;
 
-
-
-
-
     protected static function boot() {
 
         parent::boot();
@@ -25,8 +21,8 @@ class CarDetails extends Model {
                 "model_name" => $model->carModel->model_name,
                 "car_details_id" => $model->id,
                 "created_by" => auth()->guard('admin')->id(),
-                'created_at' => now()->tz('Asia/Kolkata'),
-                "type" => 'details'
+                "type" => 'details',
+                  'created_at' => now(),
             ]);
         });
 
@@ -39,8 +35,8 @@ class CarDetails extends Model {
                 "model_name" => $model->carModel->model_name,
                 "car_details_id" => $model->id,
                 "created_by" => auth()->guard('admin')->id(),
-                'created_at' => now()->tz('Asia/Kolkata'),
-                "type" => 'details'
+                "type" => 'details',
+                  'created_at' => now(),
             ]);
         });
 
@@ -54,18 +50,19 @@ class CarDetails extends Model {
                 "model_name" => $model->carModel->model_name,
                 "car_details_id" => $model->id,
                 "created_by" => auth()->guard('admin')->id(),
-                'created_at' => now()->tz('Asia/Kolkata'),
-                "type" => 'details'
+                "type" => 'details',
+                  'created_at' => now(),
             ]);
         });
     }
-
-
-    public function blocks() {
+    
+     public function blocks() {
         return $this->hasMany(CarBlock::class, 'car_register_number', 'register_number');
     }
-
-
+    
+      public function isAvailable() {
+        return Available::where('start_date', '>=', now())->pluck('id');
+    }
 
     public function carModel() {
         return $this->belongsTo(CarModel::class, 'model_id', 'car_model_id');
@@ -78,11 +75,5 @@ class CarDetails extends Model {
 
     public function city() {
         return $this->belongsTo(City::class, 'city_code', 'code');
-    }
-
-
-
-    public function isAvailable() {
-        return Available::where('start_date', '>=', now())->pluck('id');
     }
 }

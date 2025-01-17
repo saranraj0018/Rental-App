@@ -17,12 +17,11 @@
                 </div>
                 <!-- Hidden input to store the content -->
                 <input type="hidden" id="content-input" name="content"
-                    value="{{ old('content', !empty($item['data_values']) ? json_decode($item['data_values']) : '') }}">
+                       value="{{ old('content', !empty($item['data_values']) ? json_decode($item['data_values']) : '') }}">
                 <input type="hidden" name="{{ $section }}_id" value="{{ $item['id'] ?? 0 }}">
             </div>
-
-            @if (in_array('others_update', getAdminPermissions()))
-                <button type="submit" class="btn btn-primary">Save</button>
+             @if (in_array('others_update', getAdminPermissions()))
+            <button type="submit" class="btn btn-primary">Save</button>
             @endif
         </form>
     </div>
@@ -49,10 +48,10 @@
             },
             heading: {
                 options: [{
-                        model: 'paragraph',
-                        title: 'Paragraph',
-                        class: 'ck-heading_paragraph'
-                    },
+                    model: 'paragraph',
+                    title: 'Paragraph',
+                    class: 'ck-heading_paragraph'
+                },
                     {
                         model: 'heading1',
                         view: 'h1',

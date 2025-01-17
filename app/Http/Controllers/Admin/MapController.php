@@ -8,20 +8,19 @@ use App\Models\HubAera;
 use App\Models\HubArea;
 use Illuminate\Http\Request;
 
-class MapController extends Controller {
-    public function show() {
-        $permissions = getAdminPermissions();
+class MapController extends Controller
+{
+    public function show()
+    {
+         $permissions = getAdminPermissions();
         $this->authorizePermission('cities_map_view');
-
-
-        $city_list = City::where('city_status', 1)->get(['name', 'code', 'latitude', 'longitude']);
+    $city_list = City::where('city_status', 1)->get(['name', 'code', 'latitude', 'longitude']);
         return view('admin.city-map.show', compact('city_list', 'permissions'));
     }
 
-    public function store(Request $request) {
-
-        $this->authorizePermission('cities_map_create');
-
+    public function store(Request $request)
+    {
+           $this->authorizePermission('cities_map_create');
         $validated = $request->validate([
             'polygons' => 'required|array',
             'hub' => 'required',
@@ -41,13 +40,14 @@ class MapController extends Controller {
         return response()->json(['message' => 'Area saved successfully']);
     }
 
-    public function getCityCoordinates(Request $request) {
+    public function getCityCoordinates(Request $request)
+    {
         $city = $request->input('city');
         $areas = HubArea::where('hub', $city)->get(); // Get all polygons for the city
-        $coordinates = $areas->map(function ($area) {
+        $coordinates = $areas->map(function($area) {
             return json_decode($area->coordinates, true); // Decode each area’s coordinates
         });
-        return response()->json(['data' => $coordinates]);
+          return response()->json(['data' => $coordinates]);
     }
 
 

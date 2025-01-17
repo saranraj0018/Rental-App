@@ -5,14 +5,13 @@
     <section>
         <header>
             <section class="booking-header">
-                <header>
-                    <section>
-                        @include('user.frontpage.menus')
-                    </section>
-                </header>
+              
+                <section>
+                    @include('user.frontpage.menus')
+                </section>
 
                 <div class="container mb-3 py-5">
-                    <h1 class="display-1 fw-bold text-white text-center">FAQ</h1>
+                    <h1 class="fs-1 fw-bold text-white text-center">FAQ</h1>
                 </div>
             </section>
 

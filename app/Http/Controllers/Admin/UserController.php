@@ -9,6 +9,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
+
 class UserController extends BaseController {
     public function list() {
 
@@ -19,23 +20,24 @@ class UserController extends BaseController {
         return view('admin.user.list', compact('user', 'permissions'));
     }
 
-    public function search(Request $request) {
+    public function search(Request $request)
+    {
         $query = User::query();
         if (!empty($request['name_search'])) {
-            $query->where('name', 'like', '%' . $request['name_search'] . '%');
+            $query->where('name', 'like', '%' .  $request['name_search']. '%');
         }
         $user_list = $query->paginate(10);
-        return response()->json(['data' => ['user' => $user_list->items(), 'pagination' => $user_list->links()->render()]]);
+        return response()->json(['data'=> ['user' => $user_list->items(),'pagination' => $user_list->links()->render()]]);
+
     }
-
-
+    
     /**
      * Export data for History
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function users_export(Request $request) {
-        $this->authorizePermission('user_export');
+          $this->authorizePermission('user_export');
         $ext = $request->query('v');
         $dataset = $this->getData();
 
@@ -47,17 +49,12 @@ class UserController extends BaseController {
         return $pdf->download('user-export.pdf');
     }
 
-
-
-
-
     /**
      * Get Data for History
      * @param string $type
      */
     protected function getData() {
-        $this->authorizePermission('user_export');
-
+   $this->authorizePermission('user_export');
         return User::with('userDoc')->orderBy('created_at', 'desc')->get([
             'name',
             'mobile',

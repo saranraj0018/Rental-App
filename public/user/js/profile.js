@@ -25,6 +25,7 @@ $(function () {
             { id: "#aadhaar_number", condition: (val) => val === "" },
             { id: "#driving_licence", condition: (val) => val === "" },
         ];
+
         fields.forEach((field) => {
             if (!validateField(field)) isValid = false;
         });

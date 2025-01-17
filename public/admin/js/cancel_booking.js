@@ -1,7 +1,7 @@
 $(function () {
     'use strict'
     $(document).ready(function() {
-        $('#cancel_car_model, #cancel_register_number, #cancel_booking_id, #cancel_customer_name, #cancel_booking_type, #cancel_hub_type').on('input change', function() {
+               $('#cancel_car_model, #cancel_register_number, #cancel_booking_id, #cancel_customer_name, #cancel_booking_type, #cancel_hub_type').on('input change', function() {
             fetchData();
         });
 
@@ -11,7 +11,7 @@ $(function () {
             const bookingId = $('#cancel_booking_id').val();
             const customerName = $('#cancel_customer_name').val();
             const bookingType = $('#cancel_booking_type').val();
-            const hub_type = $('#cancel_hub_type').val();
+               const hub_type = $('#cancel_hub_type').val();
             let status = 3;
             $.ajax({
                 url: '/admin/booking/search', // Define this route in your web.php
@@ -22,11 +22,11 @@ $(function () {
                     booking_id: bookingId,
                     customer_name: customerName,
                     booking_type: bookingType,
-                    hub_type: hub_type,
+                      hub_type: hub_type,
                     status:status
                 },
                 success: function(response) {
-                    updateBookingTable(response.data, response.permissions) // Populate table with new data
+                    updateBookingTable(response.data,response.permissions) // Populate table with new data
                 },
                 error: function(xhr) {
                     alertify.error('Something Went Wrong');
@@ -54,7 +54,7 @@ $(function () {
         });
 
         $('#cancel_booking_table').on('click', '.open-risk-modal', function() {
-            $('#risk-comment').val(' ');
+               $('#risk-comment').val(' ');
             let bookingId = $(this).data('id');
             let commend = $(this).data('commend');
             // Parse the comments if they are not already an array
@@ -138,24 +138,22 @@ $(function () {
                     tbody.append(`
                 <tr class="${item.risk === 1 ? 'bg-light-red' : item.status === 2 ? 'bg-light-green' : ''}">
                     <td>${item.booking_type === 'pickup' ? '<h2>P</h2>' : '<h2>D</h2>'}</td>
-
-                    ${(permissions.includes('hub_risk_status') || permissions.includes('hub_risk_comments')) ? `
+                     ${(permissions.includes('hub_risk_status') || permissions.includes('hub_risk_comments')) ? `
                     <td>
                        <button class="btn btn-warning open-risk-modal" data-id="${item.id}" data-commend='${JSON.stringify(commends).replace(/'/g, "&apos;")}'>
                          <h5>i</h5>
                         </button>
                     </td>
                     ` : ''}
-
                     <td>${formatDateTime(item.start_date)}<br>
 <p class="text-danger">${rescheduleDate}</p></td>
                     <td>${item.user ? item.user.name : ''}</td>
-                     <td>${item.user ? item.user.mobile : ""}</td>
+                       <td>${item.user ? item.user.mobile : ""}</td>
                     <td>${carModel.model_name || ''}</td>
                     <td>${bookingDetails.register_number || ''}</td>
                     <td class="truncate-text" title="${item.address}">${item.address}</td>
                     <td>
-                        <button class="btn btn-warning user-details-modal" data-id="${item.user_id}" data-mobile="${item.user ? item.user.mobile : ''}" data-booking="${item.user.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item.user ? item.user.aadhaar_number : ''}">
+                         <button class="btn btn-warning user-details-modal" data-id="${item.user_id}" data-mobile="${item.user ? item.user.mobile : ''}" data-booking="${item.user.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item.user ? item.user.aadhaar_number : ''}">
                             User details
                         </button>
                     </td>

@@ -11,16 +11,10 @@ class CarBlock extends Model {
     public function user() {
         return $this->belongsTo(AdminDetail::class);
     }
-
-
-
-    public function details() {
+    
+        public function details() {
         return $this->belongsTo(CarDetails::class, 'car_register_number', 'register_number');
     }
-
-
-
-
 
     protected static function boot() {
 
@@ -36,7 +30,8 @@ class CarBlock extends Model {
                 "start_date" => $model->start_date,
                 "end_date" => $model->end_date,
                 'created_by' => auth()->guard('admin')->id(),
-                'created_at' => now()->tz('Asia/Kolkata'),
+                   'created_at' => now(),
+                
             ]);
         });
 
@@ -50,7 +45,8 @@ class CarBlock extends Model {
                 "start_date" => $model->start_date,
                 "end_date" => $model->end_date,
                 'created_by' => auth()->guard('admin')->id(),
-                'created_at' => now()->tz('Asia/Kolkata'),
+                  'created_at' => now(),
+
             ]);
         });
 
@@ -65,7 +61,8 @@ class CarBlock extends Model {
                 "start_date" => $model->start_date,
                 "end_date" => $model->end_date,
                 'created_by' => auth()->guard('admin')->id(),
-                'created_at' => now()->tz('Asia/Kolkata'),
+                  'created_at' => now(),
+
             ]);
         });
     }

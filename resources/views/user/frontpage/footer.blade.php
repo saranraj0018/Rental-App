@@ -21,25 +21,25 @@
                 </div>
                 <div class="col-12 col-lg-8 mx-auto my-auto">
                     <div class="d-flex justify-content-center">
-                        <a href="{{ route('privacy-policy') }}" target="_blank" class="text-white text-decoration-none mx-4 fs-16">
+                        <a href="{{ route('privacy-policy') }}" class="text-white text-decoration-none mx-4 fs-16">
                             Privacy Policy
                         </a>
-                        <a href="{{ route('terms-and-conditions') }}" target="_blank" class="text-white text-decoration-none mx-4 fs-16">
+                        <a href="{{ route('terms-and-conditions') }}"  class="text-white text-decoration-none mx-4 fs-16">
                             Terms & Conditions
                         </a>
-                        <a href="{{ route('faq') }}" target="_blank" class="text-white text-decoration-none mx-4 fs-16">
+                        <a href="{{ route('faq') }}" class="text-white text-decoration-none mx-4 fs-16">
                             FAQs
                         </a>
-                        <a href="{{ route('shipping') }}" target="_blank" class="text-white text-decoration-none mx-4 fs-16">
+                        <a href="{{ route('shipping') }}"  class="text-white text-decoration-none mx-4 fs-16">
                             Shipping
                         </a>
-                        <a href="{{ route('refund') }}" target="_blank" class="text-white text-decoration-none mx-4 fs-16">
+                        <a href="{{ route('refund') }}"  class="text-white text-decoration-none mx-4 fs-16">
                             Refund
                         </a>
-                        <a href="{{ route('pricing') }}" target="_blank" class="text-white text-decoration-none mx-4 fs-16">
+                        <a href="{{ route('pricing') }}"  class="text-white text-decoration-none mx-4 fs-16">
                             Pricing
                         </a>
-                        <a href="{{ route('cancellation') }}" target="_blank" class="text-white text-decoration-none mx-4 fs-16">
+                        <a href="{{ route('cancellation') }}"  class="text-white text-decoration-none mx-4 fs-16">
                             Cancellation
                         </a>
                     </div>
@@ -82,7 +82,7 @@
             <div class="row">
                 <div class="col-6 d-flex flex-column justify-content-around">
                     <div>
-                        <img src="./assets/Logo (4).png" alt="Site-Logo" class="img-fluid d-block w-75 mb-0 mb-md-3 mb-lg-0">
+                        <img src="{{ asset('user/img/Logo (4).png') }}" alt="Site-Logo" class="img-fluid d-block w-75 my-3 mb-md-3 mb-lg-0">
                     </div>
                     <div class="d-flex media-list p-1">
                         <a href="https://www.youtube.com" target="_blank" class="me-2">
@@ -104,20 +104,26 @@
                 </div>
                 <div class="col-6 mx-auto my-auto">
                     <div class="d-flex flex-column justify-content-center ms-3">
-                        <a href="https://www.youtube.com" target="_blank" class="text-white text-decoration-none mb-2">
-                            Home
+                        <a href="{{ route('privacy-policy') }}" class="text-white text-decoration-none mb-2">
+                            Privacy Policy
                         </a>
-                        <a href="https://www.youtube.com" target="_blank" class="text-white text-decoration-none mb-2">
+                        <a href="{{ route('terms-and-conditions') }}"  class="text-white text-decoration-none mb-2">
+                            Terms & Conditions
+                        </a>
+                        <a href="{{ route('faq') }}" class="text-white text-decoration-none mb-2">
                             FAQs
                         </a>
-                        <a href="https://www.youtube.com" target="_blank" class="text-white text-decoration-none mb-2">
-                            Safety
+                        <a href="{{ route('shipping') }}"  class="text-white text-decoration-none mb-2">
+                            Shipping
                         </a>
-{{--                        <a href="https://www.youtube.com" target="_blank" class="text-white text-decoration-none mb-2">--}}
-{{--                            Blog--}}
-{{--                        </a>--}}
-                        <a href="https://www.youtube.com" target="_blank" class="text-white text-decoration-none mb-2">
-                            Contact us
+                        <a href="{{ route('refund') }}"  class="text-white text-decoration-none mb-2">
+                            Refund
+                        </a>
+                        <a href="{{ route('pricing') }}"  class="text-white text-decoration-none mb-2">
+                            Pricing
+                        </a>
+                        <a href="{{ route('cancellation') }}"  class="text-white text-decoration-none mb-2">
+                            Cancellation
                         </a>
                     </div>
                 </div>

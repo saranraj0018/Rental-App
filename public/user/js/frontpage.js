@@ -265,7 +265,7 @@ $(document).ready(function(){
 
 document.addEventListener("DOMContentLoaded", function () {
     let selectedDate1 = "", selectedTime1 = "", selectedDate2 = "", selectedTime2 = "";
-    const duration = $('#front_duration').val();
+     const duration = $('#front_duration').val();
     calculateTimeDifference();
     function calculateTimeDifference() {
         const dateTime1 = $('#dateTimeInput1').val();
@@ -291,7 +291,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const minHours = parseInt($('#minimum_days').val());
         const maxHours = parseInt($('#maximum_days').val());
-
         if (totalHours < minHours) {
             setDurationError(`Minimum ${minHours} hours required`);
             $('#find_car').prop('disabled', true);
@@ -347,9 +346,18 @@ document.addEventListener("DOMContentLoaded", function () {
         inline: true,
         dateFormat: "d-m-Y",
         disable: [
-            date => date < new Date().setHours(0, 0, 0, 0)
+            (date) => {
+                const now = new Date();
+                const ninePM = new Date().setHours(21, 0, 0, 0);
+
+                if (now > ninePM) {
+                    now.setDate(now.getDate() + 1);
+                }
+
+                return date < now.setHours(0, 0, 0, 0);
+            },
         ],
-        maxDate: duration,
+  maxDate: duration,
         onChange: function (selectedDates, dateStr) {
             selectedDate1 = dateStr;
             disablePastTimes(document.getElementById('timeTabContent1'), selectedDate1); // Disable past times
@@ -364,9 +372,18 @@ document.addEventListener("DOMContentLoaded", function () {
         inline: true,
         dateFormat: "d-m-Y",
         disable: [
-            date => date < new Date().setHours(0, 0, 0, 0)
+            (date) => {
+                const now = new Date();
+                const ninePM = new Date().setHours(21, 0, 0, 0);
+
+                if (now > ninePM) {
+                    now.setDate(now.getDate() + 1);
+                }
+
+                return date < now.setHours(0, 0, 0, 0);
+            },
         ],
-        maxDate: duration,
+          maxDate: duration,
         onChange: function (selectedDates, dateStr) {
             selectedDate2 = dateStr;
             disablePastTimes(document.getElementById('timeTabContent2'), selectedDate2); // Disable past times
@@ -417,8 +434,8 @@ document.addEventListener("DOMContentLoaded", function () {
             window.location.href = `/book/${booking_id}`;
         }
     });
-
-    $(document).on('click', '.view_all', function () {
+    
+     $(document).on('click', '.view_all', function () {
         const start_date = $('#dateTimeInput1').val();
         const end_date = $('#dateTimeInput2').val();
         if (start_date === '' || end_date === '') {

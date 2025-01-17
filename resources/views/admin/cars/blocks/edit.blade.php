@@ -14,7 +14,7 @@
                         <input type="text" class="form-control" id="register_number" disabled>
                     </div>
 
-                    <div class="form-row mt-2">
+                     <div class="form-row mt-2">
                         <div class="form-group col-md-4">
                             <label for="start_date_time">Start Date & Time</label>
                             <div class="input-group" >

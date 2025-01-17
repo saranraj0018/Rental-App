@@ -20,7 +20,8 @@ class AvailableController extends Controller {
     }
 
 
-    public function available(Request $request) {
+
+        public function available(Request $request) {
         if (empty($request['model_id']) || empty($request['city_code'])) {
             return ['bookings' => []];
         }
@@ -44,6 +45,7 @@ class AvailableController extends Controller {
         }])->where('city_code', $city_code)
             ->where('model_id', $model_id)
             ->get();
+
 
         $bookings = [];
 
@@ -76,9 +78,5 @@ class AvailableController extends Controller {
         }
         return response()->json(['bookings' => $bookings]);
     }
-
-
-
-
 
 }

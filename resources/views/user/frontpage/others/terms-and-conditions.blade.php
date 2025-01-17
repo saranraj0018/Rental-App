@@ -5,9 +5,9 @@
     <section>
         <header>
             <section class="booking-header">
-                @include('user.frontpage.menus')
+                 @include('user.frontpage.menus')
                 <div class="container mb-3 py-5">
-                    <h1 class="display-1 fw-bold text-white text-center">TERMS & CONDITIONS</h1>
+                    <h1 class="fs-1 fw-bold text-white text-center">TERMS & CONDITIONS</h1>
                 </div>
             </section>
 

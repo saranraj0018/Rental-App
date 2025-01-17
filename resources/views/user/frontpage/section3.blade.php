@@ -16,7 +16,7 @@
 
                     @foreach ($section3 as $item)
                         <div class="item">
-                            <div class="r2dc-card-bg px-3 py-1">
+                              <div class="r2dc-card-bg px-3 py-1">
                                 <div class="d-flex justify-content-between"
                                     style="display: @if (!empty($timing_setting['show_bookmarks']) && $timing_setting['show_bookmarks'] == 1) flex @else none @endif !important">
                                     <div class="d-flex">

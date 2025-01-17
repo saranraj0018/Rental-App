@@ -70,13 +70,11 @@
                                     </select>
                                     <div class="invalid-feedback">Please select at least one feature.</div>
                                 </div>
-
-
                                 @if (in_array('banner_section_update', getAdminPermissions()))
                                 <div class="form-group">
                                     <button type="submit" id="banner_save" class="btn btn-primary btn-block btn-lg">Update</button>
                                 </div>
-                                @endif
+                                   @endif
                             </div>
                         </div>
                     </form>

@@ -89,6 +89,7 @@
         </header>
     </section>
 
+
     <section class="my-5">
         <ul class="nav nav-pills mb-3 justify-content-center border border-1 rounded-pill w-fit mx-auto" id="pills-tab"
             role="tablist">
@@ -101,7 +102,6 @@
                     role="tab" aria-controls="pills-profile" aria-selected="false">History</a>
             </li>
         </ul>
-
 
         <div class="mt-5">
             <div class="tab-content" id="pills-tabContent">
@@ -128,11 +128,8 @@
                                                     $coupon_details = !empty($car->coupon)
                                                         ? json_decode($car->coupon)
                                                         : [];
-                                                    $booking_end_date =
-                                                        $details->booking_type === 'pickup' &&
-                                                        !empty($details->reschedule_date)
-                                                            ? $details->reschedule_date
-                                                            : $details->end_date;
+                                                     $booking_end_date = ($details->booking_type === 'pickup' && !empty($details->reschedule_date))  ?
+                                                    $details->reschedule_date : $details->end_date;
 
                                                 @endphp
                                                 <tr>
@@ -190,7 +187,7 @@
                                                         @if ($endDate->gt($currentDateTime))
                                                             <button
                                                                 class="mt-3 btn-sm rounded-3 bg-blue text-white fs-14 fw-500 fs-mb-10 text-decoration-none edit_date"
-                                                                data-end_date="{{ showDateformat($booking_end_date) ?? '' }}"
+                                                                data-end_date="{{showDateformat($booking_end_date) ?? ''}}"
                                                                 data-booking_id="{{ $details->booking_id ?? '' }}"
                                                                 data-model_id="{{ $model_details->car_model->id ?? '' }}">Edit</button>
                                                         @endif

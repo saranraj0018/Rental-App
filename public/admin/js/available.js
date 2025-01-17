@@ -25,7 +25,6 @@ $(function () {
             newDate.setDate(newDate.getDate() - currentWeekOffset * 7 - 7); // Previous week's date
                 currentWeekOffset--;
                 loadWeekData();
-
         });
 
         // Fetch and render data for the selected week
@@ -70,8 +69,7 @@ $(function () {
                                                 (bookingType === '6') ? 'gray' :
                                                     (bookingType === '7') ? 'brown' : 'green';
                         let tempDate = new Date(startDate); // Clone startDate to avoid mutation
-                        console.log(tempDate);
-                        
+
                         while (tempDate <= endDate) {
                             const dayIndex = calculateDayIndex(tempDate);
 
@@ -129,6 +127,7 @@ $(function () {
                 },
 
                 error: function(xhr) {
+                    console.error('Error fetching data:', xhr);
                     alert('An error occurred while fetching registration numbers.');
                 }
             });

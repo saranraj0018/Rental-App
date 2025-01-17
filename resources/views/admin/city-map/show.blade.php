@@ -21,7 +21,7 @@
         @if (in_array('cities_map_create', $permissions))
         <!-- Save button -->
         <button id="save-area" class="btn btn-primary mt-3">Save Area</button>
-            <button id="clear-polygons" class="btn btn-danger mt-3">Clear Polygons</button>
+        <button id="clear-polygons" class="btn btn-danger mt-3">Clear Polygons</button>
         @endif
     </div>
 
@@ -164,7 +164,7 @@
                     alertify.error('No polygons to clear.');
                 }
             });
-
+            
             // Save all drawn polygons
             $('#save-area').click(function() {
                 let selectedCity = $('#city-select').val();

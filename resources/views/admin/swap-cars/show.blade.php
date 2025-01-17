@@ -6,8 +6,7 @@
                 <div class="col-sm-6">
                     <h1>Swap Cars </h1>
                 </div>
-
-                @if (in_array('swap_cars_history', $permissions))
+                    @if (in_array('swap_cars_history', $permissions))
                 <div class="col-sm-6 text-right">
                     <a href="{{ route('car-swap.table') }}" class="btn btn-primary mb-3" id="add_role" role="button">Swap History</a>
                 </div>
@@ -21,7 +20,7 @@
         <div class="d-flex mb-3">
             <div class="form-group w-25 mr-3">
                 <label for="booking_type">Select Hub</label>
-                <select id="hub_city" name="hub_city" class="form-select w-100" data-live-search="true">
+                   <select id="hub_city" name="hub_city" class="form-select w-100" data-live-search="true">
                     <option selected disabled>Hub</option>
                     @if(!empty($city_list))
                         @foreach($city_list as $id => $list)
@@ -44,7 +43,7 @@
                 <label for="booking_id_3">End Date</label>
                 <input type="text" id="end_date" class="form-control" placeholder="End Date" disabled>
             </div>
-            <div class="form-group col-md-2">
+              <div class="form-group col-md-2">
                 <label for="car_name">Car Name</label>
                 <input type="text" id="car_name" class="form-control" placeholder="Car Name" disabled>
             </div>
@@ -52,14 +51,9 @@
                 <label for="car_number">Car Number</label>
                 <input type="text" id="car_number" class="form-control" placeholder="Car Number" disabled>
             </div>
-
-            @if (in_array('swap_cars_search', $permissions))
-
             <div class="form-group col-md-2">
                     <button type="submit" class="btn btn-secondary" id="search_cars" style="margin-top: 30px" disabled>Search Available Cars</button>
             </div>
-            @endif
-
         </div>
     </section>
 

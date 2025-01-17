@@ -41,7 +41,6 @@
     </div>
 </div>
 
-
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="delete_city" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">

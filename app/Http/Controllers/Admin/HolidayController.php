@@ -10,37 +10,34 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class HolidayController extends BaseController {
+class HolidayController extends BaseController
+{
     /**
      * Display a listing of the resource.
      */
-    public function list(Request $request) {
+    public function list(Request $request)
+    {
         $this->authorizePermission('holidays_view');
-
         $holidays = Holiday::with('user')->orderBy('created_at', 'desc')->paginate(20);
         return view('admin.holiday.list', compact('holidays'));
     }
-
-
-    public function history(Request $request) {
+      public function history(Request $request) {
         $this->authorizePermission('holidays_history');
 
         $holidays = HolidayHistory::orderBy('created_at', 'desc')->paginate(20);
         return view('admin.holiday.history', compact('holidays'));
     }
 
-    public function save(Request $request) {
-
-
-        $this->authorizePermission('holidays_create');
-
+    public function save(Request $request)
+    {
+ $this->authorizePermission('holidays_create');
         if (!empty($request['holiday_id'])) {
             $request->validate([
                 'edit_event_name' => 'required|string|max:144',
                 'event_date' => 'required|date|after:today',
             ]);
 
-            $holidays = Holiday::find($request['holiday_id']);
+            $holidays =  Holiday::find($request['holiday_id']);
             $holidays->event_name = $request['edit_event_name'];
             $holidays->event_date = formDate($request['event_date']);
             $holidays->notes = $request['edit_description'];
@@ -48,7 +45,7 @@ class HolidayController extends BaseController {
             $holidays->save();
 
             $holiday_list = Holiday::with('user')->orderBy('created_at', 'desc')->paginate(20);
-            return response()->json(['data' => ['holiday' => $holiday_list->items(), 'pagination' => $holiday_list->links()->render()], 'success' => 'Holidays Created successfully']);
+            return response()->json(['data'=> ['holiday' => $holiday_list->items(), 'pagination' => $holiday_list->links()->render()],'success' => 'Holidays Created successfully']);
 
         }
 
@@ -74,28 +71,28 @@ class HolidayController extends BaseController {
         }
 
         $holiday_list = Holiday::with('user')->orderBy('created_at', 'desc')->paginate(20);
-        return response()->json(['data' => ['holiday' => $holiday_list->items(), 'pagination' => $holiday_list->links()->render()], 'success' => 'Holidays Created successfully']);
+        return response()->json(['data'=> ['holiday' => $holiday_list->items(), 'pagination' => $holiday_list->links()->render()],'success' => 'Holidays Created successfully']);
 
     }
 
-    public function delete($id) {
-
-
-        $this->authorizePermission('holidays_delete');
+    public function delete($id)
+    {
+         $this->authorizePermission('holidays_delete');
         $holidays = Holiday::find($id);
         $holidays->delete();
         $holiday_list = Holiday::with('user')->orderBy('created_at', 'desc')->paginate(20);
-        return response()->json(['data' => ['holiday' => $holiday_list->items(), 'pagination' => $holiday_list->links()->render()], 'success' => 'Holidays Deleted successfully']);
+        return response()->json(['data'=> ['holiday' => $holiday_list->items(), 'pagination' => $holiday_list->links()->render()],'success' => 'Holidays Deleted successfully']);
     }
 
-    public function search(Request $request) {
+    public function search(Request $request)
+    {
         $query = Holiday::with('user');
         if ($request->filled('holiday_search')) {
-            $query->where('event_name', 'like', '%' . $request['holiday_search'] . '%');
+            $query->where('event_name', 'like', '%' .  $request['holiday_search']. '%');
         }
 
         $holiday_list = $query->paginate(20);
-        return response()->json(['data' => ['holiday' => $holiday_list->items(), 'pagination' => $holiday_list->links()->render()]]);
+        return response()->json(['data'=> ['holiday' => $holiday_list->items(),'pagination' => $holiday_list->links()->render()]]);
 
     }
 }

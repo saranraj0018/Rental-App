@@ -15,8 +15,8 @@ $(function () {
                 success: function (response) {
                     let coupon_amount = response.final_amount ?? 0;
                     let total_amount = final_amount - coupon_amount;
-                    if (response.message) {
-                        $('#mobileModal').modal('show');
+                      if (response.message) {
+                          $('#mobileModal').modal('show');
                         return;
                     }
                     if (response.valid) {
@@ -27,12 +27,13 @@ $(function () {
                         $('#final_coupon_amount').val(coupon_amount);
                         $('#coupon_code').val(` `);
                     } else {
-                        let error_message = 'Invalid coupon code';
+                         let error_message = 'Invalid coupon code';
                         $('#error_message').text(error_message);
                         $('#login_alert').modal('show');
                     }
                 },
-                error: function (response) {
+                 error: function (response) {
+
                     if (response.responseJSON && response.responseJSON.message) {
                         let errors = response.responseJSON.message;
                         if (errors === 'Unauthenticated.') {
@@ -76,6 +77,7 @@ $(function () {
             minuteIncrement: 30, // 30-minute intervals
             allowInput: true,
         });
+
         $('#calculate_price').on('click', function () {
             const bookingId = $('#booking_id').val();
             const endDate = $('#end_date').val();
@@ -144,8 +146,8 @@ $(function () {
             $('#cancel_booking_id').val($(this).data('booking_id'));
             $('#cancel_booking').modal('show');
         });
-
-        $(document).on('click', '#close_pop', function () {
+        
+           $(document).on('click', '#close_pop', function () {
             $('#reschedule_model').modal('hide');
         });
 
@@ -157,14 +159,13 @@ $(function () {
             $('#cancel_booking').modal('hide');
         });
 
-        $('#accept_terms').on('change', function() {
+  $('#accept_terms').on('change', function() {
             if ($(this).is(':checked')) {
                 $('#confirm_cancel_btn').prop('disabled', false);
             } else {
                 $('#confirm_cancel_btn').prop('disabled', true);
             }
         });
-
 
         $('#cancel_booking_form').on('submit', function(e) {
             e.preventDefault();

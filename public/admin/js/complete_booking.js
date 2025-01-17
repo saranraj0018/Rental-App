@@ -26,7 +26,7 @@ $(function () {
                     hub_type:hub_type
                 },
                 success: function(response) {
-                    updateBookingTable(response.data, response.permissions) // Populate table with new data
+                     updateBookingTable(response.data, response.permissions) // Populate table with new data
                 },
                 error: function() {
                     alertify.error('Something Went Wrong');
@@ -64,7 +64,7 @@ $(function () {
                 },
                 success: function(response) {
                     if (response.data){
-                        updateBookingTable(response.data, response.permissions)
+                          updateBookingTable(response.data, response.permissions)
                     } else {
                         alertify.error('Data Not Found');
                     }
@@ -120,8 +120,7 @@ $(function () {
                     tbody.append(`
                 <tr class="${item.risk === 1 ? 'bg-light-red' : item.status === 2 ? 'bg-light-green' : ''}">
                     <td>${item.booking_type === 'pickup' ? '<h2>P</h2>' : '<h2>D</h2>'}</td>
-
-                  ${permissions.includes('booking_revert') ? `
+                     ${permissions.includes('booking_revert') ? `
                     <td>
                     ${item.status === 2 ?
                         `<button class="btn btn-warning revert" data-id="${item.id}">
@@ -129,16 +128,15 @@ $(function () {
                         </button>` : ''}
                     </td>
                 ` : ''}
-
                     <td>${formatDateTime(item.start_date)}<br>
                     <p class="text-danger">${rescheduleDate}</p></td>
                     <td>${item.user ? item.user.name : ''}</td>
-                     <td>${item.user ? item.user.mobile : ""}</td>
+                    <td>${item.user ? item.user.mobile : ""}</td>
                     <td>${carModel.model_name || ''}</td>
                     <td>${bookingDetails.register_number || ''}</td>
                     <td class="truncate-text" title="${item.address}">${item.address}</td>
                     <td>
-                        <button class="btn btn-warning user-details-modal" data-id="${item.user_id}" data-mobile="${item.user.mobile}" data-booking="${item.user.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item.user.aadhaar_number}">
+                         <button class="btn btn-warning user-details-modal" data-id="${item.user_id}" data-mobile="${item.user ? item.user.mobile : ''}" data-booking="${item.user.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item.user ? item.user.aadhaar_number : ''}">
                             User details
                         </button>
                     </td>

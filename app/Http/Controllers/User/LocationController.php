@@ -7,6 +7,8 @@ use App\Models\HubArea;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class LocationController extends Controller
 {
@@ -21,7 +23,9 @@ class LocationController extends Controller
         $location = $request['type'];
         $address = $request['address'];
 
-        $hubAreas = HubArea::where('hub', session('booking_details.city_id') ?? 632)->get();
+        // Fetch all polygons for the specified hub
+       $hubAreas = HubArea::where('hub', session('booking_details.city_id') ?? 632)->get();
+
 
         $isInside = false;
 
@@ -70,6 +74,7 @@ class LocationController extends Controller
 
             $user->save();
         }
+
         return response()->json(['inside' => $isInside]);
     }
 
@@ -97,5 +102,72 @@ class LocationController extends Controller
         }
 
         return $inside;
+    }
+    
+      public function registerUpdate(Request $request)
+    {
+
+        if(empty($request->all()) || empty($request['user_name']) || empty($request['pet_name']) || empty($request['pet_type'])
+            || empty($request['gender']) || empty($request['location']) || empty($request['image'])){
+            return response()->json([
+            'status' => 401,
+            'message' => 'Data Error',
+        ], 401);
+        }
+        $validated = $request->validate([
+            'user_name' => 'required',
+            'pet_name' => 'required',
+            'pet_type' => 'required',
+            'gender' => 'required',
+            'location' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $image = '';
+        if ($request->hasFile('image')) {
+            // Generate a unique file name
+            $uniq_id = uniqid();
+            $img_name = $uniq_id . '_' . $request->file('image')->getClientOriginalName();
+
+            // Save the file in the 'public/car_image' directory
+            $request->file('image')->storeAs('image/', $img_name, 'public');
+
+            // Add the image name to the data array
+            $image = $img_name;
+        }
+
+        DB::table('api_testings')->insert([
+            'user_name' => $validated['user_name'],
+            'pet_name' => $validated['pet_name'],
+            'pet_type' => $validated['pet_type'],
+            'gender' => $validated['gender'],
+            'location' => $validated['location'] ?? null, // Handle nullable fields
+            'image' => $image, // Handle nullable fields
+            'created_at' => now(), // Add timestamps manually
+            'updated_at' => now(),
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Data Saved Successfully',
+        ], 200);
+
+    }
+
+    public function getData()
+    {
+
+       $list =  DB::table('api_testings')->get();
+
+       foreach ($list as $item) {
+           $item->image = url('/storage/image/' . $item->image);
+       }
+
+        return response()->json([
+            'status' => 200,
+            'data' => $list,
+            'message' => 'Data Get Successfully',
+        ], 200);
+
     }
 }

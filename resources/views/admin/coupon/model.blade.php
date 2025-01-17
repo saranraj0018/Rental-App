@@ -69,7 +69,7 @@
                                 <input id="coupon_code" type="text" name="coupon_code" class="form-control" placeholder="Valam#1234" />
                             </div>
                         </div>
-                        <div class="form-group col-md-4">
+                         <div class="form-group col-md-4">
                             <label for="coupon_start_date">Start Date & Time</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="coupon_start_date" name="coupon_start_date" placeholder="Start date and time" />

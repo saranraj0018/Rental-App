@@ -7,7 +7,8 @@ use App\Models\City;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CityController extends Controller {
+class CityController extends Controller
+{
     public function list(Request $request) {
         $this->authorizePermission('city_list_view');
         $permissions = getAdminPermissions();
@@ -17,9 +18,10 @@ class CityController extends Controller {
         return view('admin.city.list', compact('city', 'permissions'));
     }
 
-    public function save(Request $request) {
-        $this->authorizePermission('city_list_create');
-        $request->validate([
+    public function save(Request $request)
+    {
+          $this->authorizePermission('city_list_create');
+         $request->validate([
             'city_name' => 'required|string|max:144',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
@@ -36,15 +38,16 @@ class CityController extends Controller {
         $city->save();
 
         $city_list = City::with('user')->orderBy('created_at', 'desc')->paginate(10);
-        return response()->json(['data' => ['city' => $city_list->items(), 'pagination' => $city_list->links()->render()], 'success' => 'City Created successfully']);
+        return response()->json(['data'=> ['city' => $city_list->items(), 'pagination' => $city_list->links()->render()],'success' => 'City Created successfully']);
 
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $this->authorizePermission('city_list_delete');
         City::find($id)->delete();
         $city_list = City::with('user')->orderBy('created_at', 'desc')->paginate(10);
-        return response()->json(['data' => ['city' => $city_list->items(), 'pagination' => $city_list->links()->render()], 'success' => 'City Deleted successfully']);
+        return response()->json(['data'=> ['city' => $city_list->items(), 'pagination' => $city_list->links()->render()],'success' => 'City Deleted successfully']);
     }
 
 }

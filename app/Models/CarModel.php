@@ -9,7 +9,17 @@ class CarModel extends Model
 {
     use HasFactory;
 
-    protected static function boot() {
+    public function carDetails()
+    {
+        return $this->hasOne(CarDetails::class, 'model_id', 'car_model_id');
+    }
+
+    public function carDoc()
+    {
+        return $this->hasMany(CarDocument::class, 'model_id');
+    }
+    
+     protected static function boot() {
 
         parent::boot();
 
@@ -21,7 +31,7 @@ class CarModel extends Model
                 "register_number" => $model?->carDetails?->register_number,
                 "model_name" => $model->model_name,
                 "created_by" => auth()->guard('admin')->id(),
-                'created_at' => now()->tz('Asia/Kolkata'),
+                'created_at' => now(),
                 "type" => 'models'
             ]);
         });
@@ -34,7 +44,7 @@ class CarModel extends Model
                 "register_number" => $model?->carDetails?->register_number,
                 "model_name" => $model->model_name,
                 "created_by" => auth()->guard('admin')->id(),
-                'created_at' => now()->tz('Asia/Kolkata'),
+                'created_at' => now(),
                 "type" => 'models'
             ]);
         });
@@ -49,19 +59,9 @@ class CarModel extends Model
                 "register_number" => $model?->carDetails?->register_number,
                 "model_name" => $model->model_name,
                 "created_by" => auth()->guard('admin')->id(),
-                'created_at' => now()->tz('Asia/Kolkata'),
+                'created_at' => now(),
                 "type" => 'models'
             ]);
         });
-    }
-
-    public function carDetails()
-    {
-        return $this->hasOne(CarDetails::class, 'model_id', 'car_model_id');
-    }
-
-    public function carDoc()
-    {
-        return $this->hasMany(CarDocument::class, 'model_id');
     }
 }

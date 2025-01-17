@@ -22,7 +22,7 @@ class Holiday extends Model {
                 "event_date" => $model->event_date,
                 "description" => $model->notes,
                 "created_by" => auth()->guard('admin')->id(),
-                'created_at' => now()->tz('Asia/Kolkata'),
+                'created_at' => now(),
             ]);
         });
 
@@ -34,7 +34,7 @@ class Holiday extends Model {
                 "event_date" => $model->event_date,
                 "description" => $model->notes,
                 "created_by" => auth()->guard('admin')->id(),
-                'created_at' => now()->tz('Asia/Kolkata'),
+                'created_at' => now(),
             ]);
         });
 
@@ -47,7 +47,7 @@ class Holiday extends Model {
                 "event_date" => $model->event_date,
                 "description" => $model->notes,
                 "created_by" => auth()->guard('admin')->id(),
-                'created_at' => now()->tz('Asia/Kolkata'),
+                'created_at' => now(),
             ]);
         });
     }

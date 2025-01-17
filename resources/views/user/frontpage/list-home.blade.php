@@ -1,7 +1,5 @@
 @extends('user.frontpage.list-cars.main')
 
-
-
 @section('content')
     @include('user.frontpage.section1')
     @include('user.frontpage.section2')

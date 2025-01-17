@@ -7,28 +7,27 @@
                 </p>
             </div>
             <div>
-                {{-- <button class="btn text-blue fs-16 fs-mb-12 fw-500">View All <i class="fas fa-chevron-right"></i></button> --}}
+                <!--<button class="btn text-blue fs-16 fs-mb-12 fw-500">View All <i class="fas fa-chevron-right"></i></button>-->
             </div>
         </div>
 
         <div class="home-demo">
             <div class="owl-carousel owl-carousel-4 owl-theme">
-                @if (!empty($brand_image))
-                    @foreach ($brand_image as $key => $image)
-                        @if (!empty($image->slug) && $image->slug == 'vacation-image')
-                            <div class="item card bg-white bdr-20 border-0 position-relative">
-                                <img src="{{ !empty($image->name) ? asset('storage/vacation-section/' . $image->name) : asset('admin/img/maruthamalai.png') }}"
-                                    alt="car-logo" class="img-fluid vt-img">
-
-                                <div class="p-2 mt-2">
-                                    <p class="fs-14 fw-600 mb-1">
-                                        {{ $image->description }}
-                                    </p>
-                                    <p class="fs-12">
-                                        <i class="fas fa-map-marker-alt text-blue fs-14"></i> {{ $image->title }}
-                                    </p>
-                                </div>
-                            </div>
+                @if(!empty($brand_image))
+                    @foreach($brand_image as $key => $image)
+                        @if(!empty($image->slug) && $image->slug == 'vacation-image')
+                <div class="item card bg-white bdr-20 border-0 position-relative">
+                    <img src="{{ !empty($image->name) ? asset('storage/vacation-section/' . $image->name) :  asset('admin/img/maruthamalai.png') }}" alt="car-logo" class="img-fluid vt-img">
+                    
+                    <div class="p-2 mt-2">
+                        <p class="fs-14 fw-600 mb-1">
+                            {{ $image->description }}
+                        </p>
+                        <p class="fs-12">
+                            <i class="fas fa-map-marker-alt text-blue fs-14"></i> {{ $image->title }}
+                        </p>
+                    </div>
+                </div>
                         @endif
                     @endforeach
                 @else
@@ -53,3 +52,4 @@
         </div>
     </div>
 </section>
+

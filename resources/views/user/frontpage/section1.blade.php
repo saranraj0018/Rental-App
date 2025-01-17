@@ -12,11 +12,12 @@
 
 
 <section class="section-1-bg pb-3" x-data>
-    <header>
+     <header>
         <section>
-            @include('user.frontpage.menus')
+             @include('user.frontpage.menus')
         </section>
     </header>
+
 
 
     <div class="container py-5 d-none d-lg-block">
@@ -61,7 +62,7 @@
                 </div>
             </div>
             <div class="col-12 col-lg-6">
-                <div id="carouselExampleFade" class="carousel slide carousel-fade">
+                <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
                             <img src="{{ asset('storage/section1-image-car/' . $image1) }}" class="d-block w-100 mb-5"
@@ -73,14 +74,14 @@
 
                         </div>
                         <div class="carousel-item">
-                            <img src="{{ asset('storage/section1-image-car/' . $image3) }}" class="d-block w-100 mb-5"
-                                alt="Slide 1">
+                            <img src="{{ asset('storage/section1-image-car/' . $image3) }}"
+                                class="d-block w-100 mb-5" alt="Slide 1">
                         </div>
                     </div>
                     <!-- Pagination Dots -->
                     <div class="carousel-indicators bdr-30 px-1">
-                        <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="0" class="active"
-                            aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="0"
+                            class="active" aria-current="true" aria-label="Slide 1"></button>
                         <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="1"
                             aria-label="Slide 2"></button>
                         <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="2"
@@ -107,7 +108,7 @@
         <div class="container filter-input-bg bg-white p-3 d-flex align-items-center justify-content-center">
             <div class="row">
                 <div class="col-12 col-lg-3 my-lg-0">
-                    <label class="fs-16 fw-500 text-center w-100">City</label>
+                    <label class="fs-16 fw-500 text-left w-100">City</label>
                     <div class="input-group my-grps">
                         <span class="input-group-text" id="basic-addon1">
                             <i class=" text-white fa-solid fa-location-dot"></i>
@@ -116,15 +117,15 @@
                             $city = !empty($city_list) ? $city_list->toArray() : [];
                         @endphp
                         <!-- Input field -->
-                        <input type="text" class="form-control fs-14 my-hub" id="cityInput" placeholder="Choose City"
-                            aria-label="City" aria-describedby="basic-addon1"
+                        <input type="text" class="form-control fs-14 my-hub" id="cityInput"
+                            placeholder="Choose City" aria-label="City" aria-describedby="basic-addon1"
                             value="{{ array_key_exists(session('city_id'), $city) ? $city[session('city_id')] : '' }}"
                             readonly style="font-size:13px;">
                         <input type="hidden" id="city_id" name="city_id" value="{{ session('city_id') }}">
                     </div>
                 </div>
                 <div class="col-12 col-lg-4 my-1 mt-2 my-lg-0">
-                    <label class="fs-16 fw-500 text-center w-100">Starting Date</label>
+                     <label class="fs-16 fw-500 text-left w-100">Starting Date</label>
                     <div class="input-group my-grps">
                         <span class="input-group-text" id="basic-addon1">
                             <i class=" text-white fa-solid fa-calendar-days"></i>
@@ -136,7 +137,7 @@
                     </div>
                 </div>
                 <div class="col-12 col-lg-3 mt-2 mb-2 my-lg-0">
-                    <label class="fs-16 fw-500 text-center w-100">Ending Date</label>
+                    <label class="fs-16 fw-500 text-left w-100">Ending Date</label>
                     <div class="input-group my-grps">
                         <span class="input-group-text" id="basic-addon1">
                             <i class=" text-white fa-solid fa-calendar-days"></i>

@@ -35,7 +35,7 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <div class="input-group" style="width: 250px;">
-                            <label for="booking_id">
+                            <label for="history_booking_id">
                             </label><input type="text" id="history_booking_id" name="history_booking_id" class="form-control" placeholder="Booking ID....">
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                             <th>Email</th>
                             <th>Booking Car</th>
                             <th>Booking Register No</th>
-                            <th>Swap Car </th>
+                            <th>Swap Car</th>
                             <th>Swap Car Register No</th>
                             <th>Create At</th>
                         </tr>

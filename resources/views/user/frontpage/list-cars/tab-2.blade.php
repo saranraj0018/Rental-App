@@ -3,7 +3,7 @@
          <div class="row">
              @if (!empty($car_models))
                  @foreach ($car_models as $key => $model)
-                     <div class="col-6 col-lg-4 mb-4 px-2">
+                     <div class="col-12 col-md-6 col-lg-4 mb-4 px-2">
                          <div class="r2dc-card-bg py-2 px-3">
                              <div class="d-flex justify-content-between"
                                  style="display: @if ($timing_setting['show_bookmarks'] == 1) flex @else none @endif !important">

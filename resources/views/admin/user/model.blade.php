@@ -28,11 +28,6 @@
                     </div>
 
                 </div>
-
-
-                {{-- <div id="image_gallery" class="row">
-
-                </div> --}}
             </div>
         </div>
     </div>

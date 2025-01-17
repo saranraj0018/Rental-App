@@ -4,7 +4,7 @@ $(function () {
 
         $('#booking_id').on('input', function () {
             let booking_id = $(this).val();
-            let city_code = $('#hub_city').val();
+             let city_code = $('#hub_city').val();
             $.ajax({
                 url: '/admin/get/booking_date',
                 type: 'GET',
@@ -13,7 +13,7 @@ $(function () {
                     if (response.data) {
                         $('#start_date').val(response.data.start_date);
                         $('#end_date').val(response.data.end_date);
-                        $('#car_name').val(response.data.car_name);
+                         $('#car_name').val(response.data.car_name);
                         $('#car_number').val(response.data.register_number);
                         $('#search_cars').prop('disabled',false);
                     }
@@ -26,7 +26,7 @@ $(function () {
         $('#search_cars').on('click', function () {
             let start_date = $('#start_date').val();
             let end_date = $('#end_date').val();
-            let hub_list = $('#hub_city').val();
+             let hub_list = $('#hub_city').val();
 
             $.ajax({
                 url: '/admin/available/cars',
@@ -44,7 +44,6 @@ $(function () {
                               <input type="hidden" name="car_id" id="car_id" class="car_id" value="${car.id}" >
                                 <h5 class="card-title">${car.car_model.model_name ?? ''}</h5>
                                 <p class="card-text">Register Number: ${car.register_number}</p>
-                                <p class="card-text">car id Number: ${car.id}</p>
                                 <button type="button" class="btn btn-primary with_price">With Price</button>
                                 <button type="button" class="btn btn-secondary without_price">Without Price</button>
                             </div>
@@ -65,7 +64,7 @@ $(function () {
         $(document).on('click', '.without_price', function (e) {
             e.preventDefault();
             let car_id = $(this).closest('.card').find('.car_id').val();
-            let old_car_id = $('#old_car_id').val();
+             let old_car_id = $('#old_car_id').val();
             let booking_id = $('#booking_id').val();
             let start_date = $('#start_date').val();
             let end_date = $('#end_date').val();
@@ -107,7 +106,8 @@ $(function () {
                         <p>Weekend Days: ₹${week_end_amount}</p>
                         <p>Total Booking Amount : ₹${booking_price}</p>
                         <p>Total: ₹${final_total_price}</p>
-                         <input type="hidden" name="old_car_id" id="old_car_id" class="old_car_id" value="${car_id}" >
+                     <input type="hidden" name="old_car_id" id="old_car_id" class="old_car_id" value="${car_id}" >
+
                     `);
                         $('#amount').val(final_total_price);
                         $('#with-price-modal').modal('show');
@@ -142,8 +142,8 @@ $(function () {
                 }
             });
         });
-
-        $('#history_booking_id').on('keyup', fetchData);
+        
+           $('#history_booking_id').on('keyup', fetchData);
 
         function fetchData() {
             let booking_id = $('#history_booking_id').val();
@@ -151,10 +151,10 @@ $(function () {
                 url: '/admin/swap/search', // Define this route in your web.php
                 type: 'GET',
                 data: {
-                    booking_id: booking_id,
+                    booking_id: booking_id
                 },
                 success: function (response) {
-                    updateSwapTable(response.data, response.permissions) // Populate table with new data
+                    updateSwapTable(response.data) // Populate table with new data
                 },
                 error: function (xhr) {
                     alertify.error('Something Went Wrong');
@@ -162,7 +162,7 @@ $(function () {
             });
         }
 
-        function updateSwapTable(data, permissions) {
+        function updateSwapTable(data) {
             let tbody = $('#swap_table tbody');
             tbody.empty(); // Clear existing rows
 

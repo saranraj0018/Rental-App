@@ -1,4 +1,4 @@
-@media only screen and (min-width: 401px) and (max-width: 800px) {
+@media only screen and (min-width: 451px) and (max-width: 800px) {
     .date-modal-width {
         width: 49%;
     }
@@ -40,12 +40,12 @@
         width: 100%;
     }
     .mobile-head-width img{
-         width: 100% !important;
+         width: 120px !important;
      }
 
 }
 
-@media only screen and (max-width:400px) {
+@media only screen and (max-width:450px) {
     .fs-mb-9 {
         font-size: 9px;
         line-height: 11px;
@@ -166,7 +166,7 @@
     .mobile-head-width{
         width: 100%;
     }.mobile-head-width img{
-         width: 70% !important;
+         width: 80px !important;
      }
     .badge-perc-2 {
         width: 20px !important;

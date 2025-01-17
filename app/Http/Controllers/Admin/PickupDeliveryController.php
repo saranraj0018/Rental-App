@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\Hub;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\UserController;
@@ -22,26 +21,23 @@ use App\Models\Frontend;
 use App\Models\Payment;
 use Carbon\Carbon;
 use App\Models\User;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Maatwebsite\Excel\Facades\Excel;
 use Razorpay\Api\Api;
 
-class PickupDeliveryController extends BaseController {
-    public function list(Request $request) {
-
+class PickupDeliveryController extends BaseController
+{
+    public function list(Request $request)
+    {
         $this->authorizePermission('hub_view');
         //  $bookings = self::getBooking();
-        $city_list = City::where('city_status', 1)->pluck('name', 'code');
-        return view('admin.hub.list', compact('city_list', ));
+        $city_list = City::where('city_status',1)->pluck('name','code');
+        return view('admin.hub.list',compact('city_list',));
     }
 
-
-    public static function getBooking() {
-
+    public static function getBooking()
+    {
         $timeLimit = now()->addHours(48);
         return Booking::with(['user', 'details', 'comments', 'user.bookings'])
             ->where('status', 1)
@@ -64,15 +60,18 @@ class PickupDeliveryController extends BaseController {
                 $query->where('risk', 1)
                     ->where('status', 1);
             })
-            ->orderBy('start_date')
-            ->orderBy('end_date', )
+           ->orderByRaw("
+            CASE 
+                WHEN booking_type = 'delivery' THEN start_date
+                WHEN booking_type = 'pickup' THEN end_date
+            END ASC
+        ") // Conditional ordering based on booking_type
             ->paginate(20);
     }
 
-    public function rescheduleDate(Request $request) {
-
-        $this->authorizePermission('hub_reschedule');
-
+    public function rescheduleDate(Request $request)
+    {
+          $this->authorizePermission('hub_reschedule');
         $request->validate([
             'booking_id' => 'required|numeric',
             'car_id' => 'required|numeric',
@@ -80,13 +79,17 @@ class PickupDeliveryController extends BaseController {
             'start_date' => 'required|date',
             'end_date' => 'required|date',
         ]);
-        $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
+        
+          $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
         $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
-        // dd($request->all());
+       
+
         $booking = Booking::find($request['booking_id']);
 
         $booking->reschedule_date = formDateTime($request['end_date']);
         $booking->save();
+        
+        
         if ($booking->booking_type == 'delivery') {
             Available::where('booking_id', $booking->booking_id)->update(['start_date' => formDateTime($request['end_date'])]);
         } else {
@@ -94,8 +97,8 @@ class PickupDeliveryController extends BaseController {
             Available::where('booking_id', $booking->booking_id)->update(['end_date' => formDateTime($request['end_date']) , 'next_booking' => formDateTime($next_booking)]);
         }
 
-
         $availableCars = self::checkAvailability($request['start_date'], $request['end_date'], $request['car_id'], $request['model_id']);
+
 
         if (!empty($availableCars['booking_details'])) {
             // Counter for available cars
@@ -110,8 +113,8 @@ class PickupDeliveryController extends BaseController {
                         $bookingUpdate = Booking::where('booking_id', $booking->booking_id)
                             ->update(['car_id' => $carId]);
 
-                        if (!empty($carId)) {
-                            $car_details = CarDetails::with('carModel')->find($carId);
+                        if (!empty($carId)){
+                            $car_details =  CarDetails::with('carModel')->find($carId);
                             BookingDetail::where('booking_id', $booking->booking_id)
                                 ->update(['car_details' => json_encode($car_details)]);
                         }
@@ -119,8 +122,8 @@ class PickupDeliveryController extends BaseController {
                         $car_available = new Available();
                         $car_available->car_id = !empty($carId) ? $carId : 0;
                         $car_available->model_id = !empty($request['model_id']) ? $request['model_id'] : 0;
-                        $car_available->register_number = !empty($car_details->register_number) ? $car_details->register_number : 0;
-                        $car_available->booking_id = $booking->booking_id;
+                        $car_available->register_number = !empty($car_details->register_number) ? $car_details->register_number: 0;
+                        $car_available->booking_id =  $booking->booking_id;
                         $car_available->start_date = formDateTime($request['start_date']);
                         $car_available->end_date = formDateTime($request['end_date']);
                         $car_available->next_booking = Carbon::parse(formDateTime($request['end_date']))->addHours($timing_setting['booking_duration'] ?? 3);
@@ -139,20 +142,21 @@ class PickupDeliveryController extends BaseController {
                 }
             }
         }
-
-        Mail::to($booking->user->email)->send(new BookingReScheduleMail($booking));
-        Mail::to(auth('admin')->user()->email)->send(new NotifyBookingReScheduleMail($booking));
+        //Mail::to($booking->user->email)->send(new BookingReScheduleMail($booking));
+       // Mail::to(auth('admin')->user()->email)->send(new NotifyBookingReScheduleMail($booking));
 
         twilio()->send("Hello there, Your Booking for: booking id - $booking->booking_id, has been rescheduled to the date: $booking->reschedule_date")->to('+91' . $booking?->user?->mobile);
 
         twilio()->send("Hello there, Booking for Customer: $booking->user->name, with Booking id - $booking->booking_id, has been rescheduled to the date: $booking->reschedule_date")->to('+91' . auth('admin')?->user()?->mobile_number);
 
+
         $bookings = self::getBooking();
-        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'success' => 'Reschedule date Update successfully']);
+        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'success' => 'Reschedule date Update successfully']);
+
     }
 
-    public static function checkAvailability($startDate, $endDate, $carId, $model_id) {
-
+    public static function checkAvailability($startDate, $endDate, $carId, $model_id)
+    {
         $availableCars = [];
 
         if (!empty($startDate) && !empty($endDate) && !empty($carId)) {
@@ -169,7 +173,7 @@ class PickupDeliveryController extends BaseController {
 
             if ($bookingDetails) {
                 $otherCars = CarDetails::where('model_id', $model_id)->
-                    where('id', '!=', $carId)->get();
+                where('id','!=', $carId)->get();
                 // Check availability of other cars within the date range
                 foreach ($otherCars as $car) {
                     $isAvailable = Available::where('car_id', $car->id)
@@ -201,10 +205,9 @@ class PickupDeliveryController extends BaseController {
     }
 
 
-    public function riskCommends(Request $request) {
-
-        $this->authorizePermission('hub_risk_comments');
-
+    public function riskCommends(Request $request)
+    {
+          $this->authorizePermission('hub_risk_comments');
         $request->validate([
             'booking_id' => 'required|numeric',
             'commends' => 'required',
@@ -215,37 +218,36 @@ class PickupDeliveryController extends BaseController {
         $commend->commends = $request['commends'];
         $commend->save();
         $bookings = self::getBooking();
-        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Commends Update successfully']);
+        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Commends Update successfully']);
     }
 
-    public function riskStatus(Request $request) {
-
+    public function riskStatus(Request $request)
+    {
         $request->validate([
             'booking_id' => 'required|numeric',
             'status' => 'required',
         ]);
         $booking = Booking::find($request['booking_id']);
-        if (!empty($booking) && !empty($request['note']) && $request['note'] == 'complete') {
+        if (!empty($booking) && !empty($request['note']) && $request['note'] == 'complete' ) {
             $booking->status = $request['status'];
             $booking->risk = 2;
             $booking->save();
             $bookings = self::getBooking();
-            return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Risk updated successfully']);
-        } elseif (!empty($booking) && !empty($request['note']) && $request['note'] == 'risk') {
+            return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
+        } elseif (!empty($booking) && !empty($request['note']) && $request['note'] == 'risk' ) {
             $booking->risk = $request['status'];
             $booking->save();
             $bookings = self::getBooking();
-            return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Risk updated successfully']);
+            return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
 
         }
         $bookings = self::getBooking();
-        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Booking not found']);
+        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Booking not found']);
     }
 
-    public function riskStatusPending(Request $request) {
-
-        $this->authorizePermission('hub_risk_status');
-
+    public function riskStatusPending(Request $request)
+    {
+           $this->authorizePermission('hub_risk_status');
         $request->validate([
             'booking_id' => 'required|numeric',
             'status' => 'required',
@@ -263,33 +265,32 @@ class PickupDeliveryController extends BaseController {
                         ->where('end_date', '<', now());
                 });
             });
-        if (!empty($booking) && !empty($request['note']) && $request['note'] == 'complete') {
+        if (!empty($booking) && !empty($request['note']) && $request['note'] == 'complete' ) {
             $booking->status = $request['status'];
             $booking->risk = 2;
             $booking->save();
             $bookings = $query->paginate(20);
-            return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Risk updated successfully']);
-        } elseif (!empty($booking) && !empty($request['note']) && $request['note'] == 'risk') {
+            return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
+        } elseif (!empty($booking) && !empty($request['note']) && $request['note'] == 'risk' ) {
             $booking->risk = $request['status'];
             $booking->save();
             $bookings = $query->paginate(20);
-            return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Risk updated successfully']);
+            return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
 
         }
-        $bookings = Booking::with(['user', 'details', 'comments', 'user.bookings'])->where('status', 2)->paginate(20);
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',2)->paginate(20);
 
-        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Booking not found']);
+        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Booking not found']);
     }
 
-    public function bookingPendingCancel(Request $request) {
-
-        $this->authorizePermission('hub_cancel_booking');
-
+    public function bookingPendingCancel(Request $request)
+    {
+          $this->authorizePermission('hub_cancel_booking');
         $request->validate([
             'booking_id' => 'required',
             'reason' => 'required|string|max:255',
         ]);
-
+       
         $booking = Booking::where('booking_id', $request['booking_id']);
 
         $booking->update([
@@ -303,6 +304,7 @@ class PickupDeliveryController extends BaseController {
             twilio()->send("Hai there, your booking has been cancelled for booking id (" . $booking_data . ")")->to('+91' . $booking->get()->first()->user->mobile);
             twilio()->send("Hello there, The booking with the id of - $booking_data has been cancelled")->to('+91' . auth('admin')->user()->mobile_number);
 
+       
         $query = Booking::with(['user', 'details', 'comments', 'user.bookings'])
             ->where('status', 1) // Filter by status = 1
             ->where('city_code', $booking->city_code ?? 632) // Default city_code filter
@@ -316,43 +318,42 @@ class PickupDeliveryController extends BaseController {
                 });
             });
         $bookings = $query->paginate(20);
-        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Booking cancelled successfully']);
+        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Booking cancelled successfully']);
     }
 
-    public function bookingCancel(Request $request) {
-
-        $this->authorizePermission('hub_cancel_booking');
-
+    public function bookingCancel(Request $request)
+    {
+           $this->authorizePermission('hub_cancel_booking');
         $request->validate([
             'booking_id' => 'required',
             'reason' => 'required|string|max:255',
         ]);
-
-        $booking = Booking::where('booking_id', $request['booking_id']);
+       $booking = Booking::where('booking_id', $request['booking_id']);
 
         $booking->update([
             'notes' => $request['cancel_reason'],
             'status' => 3,
         ]);
 
-        // dd($booking->with('user')->get()->first()->user);
-        Mail::to(auth('admin')->user()->email)->send(new NotifyBookingCancelledMail($booking->get()->first()));
-        Mail::to($booking->with('user')->get()->first()->user->email)->send(new BookingCancelledMail($booking->get()->first()));
+     
+      //  Mail::to(auth('admin')->user()->email)->send(new NotifyBookingCancelledMail($booking->get()->first()));
+       // Mail::to($booking->with('user')->get()->first()->user->email)->send(new BookingCancelledMail($booking->get()->first()));
 
-        $booking_data = $booking->get()->first()->booking_id;
-
-        twilio()->send("Hai there, your booking has been cancelled for booking id (" . $booking->get()->first()->booking_id . ")")->to('+91' . $booking->get()->first()->user->mobile);
-        twilio()->send("Hello there, The booking with the id of - $booking_data has been cancelled")->to('+91' . auth('admin')->user()->mobile_number);
-
-        $bookings = self::getBooking();
+         if(!empty($booking->get()->first()->user->mobile) && auth('admin')->user()->mobile_number) {
+            twilio()->send("Hai there, your booking has been cancelled for booking id (" . $request['booking_id'] . ")")->to('+91' . $booking->get()->first()->user->mobile);
+            twilio()->send("Hello there, The booking with the id of - " . $request['booking_id'] . " has been cancelled")->to('+91' . auth('admin')->user()->mobile_number);
+        }
+      
+            $bookings = self::getBooking();
         return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Booking cancelled successfully']);
     }
 
     public function fetchBookings(Request $request) {
         // Set the number of items per page
         $perPage = $request->input('per_page', 20);
-
-        if (!empty($request->input('booking_id')) && !empty($request['hub_type'])) {
+        
+        
+          if (!empty($request->input('booking_id')) && !empty($request['hub_type'])) {
             $booking = Booking::with(['user', 'details', 'comments', 'user.bookings'])
                 ->where('city_code', $request['hub_type'])
                 ->where('booking_id', $request->input('booking_id'));
@@ -372,7 +373,7 @@ class PickupDeliveryController extends BaseController {
 
         }
 
-
+        
         $timeLimit = now()->addHours(48);
         $query = Booking::with(['user', 'details', 'comments', 'user.bookings'])
             ->where('status', $request['status'])
@@ -395,46 +396,46 @@ class PickupDeliveryController extends BaseController {
 
         // Apply filters based on request parameters
         if (!empty($request['car_model'])) {
-            $query->whereHas('details', function ($query) use ($request) {
+            $query->whereHas('details', function($query) use ($request) {
                 $query->where('car_details->car_model->model_name', 'like', '%' . $request->input('car_model') . '%');
             });
         }
         if (!empty($request['register_number'])) {
             $query->where('register_number', 'like', '%' . $request->input('register_number') . '%');
         }
-
+      
+        if (!empty($request['customer_name'])) {
+            $query->whereHas('user', function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->input('customer_name') . '%');
+            });
+        }
         if ($request->has('booking_type') && $request->input('booking_type') !== 'both') {
             $query->where('booking_type', $request->input('booking_type'));
         }
 
-        if (!empty($request['customer_name'])) {
-            $query->whereHas('user', function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->input('customer_name') . '%');
-            });
-        }
         if ($request->has('hub_type')) {
             $query->where('city_code', $request->input('hub_type'));
         }
         // Paginate the results
         $bookings = $query->orderByRaw("
-            CASE
+            CASE 
                 WHEN booking_type = 'delivery' THEN start_date
                 WHEN booking_type = 'pickup' THEN end_date
             END ASC
         ")->paginate($perPage);
-        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Data Fetch successfully']);
+        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Data Fetch successfully']);
 
     }
 
-    public function calculatePrice(Request $request) {
-
+    public function calculatePrice(Request $request)
+    {
         if (!empty($request['car_model_id']) && !empty($request['start_date']) && !empty($request['end_date'])) {
 
-            $car_model = CarModel::where('car_model_id', $request['car_model_id'])->first();
-            $prices = ['festival' => $car_model->peak_reason_surge ?? 0,
+            $car_model = CarModel::where('car_model_id',$request['car_model_id'])->first();
+            $prices = ['festival' =>  $car_model->peak_reason_surge ?? 0,
                 'weekend' => $car_model->weekend_surge ?? 0,
-                'weekday' => $car_model->price_per_hour ?? 0];
-            $general = Frontend::where('data_keys', 'general-setting')->first();
+                'weekday' =>  $car_model->price_per_hour ?? 0];
+            $general = Frontend::where('data_keys','general-setting')->first();
             $data = !empty($general) && optional($general)->data_values ? json_decode($general->data_values, true) : [];
             $model_price = UserController::calculatePrice($prices, showDateformat($request['start_date']), showDateformat($request['end_date']));
             return response()->json([
@@ -447,27 +448,25 @@ class PickupDeliveryController extends BaseController {
                 'total_days' => $model_price['total_days'] ?? 0,
                 'total_hours' => $model_price['total_hours'] ?? 0,
                 'car_model' => $car_model,
-                'delivery_fee' => (int) $data['delivery_fee'] ?? 0
+                'delivery_fee' => (int)$data['delivery_fee'] ?? 0
             ]);
 
         }
-        return response()->json(['success' => 'false', 'message' => 'Data not Found .']);
+        return response()->json(['success' => 'false','message' => 'Data not Found .']);
     }
 
-    public function sendUserPayment(Request $request) {
-
-
-
+    public function sendUserPayment(Request $request)
+    {
         if (!empty($request['email']) && !empty($request['amount'])) {
 
             $amount = $request['amount'] * 100; // Amount in paise (e.g., ₹1000 = 100000)
             $email = $request['email'];
-            $mobile = $request['mobile'];
+               $mobile = $request['mobile'];
 
             $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
 
             try {
-                $uniqueReceiptId = 'rcptid_' . rand(100000, 999999); // Generate a unique receipt ID using the booking ID
+                $uniqueReceiptId = 'rcptid_' .  rand(100000, 999999); // Generate a unique receipt ID using the booking ID
 
                 $response = $api->invoice->create([
                     'type' => 'link',
@@ -485,23 +484,22 @@ class PickupDeliveryController extends BaseController {
                 ]);
 
                 $paymentLink = $response->short_url;
-                // dd(1);
-                // Mail::to($email)->send(new \App\Mail\PaymentDetails($amount, $paymentLink));
 
-                # send mail to admin
-                Mail::to(auth('admin')->user()->email)->send(new \App\Mail\NotifyManualBookingGeneratedMail(user: $request['email']));
+                         # send mail to admin
+            //    Mail::to(auth('admin')->user()->email)->send(new \App\Mail\NotifyManualBookingGeneratedMail(user: $request['email']));
 
                 twilio()->send("Manual Payment Created, Booked for: $email, Payment URI send to customer")->to('+91' . auth('admin')?->user()?->mobile_number);
 
                 twilio()->send("Dear Customer, Thank you for choosing our service!
 
-  Payment Details: Total Amount: ₹ $amount
-  Complete your payment here: $paymentLink
+                      Payment Details: Total Amount: ₹ $amount
+                      Complete your payment here: $paymentLink
+                    
+                    For questions, contact us anytime.
+                    
+                    Best regards,
+                    Valam Team")->to('+91' . $mobile);
 
-For questions, contact us anytime.
-
-Best regards,
-Valam Team")->to('+91' . $mobile);
                 return response()->json(['success' => 'Payment link created and sent successfully.']);
             } catch (\Exception $e) {
                 return response()->json(['error' => 'Failed to create payment link: ' . $e->getMessage()], 500);
@@ -511,8 +509,9 @@ Valam Team")->to('+91' . $mobile);
 
     }
 
-    public static function createBooking(Request $request) {
-
+    public static function createBooking(Request $request)
+    {
+         
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users',
@@ -531,14 +530,14 @@ Valam Team")->to('+91' . $mobile);
             if (!empty($car_available)) {
                 $available_car = current($car_available);
             }
-            $general = Frontend::where('data_keys', 'general-setting')->first();
+            $general = Frontend::where('data_keys','general-setting')->first();
             $data = !empty($general) && optional($general)->data_values ? json_decode($general->data_values, true) : [];
 
             $user = new User();
             $user->name = $request['name'];
             $user->mobile = $request['mobile'];
             $user->email = $request['email'];
-            $user->aadhaar_number = $request['aadhaar_card'];
+            $user->aadhaar_number  = $request['aadhaar_card'];
             $user->driving_licence = $request['license_number'];
             $user->save();
 
@@ -559,8 +558,8 @@ Valam Team")->to('+91' . $mobile);
             $booking->car_id = $available_car->id;
             $booking->city_code = $request['hub_list'] ?? 0;
             $booking->booking_type = 'delivery';
-            $booking->start_date = formDateTime($request['user_start_date']);
-            $booking->end_date = formDateTime($request['user_end_date']);
+            $booking->start_date = formDateTime( $request['user_start_date']);
+            $booking->end_date = formDateTime( $request['user_end_date']);
             $booking->address = $request['drop_location'] ?? '';
             $booking->delivery_fee = $data['delivery_fee'] ?? '';
             $booking->status = 1;
@@ -579,23 +578,23 @@ Valam Team")->to('+91' . $mobile);
             $delivery_booking->delivery_fee = $data['delivery_fee'] ?? '';
             $delivery_booking->status = 1;
             $delivery_booking->save();
-
-            Mail::to($user->email)->send(new BookingConfirmed($request['name'], $delivery_booking));
-            Mail::to(auth('admin')->user()->email)->send(new \App\Mail\NotifyManualBookingConfirmedMail(user: $request->email));
+            
+          //   Mail::to($user->email)->send(new BookingConfirmed($request['name'], $delivery_booking));
+          //  Mail::to(auth('admin')->user()->email)->send(new \App\Mail\NotifyManualBookingConfirmedMail(user: $request->email));
 
             twilio()->send("Manual Payment Completed, Booking made for: $request->email")->to('+91' . auth('admin')?->user()?->mobile_number);
 
             twilio()->send("Dear Customer, Thank you for choosing our service!, your booking has been confirmed, For questions, contact us anytime.
-Best regards,
-Valam Team")->to('+91' . $request->mobile);
+            Best regards,
+            Valam Team")->to('+91' . $request->mobile);
 
-            $car_details = CarDetails::with('carModel')->find($available_car->id);
+            $car_details =  CarDetails::with('carModel')->find($available_car->id);
 
-            $prices = ['festival' => $car_details->carModel->peak_reason_surge ?? 0,
+            $prices = ['festival' =>  $car_details->carModel->peak_reason_surge ?? 0,
                 'weekend' => $car_details->carModel->weekend_surge ?? 0,
-                'weekday' => $car_details->carModel->price_per_hour ?? 0];
+                'weekday' =>  $car_details->carModel->price_per_hour ?? 0];
 
-            $general = Frontend::where('data_keys', 'general-setting')->first();
+            $general = Frontend::where('data_keys','general-setting')->first();
             $data = !empty($general) && optional($general)->data_values ? json_decode($general->data_values, true) : [];
             $delivery_fee = $data['delivery_fee'] ?? 0;
             $deposit_amount = $car_details->carModel->dep_amount ?? 0;
@@ -612,17 +611,17 @@ Valam Team")->to('+91' . $request->mobile);
 
 
             $payment = new Payment();
-            $payment->payment_id = 'custom_' . rand(100, 999);
+            $payment->payment_id = 'custom_'.rand(100, 999);
             $payment->booking_id = $new_booking_id;
             $payment->amount = $total_price;
             $payment->currency = 'INR';
             $payment->customer_id = $user->id;
-            $payment->payment_status = 'complete';
+            $payment->payment_status =  'complete';
             $payment->save();
 
 
             $car_available = new Available();
-            $car_available->car_id = $available_car->id;
+            $car_available->car_id  = $available_car->id;
             $car_available->model_id = $request['user_car_model'];
             $car_available->booking_id = $new_booking_id;
             $car_available->register_number = $available_car->register_number;
@@ -640,8 +639,7 @@ Valam Team")->to('+91' . $request->mobile);
     }
 
 
-    public static function carAvailablity($model_id, $start_date, $end_date, $hub_id = 0) {
-
+    public static function carAvailablity($model_id ,$start_date, $end_date,$hub_id = 0) {
         if (!empty($model_id)) {
             $details = CarDetails::where('model_id', $model_id);
             if (!empty($hub_id)) {
@@ -674,20 +672,20 @@ Valam Team")->to('+91' . $request->mobile);
         }
         return [];
     }
-    public function bookingComplete() {
-
-        $this->authorizePermission('booking_completed_view');
+    public function bookingComplete()
+    {
+         $this->authorizePermission('booking_completed_view');
         // $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',2)->paginate(20);
-        $city_list = City::where('city_status', 1)->pluck('name', 'code');
-        return view('admin.hub.complete_booking', compact('city_list'));
+        $city_list = City::where('city_status',1)->pluck('name','code');
+        return view('admin.hub.complete_booking',compact('city_list'));
     }
 
-    public function bookingPending() {
-
-        $this->authorizePermission('booking_pending_view');
+    public function bookingPending()
+    {
+          $this->authorizePermission('booking_pending_view');
         // $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',2)->paginate(20);
-        $city_list = City::where('city_status', 1)->pluck('name', 'code');
-        return view('admin.hub.pending_booking', compact('city_list'));
+        $city_list = City::where('city_status',1)->pluck('name','code');
+        return view('admin.hub.pending_booking',compact('city_list'));
     }
 
     public function fetchPendingBookings(Request $request) {
@@ -719,7 +717,7 @@ Valam Team")->to('+91' . $request->mobile);
         }
         // Apply filters based on request parameters
         if (!empty($request['car_model'])) {
-            $query->whereHas('details', function ($query) use ($request) {
+            $query->whereHas('details', function($query) use ($request) {
                 $query->where('car_details->car_model->model_name', 'like', '%' . $request->input('car_model') . '%');
             });
         }
@@ -730,7 +728,7 @@ Valam Team")->to('+91' . $request->mobile);
             $query->where('booking_id', $request->input('booking_id'));
         }
         if (!empty($request['customer_name'])) {
-            $query->whereHas('user', function ($q) use ($request) {
+            $query->whereHas('user', function($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->input('customer_name') . '%');
             });
         }
@@ -743,65 +741,28 @@ Valam Team")->to('+91' . $request->mobile);
         }
         // Paginate the results
         $bookings = $query->paginate($perPage);
-
-        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Data Fetch successfully']);
+        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Data Fetch successfully']);
 
     }
 
-    public function revertBooking(Request $request) {
-
-        $this->authorizePermission('booking_revert');
-
+    public function revertBooking(Request $request)
+    {
+            $this->authorizePermission('booking_revert');
         if (empty($request['booking_id'])) {
-            return response()->json(['data' => [], 'message' => 'Data Fetch Failed']);
+            return response()->json(['data'=> [],'message' => 'Data Fetch Failed']);
         }
 
         Booking::find($request['booking_id'])->update(['status' => 1]);
-        $bookings = Booking::with(['user', 'details', 'comments', 'user.bookings'])->where('status', 2)->paginate(20);
-        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Data Fetch successfully']);
+        $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',2)->paginate(20);
+        return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Data Fetch successfully']);
     }
 
-    public function bookingCancelList() {
-        $this->authorizePermission('booking_cancel_view');
-
-        $bookings = Booking::with(['user', 'details', 'comments', 'user.bookings'])->where('status', 3)->paginate(20);
-        $city_list = City::where('city_status', 1)->pluck('name', 'code');
-        return view('admin.hub.cancel_booking', compact('city_list'));
+    public function bookingCancelList()
+    {
+          $this->authorizePermission('booking_cancel_view');
+        // $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',3)->paginate(20);
+        $city_list = City::where('city_status',1)->pluck('name','code');
+        return view('admin.hub.cancel_booking',compact('city_list'));
     }
 
-
-
-
-
-
-    /**
-     * Export data for History
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
-     */
-    public function export(Request $request) {
-        $this->authorizePermission('hub_export');
-
-        $ext = $request->query('v');
-        $dataset = $this->getData();
-
-        if ($ext == 'csv') {
-            return Excel::download(new Hub(type: $ext, dataset: $dataset), 'hub-export.csv');
-        }
-
-        $pdf = Pdf::loadView('admin.hub.pdf', ["dataset" => $dataset]);
-        return $pdf->download('hub-export.pdf');
-    }
-
-
-
-
-
-    /**
-     * Get Data for History
-     * @param string $type
-     */
-    protected function getData() {
-        return collect(DB::select('call sp_hub_export'));
-    }
 }
