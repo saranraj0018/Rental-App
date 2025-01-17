@@ -84,14 +84,16 @@
                     </p>
                     <div class=" mt-2">
                         <ul class="fs-6 fw-500 ps-3">
-                           <li>Pricing Plan: Total {{!empty($car_model->carModel->per_day_km) ? $car_model->carModel->per_day_km *  !empty($price_list['different_hours']) ? $price_list['different_hours'] : 0 : $car_model->carModel->per_day_km }} kms, excludes fuel</li>
+
+                           <li>Pricing Plan: Total {{!empty($car_model->carModel->per_day_km) && !empty($price_list['different_hours'])
+                                    ? $car_model->carModel->per_day_km * $price_list['different_hours'] : 0 }} kms, excludes fuel</li>
                             <li>Extra Hour: ₹{{ $car_model->carModel->extra_hours_price ?? '' }} / per hour</li>
                             <li>Extra Km: ₹{{ $car_model->carModel->extra_km_charge }} / per KM</li>
                         </ul>
                     </div>
                     <!--<div class="my-2">-->
                     <!--    <p class="fs-18 fw-500">Sanitised and safe cars</p>-->
-    
+
                     <!--    <div class="row p-0">-->
                     <!--        <div class="col-3 d-flex flex-column">-->
                     <!--            <img src="{{ asset('user/img/car-booking/Vector.png') }}" alt="" class="img-fluid mx-auto my-2">-->
@@ -259,7 +261,7 @@
                         <div class="d-flex justify-content-between flex-column flex-md-row">
                             <div>
                                 <div class="m-minus-top my-auto">
-                                
+
                                     <div class="mb-3 mb-md-auto toggle">
                                         <button type="button" class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto pickup_location">
                                             <img src="{{ asset('user/img/car-booking/Group.png') }}" alt="location icons" class="img-fluid d-block me-2"> Select Drop/Pickup Location
@@ -294,7 +296,7 @@
             $('#user_document').modal('show');
             return;
         }
-       
+
         let drop_address = "{{ session('delivery.address') ?? session('pick-delivery.address') ?? '' }}";
         let pickup_address = "{{ session('pickup.address') ?? session('pick-delivery.address') ?? '' }}";
         let drop_address_pine = $('#drop_address_pine').val();
