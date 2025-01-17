@@ -33,7 +33,7 @@
 
                     <div class="col-12 col-lg-3">
                         <label for="name" class="fs-14 fw-500">Your Name</label>
-                        <input type="text" class=" form-control fs-14" name="user_name" id="user_name"
+                        <input type="text" class=" form-control fs-14" name="profile_name" id="profile_name"
                             value="{{ Auth::user()->name ?? '' }}" placeholder="Enter Your name">
                     </div>
                     <div class="col-12 col-lg-3">

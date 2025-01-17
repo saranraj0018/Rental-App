@@ -157,6 +157,7 @@
                                     <input type="text" id="cancel_customer_name" name="cancel_customer_name"
                                         class="form-control apply-min-width" placeholder="Name">
                                 </th>
+                                <th>Mobile Number</th>
                                 <th> <input type="text" id="cancel_car_model" name="cancel_car_model"
                                         class="form-control apply-min-width" placeholder="Model" style="padding: 0%;"></th>
                                 <th><input type="text" id="cancel_register_number" name="cancel_register_number"

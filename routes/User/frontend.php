@@ -65,4 +65,5 @@ Route::view('user/blog', '.user.frontpage.others.blog')->name('blog');
 Route::view('user/refund', '.user.frontpage.others.refund')->name('refund');
 Route::view('user/shipping', '.user.frontpage.others.shipping')->name('shipping');
 Route::view('user/terms-and-conditions', '.user.frontpage.others.terms-and-conditions')->name('terms-and-conditions');
+Route::view('user/blog', '.user.frontpage.others.blog')->name('blog');
 

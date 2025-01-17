@@ -19,13 +19,12 @@ $(function () {
         let isValid = true;
 
         const fields = [
-            { id: "#user_name", condition: (val) => val === "" },
+            { id: "#profile_name", condition: (val) => val === "" },
             { id: "#user_mobile", condition: (val) => val === "" },
             { id: "#user_email", condition: (val) => val === "" },
             { id: "#aadhaar_number", condition: (val) => val === "" },
             { id: "#driving_licence", condition: (val) => val === "" },
         ];
-
         fields.forEach((field) => {
             if (!validateField(field)) isValid = false;
         });

@@ -451,9 +451,9 @@ span#basic-addon1 {
     color: white;
     border-radius: 10px;
 }
-
 .copy-btn:hover {
     color: white;
+    background-color: #4081ff;
 }
 
 .h-40px {
@@ -634,7 +634,8 @@ button.accordion-button.collapsed {
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     height: 151px;
-    width: 251px !important;
+    width: 100% !important;
+    object-fit: cover;
 }
 
 .vt-bg {
@@ -715,9 +716,7 @@ button.accordion-button.collapsed {
     width: 50%;
 }
 
-.m-minus-top-48 {
-    margin-top: -46px !important;
-}
+
 
 .bg-light-blue {
     background-color: #A7CBFF;

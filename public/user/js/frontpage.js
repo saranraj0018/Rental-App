@@ -418,6 +418,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    $(document).on('click', '.view_all', function () {
+        const start_date = $('#dateTimeInput1').val();
+        const end_date = $('#dateTimeInput2').val();
+        if (start_date === '' || end_date === '') {
+            $('#alert_booking').modal('show');
+        } else {
+            window.location.href = '/search-car/list';
+        }
+    });
+
     $('#cityInput').on('click', function () {
         $('#cityModal').modal('show');
     });

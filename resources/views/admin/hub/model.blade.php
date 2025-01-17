@@ -34,7 +34,7 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="form-group">
+                    <div class="form-group d-none">
                         <label for="user_mobile">User Mobile</label>
                         <input type="number" id="user_mobile" class="form-control" disabled>
                     </div>

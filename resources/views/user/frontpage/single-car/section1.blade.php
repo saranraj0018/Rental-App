@@ -266,20 +266,14 @@
                                     <span id="pickup_address"
                                         class="fs-14 fw-500">{{ session('pickup.address') ?? (session('pick-delivery.address') ?? '') }}</span>
                                     <div id="check_pickup_location"
-                                        class="{{ !empty(session('pickup.address')) || !empty(session('pick-delivery.address')) ? '' : 'd-none' }}">
+                                         class="{{ !empty(session('pickup.address')) || !empty(session('pick-delivery.address')) ? '' : 'd-none' }}">
                                         <button type="button"
-                                            class="input-group-text form-dates fs-16 bg-transparent border-0 font-weight-normal p-0"
-                                            id="return_location" style="color: #47ACFF !important;">Location
+                                                class="input-group-text form-dates fs-16 bg-transparent border-0 font-weight-normal p-0"
+                                                id="return_location" style="color: #47ACFF !important;">Location
                                             Change</button>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between flex-column flex-md-row">
-                            <div>
-                                <div class="m-minus-top my-auto">
                                     <div
-                                        class="mb-3 {{ empty($general_section['show_delivery']) ? 'd-none' : 'd-flex' }}">
+                                        class="mb-3 mt-3 {{ empty($general_section['show_delivery']) ? 'd-none' : 'd-flex' }}">
                                         <div>
                                             <label class="switch m-0">
                                                 <input type="checkbox" id="delivery_amount">
@@ -290,6 +284,12 @@
                                             <span class="fs-14 ms-2 text-white">Door Step Delivery</span>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between flex-column flex-md-row">
+                            <div>
+                                <div class="m-minus-top my-auto">
                                     <div class="mb-3 mb-md-auto toggle">
                                         <button type="button"
                                             class="btn text-white fs-16 fs-mb-14 fw-500 border-white rounded-pill px-4 d-flex justify-content-center w-100 w-md-auto pickup_location">
@@ -311,7 +311,7 @@
                             </div>
                             <div>
                                 <button type="button"
-                                    class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto"
+                                    class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto ms-2"
                                     style="display:{{ Auth::check() ? 'block' : 'none' }};" id="payment">Proceed
                                     Payment</button>
                                 <button type="button"

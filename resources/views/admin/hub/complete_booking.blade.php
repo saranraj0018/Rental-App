@@ -157,6 +157,7 @@
                                     <input type="text" id="complete_customer_name" name="complete_customer_name"
                                         class="form-control apply-min-width" placeholder="Name">
                                 </th>
+                                <th>Mobile Number</th>
                                 <th> <input type="text" id="complete_car_model" name="complete_car_model"
                                         class="form-control apply-min-width" placeholder="Model" style="padding: 0%;"></th>
                                 <th><input type="text" id="complete_register_number" name="complete_register_number"

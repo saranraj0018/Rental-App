@@ -95,7 +95,7 @@
                 everyone.
             </p>
 
-            <div class="row">
+            <div class="row g-3">
                 <div class="col-12 col-lg-3">
                     <img src="{{ asset('user/img/about/Group 40519.png') }}" alt="" class="img-fluid">
                 </div>
@@ -182,7 +182,7 @@
     <section class="mt-5 abt-os-blue py-5">
         <div class="container">
             <h2 class="text-center text-white display-5 display-lg-1 fw-bold">OUR SERVICES</h2>
-            <div class="row">
+            <div class="row g-3">
                 <div class="col-12 col-lg-7">
                     <img src="{{ asset('user/img/about/from Right Front View 1.png') }}" alt=""
                         class="img-fluid">

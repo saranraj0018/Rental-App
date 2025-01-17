@@ -150,6 +150,7 @@ $(function () {
                     <td>${formatDateTime(item.start_date)}<br>
 <p class="text-danger">${rescheduleDate}</p></td>
                     <td>${item.user ? item.user.name : ''}</td>
+                     <td>${item.user ? item.user.mobile : ""}</td>
                     <td>${carModel.model_name || ''}</td>
                     <td>${bookingDetails.register_number || ''}</td>
                     <td class="truncate-text" title="${item.address}">${item.address}</td>
