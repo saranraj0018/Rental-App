@@ -61,7 +61,7 @@ class PickupDeliveryController extends BaseController
                     ->where('status', 1);
             })
            ->orderByRaw("
-            CASE 
+            CASE
                 WHEN booking_type = 'delivery' THEN start_date
                 WHEN booking_type = 'pickup' THEN end_date
             END ASC
@@ -79,17 +79,17 @@ class PickupDeliveryController extends BaseController
             'start_date' => 'required|date',
             'end_date' => 'required|date',
         ]);
-        
+
           $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
         $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
-       
+
 
         $booking = Booking::find($request['booking_id']);
 
         $booking->reschedule_date = formDateTime($request['end_date']);
         $booking->save();
-        
-        
+
+
         if ($booking->booking_type == 'delivery') {
             Available::where('booking_id', $booking->booking_id)->update(['start_date' => formDateTime($request['end_date'])]);
         } else {
@@ -290,7 +290,7 @@ class PickupDeliveryController extends BaseController
             'booking_id' => 'required',
             'reason' => 'required|string|max:255',
         ]);
-       
+
         $booking = Booking::where('booking_id', $request['booking_id']);
 
         $booking->update([
@@ -304,7 +304,7 @@ class PickupDeliveryController extends BaseController
             twilio()->send("Hai there, your booking has been cancelled for booking id (" . $booking_data . ")")->to('+91' . $booking->get()->first()->user->mobile);
             twilio()->send("Hello there, The booking with the id of - $booking_data has been cancelled")->to('+91' . auth('admin')->user()->mobile_number);
 
-       
+
         $query = Booking::with(['user', 'details', 'comments', 'user.bookings'])
             ->where('status', 1) // Filter by status = 1
             ->where('city_code', $booking->city_code ?? 632) // Default city_code filter
@@ -335,7 +335,7 @@ class PickupDeliveryController extends BaseController
             'status' => 3,
         ]);
 
-     
+
       //  Mail::to(auth('admin')->user()->email)->send(new NotifyBookingCancelledMail($booking->get()->first()));
        // Mail::to($booking->with('user')->get()->first()->user->email)->send(new BookingCancelledMail($booking->get()->first()));
 
@@ -343,7 +343,7 @@ class PickupDeliveryController extends BaseController
             twilio()->send("Hai there, your booking has been cancelled for booking id (" . $request['booking_id'] . ")")->to('+91' . $booking->get()->first()->user->mobile);
             twilio()->send("Hello there, The booking with the id of - " . $request['booking_id'] . " has been cancelled")->to('+91' . auth('admin')->user()->mobile_number);
         }
-      
+
             $bookings = self::getBooking();
         return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Booking cancelled successfully']);
     }
@@ -351,8 +351,8 @@ class PickupDeliveryController extends BaseController
     public function fetchBookings(Request $request) {
         // Set the number of items per page
         $perPage = $request->input('per_page', 20);
-        
-        
+
+
           if (!empty($request->input('booking_id')) && !empty($request['hub_type'])) {
             $booking = Booking::with(['user', 'details', 'comments', 'user.bookings'])
                 ->where('city_code', $request['hub_type'])
@@ -373,7 +373,7 @@ class PickupDeliveryController extends BaseController
 
         }
 
-        
+
         $timeLimit = now()->addHours(48);
         $query = Booking::with(['user', 'details', 'comments', 'user.bookings'])
             ->where('status', $request['status'])
@@ -403,7 +403,7 @@ class PickupDeliveryController extends BaseController
         if (!empty($request['register_number'])) {
             $query->where('register_number', 'like', '%' . $request->input('register_number') . '%');
         }
-      
+
         if (!empty($request['customer_name'])) {
             $query->whereHas('user', function($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->input('customer_name') . '%');
@@ -418,7 +418,7 @@ class PickupDeliveryController extends BaseController
         }
         // Paginate the results
         $bookings = $query->orderByRaw("
-            CASE 
+            CASE
                 WHEN booking_type = 'delivery' THEN start_date
                 WHEN booking_type = 'pickup' THEN end_date
             END ASC
@@ -492,11 +492,11 @@ class PickupDeliveryController extends BaseController
 
                 twilio()->send("Dear Customer, Thank you for choosing our service!
 
-                      Payment Details: Total Amount: ₹ $amount
+                      Payment Details: Total Amount: ₹ $request->amount
                       Complete your payment here: $paymentLink
-                    
+
                     For questions, contact us anytime.
-                    
+
                     Best regards,
                     Valam Team")->to('+91' . $mobile);
 
@@ -511,7 +511,7 @@ class PickupDeliveryController extends BaseController
 
     public static function createBooking(Request $request)
     {
-         
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users',
@@ -523,6 +523,7 @@ class PickupDeliveryController extends BaseController
             'user_start_date' => 'required|date|after_or_equal:today',
             'user_end_date' => 'required|date|after:user_start_date',
             'hub_list' => 'required|numeric',
+            'discount' => 'required|numeric',
         ]);
 
         if (!empty($request['user_car_model'])) {
@@ -578,7 +579,7 @@ class PickupDeliveryController extends BaseController
             $delivery_booking->delivery_fee = $data['delivery_fee'] ?? '';
             $delivery_booking->status = 1;
             $delivery_booking->save();
-            
+
           //   Mail::to($user->email)->send(new BookingConfirmed($request['name'], $delivery_booking));
           //  Mail::to(auth('admin')->user()->email)->send(new \App\Mail\NotifyManualBookingConfirmedMail(user: $request->email));
 
@@ -609,7 +610,6 @@ class PickupDeliveryController extends BaseController
             $booking_details->payment_details = json_encode($model_price);
             $booking_details->save();
 
-
             $payment = new Payment();
             $payment->payment_id = 'custom_'.rand(100, 999);
             $payment->booking_id = $new_booking_id;
@@ -617,6 +617,7 @@ class PickupDeliveryController extends BaseController
             $payment->currency = 'INR';
             $payment->customer_id = $user->id;
             $payment->payment_status =  'complete';
+            $payment->discount =  $request->discount;
             $payment->save();
 
 
