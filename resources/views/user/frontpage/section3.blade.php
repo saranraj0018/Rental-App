@@ -7,7 +7,8 @@
                 </p>
             </div>
             <div>
-                <button class="btn text-blue fs-16 fs-mb-12 fw-500 view_all">View All <i class="fas fa-chevron-right"></i></button>
+                <button class="btn text-blue fs-16 fs-mb-12 fw-500 view_all">View All <i
+                        class="fas fa-chevron-right"></i></button>
             </div>
         </div>
         @if (!empty($section3))
@@ -16,7 +17,7 @@
 
                     @foreach ($section3 as $item)
                         <div class="item">
-                              <div class="r2dc-card-bg px-3 py-1">
+                            <div class="r2dc-card-bg px-3 py-1">
                                 <div class="d-flex justify-content-between"
                                     style="display: @if (!empty($timing_setting['show_bookmarks']) && $timing_setting['show_bookmarks'] == 1) flex @else none @endif !important">
                                     <div class="d-flex">
@@ -31,8 +32,8 @@
                                     </div>
                                 </div>
                                 <div class="d-block">
-                                    <img src="{{ asset('storage/car_image/' . $item->carModel->car_image ?? '') }}"
-                                        alt="Cars" class="img-fluid w-75 mx-auto car-list-image">
+                                    <img src="{{ asset('storage/car_image/' . $item->carModel->car_image ?? '') }}" alt="Cars"
+                                        class="img-fluid w-75 mx-auto car-list-image">
                                 </div>
                             </div>
                             <div class="r2dc-card-content-bg py-2 px-3">
@@ -55,7 +56,8 @@
                                     </div>
                                     <div class="my-auto">
                                         <button type="button" value="{{ $item->id }}" id="car_book_id"
-                                            class="my-button btn btn-lg fs-16 py-2 px-3 float-end book_now">Book now</button>
+                                            class="my-button btn btn-lg fs-16 py-2 px-3 float-end book_car_input">Book
+                                            now</button>
                                     </div>
                                 </div>
                             </div>

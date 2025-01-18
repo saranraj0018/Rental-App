@@ -71,8 +71,8 @@
                         <input type="hidden" id="car_id" name="car_id">
                         <label for="start_date">Choose Date & Time</label>
                         <div class="input-group">
-                            <input type="text" class="form-control"
-                                   id="end_date" name="end_date" placeholder="Select date and time" />
+                            <input type="text" class="form-control" id="end_date" name="end_date"
+                                placeholder="Select date and time" />
                             <div class="input-group-append">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
@@ -88,7 +88,8 @@
     </div>
 </div>
 
-<div class="modal fade" id="amount_modal" tabindex="-1" role="dialog" aria-labelledby="amountModalLabel" aria-hidden="true">
+<div class="modal fade" id="amount_modal" tabindex="-1" role="dialog" aria-labelledby="amountModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -117,9 +118,9 @@
                     <li class="list-group-item">
                         <strong>Refundable Security Deposit:</strong> ₹<span id="dep_fee">0</span>
                     </li>
-                    {{--                    <li class="list-group-item">--}}
-                    {{--                        <strong>Coupon Amount :</strong> ₹<span id="modal_security_deposit">0</span>--}}
-                    {{--                    </li>--}}
+                    {{-- <li class="list-group-item">--}}
+                        {{-- <strong>Coupon Amount :</strong> ₹<span id="modal_security_deposit">0</span>--}}
+                        {{-- </li>--}}
                 </ul>
             </div>
             <div class="modal-footer">
@@ -130,7 +131,8 @@
 </div>
 
 
-<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
+<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -144,7 +146,8 @@
                     <input type="hidden" id="cancel-booking-id" name="booking_id">
                     <div class="form-group">
                         <label for="cancel-reason">Reason for Cancellation</label>
-                        <textarea class="form-control" id="cancel-reason" name="reason" rows="3" placeholder="Enter reason..."></textarea>
+                        <textarea class="form-control" id="cancel-reason" name="reason" rows="3"
+                            placeholder="Enter reason..."></textarea>
                         <div class="invalid-feedback">
                             Please provide a reason for cancellation.
                         </div>
@@ -162,7 +165,7 @@
             <form id="user_booking_form">
                 <div class="modal-header">
                     <h5 class="modal-title" id="bookingModalLabel">Booking Details</h5>
-                  
+
                 </div>
                 <div class="modal-body">
                     <!-- Form fields with horizontal layout -->
@@ -220,7 +223,8 @@
                         <div class="col-md-3">
                             <label for="start_date">Start Date & Time</label>
                             <div class="input-group" id="start_date_picker">
-                                <input type="text" class="form-control" id="user_start_date" name="user_start_date" placeholder="Select date and time" />
+                                <input type="text" class="form-control" id="user_start_date" name="user_start_date"
+                                    placeholder="Select date and time" />
                                 <div class="input-group-append">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -232,7 +236,8 @@
                         <div class="col-md-3">
                             <label for="start_date">End Date & Time</label>
                             <div class="input-group" id="user_end_date_picker" data-target-input="nearest">
-                                <input type="text" class="form-control" id="user_end_date" name="user_end_date" placeholder="Select date and time" />
+                                <input type="text" class="form-control" id="user_end_date" name="user_end_date"
+                                    placeholder="Select date and time" />
                                 <div class="input-group-append">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -241,14 +246,14 @@
                                 </div>
                             </div>
                         </div>
-                         <div class="col-md-3">
+                        <div class="col-md-3">
                             <label for="hub_list" class="form-label">Hub List </label>
                             <select class="form-select" id="hub_list" name="hub_list" data-live-search="true">
                                 <option disabled selected>Select City</option>
                                 @if(!empty($city_list))
-                              @foreach($city_list as $id => $list)
-                                  <option value="{{$id}}">{{$list}}</option>
-                              @endforeach
+                                    @foreach($city_list as $id => $list)
+                                        <option value="{{$id}}">{{$list}}</option>
+                                    @endforeach
                                 @endif
                             </select>
                         </div>
@@ -258,29 +263,61 @@
 
                         <div class="col-md-12 mt-3" id="car_availability_section" style="display: none;">
                             <label for="car_model" class="form-label">Available Cars</label>
-                            <select class="form-select" id="user_car_model" name="user_car_model" data-live-search="true">
+                            <select class="form-select" id="user_car_model" name="user_car_model"
+                                data-live-search="true">
                                 <option value="">Select Car Model</option>
                                 <!-- Dynamic options will be loaded here -->
                             </select>
                         </div>
 
 
-                            <input type="hidden" id="user_amount" name="user_amount">
+                        <input type="hidden" id="user_amount" name="user_amount">
 
-                        <div class="col-md-12 mt-3" id="price_list_section" style="display: none;">
+                        <div class="col-md-12 mt-3" id="price_list_section" style="display: none;" x-data="{
+                            grandTotal: 0,
+                            discount: 0,
+
+                            updateTotal() {
+                                if(!isNaN(parseFloat($('#final_total_price').text()) - this.discount)) {
+                                    this.grandTotal = parseFloat($('#final_total_price').text()) - this.discount
+                                } else return 0;
+                            }
+                        }">
                             <h5>Price Details</h5>
-                            <ul class="list-group">
-                                <li class="list-group-item">Model Name: <span id="model_name"></span></li>
-                                <li class="list-group-item">Total Days: <span id="total_days"></span></li>
-                                <li class="list-group-item">Total hours: <span id="total_hours"></span></li>
-                                <li class="list-group-item">Weekdays Amount: ₹<span id="user_week_days_amount"></span></li>
-                                <li class="list-group-item">Weekend Amount: ₹<span id="user_week_end_amount"></span></li>
-                                <li class="list-group-item">Festival Amount: ₹<span id="user_festival_amount"></span></li>
-                                <li class="list-group-item">Total Price: ₹<span id="total_price"></span></li>
-                                <li class="list-group-item">Doorstep delivery & pickup: ₹<span id="user_delivery_fee"></span></li>
-                                <li class="list-group-item">Refundable security deposit: ₹<span id="security_dep"></span></li>
-                                <li class="list-group-item">Final Total Price: ₹<span id="final_total_price"></span></li>
-                            </ul>
+
+                            <div class="row">
+                                <ul class="list-group col-6">
+                                    <li class="list-group-item">Model Name: <span id="model_name"></span></li>
+                                    <li class="list-group-item">Total Days: <span id="total_days"></span></li>
+                                    <li class="list-group-item">Total hours: <span id="total_hours"></span></li>
+                                    <li class="list-group-item">Weekdays Amount: ₹<span
+                                            id="user_week_days_amount"></span>
+                                    </li>
+                                    <li class="list-group-item">Weekend Amount: ₹<span id="user_week_end_amount"></span>
+                                    </li>
+                                    <li class="list-group-item">Festival Amount: ₹<span
+                                            id="user_festival_amount"></span>
+                                    </li>
+                                    <li class="list-group-item">Total Price: ₹<span id="total_price"></span></li>
+                                    <li class="list-group-item">Doorstep delivery & pickup: ₹<span
+                                            id="user_delivery_fee"></span></li>
+                                    <li class="list-group-item">Refundable security deposit: ₹<span
+                                            id="security_dep"></span></li>
+                                    <li class="list-group-item">Total Price: ₹<span id="final_total_price"></span>
+                                    </li>
+
+                                    <li class="list-group-item">Grand Total ₹<span
+                                        id="grand_total" x-text="grandTotal"></span></li>
+                                </ul>
+
+                                <ul class="list-group col-6">
+                                    <li class="list-group-item">Discount: <input x-on:change="updateTotal" class="form-control" id="discount"
+                                            type="number" name="discount" x-model="discount" :value="discount" placeholder="Fixed Eg.., 200.00"></li>
+                                    <span class="text-sm p-3">* The discount will be added to the Grand Total
+                                        automatically
+                                </ul>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -288,13 +325,8 @@
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" id="user_payment_link">Send Payment Link</button>
                     <button type="submit" class="btn btn-primary">Save User</button>
-                  
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-
-
-

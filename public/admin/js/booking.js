@@ -202,10 +202,14 @@ $(function () {
             let amount = $('#user_amount').val();
               let mobile = $('#mobile').val();
             $('#user_payment_link').prop('disabled', true);
+            let discount = $('#discount').val();
+
+
+            const _amount = parseFloat(amount) - parseFloat(discount);
             $.ajax({
                 url: '/admin/user-payment/link',
                 type: 'POST',
-                  data: { email: email, amount: amount, mobile: mobile },
+                  data: { email: email, amount: _amount, mobile: mobile },
                 success: function (data) {
                     if (data.success) {
                         $('#payment_success').text(data.success);
@@ -236,6 +240,7 @@ $(function () {
                 { id: '#aadhaar_card', wrapper: true, condition: (val) => val === '' },
                 { id: '#user_start_date', wrapper: true, condition: (val) => val === '' },
                 { id: '#user_end_date', wrapper: true, condition: (val) => val === '' },
+                { id: '#discount', wrapper: true, condition: (val) => val === '' },
             ];
 
             fields.forEach(field => {
@@ -364,7 +369,7 @@ $(function () {
             $('#booking_count').text($(this).data('booking'));
             $('#user_model').modal('show');
         });
-        
+
               $('#booking_table').on('click', '.edit-booking-date', function() {
             $('#date_booking_id').val($(this).data('id'));
             $('#date_booking_type').val($(this).data('booking_type'));
