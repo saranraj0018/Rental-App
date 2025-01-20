@@ -23,6 +23,26 @@
 </div>
 
 
+<div class="modal fade" id="alert-modal-admin" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Profile</h4>
+            </div>
+
+            <div class="modal-body">
+                <p><i class="fa fa-check px-2 text-success"></i> Booking Created Successfully</p>
+
+                <ul>
+                    <li>Booking ID: <span class="response_booking_id"></span></li>
+                    <li>Start Date: <span id="response_start_date"></span></li>
+                    <li>End Date: <span id="response_end_date"></span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="user_model" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -306,13 +326,14 @@
                                     <li class="list-group-item">Total Price: ₹<span id="final_total_price"></span>
                                     </li>
 
-                                    <li class="list-group-item">Grand Total ₹<span
-                                        id="grand_total" x-text="grandTotal"></span></li>
+                                    <li class="list-group-item">Grand Total ₹<span id="grand_total"
+                                            x-text="grandTotal"></span></li>
                                 </ul>
 
                                 <ul class="list-group col-6">
-                                    <li class="list-group-item">Discount: <input x-on:change="updateTotal" class="form-control" id="discount"
-                                            type="number" name="discount" x-model="discount" :value="discount" placeholder="Fixed Eg.., 200.00"></li>
+                                    <li class="list-group-item">Discount: <input x-on:change="updateTotal"
+                                            class="form-control" id="discount" type="number" name="discount"
+                                            x-model="discount" :value="discount" placeholder="Fixed Eg.., 200.00"></li>
                                     <span class="text-sm p-3">* The discount will be added to the Grand Total
                                         automatically
                                 </ul>
@@ -329,4 +350,5 @@
             </form>
         </div>
     </div>
+
 </div>

@@ -36,23 +36,12 @@
         <!-- Default box -->
         <div class="container-fluid">
             <div class="card">
-                {{--                <div class="card-header">--}}
-                {{--                    <div class="d-flex justify-content-between">--}}
-                {{--                        <div class="input-group" style="width: 250px;">--}}
-                {{--                            <input type="text" id="search_item" name="keyword" class="form-control" placeholder="Search">--}}
-                {{--                            <div class="input-group-append">--}}
-                {{--                                <button type="button" id="searchBtn" class="btn btn-default">--}}
-                {{--                                    <i class="fas fa-search"></i>--}}
-                {{--                                </button>--}}
-                {{--                            </div>--}}
-                {{--                        </div>--}}
-                {{--                    </div>--}}
-                {{--                </div>--}}
                 <div class="card-body table-responsive p-0">
                     <table id="role_table" class="table table-hover text-nowrap">
                         <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Info</th>
                             <th>User Role</th>
                             <th>Email</th>
                             <th>Create At</th>
@@ -65,6 +54,7 @@
                             @foreach($user_role as $item)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
+                                    <td><button  data-toggle="modal" data-target="#user_{{ $item->id }}" class="btn"><i class="fa fa-eye"></i></button></td>
                                     <td>{{ $item->user_role }}</td>
                                     <td>{{ $item->user->email ?? '' }}</td>
                                     <td>{{ showDateTime($item->updated_at) }}</td>
@@ -85,7 +75,31 @@
                                             @endif
                                         @endif
                                     </td>
-                                </tr>
+
+                                <div class="modal fade" id="user_{{ $item->id }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4>Users in this Role</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <ul>
+                                                    @forelse ($item->users as $user)
+                                                    <li>{{ $user->email }}</li>
+                                                    @empty
+                                                    <li>No users found for this role</li>
+                                                    @endforelse
+                                                </ul>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-danger" data-dismiss="modal"><span>Close</span></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </tr>
+
                             @endforeach
                         @else
                             <tr>

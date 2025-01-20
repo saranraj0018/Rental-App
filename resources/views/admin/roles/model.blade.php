@@ -37,7 +37,7 @@
             'slug' => 'dashboard',
             'permissions' => [
                 'view' => 'View Dashboard',
-              
+
             ],
         ],
         [
@@ -94,7 +94,7 @@
                 'delete' => 'Delete Car Block',
             ],
         ],
-        
+
         [
             'name' => 'Swap Cars',
             'slug' => 'swap_cars',

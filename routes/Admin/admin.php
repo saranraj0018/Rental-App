@@ -57,6 +57,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/user-payment/link', [PickupDeliveryController::class, 'sendUserPayment'])->name('user.send.payment');
         Route::post('/user/save', [PickupDeliveryController::class, 'createBooking'])->name('user.booking');
         Route::get('/booking/complete', [PickupDeliveryController::class, 'bookingComplete'])->name('complete.booking');
+        Route::get('/booking/complete/export', [PickupDeliveryController::class, 'bookingCompleteExport'])->name('complete.booking.export');
         Route::get('/booking/pending', [PickupDeliveryController::class, 'bookingPending'])->name('pending.booking');
         Route::get('/booking/pending/search', [PickupDeliveryController::class, 'fetchPendingBookings'])->name('pending.search');
         Route::post('/booking/revert', [PickupDeliveryController::class, 'revertBooking'])->name('revert.booking');

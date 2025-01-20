@@ -54,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            <p id="profile_message" class="text-success text-center"></p>
+            <p id="profile_message" style="display: none" class="text-success text-center"></p>
         </section>
 
         <section class="my-5">
@@ -187,6 +187,21 @@
                 </div>
             </div>
         </form>
+
+        <div class="modal fade" id="alert-model" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4>Profile</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <p><i class="fa fa-check px-2 text-success"></i> User Profile Updated Successfully</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </section>
     <style>
         .file-upload-box {
