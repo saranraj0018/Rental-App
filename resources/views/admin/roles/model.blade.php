@@ -230,6 +230,7 @@
             'slug' => 'booking',
             'permissions' => [
                 'completed_view' => 'Booking Complete',
+                'completed_export' => 'Booking Complete Export',
                 'pending_view' => 'Booking Pending',
                 'cancel_view' => 'Booking Cancel',
                 'revert' => 'Revert Booking',

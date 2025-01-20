@@ -139,9 +139,12 @@
                             </select>
                         </div>
 
+
+                        @if (in_array('booking_completed_export', getAdminPermissions()))
                         <div class="flex-1 align-self-center  w-75 text-right" x-data x-show="show">
                             <a :href="router + '?id=' + hubId" class="btn btn-primary btn-sm">Export</a>
                         </div>
+                        @endif
                     </div>
                 </div>
                 <div class="card-body table-responsive p-0">
