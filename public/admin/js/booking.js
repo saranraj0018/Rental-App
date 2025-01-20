@@ -228,6 +228,7 @@ $(function () {
         });
 
         $('#user_booking_form').on('submit', function(e) {
+
             e.preventDefault();
             let isValid = true;
             let fields = [
@@ -260,10 +261,18 @@ $(function () {
                     type: 'POST',
                     data: $(this).serialize(),
                     success: function(response) {
+                        $('#alert-modal-admin').modal('show');
                         $('#create_user_booking').modal('hide');
-                        alertify.success(response.success);
-                        window.location.reload();
+
+                        $('#response_booking_id').text(response?.booking?.booking_id);
+                        $('#response_start_date').text(response?.booking?.start_date);
+                        $('#response_end_date').text(response?.booking?.end_date);
+
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 4000)
                     },
+
                     error: function(response) {
                         if (response.responseJSON && response.responseJSON.errors) {
                             let errors = response.responseJSON.errors;

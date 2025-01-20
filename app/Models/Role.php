@@ -13,4 +13,11 @@ class Role extends Model
     {
         return $this->belongsTo(AdminDetail::class);
     }
+
+
+
+    public function users()
+    {
+        return $this->hasMany(AdminDetail::class, 'role');
+    }
 }

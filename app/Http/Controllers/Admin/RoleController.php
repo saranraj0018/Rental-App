@@ -11,7 +11,7 @@ class RoleController extends BaseController
 {
     public function list(Request $request) {
         $this->authorizePermission('roles_view');
-        $user_role = Role::with('user')->orderBy('created_at', 'desc')->paginate(5);
+        $user_role = Role::with('user', 'users')->orderBy('created_at', 'desc')->paginate(5);
         $permissions = getAdminPermissions();
         return view('admin.roles.list', compact('user_role', 'permissions'));
     }

@@ -81,15 +81,15 @@
             right: 27px;
             color: black;
         }
-        
+
         .apply-width {
             min-width: 100px !important;
             padding: .5em !important;
         }
 
-        
-        
-        
+
+
+
     </style>
 
     <!-- Content Header (Page header) -->
@@ -103,17 +103,26 @@
         </div>
         <!-- /.container-fluid -->
     </section>
+
+
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
         <div class="container-fluid">
-            <div class="card">
+            <div class="card" x-data="{
+                show: false,
+                hubId: null,
+                router: '{{ route('complete.booking.export') }}'
+            }">
                 <div class="card-header">
-                    <div class="d-flex text-center">
+                    <div class="d-flex text-center gap-2">
                         <!-- Search for Booking ID -->
                         <div class="input-group" style="width: 250px;">
                             <label for="complete_hub_type"></label>
-                            <select id="complete_hub_type" class="form-control">
+                            <select id="complete_hub_type" x-on:change="(e) => {
+                                show = !(e.target.value == null)
+                                hubId = e.target.value
+                            }" class="form-control">
                                 <option selected disabled>Select Hub</option>
                                 @if(!empty($city_list))
                                     @foreach($city_list as $id => $list)
@@ -129,6 +138,13 @@
                                 <option value="pickup">Pickup</option>
                             </select>
                         </div>
+
+
+                        @if (in_array('booking_completed_export', getAdminPermissions()))
+                        <div class="flex-1 align-self-center  w-75 text-right" x-data x-show="show">
+                            <a :href="router + '?id=' + hubId" class="btn btn-primary btn-sm">Export</a>
+                        </div>
+                        @endif
                     </div>
                 </div>
                 <div class="card-body table-responsive p-0">

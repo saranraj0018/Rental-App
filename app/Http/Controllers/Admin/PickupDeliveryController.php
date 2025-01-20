@@ -24,6 +24,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 use Razorpay\Api\Api;
 
 class PickupDeliveryController extends BaseController
@@ -424,7 +425,6 @@ class PickupDeliveryController extends BaseController
             END ASC
         ")->paginate($perPage);
         return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Data Fetch successfully']);
-
     }
 
     public function calculatePrice(Request $request)
@@ -552,7 +552,6 @@ class PickupDeliveryController extends BaseController
                 $new_booking_id = 100001;
             }
 
-
             $booking = new Booking();
             $booking->booking_id = $new_booking_id;
             $booking->user_id = $user->id;
@@ -634,8 +633,13 @@ class PickupDeliveryController extends BaseController
 
             PaymentController::sendSMS($user->mobile, $new_booking_id);
 
-            return response()->json(['success' => true, 'message' => 'Booking Created successfully']);
+            return response()->json(['success' => true, 'message' => 'Booking Created successfully', 'booking' => [
+                'booking_id' => $new_booking_id,
+                'start_date' => $request['user_start_date'],
+                'end_date' => $request['user_end_date']
+            ]]);
         }
+
         return response()->json(['success' => false, 'message' => 'Booking Fail']);
     }
 
@@ -673,12 +677,22 @@ class PickupDeliveryController extends BaseController
         }
         return [];
     }
+
+    // bookingCompleteExport
     public function bookingComplete()
     {
-         $this->authorizePermission('booking_completed_view');
+        $this->authorizePermission('booking_completed_view');
         // $bookings = Booking::with(['user','details','comments','user.bookings'])->where('status',2)->paginate(20);
         $city_list = City::where('city_status',1)->pluck('name','code');
         return view('admin.hub.complete_booking',compact('city_list'));
+    }
+
+
+    public function bookingCompleteExport(Request $request)
+    {
+        $this->authorizePermission('booking_completed_export');
+        $hub = $request->query('id');
+        return Excel::download(new \App\Exports\CompletedBooking(hub: $hub), 'completed-booking-export.csv');
     }
 
     public function bookingPending()

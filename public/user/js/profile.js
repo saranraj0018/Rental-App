@@ -41,10 +41,10 @@ $(function () {
                 contentType: false, // Required to handle file uploads correctly
                 success: function (response) {
                     if (response.success) {
-                        $("#profile_message").text(response.message);
+                        $("#alert-model").modal("show");
                         setTimeout(function () {
                             window.location.reload();
-                        }, 3000);
+                        }, 4000);
                     }
                 },
                 error: function (response) {
@@ -79,10 +79,11 @@ $(function () {
             contentType: false, // Required to handle file uploads correctly
             success: function (response) {
                 if (response.success) {
-                    $("#profile_message").text(response.message);
+                    $("#alert-model").modal("show");
+                    // $("#profile_message").text(response.message);
                     setTimeout(function () {
                         window.location.reload();
-                    }, 3000);
+                    }, 4000);
                 }
             },
             error: function (response) {
@@ -117,10 +118,10 @@ $(function () {
             contentType: false, // Required to handle file uploads correctly
             success: function (response) {
                 if (response.success) {
-                    $("#document_message").text(response.message);
+                    $("#alert-model").modal("show");
                     setTimeout(function () {
                         window.location.reload();
-                    }, 3000);
+                    }, 4000);
                 }
             },
             error: function (response) {
@@ -150,10 +151,10 @@ $(function () {
             type: "DELETE",
             success: function (response) {
                 if (response.success) {
-                    $("#profile_message").text(response.message);
+                    $("#alert-model").modal("show");
                     setTimeout(function () {
                         window.location.reload();
-                    }, 3000);
+                    }, 4000);
                 } else if (!response.success) {
                     $("#profile_message").text(response.message);
                 }
