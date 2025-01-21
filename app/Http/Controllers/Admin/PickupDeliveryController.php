@@ -455,9 +455,9 @@ class PickupDeliveryController extends BaseController {
                     'email_notify' => true
                 ]);
 
-                  # send mail and SMS to user and admin
+                # send mail and SMS to user and admin
                 event(new \App\Events\BookingUpdated(null, 'payment', $request->all()));
-                // Mail::to('srik51977@gmail.com')->send(new \App\Mail\NotifyManualBookingGeneratedMail());
+
 
                 return response()->json(['success' => 'Payment link created and sent successfully.']);
             } catch (\Exception $e) {
@@ -472,8 +472,8 @@ class PickupDeliveryController extends BaseController {
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'mobile' => 'required|digits:10|unique:users',
+            'email' => 'required|email|max:255',
+            'mobile' => 'required|digits:10',
             'pickup_location' => 'required|string|max:255',
             'drop_location' => 'required|string|max:255',
             'license_number' => 'required|string|max:20',

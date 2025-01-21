@@ -280,7 +280,7 @@ class PaymentController extends Controller {
             'status' => 3,
         ]);
 
-        event(new \App\Events\BookingUpdated($booking, 'cancelled'));
+        event(new \App\Events\BookingUpdated($booking->get()->first(), 'cancelled'));
 
         return response()->json(['success' => true]);
     }

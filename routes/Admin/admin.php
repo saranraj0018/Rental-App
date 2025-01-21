@@ -1,5 +1,7 @@
 <?php
 
+use App\Facades\Message;
+use App\Message\LoginMessage;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -28,10 +30,9 @@ use App\Http\Controllers\Admin\SettingController;
 |
 */
 
-
-
 Route::group(['prefix' => 'admin'], function () {
     Route::group(['middleware' => 'admin.guest'], function () {
+
         Route::view('/login', 'admin.login')->name('admin.login');
         Route::view('/register', 'admin.register')->name('admin.register');
         Route::post('/authenticate', [AdminAuthController::class, 'adminAuthenticate'])->name('admin.authenticate');
