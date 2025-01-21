@@ -1,67 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333333;
-        }
-        .email-container {
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        .email-header {
-            background-color: lightcoral;
-            color: #ffffff;
-            padding: 20px;
-            text-align: center;
-        }
-        .email-content {
-            padding: 20px;
-        }
-        .email-content h1 {
-            font-size: 20px;
-            margin: 0 0 20px;
-        }
-        .email-content p {
-            margin: 10px 0;
-            line-height: 1.6;
-        }
-        .email-footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #f4f4f9;
-            color: #888888;
-            font-size: 12px;
-        }
-
-    </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HTML</title>
 </head>
-<body>
-    <div class="email-container">
-        <div class="email-header">
-            <h1>Booking Cancelled Notification</h1>
-        </div>
-        <div class="email-content">
-            <h1>Hello ({{ $booking->user->name }})</h1>
-            <p>Your Booking for the booking ID of: ({{ $booking->booking_id }}) has been Rescheduled,</p>
-            <p>The reschuduled date is - ({{ $booking->reschedule_date }})</p>
 
-            <br>
-        </div>
-        <div class="email-footer">
-            <p>Thank you,<br> Valam Team</p>
-        </div>
+<body style="background: #f4f4f4; font-family: sans, arial; padding: 1em 12em">
+
+  <div>
+    <p style="font-size: 1.5em; margin-bottom: 1em">Dear <b>{{ $booking->user->name }}</b>,</p>
+    <p style="font-style: italic; color: #555; font-size: .9em">Your booking with Valam Cars has been successfully modified. Below are your updated booking details:</p>
+
+    <div style="padding: .3em; background: lightgray; border-radius: 5px">
+      <span style="font-style: italic; color: #111; font-size: .8em; padding: 0 1em">Updated Booking Details</span>
+
+      <ul style="font-size: .7em">
+        <li>Booking ID: <b>{{ $booking->booking_id }}</b></li>
+        <li>Car Model: <b>{{ $booking?->Car?->carModel?->model_name }}</b></li>
+        <li>Drop-off Location: <b>{{ $booking->location()->dropoff }}</b></li>
+        <li>Drop-off Date/Time: <b>{{ $booking->start_date }}</b></li>
+        <li>Pick-up Location: <b>{{ $booking->location()->pickup }}</b></li>
+        <li>Pick-up Date/Time: <b>{{ $booking->end_date }}</b></li>
+      </ul>
     </div>
+
+    <hr />
+
+    <div style="padding: .3em; background: lightgray; border-radius: 5px">
+      <span style="font-style: italic; color: #111; font-size: .8em; padding: 0 1em">Important Information</span>
+
+      <p style="font-size: .7em; padding: 0 1em">Please ensure that the modified details meet your requirements. If you have any questions or need further assistance, you can:</p>
+      <ul style="font-size: .7em">
+        <li>Visit our website: <a href="www.valamcars.com">www.valamcars.com</a></li>
+        <li>Contact us at +91-9363065901</li>
+      </ul>
+    </div>
+
+    <p style="font-size: .8em; margin-top: 2em">Thank you for choosing Valam Cars. We’re here to make your self-drive journey smooth and enjoyable!</p>
+
+    <div style="margin-top: 1em">
+      <h5 style="margin: 0">Best regards,</h5>
+      <p style="margin: 0; font-size: .8em">Team Valam Cars.</p>
+    </div>
+  </div>
 </body>
 </html>

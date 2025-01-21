@@ -13,42 +13,34 @@ class BookingConfirmed extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $bookingDetails , $_name;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($_name, $bookingDetails)
-    {
-        $this->bookingDetails = $bookingDetails;
-        $this->_name = $_name;
-    }
+    public function __construct(public $booking)
+    {}
 
 
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
+    public function envelope(): Envelope {
         return new Envelope(
-            subject: 'Booking Confirmed',
+            subject: 'Booking Created Successfully - Valam Cars',
         );
     }
 
-    public function build()
-    {
-        return $this->subject('Booking Confirmation')
-            ->view('emails.booking_confirmation')
-            ->with('bookingDetails', $this->bookingDetails);
-    }
+
 
     /**
      * Get the message content definition.
      */
-    public function content(): Content
-    {
+    public function content(): Content {
         return new Content(
             view: 'user.frontpage.booking.mail',
+            with: [
+                'booking' => $this->booking,
+            ],
         );
     }
 

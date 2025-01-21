@@ -2,9 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\AdminDetail;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -21,7 +19,6 @@ class BookingReScheduleMail extends Mailable {
      */
     public function __construct($booking) {
         $this->booking = $booking;
-        $this->admin = AdminDetail::where('role', '=', 1)->first();
     }
 
     /**
@@ -29,7 +26,7 @@ class BookingReScheduleMail extends Mailable {
      */
     public function envelope(): Envelope {
         return new Envelope(
-            subject: 'Your Booking has been Rescheduled',
+            subject: 'Booking Modification Confirmation - Valam Cars',
         );
     }
 
@@ -40,7 +37,6 @@ class BookingReScheduleMail extends Mailable {
         return new Content(
             view: 'user.frontpage.booking.booking-resheduled-mail',
             with: [
-                'admin' => $this->admin,
                 'booking' => $this->booking,
             ],
         );
