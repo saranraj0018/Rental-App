@@ -13,15 +13,10 @@ use Illuminate\Queue\SerializesModels;
 class BookingCancelledMail extends Mailable {
     use Queueable, SerializesModels;
 
-    public $booking;
-    public $admin;
-
     /**
      * Create a new message instance.
      */
-    public function __construct($booking) {
-        $this->booking = $booking;
-        $this->admin = AdminDetail::where('role', '=', 1)->first();
+    public function __construct(public $booking) {
     }
 
     /**
@@ -29,7 +24,7 @@ class BookingCancelledMail extends Mailable {
      */
     public function envelope(): Envelope {
         return new Envelope(
-            subject: 'Booking Cancelled',
+            subject: 'Booking Cancelled Mail - Valam Cars',
         );
     }
 
@@ -40,7 +35,6 @@ class BookingCancelledMail extends Mailable {
         return new Content(
             view: 'admin.hub.user-booking-cancelled-mail',
             with: [
-                'admin' => $this->admin,
                 'booking' => $this->booking,
             ],
         );

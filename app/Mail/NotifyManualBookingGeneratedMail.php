@@ -19,9 +19,7 @@ class NotifyManualBookingGeneratedMail extends Mailable {
     /**
      * Create a new message instance.
      */
-    public function __construct(string $user) {
-        $this->admin = auth('admin')->user()->name;
-        $this->user = $user;
+    public function __construct(public $dataset) {
     }
 
     /**
@@ -40,8 +38,7 @@ class NotifyManualBookingGeneratedMail extends Mailable {
         return new Content(
             view: 'admin.hub.booking-generated-mail',
             with: [
-                'admin' => $this->admin,
-                'user' => $this->user,
+                'dataset' => $this->dataset,
             ],
         );
     }

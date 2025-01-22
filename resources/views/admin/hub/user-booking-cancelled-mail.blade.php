@@ -1,77 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333333;
-        }
-        .email-container {
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        .email-header {
-            background-color: lightcoral;
-            color: #ffffff;
-            padding: 20px;
-            text-align: center;
-        }
-        .email-content {
-            padding: 20px;
-        }
-        .email-content h1 {
-            font-size: 20px;
-            margin: 0 0 20px;
-        }
-        .email-content p {
-            margin: 10px 0;
-            line-height: 1.6;
-        }
-        .email-footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #f4f4f9;
-            color: #888888;
-            font-size: 12px;
-        }
-        .button {
-            display: inline-block;
-            background-color: lightcoral;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            margin-top: 20px;
-        }
-        .button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HTML</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="email-container">
-        <div class="email-header">
-            <h1>Booking Cancelled Notification</h1>
+
+<body style="background: #f4f4f4; font-family: sans, arial; padding: 1em">
+
+
+    <div>
+        <p style="font-size: 1.5em; margin-bottom: 1em">Hi <b>{{ $booking->user->name }}</b>,</p>
+
+        <p style="font-style: italic; color: #555">Your booking <span
+                style="color: #000">{{ $booking->booking_id }}</span> with Valam Cars has been canceled.</p>
+        <p style="font-size: .8em">We’re truly sorry to miss the opportunity to provide you with a great experience, and
+            we hope to serve you again in the future. The refundable amount will be processed back to your original
+            payment method within 7 working days. Let us know how we can improve our services.</p>
+
+
+        <div style="padding: .3em; background: lightgray; border-radius: 5px">
+            <span style="font-style: italic; color: #555; font-size: .8em; padding: 0 1em">Please feel free to:</span>
+            <ul style="font-size: .8em">
+                <li>Visit our website: www.valamcars.com</li>
+                <li>Call us at: +91-9363065901</li>
+            </ul>
         </div>
-        <div class="email-content">
-            <h1>Hello {{ $booking->user->name }}</h1>
-            <p>Your Booking for ({{ $booking->booking_id }}) has been cancelled,</p>
-            <p>For more information plase  <a href="valamcars.rankuheigher.in/contact">contact us</a></p>
-        </div>
-        <div class="email-footer">
-            <p>Thank you,<br> Valam Team</p>
+
+        <p style="font-size: .8em">Thank you for considering Valam Cars. We hope to see you again soon!</p>
+
+        <div style="margin-top: 1em">
+            <h5 style="margin: 0">Warm regards,</h5>
+            <p style="margin: 0; font-size: .8em">Team Valam Cars</p>
         </div>
     </div>
+
+
 </body>
+
 </html>

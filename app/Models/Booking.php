@@ -29,4 +29,22 @@ class Booking extends Model
     {
         return $this->hasMany(Commend::class);
     }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+
+
+
+    public function location() {
+
+        $_booking = Booking::where('booking_id', $this->booking_id)
+        ->get(['address', 'booking_type']);
+
+        return (object) [
+            'pickup' => $_booking->filter(fn($_book) => $_book->booking_type != 'delivery')?->first()?->address,
+            'dropoff' => $_booking->filter(fn($_book) => $_book->booking_type == 'delivery')?->first()?->address,
+        ];
+    }
 }

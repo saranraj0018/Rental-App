@@ -65,11 +65,11 @@
             <h1>New Booking Created Notification</h1>
         </div>
         <div class="email-content">
-            <h1>Hello {{ $admin }}</h1>
-            <p>A manual Booking has been made by you, Waiting for Payment by the Customer.</p>
+            <h1>Hello Admin</h1>
+            <p>A Manual Booking has been made by you, Waiting for Payment by the Customer.</p>
             <p><strong>Booking Details:</strong></p>
             <ul>
-                <li><strong>User Name:</strong> {{ $user }}</li>
+                <li><strong>User Email:</strong> {{ $dataset['email'] }}</li>
             </ul>
         </div>
         <div class="email-footer">

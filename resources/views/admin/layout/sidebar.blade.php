@@ -3,13 +3,46 @@
     $permissions = getAdminPermissions();
 @endphp
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+    <style>
+        .nav-item.active {
+            background: rgb(100, 100, 100) !important;
+            border-radius: 5px;
+        }
+
+        .nav-item.active * {
+            color: #fff;
+        }
+    </style>
+
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
         <img src="{{asset("admin/img/valam.png")}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3">
         <span class="brand-text font-weight-light">Rental Cars</span>
     </a>
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" x-data="{
+
+        open() {
+            const manageSection = document.getElementById('manageSection');
+            const manageSectionMenus = [...manageSection.children]
+
+            if(manageSection.querySelector('.active')) {
+                return true;
+            }
+
+            return false;
+        }
+
+    }" x-init="() => {
+        const menusList = [...document.querySelectorAll('.nav-item')]
+        menusList.map((menu) => {
+            const menuLink = menu.children[0];
+            if(menuLink.href == '{{ url()->current() }}') {
+                menu.classList.add('active');
+            }
+        })
+    }">
         <!-- Sidebar user (optional) -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -85,7 +118,7 @@
                         <p>Cities Map</p>
                     </a>
                 </li>
-                
+
                @endif
 
                 @if (in_array('car_listing_view', $permissions))
@@ -142,7 +175,7 @@
                 </li>
                   @endif
                 <!-- Manage Section with Hide/Show Functionality -->
-                <li class="nav-item">
+                <li class="nav-item" :class="{ 'menu-is-opening menu-open': open() }">
                     <a href="#manageSection" class="nav-link" data-bs-toggle="collapse">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
