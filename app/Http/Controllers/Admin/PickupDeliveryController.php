@@ -492,13 +492,15 @@ class PickupDeliveryController extends BaseController {
             $general = Frontend::where('data_keys', 'general-setting')->first();
             $data = !empty($general) && optional($general)->data_values ? json_decode($general->data_values, true) : [];
 
-            $user = new User();
-            $user->name = $request['name'];
-            $user->mobile = $request['mobile'];
-            $user->email = $request['email'];
-            $user->aadhaar_number = $request['aadhaar_card'];
-            $user->driving_licence = $request['license_number'];
-            $user->save();
+            if (!($user = User::where('mobile', '=', $request['mobile'])->get()?->first())) {
+                $user = new User();
+                $user->name = $request['name'];
+                $user->mobile = $request['mobile'];
+                $user->email = $request['email'];
+                $user->aadhaar_number = $request['aadhaar_card'];
+                $user->driving_licence = $request['license_number'];
+                $user->save();
+            }
 
             $last_booking = Booking::orderBy('id', 'desc')->first() ?? 0;
 
@@ -537,9 +539,6 @@ class PickupDeliveryController extends BaseController {
             $delivery_booking->status = 1;
             $delivery_booking->save();
 
-
-            # send mail and SMS to user and admin
-            event(new \App\Events\BookingUpdated($booking, 'created'));
             $car_details = CarDetails::with('carModel')->find($available_car->id);
 
             $prices = ['festival' => $car_details->carModel->peak_reason_surge ?? 0,
@@ -583,10 +582,11 @@ class PickupDeliveryController extends BaseController {
             $car_available->booking_type = 1;
             $car_available->save();
 
-            PaymentController::sendSMS($user->mobile, $new_booking_id);
-
+            # send mail and SMS to user and admin
+            event(new \App\Events\BookingUpdated($booking, 'created'));
+            // dd($delivery_booking->booking_id);
             return response()->json(['success' => true, 'message' => 'Booking Created successfully', 'booking' => [
-                'booking_id' => $new_booking_id,
+                'booking_id' => $delivery_booking->booking_id,
                 'start_date' => $request['user_start_date'],
                 'end_date' => $request['user_end_date']
             ]]);

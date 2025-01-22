@@ -173,8 +173,13 @@
                         @foreach ($user_details->userDoc as $image)
                             <div class="col-md-4 mb-4">
                                 <div class="card image-card">
-                                    <img src="{{ asset('/storage/user-documents/' . $image->image_name) }}"
-                                        class="card-img-top" alt="Image">
+
+                                    @php
+                                        $_src = asset('/storage/user-documents/' . $image->image_name);
+                                    @endphp
+
+                                    <x-image :src="$_src"
+                                        class="card-img-top" alt="Image" />
                                     <button class="btn btn-danger btn-sm delete-image position-absolute"
                                         data-id="{{ $image->id }}"
                                         style="top: 5px; right: 5px; background: rgb(187, 46, 46); width: 25px !important">
