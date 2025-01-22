@@ -162,7 +162,7 @@ class PickupDeliveryController extends BaseController {
 
             if ($bookingDetails) {
                 $otherCars = CarDetails::where('model_id', $model_id)->
-                    where('id', '!=', $carId)->get();
+                where('id', '!=', $carId)->get();
                 // Check availability of other cars within the date range
                 foreach ($otherCars as $car) {
                     $isAvailable = Available::where('car_id', $car->id)
@@ -359,17 +359,30 @@ class PickupDeliveryController extends BaseController {
                         ->where(function ($query) use ($timeLimit) {
                             $query->where(function ($query) use ($timeLimit) {
                                 $query->where('booking_type', 'delivery')
-                                    ->whereBetween('start_date', [now(), $timeLimit]);
+                                    ->where(function ($query) use ($timeLimit) {
+                                        $query->whereNotNull('reschedule_date')
+                                            ->whereBetween('reschedule_date', [now(), $timeLimit])
+                                            ->orWhere(function ($query) use ($timeLimit) {
+                                                $query->whereNull('reschedule_date')
+                                                    ->whereBetween('start_date', [now(), $timeLimit]);
+                                            });
+                                    });
                             })->orWhere(function ($query) use ($timeLimit) {
                                 $query->where('booking_type', 'pickup')
-                                    ->whereBetween('end_date', [now(), $timeLimit]);
+                                    ->where(function ($query) use ($timeLimit) {
+                                        $query->whereNotNull('reschedule_date')
+                                            ->whereBetween('reschedule_date', [now(), $timeLimit])
+                                            ->orWhere(function ($query) use ($timeLimit) {
+                                                $query->whereNull('reschedule_date')
+                                                    ->whereBetween('end_date', [now(), $timeLimit]);
+                                            });
+                                    });
                             });
                         });
-                })
-                    ->orWhere('risk', 1); // Only `risk` check here as `status` and `city_code` are global
+                })->orWhere('risk', 1); // Only `risk` check here as `status` and `city_code` are global
             });
 
-        // Apply filters based on request parameters
+// Apply filters based on request parameters
         if (!empty($request['car_model'])) {
             $query->whereHas('details', function ($query) use ($request) {
                 $query->where('car_details->car_model->model_name', 'like', '%' . $request->input('car_model') . '%');
@@ -391,13 +404,14 @@ class PickupDeliveryController extends BaseController {
         if ($request->has('hub_type')) {
             $query->where('city_code', $request->input('hub_type'));
         }
-        // Paginate the results
+
+// Order by and paginate the results
         $bookings = $query->orderByRaw("
-            CASE
-                WHEN booking_type = 'delivery' THEN start_date
-                WHEN booking_type = 'pickup' THEN end_date
-            END ASC
-        ")->paginate($perPage);
+    CASE
+        WHEN booking_type = 'delivery' THEN COALESCE(reschedule_date, start_date)
+        WHEN booking_type = 'pickup' THEN COALESCE(reschedule_date, end_date)
+    END ASC
+")->paginate($perPage);
         return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Data Fetch successfully']);
     }
 
