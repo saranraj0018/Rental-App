@@ -34,7 +34,7 @@
                 <p><i class="fa fa-check px-2 text-success"></i> Booking Created Successfully</p>
 
                 <ul>
-                    <li>Booking ID: <span class="response_booking_id"></span></li>
+                    <li>Booking ID: <span id="response_booking_id"></span></li>
                     <li>Start Date: <span id="response_start_date"></span></li>
                     <li>End Date: <span id="response_end_date"></span></li>
                 </ul>

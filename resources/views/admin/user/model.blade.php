@@ -22,7 +22,7 @@
                         <div class="p-3">
                             <div id="image_gallery" class="d-flex flex-wrap mb-5"
                                 style="overflow: scroll; max-height: 70vh">
-                                {{--  --}}
+                                {{-- --}}
                             </div>
                         </div>
                     </div>

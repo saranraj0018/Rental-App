@@ -1,24 +1,25 @@
 $(function () {
-    'use strict'
-    $(document).ready(function() {
-
+    "use strict";
+    $(document).ready(function () {
         function updateHolidayTable(data) {
-            let tbody = $('#user_table tbody');
+            let tbody = $("#user_table tbody");
             tbody.empty(); // Clear existing rows
 
             if (data.user.length === 0) {
-                tbody.append(`<tr><td colspan="10" class="text-center">Record Not Found</td></tr>`);
+                tbody.append(
+                    `<tr><td colspan="10" class="text-center">Record Not Found</td></tr>`
+                );
             } else {
                 // Loop through the data and append rows
-                $.each(data.user, function(index, item) {
+                $.each(data.user, function (index, item) {
                     tbody.append(`
                 <tr>
                     <td>${item.id}</td>
                     <td>${item.name}</td>
                     <td>${item.mobile}</td>
-                   <td>${item.email ? item.email : ''}</td>
-                   <td>${item.aadhaar_number ? item.aadhaar_number : ''}</td>
-                   <td>${item.driving_licence ? item.driving_licence : ''}</td>
+                   <td>${item.email ? item.email : ""}</td>
+                   <td>${item.aadhaar_number ? item.aadhaar_number : ""}</td>
+                   <td>${item.driving_licence ? item.driving_licence : ""}</td>
                     <td>${formatDateTime(item.updated_at)}</td>
 
                 </tr>
@@ -27,10 +28,10 @@ $(function () {
             }
         }
 
-// Helper function to format dates
+        // Helper function to format dates
         function formatDateTime(dateString) {
             let date = new Date(dateString);
-            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            return date.toLocaleDateString() + " " + date.toLocaleTimeString();
         }
         function formatDate(dateString) {
             let date = new Date(dateString);
@@ -38,64 +39,63 @@ $(function () {
         }
 
         function fetchData() {
-            let name_search = $('#name_search').val();
+            let name_search = $("#name_search").val();
             $.ajax({
-                url: '/admin/user/search', // Define this route in your web.php
-                type: 'GET',
+                url: "/admin/user/search", // Define this route in your web.php
+                type: "GET",
                 data: {
-                    name_search: name_search
+                    name_search: name_search,
                 },
-                success: function(response) {
-                    updateHolidayTable(response.data) // Populate table with new data
+                success: function (response) {
+                    updateHolidayTable(response.data); // Populate table with new data
                 },
-                error: function(xhr) {
-                    alertify.error('Something Went Wrong');
-                }
+                error: function (xhr) {
+                    alertify.error("Something Went Wrong");
+                },
             });
         }
 
-        $('#name_search').on('keyup', fetchData);
+        $("#name_search").on("keyup", fetchData);
 
-        $('#user_table').on('click', '.user_view', function () {
+        $("#user_table").on("click", ".user_view", function () {
             // Show the modal
-            $('#document_model').modal('show');
+            $("#document_model").modal("show");
 
             // Base path for images in storage
             let assetBasePath = "/storage/user-documents";
 
             // Get images array from data-images attribute
-            let images = $(this).data('images');
-            let documents = $(this).data('documents');
+            let images = $(this).data("images");
+            let documents = $(this).data("documents");
 
             // Clear any existing images in the modal
-            $('#image_gallery').empty();
-            $('#documents').empty();
-            
+            $("#image_gallery").empty();
+            $("#documents").empty();
 
             if (images && images.length > 0) {
                 images.forEach((imageName, index) => {
                     if (imageName) {
                         let imageUrl = `${assetBasePath}/${imageName}`;
-                        $('#image_gallery').append(`
-                    <div class="mb-3 text-center d-flex" style="flex-direction: column;">
+                        $("#image_gallery").append(`
+                    <a href="${imageUrl}" target="_blank" class="mb-3 text-center d-flex" style="flex-direction: column;">
                         <label class="form-label">Document ${index + 1}</label>
-                        <img src="${imageUrl}" alt="Document Image" class="img-fluid border rounded" style="height: 300px; width: 300px; object-fit: cover;">
-                    </div>
+                        <img src="${imageUrl}" alt="Document Image" class="img-fluid border rounded" style="height: 300px; width: 300px; object-fit: cover;" />
+                    </a>
                 `);
                     }
                 });
             } else {
-                $('#image_gallery').append(`
+                $("#image_gallery").append(`
             <div class="col-12 text-center">
                 <p class="text-muted">No images available</p>
             </div>
         `);
             }
-            
-             if (documents && documents.length) {
+
+            if (documents && documents.length) {
                 documents?.map((document) => {
                     if (document?.title) {
-                        $('#documents').append(`
+                        $("#documents").append(`
                             <div>
                             <h6 class="text-bold mb-0">${document.title}</h6>
                             <p class="">${document.value}</p>
@@ -104,14 +104,12 @@ $(function () {
                     }
                 });
             } else {
-                $('#documents').append(`
+                $("#documents").append(`
                     <div class="col-12 text-center">
                         <p class="text-muted">No Data available</p>
                     </div>
                 `);
             }
         });
-
-
     });
 });
