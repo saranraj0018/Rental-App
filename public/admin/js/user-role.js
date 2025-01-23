@@ -119,6 +119,7 @@ $(function () {
                     tbody.append(`
                 <tr>
                     <td>${index + 1}</td>
+                    <td><button data-toggle="modal" data-target="#user_${item.id}" class="btn"><i class="fa fa-eye"></i></button></td>
                     <td>${item.user_role}</td>
                     <td>${item.user ? item.user.email : ''}</td>
                    <td>${formatDateTime(item.created_at)}</td>
@@ -152,7 +153,7 @@ $(function () {
                 });
             }
         }
-        
+
           function formatDateTime(dateString) {
             let date = new Date(dateString);
             return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
