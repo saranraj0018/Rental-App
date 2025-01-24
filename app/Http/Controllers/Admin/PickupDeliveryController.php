@@ -22,6 +22,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use mysql_xdevapi\Exception;
 use Razorpay\Api\Api;
 
 class PickupDeliveryController extends BaseController {
@@ -283,6 +284,8 @@ class PickupDeliveryController extends BaseController {
             'status' => 3,
         ]);
 
+        Available::where('booking_id', $request['booking_id'])->delete();
+
         $booking_data = $booking->get()->first()->booking_id;
 
         # send mail and SMS to user and admin
@@ -317,7 +320,7 @@ class PickupDeliveryController extends BaseController {
             'notes' => $request['cancel_reason'],
             'status' => 3,
         ]);
-
+        Available::where('booking_id', $request['booking_id'])->delete();
         # send mail and SMS to user and admin
         event(new \App\Events\BookingUpdated($booking->get()->first(), 'cancelled'));
 
@@ -498,11 +501,16 @@ class PickupDeliveryController extends BaseController {
             'discount' => 'required|numeric',
         ]);
 
+
         if (!empty($request['user_car_model'])) {
             $car_available = self::carAvailablity($request['user_car_model'], $request['user_start_date'], $request['user_end_date']);
-            if (!empty($car_available)) {
-                $available_car = current($car_available);
+
+            if (empty($car_available)) {
+
+                return response()->json(['success' => 'false', 'message' => 'Car Model Not Found'], 500);
             }
+
+            $available_car = current($car_available);
             $general = Frontend::where('data_keys', 'general-setting')->first();
             $data = !empty($general) && optional($general)->data_values ? json_decode($general->data_values, true) : [];
 

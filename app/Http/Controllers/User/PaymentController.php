@@ -279,7 +279,7 @@ class PaymentController extends Controller {
             'notes' => $request['cancel_reason'],
             'status' => 3,
         ]);
-
+        Available::where('booking_id', $request['booking_id'])->delete();
         event(new \App\Events\BookingUpdated($booking->get()->first(), 'cancelled'));
 
         return response()->json(['success' => true]);
