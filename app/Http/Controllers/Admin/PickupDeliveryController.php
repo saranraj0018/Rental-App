@@ -657,7 +657,11 @@ class PickupDeliveryController extends BaseController {
     public function bookingCompleteExport(Request $request) {
         $this->authorizePermission('booking_completed_export');
         $hub = $request->query('id');
-        return Excel::download(new \App\Exports\CompletedBooking(hub: $hub), 'completed-booking-export.csv');
+
+        $hubName = City::where('code', $hub)->get()->first()?->name;
+
+
+        return Excel::download(new \App\Exports\CompletedBooking(hub: $hub),  now()->format('Y_m_d_hi_') . $hubName . "_bookings.csv");
     }
 
     public function bookingPending() {
