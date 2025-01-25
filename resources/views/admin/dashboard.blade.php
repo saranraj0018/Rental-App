@@ -30,7 +30,7 @@
 
     .card-title {
         font-family: 'Montserrat', sans-serif;
-        font-size: 20px;
+        font-size: 1em;
         font-weight: 600;
         color: #333;
     }
@@ -43,7 +43,7 @@
     }
 
     .icon {
-        font-size: 50px;
+        font-size: 2em;
         margin-bottom: 20px;
         color: #777;
     }
@@ -81,29 +81,29 @@
         background-color: #3f4e5b;
     }
 
-    .fa-car {
+    #dashboard .fa-car {
         color: #2ecc71;
     }
 
-    .fa-calendar-check {
+    #dashboard .fa-calendar-check {
         color: #3498db;
     }
 
-    .fa-ban {
+    #dashboard .fa-ban {
         color: #e74c3c;
     }
 
-    .fa-users {
+    #dashboard .fa-users {
         color: #9b59b6;
     }
 
-    .fa-building {
+    #dashboard .fa-building {
         color: #f1c40f;
     }
 </style>
 
 
-<section class="px-5">
+<section class="px-5" id="dashboard">
     <div class="pt-4">
         <form class="d-flex justify-content-center align-items-center mb-4" style="height: 10vh;">
             <label for="hubFilter" class="mr-3">Select Hub</label>
@@ -169,8 +169,12 @@
                         <div class="col-md-3">
                             <div class="card">
                                 <div class="card-body">
-                                    <i class="fa fa-car fa-2x icon"></i>
-                                    <h5 class="card-title">Available Cars</h5>
+                                    <div class="d-flex justify-content-center align-items-start" style="gap: 2em;">
+                                        <h5 class="card-title" style="flex: 1;">Available Cars</h5>
+                                        <span>
+                                            <i class="fa fa-car fa-2x icon"></i>
+                                        </span>
+                                    </div>
                                     <h2 class="card-text">${data.available_cars}</h2>
                                 </div>
                             </div>
@@ -178,8 +182,12 @@
                         <div class="col-md-3">
                             <div class="card">
                                 <div class="card-body">
-                                    <i class="fa fa-calendar-check fa-2x icon"></i>
-                                    <h5 class="card-title">Booked Cars</h5>
+                                    <div class="d-flex justify-content-center align-items-start" style="gap: 2em;">
+                                        <h5 class="card-title" style="flex: 1;">Booked Cars</h5>
+                                        <span>
+                                            <i class="fa fa-calendar-check fa-2x icon"></i>
+                                        </span>
+                                    </div>
                                     <h2 class="card-text">${data.booked_cars}</h2>
                                 </div>
                             </div>
@@ -187,8 +195,12 @@
                         <div class="col-md-3">
                             <div class="card">
                                 <div class="card-body">
-                                    <i class="fa fa-ban fa-2x icon"></i>
-                                    <h5 class="card-title">Blocked Cars</h5>
+                                    <div class="d-flex justify-content-center align-items-start" style="gap: 2em;">
+                                        <h5 class="card-title" style="flex: 1;">Blocked Cars</h5>
+                                        <span>
+                                            <i class="fa fa-ban fa-2x icon"></i>
+                                        </span>
+                                    </div>
                                     <h2 class="card-text">${data.blocked_cars}</h2>
                                 </div>
                             </div>
@@ -196,8 +208,13 @@
                         <div class="col-md-3">
                             <div class="card">
                                 <div class="card-body">
-                                    <i class="fa fa-users fa-2x icon"></i>
-                                    <h5 class="card-title">Total Users</h5>
+
+                                    <div class="d-flex justify-content-center align-items-start" style="gap: 2em;">
+                                        <h5 class="card-title" style="flex: 1;">Total Users</h5>
+                                        <span>
+                                            <i class="fa fa-users fa-2x icon"></i>
+                                        </span>
+                                    </div>
                                     <h2 class="card-text">${data.total_users}</h2>
                                 </div>
                             </div>

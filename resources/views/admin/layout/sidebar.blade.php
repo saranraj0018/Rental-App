@@ -1,4 +1,4 @@
-<!-- Main Sidebar Container -->
+
 @php
     $permissions = getAdminPermissions();
 @endphp
@@ -134,7 +134,7 @@
                 <li class="nav-item">
                     <a href="{{route('car-block.list')}}" class="nav-link">
                         <!-- <i class="nav-icon fas fa-tag"></i> -->
-                        <i class="nav-icon fas fa-car"></i>
+                        <i class="nav-icon fa fa-car-side"></i>
                         <p>Car block</p>
                     </a>
                 </li>
@@ -188,7 +188,7 @@
   @if (in_array('general_settings_view', $permissions))
                         <li class="nav-item">
                             <a href="{{ route('general.list') }}" class="nav-link">
-                                <i class="nav-icon fas fa-car"></i>
+                                <i class="nav-icon fas fa-fingerprint"></i>
                                 <p>General Setting </p>
                             </a>
                         </li>
@@ -221,7 +221,7 @@
 
                             <li class="nav-item">
                                 <a href="{{ route('car-info.view') }}" class="nav-link">
-                                    <i class="fas fa-truck nav-icon"></i>
+                                    <i class="fas fa-book nav-icon"></i>
                                     <p> Real Time Information</p>
                                 </a>
                             </li>
@@ -230,7 +230,7 @@
                         @if (in_array('brands_and_vacation_view', $permissions))
                         <li class="nav-item">
                             <a href="{{ route('brand.view') }}" class="nav-link">
-                                <i class="fas fa-truck nav-icon"></i>
+                                <i class="fa fa-sleigh nav-icon"></i>
                                 <p>Brands And Vacation</p>
                             </a>
                         </li>
@@ -239,7 +239,7 @@
                         @if (in_array('faq_view', $permissions))
                         <li class="nav-item">
                             <a href="{{ route('faq.list') }}" class="nav-link">
-                                <i class="fas fa-truck nav-icon"></i>
+                                <i class="fas fa-question nav-icon"></i>
                                 <p>FAQ</p>
                             </a>
                         </li>
@@ -248,7 +248,7 @@
                         @if (in_array('others_view', $permissions))
                         <li class="nav-item">
                             <a href="{{ route('policy.list', ['section' => 'policy']) }}" class="nav-link">
-                                <i class="fas fa-truck nav-icon"></i>
+                                <i class="fas fa-lock nav-icon"></i>
                                 <p>Privacy Policy</p>
                             </a>
                         </li>
@@ -256,7 +256,7 @@
                          @if (in_array('others_view', $permissions))
                             <li class="nav-item">
                                 <a href="{{ route('blog.list', ['section' => 'blog']) }}" class="nav-link">
-                                    <i class="fas fa-truck nav-icon"></i>
+                                    <i class="fas fa-blog nav-icon"></i>
                                     <p>Blog</p>
                                 </a>
                             </li>
@@ -264,7 +264,7 @@
                         @if (in_array('others_view', $permissions))
                         <li class="nav-item">
                             <a href="{{ route('terms.list', ['section' => 'terms']) }}" class="nav-link">
-                                <i class="fas fa-truck nav-icon"></i>
+                                <i class="fas fa-book nav-icon"></i>
                                 <p>Terms & Conditions</p>
                             </a>
                         </li>
@@ -282,7 +282,7 @@
                         @if (in_array('others_view', $permissions))
                         <li class="nav-item">
                             <a href="{{ route('refunds.list', ['section' => 'refunds']) }}" class="nav-link">
-                                <i class="fas fa-truck nav-icon"></i>
+                                <i class="fas fa-credit-card nav-icon"></i>
                                 <p>Refund</p>
                             </a>
                         </li>
@@ -291,7 +291,7 @@
                         @if (in_array('others_view', $permissions))
                         <li class="nav-item">
                             <a href="{{ route('pricing.list', ['section' => 'pricing']) }}" class="nav-link">
-                                <i class="fas fa-truck nav-icon"></i>
+                                <i class="fas fa-tag nav-icon"></i>
                                 <p>Pricing</p>
                             </a>
                         </li>
@@ -300,7 +300,7 @@
                         @if (in_array('others_view', $permissions))
                         <li class="nav-item">
                             <a href="{{ route('cancel.list', ['section' => 'cancel']) }}" class="nav-link">
-                                <i class="fas fa-truck nav-icon"></i>
+                                <i class="fas fa-strikethrough nav-icon"></i>
                                 <p>Cancellation</p>
                             </a>
                         </li>
@@ -309,7 +309,7 @@
                         @if (in_array('important_points_view', $permissions))
                         <li class="nav-item">
                             <a href="{{ route('ipr-info.view') }}" class="nav-link">
-                                <i class="fas fa-truck nav-icon"></i>
+                                <i class="fas fa-exclamation nav-icon"></i>
                                 <p>Important Points</p>
                             </a>
                         </li>
