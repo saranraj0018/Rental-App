@@ -3,11 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\UserController;
-use App\Mail\BookingCancelledMail;
-use App\Mail\BookingConfirmed;
-use App\Mail\BookingReScheduleMail;
 use App\Models\Available;
 use App\Models\Booking;
 use App\Models\BookingDetail;
@@ -20,10 +16,9 @@ use App\Models\Payment;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
-use mysql_xdevapi\Exception;
 use Razorpay\Api\Api;
+use Illuminate\Support\Facades\DB;
 
 class PickupDeliveryController extends BaseController {
     public function list(Request $request) {
@@ -485,8 +480,8 @@ class PickupDeliveryController extends BaseController {
 
     }
 
-    public static function createBooking(Request $request) {
-
+    public static function createBooking(Request $request)
+    {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
@@ -501,120 +496,118 @@ class PickupDeliveryController extends BaseController {
             'discount' => 'required|numeric',
         ]);
 
+        try {
+            DB::beginTransaction();
 
-        if (!empty($request['user_car_model'])) {
-            $car_available = self::carAvailablity($request['user_car_model'], $request['user_start_date'], $request['user_end_date']);
+            if (!empty($request['user_car_model'])) {
+                $car_available = self::carAvailablity($request['user_car_model'], $request['user_start_date'], $request['user_end_date']);
 
-            if (empty($car_available)) {
+                if (empty($car_available)) {
+                    return response()->json(['success' => 'false', 'message' => 'Car Model Not Found'], 500);
+                }
 
-                return response()->json(['success' => 'false', 'message' => 'Car Model Not Found'], 500);
+                $available_car = current($car_available);
+                $general = Frontend::where('data_keys', 'general-setting')->first();
+                $data = !empty($general) && optional($general)->data_values ? json_decode($general->data_values, true) : [];
+
+                if (!($user = User::where('mobile', '=', $request['mobile'])->get()?->first())) {
+                    $user = new User();
+                    $user->name = $request['name'];
+                    $user->mobile = $request['mobile'];
+                    $user->email = $request['email'];
+                    $user->aadhaar_number = $request['aadhaar_card'];
+                    $user->driving_licence = $request['license_number'];
+                    $user->save();
+                }
+
+                $last_booking = Booking::orderBy('id', 'desc')->first() ?? 0;
+                $new_booking_id = $last_booking ? $last_booking->booking_id + 1 : 100001;
+
+                $booking = new Booking();
+                $booking->booking_id = $new_booking_id;
+                $booking->user_id = $user->id;
+                $booking->car_id = $available_car->id;
+                $booking->city_code = $request['hub_list'] ?? 0;
+                $booking->booking_type = 'delivery';
+                $booking->start_date = formDateTime($request['user_start_date']);
+                $booking->end_date = formDateTime($request['user_end_date']);
+                $booking->address = $request['drop_location'] ?? '';
+                $booking->delivery_fee = $data['delivery_fee'] ?? '';
+                $booking->status = 1;
+                $booking->save();
+
+                $delivery_booking = new Booking();
+                $delivery_booking->booking_id = $new_booking_id;
+                $delivery_booking->user_id = $user->id;
+                $delivery_booking->car_id = $available_car->id;
+                $delivery_booking->city_code = $request['hub_list'] ?? 0;
+                $delivery_booking->booking_type = 'pickup';
+                $delivery_booking->start_date = formDateTime($request['user_start_date']);
+                $delivery_booking->end_date = formDateTime($request['user_end_date']);
+                $delivery_booking->address = $request['pickup_location'] ?? '';
+                $delivery_booking->delivery_fee = $data['delivery_fee'] ?? '';
+                $delivery_booking->status = 1;
+                $delivery_booking->save();
+
+                $car_details = CarDetails::with('carModel')->find($available_car->id);
+
+                $prices = [
+                    'festival' => $car_details->carModel->peak_reason_surge ?? 0,
+                    'weekend' => $car_details->carModel->weekend_surge ?? 0,
+                    'weekday' => $car_details->carModel->price_per_hour ?? 0
+                ];
+
+                $model_price = UserController::calculatePrice($prices, showDateformat($request['user_start_date']), showDateformat($request['user_end_date']));
+                $total_price = $model_price['total_price'] + ($data['delivery_fee'] ?? 0) + ($car_details->carModel->dep_amount ?? 0);
+
+                $booking_details = new BookingDetail();
+                $booking_details->booking_id = $new_booking_id;
+                $booking_details->car_details = json_encode($car_details);
+                $booking_details->payment_details = json_encode($model_price);
+                $booking_details->save();
+
+                $payment = new Payment();
+                $payment->payment_id = 'custom_' . rand(100, 999);
+                $payment->booking_id = $new_booking_id;
+                $payment->amount = $total_price;
+                $payment->currency = 'INR';
+                $payment->customer_id = $user->id;
+                $payment->payment_status = 'complete';
+                $payment->discount = $request->discount;
+                $payment->save();
+
+                $car_available = new Available();
+                $car_available->car_id = $available_car->id;
+                $car_available->model_id = $request['user_car_model'];
+                $car_available->booking_id = $new_booking_id;
+                $car_available->register_number = $available_car->register_number;
+                $car_available->start_date = formDateTime($request['user_start_date']);
+                $car_available->end_date = formDateTime($request['user_end_date']);
+                $car_available->next_booking = Carbon::parse(formDateTime($request['user_end_date']))->addHours($data['booking_duration'] ?? 3);
+                $car_available->booking_type = 1;
+                $car_available->save();
+
+                event(new \App\Events\BookingUpdated($booking, 'created'));
+
+                DB::commit();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Booking Created successfully',
+                    'booking' => [
+                        'booking_id' => $delivery_booking->booking_id,
+                        'start_date' => $request['user_start_date'],
+                        'end_date' => $request['user_end_date']
+                    ]
+                ]);
             }
 
-            $available_car = current($car_available);
-            $general = Frontend::where('data_keys', 'general-setting')->first();
-            $data = !empty($general) && optional($general)->data_values ? json_decode($general->data_values, true) : [];
-
-            if (!($user = User::where('mobile', '=', $request['mobile'])->get()?->first())) {
-                $user = new User();
-                $user->name = $request['name'];
-                $user->mobile = $request['mobile'];
-                $user->email = $request['email'];
-                $user->aadhaar_number = $request['aadhaar_card'];
-                $user->driving_licence = $request['license_number'];
-                $user->save();
-            }
-
-            $last_booking = Booking::orderBy('id', 'desc')->first() ?? 0;
-
-            if ($last_booking) {
-                // Increment the last booking ID by 1
-                $new_booking_id = $last_booking->booking_id + 1;
-            } else {
-                // Start from 100001 if no booking exists
-                $new_booking_id = 100001;
-            }
-
-            $booking = new Booking();
-            $booking->booking_id = $new_booking_id;
-            $booking->user_id = $user->id;
-            $booking->car_id = $available_car->id;
-            $booking->city_code = $request['hub_list'] ?? 0;
-            $booking->booking_type = 'delivery';
-            $booking->start_date = formDateTime($request['user_start_date']);
-            $booking->end_date = formDateTime($request['user_end_date']);
-            $booking->address = $request['drop_location'] ?? '';
-            $booking->delivery_fee = $data['delivery_fee'] ?? '';
-            $booking->status = 1;
-            $booking->save();
-
-
-            $delivery_booking = new Booking();
-            $delivery_booking->booking_id = $new_booking_id;
-            $delivery_booking->user_id = $user->id;
-            $delivery_booking->car_id = $available_car->id;
-            $delivery_booking->city_code = $request['hub_list'] ?? 0;
-            $delivery_booking->booking_type = 'pickup';
-            $delivery_booking->start_date = formDateTime($request['user_start_date']);
-            $delivery_booking->end_date = formDateTime($request['user_end_date']);
-            $delivery_booking->address = $request['pickup_location'] ?? '';
-            $delivery_booking->delivery_fee = $data['delivery_fee'] ?? '';
-            $delivery_booking->status = 1;
-            $delivery_booking->save();
-
-            $car_details = CarDetails::with('carModel')->find($available_car->id);
-
-            $prices = ['festival' => $car_details->carModel->peak_reason_surge ?? 0,
-                'weekend' => $car_details->carModel->weekend_surge ?? 0,
-                'weekday' => $car_details->carModel->price_per_hour ?? 0];
-
-            $general = Frontend::where('data_keys', 'general-setting')->first();
-            $data = !empty($general) && optional($general)->data_values ? json_decode($general->data_values, true) : [];
-            $delivery_fee = $data['delivery_fee'] ?? 0;
-            $deposit_amount = $car_details->carModel->dep_amount ?? 0;
-
-            $model_price = UserController::calculatePrice($prices, showDateformat($request['user_start_date']), showDateformat($request['user_end_date']));
-
-            $total_price = $model_price['total_price'] + $delivery_fee + $deposit_amount;
-
-            $booking_details = new BookingDetail();
-            $booking_details->booking_id = $new_booking_id;
-            $booking_details->car_details = json_encode($car_details);
-            $booking_details->payment_details = json_encode($model_price);
-            $booking_details->save();
-
-            $payment = new Payment();
-            $payment->payment_id = 'custom_' . rand(100, 999);
-            $payment->booking_id = $new_booking_id;
-            $payment->amount = $total_price;
-            $payment->currency = 'INR';
-            $payment->customer_id = $user->id;
-            $payment->payment_status = 'complete';
-            $payment->discount = $request->discount;
-            $payment->save();
-
-
-            $car_available = new Available();
-            $car_available->car_id = $available_car->id;
-            $car_available->model_id = $request['user_car_model'];
-            $car_available->booking_id = $new_booking_id;
-            $car_available->register_number = $available_car->register_number;
-            $car_available->start_date = formDateTime($request['user_start_date']);
-            $car_available->end_date = formDateTime($request['user_end_date']);
-            $car_available->next_booking = Carbon::parse(formDateTime($request['user_end_date']))->addHours($data['booking_duration'] ?? 3);
-            $car_available->booking_type = 1;
-            $car_available->save();
-
-            # send mail and SMS to user and admin
-            event(new \App\Events\BookingUpdated($booking, 'created'));
-            // dd($delivery_booking->booking_id);
-            return response()->json(['success' => true, 'message' => 'Booking Created successfully', 'booking' => [
-                'booking_id' => $delivery_booking->booking_id,
-                'start_date' => $request['user_start_date'],
-                'end_date' => $request['user_end_date']
-            ]]);
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Booking Fail']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
-
-        return response()->json(['success' => false, 'message' => 'Booking Fail']);
     }
 
 
