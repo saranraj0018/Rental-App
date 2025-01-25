@@ -115,9 +115,6 @@
                     @endforeach
                 </select>
             </div>
-            <button type="button" class="btn btn-secondary px-2 p-1 mb-3" id="searchBtn">
-                <i class="fas fa-search" style="color: white;"></i>
-            </button>
         </form>
     </div>
 
