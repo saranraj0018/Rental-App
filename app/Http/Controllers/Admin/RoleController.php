@@ -26,7 +26,7 @@ class RoleController extends BaseController
         $user_role->user_role = ucfirst($request['role']);
         $user_role->user_id = Auth::guard('admin')->id();
         $user_role->save();
-        $user_role_list = Role::with('user')->orderBy('created_at', 'desc')->paginate(5);
+        $user_role_list = Role::with('user', 'users')->orderBy('created_at', 'desc')->paginate(5);
         $permissions = getAdminPermissions();
         return response()->json(['data'=> ['role' => $user_role_list->items(), 'pagination' => $user_role_list->links()->render()],
             'permission' =>$permissions,'success' => 'User Role saved successfully']);
@@ -39,7 +39,7 @@ class RoleController extends BaseController
         $user_permission->permissions = json_encode($request['role']);
         $user_permission->user_id = Auth::guard('admin')->id();
         $user_permission->save();
-        $user_role_list =  Role::with('user')->orderBy('created_at', 'desc')->paginate(5);
+        $user_role_list =  Role::with('user', 'users')->orderBy('created_at', 'desc')->paginate(5);
         $permissions = getAdminPermissions();
         return response()->json(['data'=> ['role' => $user_role_list->items(), 'pagination' => $user_role_list->links()->render()],
             'permission' =>$permissions,'success' => 'User Role Permissions Update Successfully']);
@@ -50,7 +50,7 @@ class RoleController extends BaseController
         $this->authorizePermission('roles_delete');
         $delete_car = Role::find($id);
         $delete_car->delete();
-        $user_role_list =  Role::with('user')->orderBy('created_at', 'desc')->paginate(5);
+        $user_role_list =  Role::with('user', 'users')->orderBy('created_at', 'desc')->paginate(5);
         $permissions = getAdminPermissions();
         return response()->json(['data'=> ['role' => $user_role_list->items(), 'pagination' => $user_role_list->links()->render()],
             'permission' =>$permissions,'success' => 'User Role Deleted Successfully']);

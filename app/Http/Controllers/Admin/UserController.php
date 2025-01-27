@@ -6,7 +6,10 @@ use App\Exports\User as ExportsUser;
 use App\Http\Controllers\BaseController;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -30,7 +33,7 @@ class UserController extends BaseController {
         return response()->json(['data'=> ['user' => $user_list->items(),'pagination' => $user_list->links()->render()]]);
 
     }
-    
+
     /**
      * Export data for History
      * @param \Illuminate\Http\Request $request
@@ -48,6 +51,64 @@ class UserController extends BaseController {
         $pdf = Pdf::loadView('admin.user.pdf', ["user" => $dataset]);
         return $pdf->download('user-export.pdf');
     }
+
+
+    public function updatePassword(Request $request): JsonResponse
+    {
+        try{
+
+            $user = \App\Models\AdminDetail::find($request->userId);
+
+            if(!$user)
+                throw new ModelNotFoundException('User Does not exists', code: 404);
+
+            $_password = Hash::make($request->password);
+
+
+            $user->update([
+                'password' => $_password
+            ]);
+
+            return response()->json([
+                'status' => 201,
+                'message' => 'Password Updated Successfully'
+            ], 201);
+        } catch(\Throwable $th) {
+
+            return response()->json([
+                'status' => $th->getCode(),
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+
+
+
+
+    public function deleteUser(Request $request) : JsonResponse
+    {
+        try{
+            $user = \App\Models\AdminDetail::find($request->userId);
+
+            if(!$user)
+                throw new ModelNotFoundException('User Does not exists', code: 404);
+
+            $user->delete();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'User Deleted Successfully'
+            ], 200);
+        } catch(\Throwable $th) {
+            return response()->json([
+                'status' => $th->getCode(),
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+
 
     /**
      * Get Data for History
