@@ -345,7 +345,7 @@
                 <p id="payment_success" class="text-success"></p>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" id="user_payment_link">Send Payment Link</button>
-                    <button type="submit" class="btn btn-primary">Save User</button>
+                    <button type="submit" id="manual_booking" class="btn btn-primary">Save User</button>
                 </div>
             </form>
         </div>

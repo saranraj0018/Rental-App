@@ -33,11 +33,11 @@ $(function () {
                 type: 'GET',
                 data: {start_date : start_date, end_date : end_date,hub_list : hub_list},
                 success: function (response) {
-                    if (response.data && response.data.length > 0) {
+                    if (response.show_all_cars && response.show_all_cars.length > 0) {
                         $('#car-list').empty();
                         $('#car-card-container').empty();
                         $('#car-swap-table').show();
-                        response.data.forEach(function (car) {
+                        response.show_all_cars.forEach(function (car) {
                             let card = `
                         <div class="card m-2" style="width: 18rem;">
                             <div class="card-body">
@@ -142,7 +142,7 @@ $(function () {
                 }
             });
         });
-        
+
            $('#history_booking_id').on('keyup', fetchData);
 
         function fetchData() {

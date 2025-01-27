@@ -39,7 +39,7 @@ class BookingConfirmedMessage implements Message {
         $_to = $this->booking->end_date;
         $_car = $this->booking?->Car?->carModel?->model_name;
 
-        return "Dear $_name, Your booking with Valam Cars has been confirmed! Booking Details: Booking ID: $_id, Drop-off Date/Time: $_from Pick-up Date/Time: $_to Car Model: $_car If you have any questions or need to make changes, please visit our website or contact customer support. Thank you for choosing Valam Cars. Drive safe and enjoy your journey! Valam Cars Team";
+        return "Dear $_name, Your booking with Valam Cars has been confirmed! Booking Details: Booking ID: $_id, Drop-off Date/Time: $_from, Pick-up Date/Time: $_to, Car Model: $_car, If you have any questions or need to make changes, please visit our website or contact customer support. Thank you for choosing Valam Cars. Drive safe and enjoy your journey! Valam Cars Team";
     }
 }
 

@@ -47,9 +47,9 @@ class PaymentController extends Controller {
         $booking->booking_type = 'delivery';
         $booking->start_date = formDateTime(session('booking_details.start_date'));
         $booking->end_date = formDateTime(session('booking_details.end_date'));
-        $booking->latitude = !empty(session('pickup.lat')) ? session('pickup.lat') : session('pick-delivery.lat');
-        $booking->longitude = !empty(session('pickup.lng')) ? session('pickup.lng') : session('pick-delivery.lng');
-        $booking->address = !empty(session('pickup.address')) ? session('pickup.address') : session('pick-delivery.address');
+        $booking->latitude = !empty(session('delivery.lat')) ? session('delivery.lat') : session('pick-delivery.lat');
+        $booking->longitude = !empty(session('delivery.lng')) ? session('delivery.lng') : session('pick-delivery.lng');
+        $booking->address = !empty(session('delivery.address')) ? session('delivery.address') : session('pick-delivery.address');
         $booking->delivery_fee = session('booking_details.delivery_fee') ?? session('delivery_fee');
         $booking->status = 1;
         $booking->payment_id = $request['payment_id'] ?? 1;
@@ -64,10 +64,9 @@ class PaymentController extends Controller {
         $delivery_booking->booking_type = 'pickup';
         $delivery_booking->start_date = formDateTime(session('booking_details.start_date'));
         $delivery_booking->end_date = formDateTime(session('booking_details.end_date'));
-        $delivery_booking->latitude = !empty(session('delivery.lat')) ? session('delivery.lat') : session('pick-delivery.lat');
-        $delivery_booking->longitude = !empty(session('delivery.lng')) ? session('delivery.lng') : session('pick-delivery.lng');
-        $delivery_booking->address = !empty(session('delivery.address')) ? session('delivery.address') : session('pick-delivery.address');
-        ;
+        $delivery_booking->latitude = !empty(session('pickup.lat')) ? session('pickup.lat') : session('pick-delivery.lat');
+        $delivery_booking->longitude = !empty(session('pickup.lng')) ? session('pickup.lng') : session('pick-delivery.lng');
+        $delivery_booking->address = !empty(session('pickup.address')) ? session('pickup.address') : session('pick-delivery.address');
         $delivery_booking->delivery_fee = session('booking_details.delivery_fee') ?? session('delivery_fee');
         $delivery_booking->status = 1;
         $delivery_booking->payment_id = $request['payment_id'] ?? 1;
@@ -81,8 +80,20 @@ class PaymentController extends Controller {
             $data = $paymentDetails;
         }
 
+        $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
+
+        $orderData = [
+            'receipt'         => 'order_rcptid_11',
+            'amount'          => $data['amount'] * 100,
+            'currency'        => 'INR',
+            'payment_capture' => 1
+        ];
+        $razorpayOrder = $api->order->create($orderData);
+        $orderId = $razorpayOrder['id'] ?? 11;
+
         $payment = new Payment();
         $payment->payment_id = $request['payment_id'];
+        $payment->order_id = $orderId ?? 0;
         $payment->booking_id = $new_booking_id;
         $payment->amount = $data['amount'];
         $payment->currency = $data['currency'];
