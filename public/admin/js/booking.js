@@ -267,10 +267,6 @@ $(function () {
                         $('#response_booking_id').text(response?.booking?.booking_id);
                         $('#response_start_date').text(response?.booking?.start_date);
                         $('#response_end_date').text(response?.booking?.end_date);
-
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 4000)
                     },
 
                     error: function(response) {

@@ -11,4 +11,6 @@ class AdminDetail extends Authenticatable
     use HasFactory;
 
 
+    protected $fillable = ['password'];
+
 }
