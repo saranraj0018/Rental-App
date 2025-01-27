@@ -80,8 +80,20 @@ class PaymentController extends Controller {
             $data = $paymentDetails;
         }
 
+        $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
+
+        $orderData = [
+            'receipt'         => 'order_rcptid_11',
+            'amount'          => $data['amount'] * 100,
+            'currency'        => 'INR',
+            'payment_capture' => 1
+        ];
+        $razorpayOrder = $api->order->create($orderData);
+        $orderId = $razorpayOrder['id'] ?? 11;
+
         $payment = new Payment();
         $payment->payment_id = $request['payment_id'];
+        $payment->order_id = $orderId ?? 0;
         $payment->booking_id = $new_booking_id;
         $payment->amount = $data['amount'];
         $payment->currency = $data['currency'];

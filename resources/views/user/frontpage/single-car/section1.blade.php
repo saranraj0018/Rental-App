@@ -287,7 +287,22 @@
 </section>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+@php
+    $api = new \Razorpay\Api\Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
+      $amount =  $total_price + $car_model->carModel->dep_amount + $delivery_fee;
+      $coupon =  session('coupon_amount') ?? 0;
+      $total = $amount - $coupon;
+    $orderData = [
+        'receipt'         => 'order_rcptid_11',
+        'amount'          => $total * 100, // Amount in paise
+        'currency'        => 'INR',
+        'payment_capture' => 1 // Auto-capture
+    ];
 
+    $razorpayOrder = $api->order->create($orderData);
+
+    $orderId = $razorpayOrder['id'] ?? 0;
+@endphp
 <script>
     // When the payment button is clicked
     $(document).on('click', '#payment', async function(e) {
@@ -332,6 +347,7 @@
             "currency": "INR",
             "name": "{{ Auth::user()->name ?? 'Customer' }}",
             "description": "{{$car_model->carModel->model_name}}",
+            "order_id": "{{$orderId}}",
             "image": "https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/razorpay-icon.png",
             "handler": function(response) {
                 let paymentData = {
