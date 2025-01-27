@@ -256,6 +256,7 @@ $(function () {
             });
 
             if (isValid) {
+                $("#manual_booking").prop("disabled", true); // Disable submit button during AJAX
                 $.ajax({
                     url: '/admin/user/save',
                     type: 'POST',
@@ -288,7 +289,7 @@ $(function () {
                         }
                     },
                     complete: function() {
-                        $('#save_holiday').prop('disabled', false);  // Re-enable the submit button
+                        $('#manual_booking').prop('disabled', false);  // Re-enable the submit button
                     }
                 });
             }

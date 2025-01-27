@@ -22,7 +22,7 @@ use Illuminate\Http\Request;
 class SwapController extends Controller
 {
 
-   
+
     public function list()
     {
 
@@ -58,7 +58,7 @@ class SwapController extends Controller
                 } elseif (!empty($booking && $booking->status==1 && $booking->booking_type == 'pickup')) {
                     $data['start_date'] = !empty($booking->reschedule_date) ? $booking->reschedule_date : $booking->start_date;
                     $data['end_date'] = !empty($booking->reschedule_date) ? $booking->reschedule_date : $booking->end_date;
-          
+
                 }
                   if (!empty($booking->car_id)){
                     $car = CarDetails::with('carModel')->find($booking->car_id);
@@ -105,14 +105,15 @@ class SwapController extends Controller
                 }
             }
             $result = !empty($data['available_cars']) ? collect($data['available_cars'])->unique('model_id')->values()->all() : [];
-            return response()->json(['data' => $result, 'success' => 'Data Fetching Successfully.']);
+            $show_all_cars = !empty($data['available_cars']) ? collect($data['available_cars'])->values()->all() : [];
+            return response()->json(['data' => $result, 'show_all_cars' => $show_all_cars, 'success' => 'Data Fetching Successfully.']);
         }
 
         return response()->json(['data' => $data, 'success' => 'Data Found.']);
     }
 
     public function swapCar(Request $request) {
-        $car_id = !empty($request['car_id']) ?$request['car_id'] : $request['old_car_id'];
+        $car_id = !empty($request['car_id']) ? $request['car_id'] : $request['old_car_id'];
         if (!empty($request['booking_id']) && !empty($car_id)) {
 
             $car_id = !empty($request['car_id']) ?$request['car_id'] : $request['old_car_id'];
@@ -127,20 +128,20 @@ class SwapController extends Controller
 
             $car_details = CarDetails::with('carModel')->find($car_id);
             BookingDetail::where('booking_id', $request['booking_id'])->update(['car_details' => json_encode($car_details)]);
-            
+
               $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
             $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
 
 
             if (!empty($request['start_date']) && !empty($request['end_date'])) {
-                
-                    $request['start_date'] = Carbon::parse($request['start_date'])->format('Y-m-d');
-                $request['end_date'] = Carbon::parse($request['end_date'])->format('Y-m-d');
+
+                    $request['start_date'] = Carbon::parse($request['start_date']);
+                $request['end_date'] = Carbon::parse($request['end_date']);
               Available::whereDate('start_date', '=', $request['start_date'])
                     ->whereDate('end_date', '=', $request['end_date'])
                     ->where('booking_id', $request['booking_id'])
                     ->delete();
-                    
+
                 $available = new Available();
                 $available->car_id = $car_id;
                 $available->model_id = $car_details->carModel->car_model_id ?? 0;
