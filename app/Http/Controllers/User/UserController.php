@@ -107,7 +107,7 @@ class UserController extends Controller
         });
         return array_merge($booking_models, $result);
     }
-    
+
     public static function showCarAvailable($start_date, $end_date, $city_id=null)
     {
         if (!empty($start_date) && !empty($end_date) && !empty($city_id)) {
@@ -244,9 +244,10 @@ class UserController extends Controller
         $request->validate([
             'aadhaar_number' => 'required|digits:12',
             'driving_licence' => 'required',
-            'documents' => 'required|array|max:2',
+            'documents' => 'nullable|array|max:2',
             'documents.*' => 'mimes:jpg,png|max:2048',
         ]);
+
         $auth_id = Auth::id() ?? 0;
         $user = User::find($auth_id);
         $user->aadhaar_number = $request['aadhaar_number'];
@@ -282,7 +283,7 @@ class UserController extends Controller
             'aadhaar_number' => 'required|digits:12',
             'driving_licence' => 'required',
             'other_documents' => 'nullable|mimes:jpg,png,pdf|max:2048',
-              
+
         ]);
         $auth_id = Auth::id() ?? 0;
         $user = User::find($auth_id);
@@ -296,7 +297,7 @@ class UserController extends Controller
         return response()->json(['success' => true, 'message' => 'User Profile updated successfully']);
 
     }
-    
+
      public function updateUserDocs(Request $request) {
         $request->validate([
             'documents' => 'required|string',
@@ -309,7 +310,7 @@ class UserController extends Controller
 
         return response()->json(['success' => true, 'message' => 'User Profile updated successfully']);
     }
-    
+
      public function updateUserDocument(Request $request)
     {
         $uniq_id =  Str::random(6);
@@ -329,7 +330,7 @@ class UserController extends Controller
         return response()->json(['success' => false, 'message' => 'User Documents updated Failed']);
 
     }
-    
+
         public function destroy($id)
     {
         if (empty($id)) {

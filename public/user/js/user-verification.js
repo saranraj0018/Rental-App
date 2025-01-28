@@ -33,12 +33,15 @@ $(function () {
     });
 
     $('#login_user').on('click', function() {
+        $('.invalid-feedback').text('');
         $('#mobileModal').modal('show');
     });
 
     $('#register_user').on('click', function() {
         $('#registerModal').modal('show');
     });
+
+
     // Send OTP form
     $('#user-otp').on('submit', function(e) {
         e.preventDefault();
@@ -53,7 +56,7 @@ $(function () {
                         $('#otpModal').modal('show');
                         $('#userPhone').text(response.phone);
                     } else {
-                        alert(response.message); // You may replace this with a modal if preferred
+                        alert(response.message);
                     }
                 },
                 error: function(xhr) {
@@ -62,8 +65,8 @@ $(function () {
             });
         }
     });
-    
-    
+
+
      $('#resend-otp').on('click', function (e) {
 
         const mobileNumber = $('#mobile_number_otp2').val();
@@ -159,6 +162,7 @@ $(function () {
                 success: function(response) {
                     if (response.success) {
                         $('#registerModal').modal('hide');
+                        $('.invalid-feedback').text('');
                         $('#mobileModal').modal('show');
                     } else {
                         alert(response.message);
@@ -243,11 +247,13 @@ $(function () {
 
     // User Registration form
     $('#user_documentation').on('submit', function(e) {
+
+
         e.preventDefault();
         const fields = [
             { id: '#aadhaar_number', condition: (val) => val === '' },
             { id: '#driving_licence', condition: (val) => val === '' },
-            { id: '#documents', condition: (val) => val === '' },
+            // { id: '#documents', condition: (val) => val === '' },
         ];
 
         let isValid = true;

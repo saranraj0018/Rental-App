@@ -4,7 +4,7 @@
             <div>
                 <div class="d-flex justify-content-between">
                     <div class="my-auto">
-                        {{--                    <button class="border-2 rounded-pill px-3 py-2 me-3 back-btn"><i class="fa fa-angle-left text-white fs-18"></i></button>--}}
+
                         <a href="{{ url()->previous() }}" class="border-2 rounded-pill px-3 py-2 me-3 back-btn">
                             <i class="fa fa-angle-left text-white fs-18"></i>
                         </a>
@@ -91,28 +91,6 @@
                             <li>Extra Km: ₹{{ $car_model->carModel->extra_km_charge }} / per KM</li>
                         </ul>
                     </div>
-                    <!--<div class="my-2">-->
-                    <!--    <p class="fs-18 fw-500">Sanitised and safe cars</p>-->
-
-                    <!--    <div class="row p-0">-->
-                    <!--        <div class="col-3 d-flex flex-column">-->
-                    <!--            <img src="{{ asset('user/img/car-booking/Vector.png') }}" alt="" class="img-fluid mx-auto my-2">-->
-                    <!--            <p class="fs-14 fw-500 text-center lh-sm">Full Car<br> Sanitization</p>-->
-                    <!--        </div>-->
-                    <!--        <div class="col-3 d-flex flex-column">-->
-                    <!--            <img src="{{ asset('user/img/car-booking/doorstep-delivery 1.png') }}" alt="" class="img-fluid mx-auto my-2">-->
-                    <!--            <p class="fs-14 fw-500 text-center lh-sm">Full Car<br> Sanitization</p>-->
-                    <!--        </div>-->
-                    <!--        <div class="col-3 d-flex flex-column">-->
-                    <!--            <img src="{{ asset('user/img/car-booking/Frame.png') }}" alt="" class="img-fluid mx-auto my-2">-->
-                    <!--            <p class="fs-14 fw-500 text-center lh-sm">Full Car<br> Sanitization</p>-->
-                    <!--        </div>-->
-                    <!--        <div class="col-3 d-flex flex-column">-->
-                    <!--            <img src="{{ asset('user/img/car-booking/Capa_1.png') }}" alt="" class="img-fluid mx-auto my-2">-->
-                    <!--            <p class="fs-14 fw-500 text-center lh-sm">Full Car<br> Sanitization</p>-->
-                    <!--        </div>-->
-                    <!--    </div>-->
-                    <!--</div>    -->
                 </div>
             </div>
             <div class="col-12 col-lg-6">

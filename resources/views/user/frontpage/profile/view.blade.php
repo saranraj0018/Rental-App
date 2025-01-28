@@ -38,12 +38,12 @@
                     </div>
                     <div class="col-12 col-lg-3">
                         <label for="name" class="fs-14 fw-500">Email Address</label>
-                        <input type="text" class=" form-control fs-14" name="user_email" id="user_mobile"
+                        <input disabled type="text" class=" form-control fs-14" name="user_email" id="user_mobile"
                             value="{{ Auth::user()->email ?? '' }}" placeholder="Enter Your Email Address">
                     </div>
                     <div class="col-12 col-lg-3">
                         <label for="name" class="fs-14 fw-500">Mobile Number</label>
-                        <input type="text" class=" form-control fs-14" name="user_mobile" id="user_mobile"
+                        <input disabled type="text" class=" form-control fs-14" name="user_mobile" id="user_mobile"
                             value="{{ Auth::user()->mobile ?? '' }}" placeholder="Enter Your Mobile Number">
                     </div>
                     <div class="col-12 col-lg-2 my-auto">
@@ -69,7 +69,7 @@
                         </div>
                         <div class="border-dotted bdr-20 p-4">
                             <label for="dl" class="fs-14 fw-500">Driving License</label>
-                            <input type="text" id="driving_licence" name="driving_licence" class="fs-14 form-control"
+                            <input type="text" disabled id="driving_licence" name="driving_licence" class="fs-14 form-control"
                                 placeholder="Driving License Number" value="{{ Auth::user()->driving_licence ?? '' }}">
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                         </div>
                         <div class="border-dotted bdr-20 p-4">
                             <label for="aadhaar" class="fs-14 fw-500">Aadhaar Number</label>
-                            <input type="number" id="aadhaar_number" name="aadhaar_number" class="fs-14 form-control"
+                            <input type="number" disabled id="aadhaar_number" name="aadhaar_number" class="fs-14 form-control"
                                 placeholder="Aadhaar Number" value="{{ Auth::user()->aadhaar_number ?? '' }}">
                         </div>
                     </div>
@@ -113,13 +113,12 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="fs-5 fw-500">Add Other Documents</h1>
                 <div>
+                    <button type="submit" class="btn btn-sm btn-primary w-10"><i class="fa fa-plus"></i>
+                        Save Documents</button>
 
                     <button @click.prevent="create" type="button" class="btn btn-sm btn-outline-primary w-10"><i
                             class="fa fa-plus"></i>
                         Add New ID</button>
-
-                    <button type="submit" class="btn btn-sm btn-primary w-10"><i class="fa fa-plus"></i>
-                        Save Documents</button>
                 </div>
             </div>
             <div class="d-flex mt-3 p-1 justify-content-start flex-wrap gap-2">
