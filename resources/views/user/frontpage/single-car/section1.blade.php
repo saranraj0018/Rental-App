@@ -85,7 +85,7 @@
                     <div class=" mt-2">
                         <ul class="fs-6 fw-500 ps-3">
 
-                           <li>Pricing Plan: Total {{!empty($car_model->carModel->per_day_km) && !empty($price_list['different_hours'])
+                            <li>Pricing Plan: Total {{!empty($car_model->carModel->per_day_km) && !empty($price_list['different_hours'])
                                     ? $car_model->carModel->per_day_km * $price_list['different_hours'] : 0 }} kms, excludes fuel</li>
                             <li>Extra Hour: ₹{{ $car_model->carModel->extra_hours_price ?? '' }} / per hour</li>
                             <li>Extra Km: ₹{{ $car_model->carModel->extra_km_charge }} / per KM</li>
@@ -133,7 +133,7 @@
                             </div>
                         </div>
                         <div >
-                           <div class="d-block d-lg-flex justify-content-evenly">
+                            <div class="d-block d-lg-flex justify-content-evenly">
                                 <div class="me-0 me-lg-1 my-auto">
                                     <div class="text-white fs-14 mb-2 text-center">Pick Date & Time </div>
                                     <div class="d-flex text-white py-2 px-4 date-pick">
@@ -226,23 +226,23 @@
                                 <input type="hidden" id="door_delivery" value="{{$general_section['delivery_fee'] ?? 0}}">
                                 <input type="hidden" id="final_amount" value="{{ session('booking_details.total_price') }}">
                                 <input type="hidden" id="additional_amount" value="{{ $delivery_fee + $car_model->carModel->dep_amount ?? 0 }}">
-                                 <div class="text-white">
+                                <div class="text-white">
                                     <input type="hidden" id="drop_address_pine">
                                     <input type="hidden" id="pickup_address_pine">
                                     <p class="fs-20 fs-mb-16 my-1">
                                         Delivery Location</p>
                                     <span id="drop_address" class="fs-14 fw-500">{{ session('delivery.address') ?? session('pick-delivery.address') ?? '' }}</span>
                                     <div id="check_delivery_location" class="{{ !empty(session('delivery.address')) || !empty(session('pick-delivery.address')) ? '' : 'd-none' }}">
-                                           <button type="button" class="input-group-text form-dates fs-16 bg-transparent border-0 font-weight-normal p-0 "
-                                                   id="delivery_location" style="color: #47ACFF !important;">Location Change</button>
-                                       </div>
+                                        <button type="button" class="input-group-text form-dates fs-16 bg-transparent border-0 font-weight-normal p-0 "
+                                                id="delivery_location" style="color: #47ACFF !important;">Location Change</button>
+                                    </div>
                                     <p class="fs-20 fs-mb-16 my-1">
                                         Return Location </p>
                                     <span id="pickup_address" class="fs-14 fw-500">{{ session('pickup.address') ?? session('pick-delivery.address') ?? '' }}</span>
                                     <div id="check_pickup_location" class="{{ !empty(session('pickup.address')) || !empty(session('pick-delivery.address')) ? '' : 'd-none' }}">
-                                    <button type="button" class="input-group-text form-dates fs-16 bg-transparent border-0 font-weight-normal p-0"
+                                        <button type="button" class="input-group-text form-dates fs-16 bg-transparent border-0 font-weight-normal p-0"
                                                 id="return_location" style="color: #47ACFF !important;">Location Change</button>
-                                                </div>
+                                    </div>
                                     <div
                                         class="mb-3 mt-3 {{ empty($general_section['show_delivery']) ? 'd-none' : 'd-flex' }}">
                                         <div>
@@ -275,8 +275,8 @@
                                 </div>
                             </div>
                             <div>
-                                    <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto ms-2" style="display:{{ Auth::check() ? 'block' : 'none' }};" id="payment">Proceed Payment</button>
-                                    <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-3 fw-600 w-100 w-md-auto"  style="display: {{ Auth::check() ? 'none' : 'block !important' }};" id="login_payment">Login To Proceed Payment</button>
+                                <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-5 fw-600 w-100 w-md-auto ms-2" style="display:{{ Auth::check() ? 'block' : 'none' }};" id="payment">Proceed Payment</button>
+                                <button type="button" class="btn bg-white rounded-pill text-blue text-center fs-16 fs-mb-14 px-3 fw-600 w-100 w-md-auto"  style="display: {{ Auth::check() ? 'none' : 'block !important' }};" id="login_payment">Login To Proceed Payment</button>
                             </div>
                         </div>
                     </form>
@@ -287,24 +287,10 @@
 </section>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-@php
-    $api = new \Razorpay\Api\Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
-      $amount =  $total_price + $car_model->carModel->dep_amount + $delivery_fee;
-      $coupon =  session('coupon_amount') ?? 0;
-      $total = $amount - $coupon;
-    $orderData = [
-        'receipt'         => 'order_rcptid_11',
-        'amount'          => $total * 100, // Amount in paise
-        'currency'        => 'INR',
-        'payment_capture' => 1 // Auto-capture
-    ];
-
-    $razorpayOrder = $api->order->create($orderData);
-
-    $orderId = $razorpayOrder['id'] ?? 0;
-@endphp
 <script>
     // When the payment button is clicked
+    import lo from "../../../../../public/admin/plugins/moment-develop/src/locale/lo.js";
+
     $(document).on('click', '#payment', async function(e) {
         let doc_verify = await verifyUserDocument();
         if (!doc_verify) {
@@ -334,52 +320,70 @@
             let message = 'You have already booked for this date. Please select a different date.';
             $('#error_message').text(message);
             $('#login_alert').modal('show');
-            return;
+              return;
         }
 
-        let coupon = $('#final_coupon_amount').val();
-        let final_amount = {{ $total_price + $car_model->carModel->dep_amount + $delivery_fee }};
-        let coupon_amount = coupon !== '' || coupon !== 0 ? coupon : 0;
-        let total = Math.round((final_amount - coupon_amount) * 100);
-        let options = {
-            "key": "{{ config('services.razorpay.key') }}", // Your Razorpay key
-            "amount":  total.toString(), // Amount in smallest currency unit (paise, for INR)
-            "currency": "INR",
-            "name": "{{ Auth::user()->name ?? 'Customer' }}",
-            "description": "{{$car_model->carModel->model_name}}",
-            "order_id": "{{$orderId}}",
-            "image": "https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/razorpay-icon.png",
-            "handler": function(response) {
-                let paymentData = {
-                    payment_id: response.razorpay_payment_id,
-                    _token: "{{ csrf_token() }}"
-                };
-                $.ajax({
-                    url: '/user/payment',
-                    method: 'POST',
-                    data: paymentData,
-                    success: function(response) {
-                        // If successful, redirect to the booking page
-                        window.location.href = '/booking/success';
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle any errors (optional)
-                        console.error('Payment failed:', error);
-                    }
-                });
-            },
-            "prefill": {
-                "name": "{{ Auth::user()->name ?? 'Customer' }}", // Prefilled customer name
-                "email": "saran@gmail.com"
-            },
-            "theme": {
-                "color": "#F37254"
+        let amount = {{ $amount =  $total_price + $car_model->carModel->dep_amount + $delivery_fee}};
+        let order_data = await generateOrderId(amount);
+            if(order_data === false || order_data === 'false') {
+                $('#payment_alert').modal('show');
+                return;
             }
-        };
-
-        let rzp = new Razorpay(options);
-        rzp.open(); // Opens Razorpay modal
+        // Trigger the Razorpay modal
+        await openRazorpayModal(order_data);
     });
+    async function openRazorpayModal(order_data) {
+        try {
+            let options = {
+                "key": "{{ config('services.razorpay.key') }}", // Razorpay Key
+                "amount": order_data.amount.toString(), // Updated amount
+                "currency": "INR",
+                "name": "{{ Auth::user()->name ?? 'Customer' }}",
+                "description": "{{$car_model->carModel->model_name}}",
+                "order_id": order_data.order_id.toString(), // Ensure the order ID is valid
+                "image": "https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/razorpay-icon.png",
+                "handler": function (response) {
+                    // Payment success handler
+                    let paymentData = {
+                        payment_id: response.razorpay_payment_id,
+                        _token: "{{ csrf_token() }}"
+                    };
+                    if (response.razorpay_payment_id) {
+                        $.ajax({
+                            url: '/user/payment',
+                            method: 'POST',
+                            data: paymentData,
+                            success: function (response) {
+                                if (response.success) {
+                                    window.location.href = '/booking/success'; // Redirect on success
+                                } else {
+                                    alert('Payment verification failed. Please try again.');
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Payment failed:', error);
+                                alert('An error occurred while processing your payment. Please try again.');
+                            }
+                        });
+                    }
+
+                },
+                "prefill": {
+                    "name": "{{ Auth::user()->name ?? 'Customer' }}",
+                    "email": "saran@gmail.com"
+                },
+                "theme": {
+                    "color": "#F37254"
+                }
+            };
+
+            let rzp = new Razorpay(options);
+            rzp.open(); // Open Razorpay modal
+        } catch (error) {
+            console.error('Error opening Razorpay modal:', error);
+            alert('Failed to initialize payment. Please try again.');
+        }
+    }
 
     async function verifyUserDocument() {
         return new Promise((resolve, reject) => {
@@ -400,6 +404,30 @@
             });
         });
     }
+
+    async function generateOrderId(amount) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: '/user/generate/order', // Replace with your actual endpoint.
+                method: 'POST',
+                data: {
+                    amount: amount, // Send the amount to the server.
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    if (response.success && response.order_id) {
+                        resolve(response); // Resolve with the order ID.
+                    } else {
+                        resolve(false);
+                    }
+                },
+                error: function() {
+                    resolve(false); // Resolve as false if an error occurs.
+                }
+            });
+        });
+    }
+
 
     async function verifyUserbooking() {
         return new Promise((resolve, reject) => {

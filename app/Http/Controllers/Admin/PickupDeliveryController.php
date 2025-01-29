@@ -464,7 +464,16 @@ class PickupDeliveryController extends BaseController {
                     'receipt' => $uniqueReceiptId, // Use the unique receipt ID
                     'reminder_enable' => true,
                     'sms_notify' => true,
-                    'email_notify' => true
+                    'email_notify' => true,
+                    'line_items' => [ // Add line items (required for invoice)
+                    [
+                        'name' => 'Car Booking',
+                        'description' => 'Payment for car booking service',
+                        'amount' => $amount,
+                        'currency' => 'INR',
+                        'quantity' => 1
+                    ]
+                ]
                 ]);
 
                 # send mail and SMS to user and admin

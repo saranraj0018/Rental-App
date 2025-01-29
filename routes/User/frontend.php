@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('user/apply-coupon', [CouponController::class, 'applyCoupon'])->name('apply.coupon');
     Route::post('user/remove-coupon', [CouponController::class, 'removeCoupon'])->name('remove.coupon');
+    Route::post('user/generate/order', [CouponController::class, 'getOrderId'])->name('get.order');
 
     // upload documents
     Route::post('user/documentation', [UserController::class, 'storeDocuments'])->name('store.documents');
@@ -39,6 +40,7 @@ Route::middleware(['auth'])->group(function () {
     Route::view('booking/success', 'user.frontpage.booking.success')->name('booking.success');
     Route::post('user/calculate-price', [PaymentController::class, 'calculatePrice'])->name('calculate.price');
     Route::post('user/complete-payment', [PaymentController::class, 'completePayment'])->name('payment.complete');
+    Route::post('user/reschedule/generate/order', [PaymentController::class, 'getRescheduleOrderId'])->name('get.reschedule.order');
     Route::post('user/booking/cancel', [PaymentController::class, 'bookingCancel'])->name('user.booking.cancel');
 
     // upload documents
