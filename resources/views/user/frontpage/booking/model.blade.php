@@ -153,58 +153,117 @@
     </div>
 </div>
 
+<div class="modal" id="payment_alert" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document"> <!-- Centering the modal -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelModalLabel">Warning</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-group d-grid">
+                    <label for="cancel-reason" class="text-center" id="payment_message_text"></label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-    $(document).on('click', '#reschedule_pay', function(e) {
-         e.preventDefault();
-    let total_price = {{ session('reschedule_total_price') ?? 0 }};
-    let bookingId = $('#booking_id').val();
+    $(document).on('click', '#reschedule_pay', async function (e) {
+        e.preventDefault();
 
-        // Initialize Razorpay payment
-        const options = {
-            "key": "{{ config('services.razorpay.key') }}", // Replace with your Razorpay API key
-            "amount": total_price * 100, // Amount is in paise
-            "currency": "INR",
-            "name": "{{Auth::user()->name}}",
-            "description": "Reschedule Delivery",
-            "handler": function (response) {
-                // On successful payment, make an AJAX request to update the booking
-                fetch(`/user/complete-payment`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({ booking_id: bookingId, payment_id: response.razorpay_payment_id })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Payment successful!');
-                            $('#reschedule_model').modal('hide');
-                            window.location.reload();
-                        } else {
-                            alert('Payment failed. Please try again.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('An error occurred while completing the payment.');
-                    });
-            },
-            "prefill": {
-                "name": "{{ Auth::user()->name }}",
-                "email": "{{ Auth::user()->email }}",
-                "contact": "{{ Auth::user()->phone }}"
-            },
-            "theme": {
-                "color": "#3399cc"
-            }
-        };
-
-        const rzp = new Razorpay(options);
-        rzp.open();
+        let order_data = await generateOrderId();
+        if (order_data === false || order_data === 'false') {
+            $('#payment_message_text').text('Payment Could not be Generate');
+            $('#payment_alert').modal('show');
+            return;
+        }
+        $('#reschedule_pay').prop('disabled', true);  // Disable submit button during AJAX
+        await openRazorpayModalReschedule(order_data);
     });
+
+    async function openRazorpayModalReschedule(order_data) {
+        try {
+            let bookingId = $('#booking_id').val();
+            let options = {
+                "key": "{{ config('services.razorpay.key') }}", // Replace with your Razorpay API key
+                "amount": order_data.amount.toString(), // Amount is in paise
+                "currency": "INR",
+                "name": "{{Auth::user()->name}}",
+                "description": "Reschedule Delivery",
+                "order_id": order_data.order_id.toString(), // Ensure the order ID is valid
+                "image": "https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/razorpay-icon.png",
+                "handler": function (response) {
+                    // On successful payment, make an AJAX request to update the booking
+                    fetch(`/user/complete-payment`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({booking_id: bookingId, payment_id: response.razorpay_payment_id})
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                $('#payment_message_text').text('Payment successful!');
+                                $('#reschedule_model').modal('hide');
+                                window.location.reload();
+                            } else {
+                                alert('');
+                                $('#payment_message_text').text('Payment failed. Please try again.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('An error occurred while completing the payment.');
+                        });
+                },
+                "prefill": {
+                    "name": "{{ Auth::user()->name }}",
+                    "email": "{{ Auth::user()->email }}",
+                    "contact": "{{ Auth::user()->phone }}"
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+
+            let rzp = new Razorpay(options);
+            rzp.open(); // Open Razorpay modal
+        } catch (error) {
+            console.error('Error opening Razorpay modal:', error);
+            alert('Failed to initialize payment. Please try again.');
+        }
+    }
+
+    async function generateOrderId() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: '/user/reschedule/generate/order', // Replace with your actual endpoint.
+                method: 'POST',
+                data: {
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    if (response.success && response.order_id) {
+                        resolve(response); // Resolve with the order ID.
+                    } else {
+                        resolve(false);
+                    }
+                },
+                error: function() {
+                    resolve(false); // Resolve as false if an error occurs.
+                }
+            });
+        });
+    }
 </script>
 

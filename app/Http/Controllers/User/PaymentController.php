@@ -133,7 +133,7 @@ class PaymentController extends Controller {
         session()->forget(['booking_details.car_id', 'booking_details.city_id',
             'booking_details.start_date', 'booking_details.end_date', 'delivery.lat',
             'delivery.lng', 'delivery.address', 'booking_details.delivery_fee',
-            'booking_details.price_list', 'booking_details.car_details', 'coupon']);
+            'booking_details.price_list', 'booking_details.car_details', 'coupon','delivery_fee','coupon_amount']);
 
         session(['booking_id' => $new_booking_id]);
         return response()->json([
@@ -294,5 +294,37 @@ class PaymentController extends Controller {
         event(new \App\Events\BookingUpdated($booking->get()->first(), 'cancelled'));
 
         return response()->json(['success' => true]);
+    }
+
+    public function getRescheduleOrderId()
+    {
+
+        $amount = session('reschedule_total_price') ?? 0;
+        if (empty($amount)) {
+            return response()->json(['success' => false, 'message' => 'Amount not reflected']);
+        }
+        $api = new \Razorpay\Api\Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
+        $orderData = [
+            'receipt'         => 'order_rcptid_' . time(),
+            'amount'          => $amount * 100, // Convert amount to paise
+            'currency'        => 'INR',
+            'payment_capture' => 1 // Auto-capture
+        ];
+        // Example: Fetch coupon value dynamically
+        try {
+            $razorpayOrder = $api->order->create($orderData);
+            $orderId = $razorpayOrder['id'];
+
+            return response()->json([
+                'success' => true,
+                'order_id' => $orderId,
+                'amount' => $amount * 100,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 }

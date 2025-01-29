@@ -259,4 +259,23 @@
             </div>
         </div>
     </div>
+
+    <div class="modal" id="payment_alert" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document"> <!-- Centering the modal -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelModalLabel">Warning</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group d-grid">
+                        <label for="cancel-reason" class="text-danger text-center">Payment Cannot Be Generate</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

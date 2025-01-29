@@ -234,7 +234,16 @@ class SwapController extends Controller
                     'receipt' => $uniqueReceiptId, // Use the unique receipt ID
                     'reminder_enable' => true,
                     'sms_notify' => true,
-                    'email_notify' => true
+                    'email_notify' => true,
+                    'line_items' => [ // Add line items (required for invoice)
+                        [
+                            'name' => 'Car Booking',
+                            'description' => 'Payment for car booking service',
+                            'amount' => $amount,
+                            'currency' => 'INR',
+                            'quantity' => 1
+                        ]
+                    ]
                 ]);
 
                 $paymentLink = $response->short_url;

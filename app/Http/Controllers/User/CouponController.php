@@ -12,7 +12,7 @@ class CouponController extends Controller
 {
     public function applyCoupon(Request $request)
     {
-        
+
          if (!Auth::check()){
             return response()->json([
                 'message' => 'please login The Account',
@@ -48,5 +48,38 @@ class CouponController extends Controller
        session()->forget('coupon_amount');
         return response()->json(['success' => true]);
     }
+
+    public function getOrderId(Request $request)
+    {
+        $request->validate([
+            'amount' => 'required|numeric|min:1',
+        ]);
+
+        $api = new \Razorpay\Api\Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
+        $total_amount = !empty(session('coupon_amount')) ? $request['amount'] - session('coupon_amount') : (int)$request['amount'];
+               $orderData = [
+            'receipt'         => 'order_rcptid_' . time(),
+            'amount'          => $total_amount * 100, // Convert amount to paise
+            'currency'        => 'INR',
+            'payment_capture' => 1 // Auto-capture
+        ];
+        // Example: Fetch coupon value dynamically
+        try {
+            $razorpayOrder = $api->order->create($orderData);
+            $orderId = $razorpayOrder['id'];
+
+            return response()->json([
+                'success' => true,
+                'order_id' => $orderId,
+                'amount' => $total_amount * 100,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
 
 }
