@@ -527,6 +527,11 @@ class PickupDeliveryController extends BaseController {
                     $user->aadhaar_number = $request['aadhaar_card'];
                     $user->driving_licence = $request['license_number'];
                     $user->save();
+                } else {
+                    $user->name = $request['name'];
+                    $user->aadhaar_number = $request['aadhaar_card'];
+                    $user->driving_licence = $request['license_number'];
+                    $user->save();
                 }
 
                 $last_booking = Booking::orderBy('id', 'desc')->first() ?? 0;
