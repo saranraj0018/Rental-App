@@ -18,7 +18,7 @@ class CarModel extends Model
     {
         return $this->hasMany(CarDocument::class, 'model_id');
     }
-    
+
      protected static function boot() {
 
         parent::boot();
@@ -63,5 +63,11 @@ class CarModel extends Model
                 "type" => 'models'
             ]);
         });
+    }
+
+
+
+    public function getDepAmountAttribute() {
+       return 0;
     }
 }

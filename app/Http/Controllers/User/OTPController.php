@@ -82,11 +82,16 @@ class OTPController extends Controller {
         return response()->json(['success' => 'true', 'message' => 'Registration successful!']);
     }
     public function verifyDocument(Request $request) {
-        // session()->forget(['pick-delivery','delivery','pickup']);
+
         $user = User::with('userDoc')->find(Auth::id());
-        if ($user->userDoc->isEmpty()) {
+
+        if(!$user->aadhaar_number || !$user->driving_licence) {
             return response()->json(['success' => false, 'message' => 'Document not found.']);
         }
+
+        // if ($user->userDoc->isEmpty()) {
+        //     return response()->json(['success' => false, 'message' => 'Document not found.']);
+        // }
 
         return response()->json(['success' => true, 'message' => 'Document is Already Verify successful!']);
     }

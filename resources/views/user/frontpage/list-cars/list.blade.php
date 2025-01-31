@@ -4,7 +4,7 @@
 @include ('user.frontpage.header')
 @include('user.frontpage.list-cars.section2')
 @include('user.frontpage.single-car.verified-model')
-@include('user.frontpage.section2')
+
 <section class="my-5">
     <div class="container">
         <div class="d-flex justify-content-between mb-3">
@@ -50,6 +50,7 @@
             <!-- TAB CONTENT-2 ENDS-->
         </div>
     </div>
+    @include('user.frontpage.section2')
 </section>
     @include('user.frontpage.footer')
 @endsection
