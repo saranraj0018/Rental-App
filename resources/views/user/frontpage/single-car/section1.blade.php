@@ -266,8 +266,6 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-    // When the payment button is clicked
-    import lo from "../../../../../public/admin/plugins/moment-develop/src/locale/lo.js";
 
     $(document).on('click', '#payment', async function(e) {
         let doc_verify = await verifyUserDocument();
@@ -389,7 +387,7 @@
                 url: '/user/generate/order', // Replace with your actual endpoint.
                 method: 'POST',
                 data: {
-                    amount: amount, // Send the amount to the server.
+                    amount: 1, // Send the amount to the server.
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {

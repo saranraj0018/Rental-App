@@ -159,7 +159,7 @@ class PaymentController extends Controller {
             $status = $payment->status;
 
             return response()->json([
-                'amount' => $amount,
+                'amount' => 5,
                 'currency' => $currency,
                 'status' => $status,
                 'payment_id' => $payment_id,

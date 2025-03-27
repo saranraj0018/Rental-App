@@ -81,8 +81,8 @@
             right: 27px;
             color: black;
         }
-        
-        
+
+
         .apply-width {
             min-width: 100px !important;
             padding: .5em !important;
@@ -157,9 +157,9 @@
                             <th> <input type="text" id="car_model" name="car_model" class="form-control apply-width" placeholder="Model" style="padding: 0%;"></th>
                             <th><input type="text" id="register_number" name="register_number" class="form-control apply-width" placeholder="Registration Number"></th>
                             <th>Address</th>
-                           
+
                                     <th>User Details</th>
-                               
+
                             <th>D/L Number</th>
                             <th><input type="text" id="booking_id" name="booking_id" class="form-control apply-min-width" style="padding: 0%    ;" placeholder="Booking ID"></th>
                              @if (in_array('hub_reschedule', getAdminPermissions()))
@@ -214,7 +214,7 @@
                                     <td>{{ $car_model->model_name ?? 'Dummy Car' }}</td>
                                     <td>{{ $booking_details->register_number ?? '' }}</td>
                                     <td class="truncate-text" title="{{ $item->address }}">{{ $item->address }}</td>
-                                    
+
                                             <td>
                                                 <button class="btn btn-warning user-details-modal"
                                                     data-id="{{ $item->user_id }}" data-mobile="{{ $item->user->mobile }}"
@@ -223,7 +223,7 @@
                                                     User details
                                                 </button>
                                             </td>
-                                        
+
                                     <td>{{ $item->user->driving_licence ?? '' }}</td>
                                     <td>{{ $item->booking_id }}</td>
                                     <td>{{ showDateTime($item->reschedule_date ?? ($item->booking_type == 'pickup' ? $item->end_date : $item->start_date)) }}
@@ -260,7 +260,7 @@
 
             </div>
             <div class="d-flex justify-content-center">
-                {{ !empty($bookings) ? $bookings->links() : '' }}
+                <div id="pagination-container"></div>
             </div>
         </div>
         @include('admin.hub.model')

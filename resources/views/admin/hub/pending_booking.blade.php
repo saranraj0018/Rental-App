@@ -81,14 +81,14 @@
             right: 27px;
             color: black;
         }
-        
+
         .apply-width {
             min-width: 100px !important;
             padding: .5em !important;
         }
 
-        
-        
+
+
     </style>
 
     <!-- Content Header (Page header) -->
@@ -232,7 +232,7 @@
 
             </div>
             <div class="d-flex justify-content-center">
-                {{ !empty($bookings) ? $bookings->links() : '' }}
+                <div id="pagination-container"></div>
             </div>
         </div>
         @include('admin.hub.model')

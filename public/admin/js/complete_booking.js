@@ -2,10 +2,10 @@ $(function () {
     'use strict'
     $(document).ready(function() {
         $('#complete_car_model, #complete_register_number, #complete_booking_id, #complete_customer_name, #complete_booking_type, #complete_hub_type').on('input change', function() {
-            fetchData();
+            fetchData(1); // Always fetch data for the first page when filters change
         });
 
-        function fetchData() {
+        function fetchData(page = 1) {
             const carModel = $('#complete_car_model').val();
             const registerNumber = $('#complete_register_number').val();
             const bookingId = $('#complete_booking_id').val();
@@ -14,7 +14,7 @@ $(function () {
             const hub_type = $('#complete_hub_type').val();
             let status = 2;
             $.ajax({
-                url: '/admin/booking/search', // Define this route in your web.php
+                url: '/admin/booking/search?page=' + page, // Define this route in your web.php
                 type: 'GET',
                 data: {
                     car_model: carModel,
@@ -27,10 +27,22 @@ $(function () {
                 },
                 success: function(response) {
                      updateBookingTable(response.data, response.permissions) // Populate table with new data
+                    updatePagination(response.data.pagination);
                 },
                 error: function() {
                     alertify.error('Something Went Wrong');
                 }
+            });
+        }
+
+        function updatePagination(pagination) {
+            $('#pagination-container').html(pagination);
+
+            // Handle click event on pagination links
+            $('#pagination-container a').off('click').on('click', function(e) {
+                e.preventDefault();
+                let page = $(this).attr('href').split('page=')[1];
+                fetchData(page);
             });
         }
 
