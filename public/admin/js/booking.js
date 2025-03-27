@@ -569,7 +569,7 @@ $(function () {
         }
 
 
-        function fetchData() {
+        function fetchData(page = 1) {
             const carModel = $('#car_model').val();
             const registerNumber = $('#register_number').val();
             const bookingId = $('#booking_id').val();
@@ -578,7 +578,7 @@ $(function () {
             const hub_type = $('#hub_type').val();
                let status = 1;
             $.ajax({
-                url: '/admin/booking/search',
+                url: '/admin/booking/search?page=' + page,
                 type: 'GET',
                 data: {
                     car_model: carModel,
@@ -591,7 +591,7 @@ $(function () {
                 },
                 success: function(response) {
                     updateBookingTable(response.data, response.permissions)
-                    updatePagination(response);
+                    updatePagination(response.data.pagination);
                 },
                 error: function(xhr) {
                     alertify.error('Something Went Wrong');
@@ -599,24 +599,18 @@ $(function () {
             });
         }
 
-        function updatePagination(data) {
-            const paginationContainer = $('#pagination');
-            paginationContainer.empty();
+        function updatePagination(pagination) {
+            $('#pagination-container').html(pagination);
 
-            // Create pagination links
-            if (data.last_page > 1) {
-                for (let i = 1; i <= data.last_page; i++) {
-                    const activeClass = (i === data.current_page) ? 'active' : '';
-                    paginationContainer.append(`
-                    <li class="page-item ${activeClass}">
-                        <a class="page-link" href="#" onclick="fetchData(${i})">${i}</a>
-                    </li>
-                `);
-                }
-            }
+            // Handle click event on pagination links
+            $('#pagination-container a').off('click').on('click', function(e) {
+                e.preventDefault();
+                let page = $(this).attr('href').split('page=')[1];
+                fetchData(page);
+            });
         }
         $('#car_model, #register_number, #booking_id, #customer_name, #booking_type, #hub_type').on('input change', function() {
-            fetchData();
+            fetchData(1);
         });
     });
 });

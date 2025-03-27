@@ -226,6 +226,8 @@
 {{--            <div class="d-flex justify-content-center">--}}
 {{--                {{ $bookings->links() }}--}}
 {{--            </div>--}}
+            <div id="pagination-container"></div>
+
         </div>
         @include('admin.hub.model')
     </section>

@@ -29,7 +29,7 @@ class CarBlockController extends BaseController
         $permissions = getAdminPermissions();
         return view('admin.cars.blocks.list',compact('car_block','car_models','car_details','city_list','permissions'));
     }
-    
+
      public function history(Request $request) {
         $car_block = CarBlockHistory::with('user')->orderBy('created_at', 'desc')->paginate(20);
         return view('admin.cars.blocks.history', compact('car_block'));
@@ -98,13 +98,13 @@ class CarBlockController extends BaseController
         $car_block->comment = $request['edit_comment'];
         $car_block->user_id = Auth::guard('admin')->id();
         $car_block->save();
-        
+
          $car_available = Available::where('booking_id', $request['block_id'])->first();
         $car_available->start_date = formDateTime($request['edit_start_date']);
         $car_available->end_date = formDateTime($request['edit_end_date']);
-        $car_available->next_booking = Carbon::parse(formDateTime($request['end_date']))->addHours($timing_setting['booking_duration'] ?? 3);
+        $car_available->next_booking = Carbon::parse(formDateTime($request['edit_end_date']))->addHours($timing_setting['booking_duration'] ?? 3);
         $car_available->save();
-        
+
         $car_block_list = CarBlock::with('user')->orderBy('created_at', 'desc')->get();
         return response()->json(['data'=> $car_block_list,'success' => 'Car blocked Update successfully']);
     }
@@ -180,7 +180,7 @@ class CarBlockController extends BaseController
             'register_number' => $register_number
         ]);
     }
-    
+
      /**
      * Export data for History
      * @param \Illuminate\Http\Request $request

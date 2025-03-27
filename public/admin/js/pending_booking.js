@@ -5,13 +5,14 @@ $(function () {
         $('#pending_car_model, #pending_register_number, #pending_booking_id, #pending_customer_name, #pending_booking_type, #pending_hub_type, #booking_history').on('input change', function() {
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(function() {
-                fetchData();
+                fetchData(1);
             }, 300); // 300ms delay
         });
 
 
 
-        function fetchData() {
+
+        function fetchData(page = 1) {
             const carModel = $('#pending_car_model').val();
             const registerNumber = $('#pending_register_number').val();
             const bookingId = $('#pending_booking_id').val();
@@ -21,7 +22,7 @@ $(function () {
             const booking_history = $('#booking_history').val();
 
             $.ajax({
-                url: '/admin/booking/pending/search', // Define this route in your web.php
+                url: '/admin/booking/pending/search?page=' + page, // Define this route in your web.php
                 type: 'GET',
                 data: {
                     car_model: carModel,
@@ -35,10 +36,23 @@ $(function () {
                 },
                 success: function(response) {
                     updateBookingTable(response.data, response.permissions)  // Populate table with new data
+                    console.log(response.data.pagination)
+                    updatePagination(response.data.pagination);
                 },
                 error: function(xhr) {
                     alertify.error('Something Went Wrong');
                 }
+            });
+        }
+
+        function updatePagination(pagination) {
+            $('#pagination-container').html(pagination);
+
+            // Handle click event on pagination links
+            $('#pagination-container a').off('click').on('click', function(e) {
+                e.preventDefault();
+                let page = $(this).attr('href').split('page=')[1];
+                fetchData(page);
             });
         }
         $('#pending_table').on('click', '.user-details-modal', function() {
@@ -144,7 +158,7 @@ $(function () {
                 success: function(response) {
                     $('#cancelModal').modal('hide');
                     alertify.success('Booking has been cancelled successfully.');
-                   updateBookingTable(response.data, response.permissions) 
+                   updateBookingTable(response.data, response.permissions)
                 },
                 error: function(xhr) {
                     alertify.error('Failed to cancel the booking. Please try again.');
@@ -165,7 +179,7 @@ $(function () {
                 success: function(response) {
                     if (response.data) {
                         alertify.success(response.message);
-                        updateBookingTable(response.data, response.permissions) 
+                        updateBookingTable(response.data, response.permissions)
                     } else {
                         alertify.error('Failed to update status.');
                     }
@@ -253,7 +267,7 @@ $(function () {
                     <td>${bookingDetails.register_number || ''}</td>
                     <td class="truncate-text" title="${item.address}">${item.address}</td>
                     <td>
-                        <button class="btn btn-warning user-details-modal" data-id="${item.user_id}" data-mobile="${item.user.mobile}" data-booking="${item.user.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item.user.aadhaar_number}">
+                        <button class="btn btn-warning user-details-modal" data-id="${item.user_id}" data-mobile="${item.user?.mobile || ''}" data-booking="${item.user?.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item.user?.aadhaar_number}">
                             User details
                         </button>
                     </td>

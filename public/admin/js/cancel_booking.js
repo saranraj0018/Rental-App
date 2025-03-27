@@ -2,10 +2,10 @@ $(function () {
     'use strict'
     $(document).ready(function() {
                $('#cancel_car_model, #cancel_register_number, #cancel_booking_id, #cancel_customer_name, #cancel_booking_type, #cancel_hub_type').on('input change', function() {
-            fetchData();
+            fetchData(1);
         });
 
-        function fetchData() {
+        function fetchData(page= 1) {
             const carModel = $('#cancel_car_model').val();
             const registerNumber = $('#cancel_register_number').val();
             const bookingId = $('#cancel_booking_id').val();
@@ -14,7 +14,7 @@ $(function () {
                const hub_type = $('#cancel_hub_type').val();
             let status = 3;
             $.ajax({
-                url: '/admin/booking/search', // Define this route in your web.php
+                url: '/admin/booking/search?page=' + page,
                 type: 'GET',
                 data: {
                     car_model: carModel,
@@ -27,13 +27,23 @@ $(function () {
                 },
                 success: function(response) {
                     updateBookingTable(response.data,response.permissions) // Populate table with new data
+                    updatePagination(response.data.pagination);
                 },
                 error: function(xhr) {
                     alertify.error('Something Went Wrong');
                 }
             });
         }
+        function updatePagination(pagination) {
+            $('#pagination-container').html(pagination);
 
+            // Handle click event on pagination links
+            $('#pagination-container a').off('click').on('click', function(e) {
+                e.preventDefault();
+                let page = $(this).attr('href').split('page=')[1];
+                fetchData(page);
+            });
+        }
         $('#cancel_booking_table').on('click', '.user-details-modal', function() {
             $('#user_mobile').val($(this).data('mobile'));
             $('#user_aadhaar').val($(this).data('aadhaar_number'));

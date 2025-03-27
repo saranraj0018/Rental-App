@@ -342,7 +342,7 @@ class PickupDeliveryController extends BaseController {
                 ->where('status', $request['status']);
 
             $bookings = $booking->paginate($perPage);
-            return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Data Fetch successfully']);
+            return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->toHtml()], 'message' => 'Data Fetch successfully']);
 
         }
 
@@ -738,7 +738,7 @@ class PickupDeliveryController extends BaseController {
         }
         // Paginate the results
         $bookings = $query->paginate($perPage);
-        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Data Fetch successfully']);
+        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->toHtml()], 'message' => 'Data Fetch successfully']);
 
     }
 
@@ -750,7 +750,7 @@ class PickupDeliveryController extends BaseController {
 
         Booking::find($request['booking_id'])->update(['status' => 1]);
         $bookings = Booking::with(['user', 'details', 'comments', 'user.bookings'])->where('status', 2)->paginate(20);
-        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Data Fetch successfully']);
+        return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->toHtml()], 'message' => 'Data Fetch successfully']);
     }
 
     public function bookingCancelList() {
