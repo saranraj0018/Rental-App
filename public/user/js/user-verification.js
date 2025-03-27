@@ -13,6 +13,7 @@ $(function () {
         }
     }
 
+
     function handleAjaxErrors(xhr, fieldId) {
         const field = $(fieldId);
         field.removeClass('is-invalid');
@@ -40,6 +41,9 @@ $(function () {
     $('#register_user').on('click', function() {
         $('#registerModal').modal('show');
     });
+
+
+
 
 
     // Send OTP form
@@ -140,6 +144,11 @@ $(function () {
         // $('#user_document').modal('show');
     });
 
+
+
+
+
+
     // User Registration form
     $('#user_registration').on('submit', function(e) {
         e.preventDefault();
@@ -160,14 +169,17 @@ $(function () {
                 method: 'POST',
                 data: $(this).serialize(),
                 success: function(response) {
+
                     if (response.success) {
                         $('#registerModal').modal('hide');
                         $('.invalid-feedback').text('');
                         $('#mobileModal').modal('show');
+                       
                     } else {
-                        alert(response.message);
+                       //
                     }
                 },
+
                 error: function(response) {
                     if (response.responseJSON && response.responseJSON.errors) {
                         let errors = response.responseJSON.errors;
@@ -175,11 +187,7 @@ $(function () {
                         $('.invalid-feedback').empty();
                         $.each(errors, function (key, value) {
                             let element = $('#' + key);
-                            // For other form controls
                             element.addClass('is-invalid');
-                            console.log(value[0])
-                            console.log(key)
-                            // Display the error message
                             element.siblings('.invalid-feedback').text(value[0]);
                         });
                     }

@@ -18,6 +18,9 @@ Route::get('/book/{model_id?}', [UserController::class, 'bookingCar'])->name('bo
 Route::post('user/send-otp', [OTPController::class, 'sendOTP'])->name('send.otp');
 Route::post('user/verify-otp', [OTPController::class, 'verifyOtp'])->name('verify.otp');
 Route::post('user/register', [OTPController::class, 'register'])->name('register');
+Route::get('auth/google', [\App\Http\Controllers\OAuthController::class, 'redirectToGoogle']);
+Route::get('google-redirect', [\App\Http\Controllers\OAuthController::class, 'handleGoogleCallback']);
+
 Route::get('user/check-auth', function () {
     return response()->json(['isAuthenticated' => auth()->check()]);
 });

@@ -43,5 +43,9 @@ return [
         'secret_key' => env('RAZORPAY_SECRET'),
     ],
 
-
+    'google' => [
+        'client_id' => "521508854715-cs443gjv7cl491lmlto1iiscv5rhrbpa.apps.googleusercontent.com",
+        'client_secret' => "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",
+        'redirect' => "http://127.0.0.1:8000/google-redirect",
+    ],
 ];
