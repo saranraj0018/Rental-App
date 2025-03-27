@@ -44,8 +44,8 @@ return [
     ],
 
     'google' => [
-        'client_id' => "521508854715-cs443gjv7cl491lmlto1iiscv5rhrbpa.apps.googleusercontent.com",
-        'client_secret' => "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",
+        'client_id' => env('OAUTH_CLIENT_ID'),
+        'client_secret' => env('OAUTH_CLIENT_SECRET'),
         'redirect' => "http://127.0.0.1:8000/google-redirect",
     ],
 ];
