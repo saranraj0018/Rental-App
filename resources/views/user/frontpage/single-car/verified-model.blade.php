@@ -13,6 +13,14 @@
                 this.otpResend = false;
             }
         }, 1000);
+    },
+
+
+    init() {
+        Alpine.nextTick(() => {
+            const googleRegisterData = @js(session()->exists('google_register_data') ? session()->get('google_register_data') : null);
+            googleRedirectAction(googleRegisterData)
+        })
     }
 
 }">
@@ -164,7 +172,15 @@
                                         Please enter the Mobile Number.
                                     </div>
                                 </div>
+                              
                                 <button type="submit" class="btn my-button next-button w-100">Register</button>
+
+                                <div id="google_button">
+                                    <a href="{{ url('auth/google') }}"  class="mt-5 btn btn-light border d-flex align-items-center justify-content-center" style="gap: 8px; padding: 10px; text-decoration: none;">
+                                        <i class="fab fa-google"></i>
+                                        <span>Sign in with Google</span>
+                                    </a>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -172,6 +188,9 @@
             </div>
         </div>
     </div>
+
+
+ 
 
     {{-- User Document upload --}}
 
@@ -279,3 +298,5 @@
         </div>
     </div>
 </div>
+
+

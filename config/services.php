@@ -43,5 +43,9 @@ return [
         'secret_key' => env('RAZORPAY_SECRET'),
     ],
 
-
+    'google' => [
+        'client_id' => env('OAUTH_CLIENT_ID'),
+        'client_secret' => env('OAUTH_CLIENT_SECRET'),
+        'redirect' => "http://127.0.0.1:8000/google-redirect",
+    ],
 ];
