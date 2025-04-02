@@ -56,10 +56,10 @@ class CouponController extends Controller
         ]);
 
         $api = new \Razorpay\Api\Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
-        $total_amount = !empty(session('coupon_amount')) ? $request['amount'] - session('coupon_amount') : (int)$request['amount'];
+        $total_amount = round($request['amount'] * 100);
                $orderData = [
             'receipt'         => 'order_rcptid_' . time(),
-            'amount'          => $total_amount * 100, // Convert amount to paise
+            'amount'          => $total_amount, // Convert amount to paise
             'currency'        => 'INR',
             'payment_capture' => 1 // Auto-capture
         ];

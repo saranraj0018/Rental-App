@@ -15,14 +15,15 @@ $(function () {
                 success: function (response) {
                     let coupon_amount = response.final_amount ?? 0;
                     let total_amount = final_amount - coupon_amount;
-                      if (response.message) {
+                    const deliveryFee = parseFloat($("#door_delivery").val());
+                    if (response.message) {
                           $('#mobileModal').modal('show');
                         return;
                     }
                     if (response.valid) {
                         $('#discount_text').text(`Coupon Applied Successfully: ${response.code}%`);
                          $('#coupon_message').removeClass('d-none').addClass('d-flex');
-                        $('#total_price').text(total_amount + additional_amount);
+                         $('#total_price').text(total_amount + additional_amount + deliveryFee);
                         $('#coupon_amount').text(coupon_amount);
                         $('#final_coupon_amount').val(coupon_amount);
                         $('#coupon_code').val(` `);
@@ -47,6 +48,7 @@ $(function () {
         $(document).on('click', '.remove-coupon', function () {
             let final_amount = parseFloat($('#final_amount').val());
             let additional_amount = parseFloat($('#additional_amount').val());
+            let is_delivery = parseFloat($('#is_delivery').val());
             $.ajax({
                 url: '/user/remove-coupon', // Define the route for removing the coupon
                 type: 'POST',
@@ -55,7 +57,7 @@ $(function () {
                     $('#discount_text').text(``);
                     $('#coupon_code').val(` `);
                     $('#coupon_message').addClass('d-none').removeClass('d-flex');
-                    $('#total_price').text(final_amount + additional_amount);
+                    $('#total_price').text(final_amount + additional_amount + is_delivery);
                 },
                 error: function () {
                     alert('Failed to remove the coupon.');
@@ -146,7 +148,7 @@ $(function () {
             $('#cancel_booking_id').val($(this).data('booking_id'));
             $('#cancel_booking').modal('show');
         });
-        
+
            $(document).on('click', '#close_pop', function () {
             $('#reschedule_model').modal('hide');
         });
