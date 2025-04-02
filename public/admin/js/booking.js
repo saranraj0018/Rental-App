@@ -388,6 +388,9 @@ $(function () {
 
         $('#booking_table').on('click', '.amount-modal', function() {
             let total = $(this).data('week_days_amount') + $(this).data('week_end_amount') + $(this).data('festival_amount');
+
+            console.log($(this).data());
+
             $('#booking_id').val($(this).data('id'));
             $('#week_days_amount').text($(this).data('week_days_amount'));
             $('#week_end_amount').text($(this).data('week_end_amount'));
@@ -395,7 +398,8 @@ $(function () {
             $('#modal_base_fare').text(total ?? 0);
             $('#delivery_fee').text($(this).data('delivery_fee'));
             $('#dep_fee').text($(this).data('dep_fee'));
-            // $('#coupon').text($(this).data('coupon'));
+            $('#coupon').text($(this).data('coupon'));
+            $('#manual_discount').text($(this).data('manual_discount'));
             // $('#type').val($(this).data('type'));
             $('#amount_modal').modal('show');
         });
@@ -458,17 +462,19 @@ $(function () {
         function updateBookingTable(data,permissions) {
             let tbody = $('#booking_table tbody');
             tbody.empty(); // Clear existing rows
+       
 
             if (data.bookings.length === 0) {
                 tbody.append(`<tr><td colspan="15" class="text-center">Record Not Found</td></tr>`);
             } else {
                 $.each(data.bookings, function(index, item) {
+                    console.log(item);
                     // Parse booking details and payment details if they exist
                     let bookingDetails = (item.details && item.details.length > 0)
-                        ? JSON.parse(item.details[0].car_details || '{}')
+                        ? JSON.parse(item.details?.[0].car_details || '{}')
                         : {};
                     let paymentDetails = (item.details && item.details.length > 0)
-                        ? JSON.parse(item.details[0].payment_details || '{}')
+                        ? JSON.parse(item.details?.[0].payment_details || '{}')
                         : {};
 
                     let carModel = bookingDetails.car_model || {};
@@ -502,6 +508,7 @@ $(function () {
                         <input type="checkbox" class="done-checkbox" data-id="${item.id}" ${item.status == 2 ? 'checked' : ''}>
                     </td>
                     ` : ''}
+
                     <td>${mainDate}<br>${rescheduleDate}</td>
                     <td>${item?.user ? item?.user?.name : ''}</td>
                     <td>${item.user ? item.user.mobile : ""}</td>
@@ -509,7 +516,7 @@ $(function () {
                     <td>${bookingDetails.register_number || ''}</td>
                     <td class="truncate-text" title="${item.address}">${item.address}</td>
                     <td>
-                        <button class="btn btn-warning user-details-modal" data-id="${item?.user_id}" data-mobile="${item?.user?.mobile}" data-booking="${item?.user?.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item?.user?.aadhaar_number}">
+                        <button class="btn btn-warning user-details-modal" data-id="${item?.user_id}" data-mobile="${item?.user?.mobile}" data-booking="${item?.user?.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item?.user?.aadhaar_number}" >
                             User details
                         </button>
                     </td>
@@ -528,7 +535,7 @@ $(function () {
                     </td>
                     <td>${carModel.dep_amount || 0}</td>
                     <td>
-                        <button class="btn btn-warning amount-modal" data-id="${item.booking_id}" data-week_days_amount="${paymentDetails.week_days_amount || 0}" data-week_end_amount="${paymentDetails.week_end_amount || 0}" data-festival_amount="${paymentDetails.festival_amount || 0}" data-delivery_fee="${item.delivery_fee || ''}" data-dep_fee="${carModel.dep_amount || ''}" data-coupon="${item.coupon ? item.coupon.discount : ''}" data-type="${item.coupon ? item.coupon.type : ''}">
+                        <button class="btn btn-warning amount-modal" data-id="${item.booking_id}" data-week_days_amount="${paymentDetails.week_days_amount || 0}" data-week_end_amount="${paymentDetails.week_end_amount || 0}" data-festival_amount="${paymentDetails.festival_amount || 0}" data-delivery_fee="${item.delivery_fee || ''}" data-dep_fee="${carModel.dep_amount || ''}" data-coupon="${item.details?.[0].coupon ? JSON.parse(item.details?.[0].coupon).discount : '0'}" data-type="${item.details?.[0].coupon ? JSON.parse(item.details?.[0].coupon).type : ''}" data-manual_discount="${item?.payment?.discount ? item?.payment?.discount : 0 }" >
                             Amount Details
                         </button>
                     </td>

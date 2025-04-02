@@ -30,6 +30,9 @@ class PaymentController extends Controller {
 
     // Store booking details
     public function orderBooking(Request $request) {
+
+        dd(1);
+        
         $last_booking = Booking::orderBy('id', 'desc')->first() ?? 0;
 
         if ($last_booking) {
@@ -75,11 +78,13 @@ class PaymentController extends Controller {
         $paymentDetails = $this->getPaymentDetails($request['payment_id']);
 
         if ($paymentDetails instanceof \Illuminate\Http\JsonResponse) {
-            $data = $paymentDetails->getData(true); // Get as array
+            $data = $paymentDetails->getData(true);
         } else {
             $data = $paymentDetails;
         }
 
+
+        
         $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
 
         $orderData = [
@@ -159,7 +164,7 @@ class PaymentController extends Controller {
             $status = $payment->status;
 
             return response()->json([
-                'amount' => 5,
+                'amount' => $amount,
                 'currency' => $currency,
                 'status' => $status,
                 'payment_id' => $payment_id,
