@@ -118,7 +118,7 @@ input:checked+.slider:before {
 }
 
 .h-600px {
-    height: 600px;
+    height: fit-content;
 }
 
 .modal {

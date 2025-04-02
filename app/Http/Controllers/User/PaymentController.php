@@ -180,12 +180,12 @@ class PaymentController extends Controller {
     public function updateDeliveryFee(Request $request) {
         if (!empty($request['delivery_fee'])) {
             // Store the delivery fee in the session
-            session(['delivery_fee' => $request['delivery_fee']]);
-            return response()->json(['message' => 'Delivery fee added']);
+            session(['delivery_fee' => (int)$request['delivery_fee']]);
+            return response()->json(['message' => 'Delivery fee added','fee' => session('delivery_fee')]);
         } else {
             // Remove the delivery fee from the session
             session()->forget('delivery_fee');
-            return response()->json(['message' => 'Delivery fee removed']);
+            return response()->json(['message' => 'Delivery fee removed','fee' => session('delivery_fee')]);
         }
     }
 

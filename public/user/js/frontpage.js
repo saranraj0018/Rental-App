@@ -263,10 +263,8 @@ $(function () {
 
         $("#delivery_amount").on("change", function () {
             const isChecked = $(this).is(":checked");
-            const deliveryFee = isChecked
-                ? parseFloat($("#door_delivery").val())
-                : 0;
-            const finalAmount = parseFloat($("#final_amount").val());
+            const deliveryFee = parseFloat($("#door_delivery").val());
+            const finalAmount = (parseFloat($("#final_amount").val()) + parseFloat($("#additional_amount").val())) - (parseFloat($('#final_coupon_amount').val()) ?? 0);
             const toggleDivs = $(".toggle");
             const toggleFadeDiv = $(".toggle-fade");
             const toggleMarginDivs = $(".m-minus-top");
@@ -283,16 +281,18 @@ $(function () {
             // Calculate and update the total price
             const finalTotal = isChecked
                 ? finalAmount + deliveryFee
-                : finalAmount - deliveryFee;
+                : finalAmount ;
             $("#total_price").text(finalTotal);
+
 
             // Send an AJAX request to update the session
             $.ajax({
                 url: "/user/update-delivery-fee",
                 type: "POST",
-                data: { delivery_fee: deliveryFee },
+                data: {  delivery_fee: isChecked ? deliveryFee : 0 },
                 success: function (response) {
-                    console.log(response.message);
+                    let fee = response.fee ?? 0; // If response.fee is null, set it to 0
+                    $('#is_delivery').val(fee);
                 },
                 error: function (xhr) {
                     console.error("Error updating delivery fee:", xhr);

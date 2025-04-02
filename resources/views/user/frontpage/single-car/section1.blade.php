@@ -153,7 +153,7 @@
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Total base fare</p>
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{ $price_list['total_price'] ?? 0  }}</p>
                         </div>
-                        <div class="d-flex justify-content-between text-white mt-3 mb-1 border-bottom border-1 toggle {{empty($general_section['show_delivery']) ? 'show' : ''}}">
+                        <div class="d-flex justify-content-between text-white mt-3 mb-1 border-bottom border-1 toggle {{!empty(session('delivery_fee')) ? 'show' : ''}}">
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Doorstep delivery & pickup</p>
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">₹{{ $general_section['delivery_fee'] ?? 0 }}</p>
                         </div>
@@ -164,12 +164,14 @@
                         @php
                             $total_price = !empty($price_list['total_price']) ? $price_list['total_price'] : 0 ;
                             $coupon = !empty(session('coupon')) ? session('coupon') : [] ;
-                            $delivery_fee = empty($general_section['show_delivery']) && !empty( $general_section['delivery_fee'] ) ? $general_section['delivery_fee'] : session('delivery_fee') ;
-                            $sub_total_price = $total_price + $delivery_fee + $car_model->carModel->dep_amount ?? 0;
+                            $delivery_fee = !empty($general_section['delivery_fee']) ? $general_section['delivery_fee'] : 0 ;
+                            $delivery_fee_local = !empty(session('delivery_fee')) ? session('delivery_fee') : 0 ;
+                            $sub_total_price = $total_price + $car_model->carModel->dep_amount ?? 0;
 
                             $type = !empty($coupon['type']) ? $coupon['type'] : 0 ;
                             $amount = !empty($type) && $type == 2 ? $coupon['discount'] : ($type == 1 ? ($total_price * $coupon['discount']) / 100 : 0);
-                            $final_total = $sub_total_price - $amount ?? 0 ;
+                            $final_total = ($sub_total_price + session('delivery_fee')) - $amount ?? 0 ;
+
                         @endphp
                         <div class="{{!empty(session('coupon')) ? 'd-flex' : 'd-none'}} justify-content-between text-white mb-2 border-bottom border-1" id="coupon_message" >
                             <p class="fs-14 fs-mb-12 mt-2 mb-3">Coupon Amount</p>
@@ -200,10 +202,11 @@
                         <p id="discount_text" class="fs-14 fs-mb-12 mt-2 mb-3 text-success"></p>
                         <div class="mt-1 pt-2 mb-3">
                             <div class="mt-2 mt-lg-5">
-                                <input type="hidden" id="final_coupon_amount" value="{{session('coupon_amount')}}">
+                                <input type="hidden" id="final_coupon_amount" value="{{session('coupon_amount') ?? 0}}">
                                 <input type="hidden" id="door_delivery" value="{{$general_section['delivery_fee'] ?? 0}}">
                                 <input type="hidden" id="final_amount" value="{{ session('booking_details.total_price') }}">
-                                <input type="hidden" id="additional_amount" value="{{ $delivery_fee + $car_model->carModel->dep_amount ?? 0 }}">
+                                <input type="hidden" id="is_delivery" value="{{session('delivery_fee') ?? 0}}">
+                                <input type="hidden" id="additional_amount" value="{{ $car_model->carModel->dep_amount ?? 0 }}">
                                 <div class="text-white">
                                     <input type="hidden" id="drop_address_pine">
                                     <input type="hidden" id="pickup_address_pine">
@@ -225,7 +228,7 @@
                                         class="mb-3 mt-3 {{ empty($general_section['show_delivery']) ? 'd-none' : 'd-flex' }}">
                                         <div>
                                             <label class="switch m-0">
-                                                <input type="checkbox" id="delivery_amount">
+                                                <input type="checkbox" id="delivery_amount" @if(!empty(session('delivery_fee'))) checked @endif>
                                                 <span class="slider"></span>
                                             </label>
                                         </div>
@@ -299,8 +302,18 @@
               return;
         }
 
-        let amount = {{ $amount =  $total_price + $car_model->carModel->dep_amount + $delivery_fee}};
+        let amount = {{ $amount = $total_price + $car_model->carModel->dep_amount}};
+        let delivery = $('#is_delivery').val();
+           if(delivery > 0) {
+               amount = {{ $amount = $total_price + $car_model->carModel->dep_amount + $delivery_fee}}
+           }
+        let coupon = $('#final_coupon_amount').val();
+           if(coupon > 0) {
+               amount = parseFloat(amount) - parseFloat(coupon);
+           }
+
         let order_data = await generateOrderId(amount);
+
             if(order_data === false || order_data === 'false') {
                 $('#payment_alert').modal('show');
                 return;
@@ -346,7 +359,7 @@
                 },
                 "prefill": {
                     "name": "{{ Auth::user()->name ?? 'Customer' }}",
-                    "email": "saran@gmail.com"
+                    "email": "{{ Auth::user()->email ?? null }}"
                 },
                 "theme": {
                     "color": "#F37254"
