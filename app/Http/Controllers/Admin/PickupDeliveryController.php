@@ -328,7 +328,7 @@ class PickupDeliveryController extends BaseController {
         $perPage = $request->input('per_page', 20);
 
         if (!empty($request->input('booking_id')) && !empty($request['hub_type'])) {
-            $booking = Booking::with(['user', 'details', 'comments', 'user.bookings'])
+            $booking = Booking::with(['user', 'details', 'comments', 'user.bookings', 'payment'])
                 ->where('city_code', $request['hub_type'])
                 ->where('booking_id', $request->input('booking_id'));
 

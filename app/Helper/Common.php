@@ -166,7 +166,7 @@ if (!function_exists('netty')) {
                             "Channel" => "Trans",
                             "DCS" => 0,
                             "FlashSms" => 0,
-                            "Route" => 4,
+                            "Route" => 15,
                             "PeId" => "1701173659682684250"
                         ],
 

@@ -53,7 +53,7 @@
             <ul style="font-size: .7em">
                 <li>Base fare (incl. discount for long bookings) <b>Rs. {{ $booking?->payment?->amount }}</b></li>
                 <li>Discounts: <b>Rs. {{ $booking?->payment?->discount }}</b></li>
-                <li>Doorstep delivery and pick-up charges: <b>Rs. 0.00</b></li>
+                <li>Doorstep delivery and pick-up charges: <b>Rs. {{ $booking?->delivery_fee ?? '0.00' }}</b></li>
                 <li>Fuel: <b>Rs. 0.00</b></li>
                 <li>Insurance and GST: <b>Included</b></li>
                 <li>Refundable security deposit: <b>Rs. 0</b></li>

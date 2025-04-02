@@ -136,6 +136,13 @@
                         <strong>Doorstep Delivery & Pickup:</strong> ₹<span id="delivery_fee">0</span>
                     </li>
                     <li class="list-group-item">
+                        <strong>Coupon Amount:</strong> ₹<span id="coupon">0</span>
+                    </li>
+
+                    <li class="list-group-item">
+                        <strong>Manual Discount:</strong> ₹<span id="manual_discount">0</span>
+                    </li>
+                    <li class="list-group-item">
                         <strong>Refundable Security Deposit:</strong> ₹<span id="dep_fee">0</span>
                     </li>
                     {{-- <li class="list-group-item">--}}

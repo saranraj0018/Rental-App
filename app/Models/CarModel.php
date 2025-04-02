@@ -65,9 +65,4 @@ class CarModel extends Model
         });
     }
 
-
-
-    public function getDepAmountAttribute() {
-       return 0;
-    }
 }
