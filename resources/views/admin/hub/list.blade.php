@@ -181,7 +181,9 @@
                                     $booking_payment_details = !empty($item->details[0]) ? json_decode($item->details[0]->payment_details, true) : [];
                                     $car_model = !empty($booking_details->car_model) ? $booking_details->car_model : [];
                                     $comments = !empty($item->comments) ? $item->comments : [];
+                                    $booking_coupon = json_decode($item->details[0]->coupon) ?: []
                                 @endphp
+                                
                                 <tr class="@if($item->risk == 1 && $item->status != 2) bg-light-red @elseif($item->status == 2) bg-light-green @endif">
                                     <td>  {!! $item->booking_type == 'pickup' ? '<h3>P</h3>' : '<h3>D</h3>' !!}</td>
                                       @if (in_array('hub_risk_status', getAdminPermissions()) || in_array('risk_comments', getAdminPermissions()))
@@ -238,7 +240,7 @@
                                     </td>
                                     <td>{{ $car_model->dep_amount ?? 0 }}</td>
                                     <td>
-                                        <button class="btn btn-warning amount-modal" data-id="{{ $item->booking_id }}" data-week_days_amount="{{ $booking_payment_details['week_days_amount'] ?? 0 }}" data-week_end_amount="{{ $booking_payment_details['week_end_amount'] ?? 0 }}" data-festival_amount="{{ $booking_payment_details['festival_amount'] ?? 0 }}" data-delivery_fee="{{ $item->delivery_fee ?? '' }}" data-dep_fee="{{ $car_model->dep_amount ?? '' }}" data-coupon="{{ $booking_coupon->discount ?? '' }}" data-type="{{ $booking_coupon->type ?? '' }}">
+                                        <button class="btn btn-warning amount-modal" data-id="{{ $item->booking_id }}" data-week_days_amount="{{ $booking_payment_details['week_days_amount'] ?? 0 }}" data-week_end_amount="{{ $booking_payment_details['week_end_amount'] ?? 0 }}" data-festival_amount="{{ $booking_payment_details['festival_amount'] ?? 0 }}" data-delivery_fee="{{ $item->delivery_fee ?? '' }}" data-dep_fee="{{ $car_model->dep_amount ?? '' }}" data-coupon="{{ $booking_coupon['discount'] }}" data-type="{{ $booking_coupon['type'] }}" data-manual_discount="{{ $item->payment['discount'] }}">
                                             Amount Details
                                         </button>
                                     </td>

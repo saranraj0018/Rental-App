@@ -61,6 +61,8 @@ $(function () {
             $('#delivery_fee').text($(this).data('delivery_fee'));
             $('#dep_fee').text($(this).data('dep_fee'));
             $('#amount_modal').modal('show');
+            $('#coupon').text($(this).data('coupon'));
+            $('#manual_discount').text($(this).data('manual_discount'));    
         });
 
         $('#cancel_booking_table').on('click', '.open-risk-modal', function() {
@@ -173,7 +175,7 @@ $(function () {
                     </td>
                     <td>${carModel.dep_amount || 0}</td>
                     <td>
-                        <button class="btn btn-warning amount-modal" data-id="${item.booking_id}" data-week_days_amount="${paymentDetails.week_days_amount || 0}" data-week_end_amount="${paymentDetails.week_end_amount || 0}" data-festival_amount="${paymentDetails.festival_amount || 0}" data-delivery_fee="${item.delivery_fee || ''}" data-dep_fee="${carModel.dep_amount || ''}" data-coupon="${item.coupon ? item.coupon.discount : ''}" data-type="${item.coupon ? item.coupon.type : ''}">
+                        <button class="btn btn-warning amount-modal" data-id="${item.booking_id}" data-week_days_amount="${paymentDetails.week_days_amount || 0}" data-week_end_amount="${paymentDetails.week_end_amount || 0}" data-festival_amount="${paymentDetails.festival_amount || 0}" data-delivery_fee="${item.delivery_fee || ''}" data-dep_fee="${carModel.dep_amount || ''}" data-coupon="${item.details[0].coupon ? JSON.parse(item.details[0].coupon).discount : '0'}" data-type="${item.details[0].coupon ? JSON.parse(item.details[0].coupon).type : ''}"  data-manual_discount="${item?.payment?.discount ? item?.payment?.discount : 0 }"   >
                             Amount Details
                         </button>
                     </td>
