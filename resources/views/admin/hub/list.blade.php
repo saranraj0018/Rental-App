@@ -16,6 +16,7 @@
         }
         .table-responsive .truncate-text {
             overflow: hidden;
+            font-size: .8em;
             text-overflow: ellipsis; /* Adds ellipsis (...) for overflowing text */
             max-width: 150px; /* Adjust the width as needed */
 
@@ -84,8 +85,10 @@
 
 
         .apply-width {
-            min-width: 100px !important;
+            min-width: 50px !important;
             padding: .5em !important;
+            font-size: .9em;
+            padding: .5em !important; 
         }
 
     </style>
@@ -137,38 +140,38 @@
                     </div>
                 </div>
                 <div class="card-body table-responsive p-0">
-                    <table id="booking_table" class="table table-hover text-nowrap">
+                    <table id="booking_table" class="table table-bordered table-hover text-nowrap">
                         <thead>
                         <tr>
-                            <th>Booking<br>Type</th>
+                            <th  style="font-size: .7em">Booking<br>Type</th>
                              @if (in_array('hub_risk_status', getAdminPermissions()) || in_array('hub_risk_comments', getAdminPermissions()))
-                                    <th>Risk</th>
+                                    <th  style="font-size: .7em">Risk</th>
                                 @endif
 
                                 @if (in_array('hub_risk_status', getAdminPermissions()))
-                                    <th>Done</th>
+                                    <th  style="font-size: .7em">Done</th>
                                 @endif
 
-                            <th>Time</th>
+                            <th style="font-size: .7em">Time</th>
                             <th>
                                 <input type="text" id="customer_name" name="customer_name" class="form-control apply-width" placeholder="Name">
                             </th>
-                             <th>Mobile Number</th>
-                            <th> <input type="text" id="car_model" name="car_model" class="form-control apply-width" placeholder="Model" style="padding: 0%;"></th>
-                            <th><input type="text" id="register_number" name="register_number" class="form-control apply-width" placeholder="Registration Number"></th>
-                            <th>Address</th>
+                             <th  style="font-size: .7em">Mobile Number</th>
+                            <th  style="font-size: .7em"> <input type="text" id="car_model" name="car_model" class="form-control apply-width" placeholder="Model" style="padding: 0%;"></th>
+                            <th  style="font-size: .7em"><input type="text" id="register_number" name="register_number" class="form-control apply-width" placeholder="Registration Number"></th>
+                            <th  style="font-size: .7em">Address</th>
 
-                                    <th>User Details</th>
+                                    <th  style="font-size: .7em">User Details</th>
 
-                            <th>D/L Number</th>
-                            <th><input type="text" id="booking_id" name="booking_id" class="form-control apply-min-width" style="padding: 0%    ;" placeholder="Booking ID"></th>
+                            <th  style="font-size: .7em">D/L Number</th>
+                            <th  style="font-size: .7em"><input type="text" id="booking_id" name="booking_id" class="form-control" style="padding: 0%; min-width: 60px !important; font-size: .9em;" placeholder="Booking ID"></th>
                              @if (in_array('hub_reschedule', getAdminPermissions()))
-                                    <th>Reschedule</th>
+                                    <th  style="font-size: .7em">Reschedule</th>
                                 @endif
-                            <th>Security Dep</th>
-                            <th>Amount</th>
+                            <th  style="font-size: .7em">Security Dep</th>
+                            <th  style="font-size: .7em">Amount</th>
                             @if (in_array('hub_cancel_booking', getAdminPermissions()))
-                                    <th>Action</th>
+                                    <th  style="font-size: .7em">Action</th>
                                 @endif
 
                         </tr>
@@ -183,11 +186,11 @@
                                     $comments = !empty($item->comments) ? $item->comments : [];
                                     $booking_coupon = json_decode($item->details[0]->coupon) ?: []
                                 @endphp
-                                
+
                                 <tr class="@if($item->risk == 1 && $item->status != 2) bg-light-red @elseif($item->status == 2) bg-light-green @endif">
-                                    <td>  {!! $item->booking_type == 'pickup' ? '<h3>P</h3>' : '<h3>D</h3>' !!}</td>
+                                    <td style="font-size: .7em">  {!! $item->booking_type == 'pickup' ? '<h3>P</h3>' : '<h3>D</h3>' !!}</td>
                                       @if (in_array('hub_risk_status', getAdminPermissions()) || in_array('risk_comments', getAdminPermissions()))
-                                    <td>
+                                    <td style="font-size: .7em">
                                          @if (in_array('hub_risk_status', getAdminPermissions()))
                                         <div class="d-flex justify-content-center">
                                             <input type="checkbox" class="risk-checkbox" data-id="{{ $item->id }}" @if($item->risk == 1) checked @endif>
@@ -208,16 +211,16 @@
                                         <input type="checkbox" class="done-checkbox" data-id="{{ $item->id }}" @if($item->status == 2) checked @endif>
                                     </td>
                                      @endif
-                                    <td>{{ $item->booking_type == 'pickup' ? showDateTime($item->end_date) :  showDateTime($item->start_date) }}<br>
+                                    <td style="font-size: .7em">{{ $item->booking_type == 'pickup' ? showDateTime($item->end_date) :  showDateTime($item->start_date) }}<br>
                                         @if(!empty($item->reschedule_date))
                                             <p class="text-danger">{{ showDateTime($item->reschedule_date) }}</p>
                                         @endif</td>
-                                    <td>{{ $item->user->name ?? '' }}</td>
-                                    <td>{{ $car_model->model_name ?? 'Dummy Car' }}</td>
-                                    <td>{{ $booking_details->register_number ?? '' }}</td>
+                                    <td style="font-size: .7em">{{ $item->user->name ?? '' }}</td>
+                                    <td style="font-size: .7em">{{ $car_model->model_name ?? 'Dummy Car' }}</td>
+                                    <td style="font-size: .7em">{{ $booking_details->register_number ?? '' }}</td>
                                     <td class="truncate-text" title="{{ $item->address }}">{{ $item->address }}</td>
 
-                                            <td>
+                                            <td style="font-size: .7em">
                                                 <button class="btn btn-warning user-details-modal"
                                                     data-id="{{ $item->user_id }}" data-mobile="{{ $item->user->mobile }}"
                                                     data-booking="{{ !empty($item->user->bookings->count()) ? $item->user->bookings->count() / 2 : 0 }}"
@@ -226,9 +229,9 @@
                                                 </button>
                                             </td>
 
-                                    <td>{{ $item->user->driving_licence ?? '' }}</td>
-                                    <td>{{ $item->booking_id }}</td>
-                                    <td>{{ showDateTime($item->reschedule_date ?? ($item->booking_type == 'pickup' ? $item->end_date : $item->start_date)) }}
+                                    <td style="font-size: .7em">{{ $item->user->driving_licence ?? '' }}</td>
+                                    <td style="font-size: .7em">{{ $item->booking_id }}</td>
+                                    <td style="font-size: .7em">{{ showDateTime($item->reschedule_date ?? ($item->booking_type == 'pickup' ? $item->end_date : $item->start_date)) }}
                                         <br>
                                          @if (in_array('hub_reschedule', getAdminPermissions()))
                                         <button class="btn btn-warning edit-booking-date" data-id="{{ $item->id }}" data-booking_type="{{$item->booking_type}}"
@@ -238,13 +241,13 @@
                                         </button>
                                          @endif
                                     </td>
-                                    <td>{{ $car_model->dep_amount ?? 0 }}</td>
-                                    <td>
+                                    <td style="font-size: .7em">{{ $car_model->dep_amount ?? 0 }}</td>
+                                    <td style="font-size: .7em">
                                         <button class="btn btn-warning amount-modal" data-id="{{ $item->booking_id }}" data-week_days_amount="{{ $booking_payment_details['week_days_amount'] ?? 0 }}" data-week_end_amount="{{ $booking_payment_details['week_end_amount'] ?? 0 }}" data-festival_amount="{{ $booking_payment_details['festival_amount'] ?? 0 }}" data-delivery_fee="{{ $item->delivery_fee ?? '' }}" data-dep_fee="{{ $car_model->dep_amount ?? '' }}" data-coupon="{{ $booking_coupon['discount'] }}" data-type="{{ $booking_coupon['type'] }}" data-manual_discount="{{ $item->payment['discount'] }}">
                                             Amount Details
                                         </button>
                                     </td>
-                                    <td>
+                                    <td style="font-size: .7em">
                                         <button class="btn btn-danger cancel_booking" data-id="{{ $item->booking_id }}">Cancel Order</button>
                                     </td>
                                 </tr>
