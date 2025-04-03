@@ -4,22 +4,24 @@ namespace App\Exports;
 
 use App\Models\Booking;
 use App\Models\CarDetailsHistory;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class CompletedBooking implements FromCollection, WithHeadings {
+class CompletedBooking implements FromCollection, WithHeadings
+{
 
 
 
-    public function __construct(public string $hub) {
-    }
+    public function __construct(public string $hub) {}
 
 
     /**
      * Heading for the dataset
      * @return array
      */
-    public function headings(): array {
+    public function headings(): array
+    {
         return [
             'Booking Type',
             'Booking ID',
@@ -42,17 +44,28 @@ class CompletedBooking implements FromCollection, WithHeadings {
     /**
      * @return \Illuminate\Support\Collection
      */
-    public function collection() {
+    public function collection()
+    {
 
-        $booking = Booking::with(['user', 'details', 'comments', 'user.bookings','details', 'Car' ,'Car.carModel'])
+        $booking = Booking::select([
+            'booking_id',
+            DB::raw('MAX(status) as status'),
+            DB::raw('MIN(start_date) as start_date'),
+            DB::raw('MAX(end_date) as end_date'),
+            DB::raw('MAX(address) as address'),
+            DB::raw('MAX(reschedule_date) as reschedule_date'),
+            DB::raw('MAX(latitude) as latitude'),
+            DB::raw('MAX(longitude) as longitude'),
+            DB::raw('MAX(created_at) as created_at'),
+        ])
             ->where('city_code', $this->hub)
+            ->groupBy('booking_id')
             ->get();
 
-        return $booking->map(function($book) {
+        return $booking->map(function ($book) {
             return collect([
-                $book?->booking_type,
                 $book?->booking_id,
-                ($book?->status == '1' ? 'Booking': ($book?->status == '2' ? 'Completed' : 'Canceled')),
+                ($book?->status == '1' ? 'Booking' : ($book?->status == '2' ? 'Completed' : 'Canceled')),
                 \Carbon\Carbon::parse($book?->start_date)->format('d-m-Y H:i A'),
                 \Carbon\Carbon::parse($book?->end_date)->format('d-m-Y H:i A'),
                 $book?->user?->name,

@@ -468,7 +468,7 @@ $(function () {
                 tbody.append(`<tr><td colspan="15" class="text-center">Record Not Found</td></tr>`);
             } else {
                 $.each(data.bookings, function(index, item) {
-       
+                    console.log(item?.status);
                     // Parse booking details and payment details if they exist
                     let bookingDetails = (item.details && item.details.length > 0)
                         ? JSON.parse(item.details?.[0].car_details || '{}')
@@ -539,7 +539,7 @@ $(function () {
                              <i class="fa fa-wallet"></i>
                         </button>
                     </td>
-                    ${permissions.includes('hub_cancel_booking') ? `
+                    ${permissions.includes('hub_cancel_booking') && item?.status == 1 ? `
                     <td style="font-size: .8em">
                         <button style="font-size: .9em !important; padding: .8em; border:none; outline: none; border-radius: 5px" class="btn-danger cancel_booking" data-id="${item.booking_id}">
                               Cancel order
