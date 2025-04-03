@@ -79,10 +79,10 @@
                             <form id="logout-form" action="{{ route('user.logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
-                            <but href="#" class="text-decoration-none"
+                            <button style="background: transparent; border:none; outline: none; cursor: pointer" href="#" class="text-decoration-none"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="fa fa-sign-out text-white me-1 fs-5"></i>
-                            </but>
+                            </button>
                         </li>
                     </ul>
                 </div>
