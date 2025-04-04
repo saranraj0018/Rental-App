@@ -133,7 +133,8 @@ $(function () {
 
                     tbody.append(`
                 <tr class="${item.risk === 1 ? 'bg-light-red' : item.status === 2 ? 'bg-light-green' : ''}">
-                    <td>${item.booking_type === 'pickup' ? '<h2>P</h2>' : '<h2>D</h2>'}</td>
+                <td>${item.booking_type === 'pickup' ? '<h2>P</h2>' : '<h2>D</h2>'}</td>
+                <td>  ${!item.details[0].mode_of_payment ? 'N/A' : item.details[0].mode_of_payment}</td>
                      ${permissions.includes('booking_revert') ? `
                     <td>
                     ${item.status === 2 ?

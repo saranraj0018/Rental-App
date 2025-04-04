@@ -152,6 +152,7 @@
                         <thead>
                         <tr>
                             <th>Booking<br>Type</th>
+                            <th>Mode of<br>Payment</th>
                             @if (in_array('booking_revert', getAdminPermissions()))
 
                             <th>Revert</th>

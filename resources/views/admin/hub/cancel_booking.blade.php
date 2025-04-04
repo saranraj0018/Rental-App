@@ -136,6 +136,7 @@
                         <thead>
                         <tr>
                             <th>Booking<br>Type</th>
+                            <th>Mode of<br>Payment</th>
                             @if (in_array('hub_risk_status', getAdminPermissions()) || in_array('hub_risk_comments', getAdminPermissions()))
                                     <th>Risk</th>
                                 @endif

@@ -144,6 +144,7 @@
                         <thead>
                         <tr>
                             <th  style="font-size: .7em">Booking<br>Type</th>
+                            <th  style="font-size: .7em">Mode of<br>Payment</th>
                              @if (in_array('hub_risk_status', getAdminPermissions()) || in_array('hub_risk_comments', getAdminPermissions()))
                                     <th  style="font-size: .7em">Risk</th>
                                 @endif
@@ -189,6 +190,7 @@
 
                                 <tr class="@if($item->risk == 1 && $item->status != 2) bg-light-red @elseif($item->status == 2) bg-light-green @endif">
                                     <td style="font-size: .7em">  {!! $item->booking_type == 'pickup' ? '<h3>P</h3>' : '<h3>D</h3>' !!}</td>
+                                    <td style="font-size: .7em">  {!! $booking_details->mode_of_payment ?? 'N/A' !!}</td>
                                       @if (in_array('hub_risk_status', getAdminPermissions()) || in_array('risk_comments', getAdminPermissions()))
                                     <td style="font-size: .7em">
                                          @if (in_array('hub_risk_status', getAdminPermissions()))
