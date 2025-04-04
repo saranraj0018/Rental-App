@@ -15,7 +15,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends BaseController {
     public function list() {
-
         $this->authorizePermission('user_view');
 
         $user = User::with('userDoc')->orderBy('created_at', 'desc')->paginate(10);

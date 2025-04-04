@@ -95,6 +95,7 @@
                         <thead>
                         <tr>
                             <th>ID</th>
+                            <th>User Type</th>
                             <th>Name</th>
                             <th>Mobile Number</th>
                             <th>Email</th>
@@ -111,6 +112,11 @@
                             @foreach($user as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        <span class="bg-{{ $item->is_offline_booking == 0 ? 'success' : 'warning' }} text-white p-1 rounded">
+                                            {{ $item->is_offline_booking == 0 ? 'Online' : 'Offline' }}
+                                        </span>
+                                    </td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->mobile }}</td>
                                     <td>{{ $item->email ?? ''}}</td>

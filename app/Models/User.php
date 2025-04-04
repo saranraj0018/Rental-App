@@ -26,7 +26,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-         'documents'
+         'documents',
+         'is_offline_booking'
     ];
 
     /**

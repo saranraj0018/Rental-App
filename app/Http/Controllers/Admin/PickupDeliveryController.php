@@ -526,6 +526,7 @@ class PickupDeliveryController extends BaseController {
                     $user->email = $request['email'];
                     $user->aadhaar_number = $request['aadhaar_card'];
                     $user->driving_licence = $request['license_number'];
+                    $user->is_offline_booking = true;
                     $user->save();
                 } else {
                     $user->name = $request['name'];
