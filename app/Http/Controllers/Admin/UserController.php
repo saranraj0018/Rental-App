@@ -124,4 +124,34 @@ class UserController extends BaseController {
             'updated_at'
         ]);
     }
+
+
+
+    public function saveComments(Request $request) {
+
+        $request->validate([
+            'userId' => 'required|integer',
+            'comments' => 'required|string|max:255'
+        ]);
+
+        try{
+            $user = User::find($request->userId);
+
+            if(!$user)
+                throw new ModelNotFoundException('User Does not exists', code: 404);
+
+            $user->comments = $request->comments;
+            $user->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Comments saved successfully'
+            ], 200);
+        } catch(\Throwable $th) {
+            return response()->json([
+                'status' => $th->getCode(),
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
 }
