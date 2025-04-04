@@ -32,3 +32,27 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="commentModalLabel">User Comments</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" >
+                <div class="d-flex justify-content-between align-items-start gap-5">
+                    <form style="width: 100%;" @submit.prevent="submitComment">
+                            <textarea x-model="comment" class="form-control w-100" rows="3" placeholder="Add your comments here..."></textarea>
+                            <button type="submit" class="btn btn-primary mt-4" id="submitComment">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

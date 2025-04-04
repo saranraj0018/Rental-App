@@ -15,7 +15,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends BaseController {
     public function list() {
-
         $this->authorizePermission('user_view');
 
         $user = User::with('userDoc')->orderBy('created_at', 'desc')->paginate(10);
@@ -124,5 +123,35 @@ class UserController extends BaseController {
             'driving_licence',
             'updated_at'
         ]);
+    }
+
+
+
+    public function saveComments(Request $request) {
+
+        $request->validate([
+            'userId' => 'required|integer',
+            'comments' => 'required|string|max:255'
+        ]);
+
+        try{
+            $user = User::find($request->userId);
+
+            if(!$user)
+                throw new ModelNotFoundException('User Does not exists', code: 404);
+
+            $user->comments = $request->comments;
+            $user->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Comments saved successfully'
+            ], 200);
+        } catch(\Throwable $th) {
+            return response()->json([
+                'status' => $th->getCode(),
+                'message' => $th->getMessage()
+            ]);
+        }
     }
 }

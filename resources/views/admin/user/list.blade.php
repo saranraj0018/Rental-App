@@ -79,7 +79,27 @@
         <!-- /.container-fluid -->
     </section>
     <!-- Main content -->
-    <section class="content">
+    <section class="content" x-data="{
+        comment: null,
+        userId: null,
+        async submitComment() {
+            try {
+                const response = await axios.post('/admin/user/save-comments', {
+                    userId: this.userId,
+                    comments: this.comment
+                });
+                if (response.status === 200) {
+                    $('#commentModal').modal('hide');
+                    alertify.success('Comments saved successfully.');
+                } else {
+                    alertify.error('Failed to save comments.');
+                }
+
+            } catch (error) {
+                alertify.error('Failed to save comments.');
+            }
+        }
+    }">
         <!-- Default box -->
         <div class="container-fluid">
             <div class="card">
@@ -95,6 +115,7 @@
                         <thead>
                         <tr>
                             <th>ID</th>
+                            <th>User Type</th>
                             <th>Name</th>
                             <th>Mobile Number</th>
                             <th>Email</th>
@@ -111,6 +132,11 @@
                             @foreach($user as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        <span class="bg-{{ $item->is_offline_booking == 0 ? 'success' : 'warning' }} text-white p-1 rounded">
+                                            {{ $item->is_offline_booking == 0 ? 'Online' : 'Offline' }}
+                                        </span>
+                                    </td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->mobile }}</td>
                                     <td>{{ $item->email ?? ''}}</td>
@@ -118,7 +144,8 @@
                                     <td>{{ $item->driving_licence ?? '' }}</td>
                                     <td>{{ showDateTime($item->updated_at) }}</td>
                                       @if (in_array('user_view_docs', $permissions))
-                                            <td><a href="#" class="user_view text-primary w-4 h-4 mr-1"
+                                            <td>
+                                                <a href="#" class="user_view text-primary w-4 h-4 mr-1"
                                                     data-id="{{ $item->id }}"
                                                     data-images="{{ json_encode($item->userDoc->pluck('image_name')) }}"   data-documents="{{ $item->documents ?? '' }}">
                                                     <svg class="filament-link-icon w-4 h-4 mr-1"
@@ -128,6 +155,12 @@
                                                             d="M12 4.5c4.636 0 8.604 3.094 10.314 7.5-1.71 4.406-5.678 7.5-10.314 7.5S3.396 16.406 1.686 12C3.396 7.594 7.364 4.5 12 4.5zm0 2.25a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5zM12 9a3 3 0 110 6 3 3 0 010-6z" />
                                                     </svg>
                                                 </a>
+                                                <button @click="() => {
+                                                    comment = @js($item->comments);    
+                                                    userId = @js($item->id);
+                                                }" class="bg-primary rounded" data-toggle="modal" data-target="#commentModal" style="border: none; outline: none; background-color: transparent;">
+                                                    <i class="fa fa-comment"></i>
+                                                </button>
                                             </td>
                                         @endif
                                 </tr>

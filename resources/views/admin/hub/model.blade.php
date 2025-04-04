@@ -303,6 +303,7 @@
                         <div class="col-md-12 mt-3" id="price_list_section" style="display: none;" x-data="{
                             grandTotal: 0,
                             discount: 0,
+                            mode_of_payment: '',
 
                             updateTotal() {
                                 if(!isNaN(parseFloat($('#final_total_price').text()) - this.discount)) {
@@ -338,13 +339,18 @@
                                 </ul>
 
                                 <ul class="list-group col-6">
+                                    <li class="list-group-item">Mode of Payment: <input x-on:change="updateTotal"
+                                        class="form-control" id="mode_of_payment" type="text" name="mode_of_payment"
+                                        x-model="mode_of_payment" :value="mode_of_payment" placeholder="Enter payment mode"></li>
+                                        
                                     <li class="list-group-item">Discount: <input x-on:change="updateTotal"
                                             class="form-control" id="discount" type="number" name="discount"
                                             x-model="discount" :value="discount" placeholder="Fixed Eg.., 200.00"></li>
                                     <span class="text-sm p-3">* The discount will be added to the Grand Total
                                         automatically
+                                    </span>
+                                      
                                 </ul>
-                                </span>
                             </div>
                         </div>
                     </div>

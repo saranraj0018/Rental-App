@@ -242,6 +242,7 @@ $(function () {
                 { id: '#user_start_date', wrapper: true, condition: (val) => val === '' },
                 { id: '#user_end_date', wrapper: true, condition: (val) => val === '' },
                 { id: '#discount', wrapper: true, condition: (val) => val === '' },
+                { id: '#mode_of_payment', wrapper: true, condition: (val) => val === '' },
             ];
 
             fields.forEach(field => {
@@ -468,7 +469,7 @@ $(function () {
                 tbody.append(`<tr><td colspan="15" class="text-center">Record Not Found</td></tr>`);
             } else {
                 $.each(data.bookings, function(index, item) {
-                    console.log(item?.status);
+            
                     // Parse booking details and payment details if they exist
                     let bookingDetails = (item.details && item.details.length > 0)
                         ? JSON.parse(item.details?.[0].car_details || '{}')
@@ -485,10 +486,10 @@ $(function () {
                     let mainDate = item.booking_type === 'pickup'
                         ? formatDateTime(item.end_date)
                         : formatDateTime(item.start_date);
-
                     tbody.append(`
                 <tr class="${item.risk === 1 ? 'bg-light-red' : item.status === 2 ? 'bg-light-green' : ''}">
                     <td style="font-size: .8em">${item.booking_type === 'pickup' ? '<h2>P</h2>' : '<h2>D</h2>'}</td>
+                     <td style="font-size: .7em">  ${!item.details[0].mode_of_payment ? 'N/A' : item.details[0].mode_of_payment}</td>
                      ${(permissions.includes('hub_risk_status') || permissions.includes('hub_risk_comments')) ? `
                         <td style="font-size: .8em">
                             ${permissions.includes('hub_risk_status') ? `<div class="d-flex justify-content-center">

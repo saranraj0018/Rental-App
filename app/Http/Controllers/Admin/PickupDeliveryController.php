@@ -491,6 +491,7 @@ class PickupDeliveryController extends BaseController {
 
     public static function createBooking(Request $request)
     {
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
@@ -503,6 +504,7 @@ class PickupDeliveryController extends BaseController {
             'user_end_date' => 'required|date|after:user_start_date',
             'hub_list' => 'required|numeric',
             'discount' => 'required|numeric',
+            'mode_of_payment' => 'required|string|max:255',
         ]);
 
         try {
@@ -526,6 +528,7 @@ class PickupDeliveryController extends BaseController {
                     $user->email = $request['email'];
                     $user->aadhaar_number = $request['aadhaar_card'];
                     $user->driving_licence = $request['license_number'];
+                    $user->is_offline_booking = true;
                     $user->save();
                 } else {
                     $user->name = $request['name'];
@@ -578,6 +581,7 @@ class PickupDeliveryController extends BaseController {
                 $booking_details->booking_id = $new_booking_id;
                 $booking_details->car_details = json_encode($car_details);
                 $booking_details->payment_details = json_encode($model_price);
+                $booking_details->mode_of_payment = $request['mode_of_payment'];
                 $booking_details->save();
 
                 $payment = new Payment();
