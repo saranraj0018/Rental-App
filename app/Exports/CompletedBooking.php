@@ -23,7 +23,6 @@ class CompletedBooking implements FromCollection, WithHeadings
     public function headings(): array
     {
         return [
-            'Booking Type',
             'Booking ID',
             'Status',
             'Start Date',
@@ -47,7 +46,7 @@ class CompletedBooking implements FromCollection, WithHeadings
     public function collection()
     {
 
-        $booking = Booking::select([
+        $booking = Booking::with('user','Car')->select([
             'booking_id',
             DB::raw('MAX(status) as status'),
             DB::raw('MIN(start_date) as start_date'),
@@ -57,6 +56,8 @@ class CompletedBooking implements FromCollection, WithHeadings
             DB::raw('MAX(latitude) as latitude'),
             DB::raw('MAX(longitude) as longitude'),
             DB::raw('MAX(created_at) as created_at'),
+            DB::raw('MAX(user_id) as user_id'),
+            DB::raw('MAX(car_id) as car_id'),
         ])
             ->where('city_code', $this->hub)
             ->groupBy('booking_id')

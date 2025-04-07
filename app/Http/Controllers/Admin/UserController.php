@@ -145,7 +145,8 @@ class UserController extends BaseController {
 
             return response()->json([
                 'status' => 200,
-                'message' => 'Comments saved successfully'
+                'message' => 'Comments saved successfully',
+                'comments' => $request->comments
             ], 200);
         } catch(\Throwable $th) {
             return response()->json([

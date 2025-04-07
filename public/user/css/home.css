@@ -787,4 +787,10 @@ button.accordion-button.collapsed {
      width: clamp(120px, 120px, 80px) !important;
 }
 
-
+.user-logout >*:hover {
+    color: red !important;
+    transition: all .4s ease-in-out;
+}
+.user-logout {
+    transition: all .4s ease-in-out;
+}

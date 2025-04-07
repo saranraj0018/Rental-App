@@ -89,12 +89,13 @@
                     comments: this.comment
                 });
                 if (response.status === 200) {
+
                     $('#commentModal').modal('hide');
                     alertify.success('Comments saved successfully.');
                 } else {
                     alertify.error('Failed to save comments.');
                 }
-
+                setTimeout(() => window.location.reload() ,2000)
             } catch (error) {
                 alertify.error('Failed to save comments.');
             }
@@ -156,7 +157,7 @@
                                                     </svg>
                                                 </a>
                                                 <button @click="() => {
-                                                    comment = @js($item->comments);    
+                                                    comment = @js($item->comments);
                                                     userId = @js($item->id);
                                                 }" class="bg-primary rounded" data-toggle="modal" data-target="#commentModal" style="border: none; outline: none; background-color: transparent;">
                                                     <i class="fa fa-comment"></i>
