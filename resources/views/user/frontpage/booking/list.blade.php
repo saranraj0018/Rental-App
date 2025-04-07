@@ -74,7 +74,7 @@
                                                 style="display: none;">
                                                 @csrf
                                             </form>
-                                            <button style="background: transparent; border:none; outline: none; cursor: pointer" href="#" class="text-decoration-none"
+                                            <button style="background: transparent; border:none; outline: none; cursor: pointer" href="#" class="text-decoration-none user-logout"
                                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                                 <i class="fa fa-sign-out text-white me-1 fs-5"></i>
                                             </button>
