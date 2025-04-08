@@ -51,7 +51,7 @@ class SendBookingUpdateNotification {
                  * Send Mail
                  */
                 Mail::to($booking->user->email)
-                    ->bcc($admin)
+                    ->bcc([$admin, 'opscoimbatore@valamcars.com'])
                     ->send(new BookingConfirmed($booking));
 
                 break;
@@ -77,7 +77,7 @@ class SendBookingUpdateNotification {
                  * Send Mail
                  */
                 Mail::to($booking->user->email)
-                    ->bcc($admin)
+                    ->bcc([$admin, 'opscoimbatore@valamcars.com'])
                     ->send(new BookingReScheduleMail($booking));
 
 
@@ -98,7 +98,7 @@ class SendBookingUpdateNotification {
                  * Send Mail
                  */
                 Mail::to($dataset['email'])
-                    ->bcc($admin)
+                    ->bcc([$admin, 'opscoimbatore@valamcars.com'])
                     ->send(new NotifyManualBookingGeneratedMail($dataset));
 
 
@@ -126,7 +126,7 @@ class SendBookingUpdateNotification {
                  * Send Mail
                  */
                 Mail::to($booking->user->email)
-                    ->bcc($admin)
+                    ->bcc([$admin, 'opscoimbatore@valamcars.com'])
                     ->send(new BookingCancelledMail($booking));
 
 
