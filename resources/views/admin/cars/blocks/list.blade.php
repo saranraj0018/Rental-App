@@ -26,7 +26,7 @@
                 <div class="col-sm-6 text-right">
                      <a href="{{ route('car-block.history') }}" class="btn btn-primary mb-3" id="">View
                             History</a>
-                            
+
                     <button class="btn btn-primary mb-3" id="add_block">Add New Block</button>
                 </div>
                 @endif
@@ -65,6 +65,7 @@
                             <th>Created By</th>
                             <th>Comments</th>
                             <th>Car Register Number</th>
+                            <th>Hub</th>
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Action</th>
@@ -80,6 +81,7 @@
                                     <td>{{ $item->user->email ?? '' }}</td>
                                     <td>{{ $item->comment }}</td>
                                     <td>{{ $item->car_register_number }}</td>
+                                    <td>{{ $item->details->city->name }}</td>
                                     <td>{{ $item->start_date }}</td>
                                     <td>{{ $item->end_date }}</td>
                                     <td>
