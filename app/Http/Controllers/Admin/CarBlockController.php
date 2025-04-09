@@ -80,7 +80,7 @@ class CarBlockController extends BaseController
         $car_available->booking_type = $request['block_type'] == 1 ? 6 : ($request['block_type'] == 0 ? 7 : $request['block_type']);
         $car_available->save();
 
-        $car_block_list = CarBlock::with('user')->orderBy('created_at', 'desc')->get();
+        $car_block_list = CarBlock::with('user', 'details', 'details.city')->orderBy('created_at', 'desc')->get();
         return response()->json(['data'=> $car_block_list,'success' => 'Car blocked saved successfully']);
     }
 
@@ -105,7 +105,7 @@ class CarBlockController extends BaseController
         $car_available->next_booking = Carbon::parse(formDateTime($request['edit_end_date']))->addHours($timing_setting['booking_duration'] ?? 3);
         $car_available->save();
 
-        $car_block_list = CarBlock::with('user')->orderBy('created_at', 'desc')->get();
+        $car_block_list = CarBlock::with('user', 'details', 'details.city')->orderBy('created_at', 'desc')->get();
         return response()->json(['data'=> $car_block_list,'success' => 'Car blocked Update successfully']);
     }
 

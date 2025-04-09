@@ -22,7 +22,7 @@ class DashboardController extends Controller {
 
         # get available list
         $_available = Available::where('start_date', '>=', now())->pluck('car_id','id')->toArray();
-        $_blocked = CarBlock::where('start_date', '>=', now())->pluck('car_register_number')->toArray();
+        $_blocked = CarBlock::where('end_date', '>=', now())->pluck('car_register_number')->toArray();
 
         # get cars list
         $cars = CarDetails::with('city')->get()->toArray();
