@@ -22,7 +22,7 @@ class DashboardController extends Controller {
 
         # get available list
         $_available = Available::where('start_date', '>=', now())->pluck('car_id','id')->toArray();
-        $_blocked = CarBlock::where('start_date', '>=', now())->pluck('car_register_number')->toArray();
+        $_blocked = CarBlock::where('end_date', '>=', now())->pluck('car_register_number')->toArray();
 
         # get cars list
         $cars = CarDetails::with('city')->get()->toArray();
@@ -35,7 +35,6 @@ class DashboardController extends Controller {
                 "blocked" => in_array($car['register_number'], $_blocked)
             ];
         })->filter(fn($hub) => $hub["city"] != "");
-
 
         if($hub != 'all') {
             $main = $main->filter(fn($item) => $item["city"] == $hub);
@@ -63,7 +62,6 @@ class DashboardController extends Controller {
         $dataset->hubs_blocked = $dataset->hubs->map(function ($hub) {
             return $hub->filter(fn($_item) => $_item['blocked'] == true)->count();
         });
-
 
         return response()->json($dataset);
     }

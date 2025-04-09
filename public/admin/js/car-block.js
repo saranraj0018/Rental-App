@@ -187,6 +187,7 @@ $(function () {
                 let rowCount = 1;
                 // Loop through the data and append rows
                 data.forEach(item => {
+                    console.log(item);
                     tbody.append(`
                 <tr>
                     <td>${rowCount++}</td>
@@ -195,6 +196,7 @@ $(function () {
                     <td>${item.user ? item.user.email : ''}</td>
                     <td>${item.comment}</td>
                     <td>${item.car_register_number}</td>
+                    <td>${item.details.city.name}</td>
                     <td>${item.start_date}</td>
                     <td>${item.end_date}</td>
                     <td>
