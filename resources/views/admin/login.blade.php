@@ -14,17 +14,16 @@
 </head>
 <style>
     .login-page, .register-page {
-        align-items: end;
-        margin: 0 150px;
+        flex-direction: row;
     }
 </style>
 <body class="hold-transition login-page">
 
-<div class="row">
-    <div class="col-12 col-lg-8 my-auto mx-auto">
-            <img src="{{ asset('admin/img/imgpsh_fullsize_anim.png') }}" class="img-fluid">
+<div class="container my-5 row">
+    <div class="col-12 col-md-6 col-lg-8 my-auto mx-auto">
+            <img src="{{ asset('admin/img/imgpsh_fullsize_anim.png') }}" class="img-fluid d-block">
     </div>
-    <div class="col-12 col-lg-4 my-auto">
+    <div class="col-12 col-md-6 col-lg-4 my-auto">
         <div class="login-box justify-content-end">
             @include('admin.message')
             <!-- /.login-logo -->
