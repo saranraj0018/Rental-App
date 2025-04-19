@@ -109,6 +109,11 @@
                         <div class="input-group" style="width: 250px;">
                             <input type="text" id="name_search" name="keyword" class="form-control" placeholder="Search Name ....">
                         </div>
+                        <select id="user_type" class="form-control w-25">
+                            <option value="0">Select User Type</option>
+                            <option value="1">Offline</option>
+                            <option value="2">Online</option>
+                        </select>
                     </div>
                 </div>
                 <div class="card-body table-responsive p-0">
@@ -124,8 +129,8 @@
                             <th>Driving Licence</th>
                             <th>Update At</th>
                             @if (in_array('user_view_docs', $permissions))
-                                    <th>Action</th>
-                                @endif
+                                <th>Action</th>
+                            @endif
                         </tr>
                         </thead>
                         <tbody>

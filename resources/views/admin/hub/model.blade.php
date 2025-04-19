@@ -121,20 +121,23 @@
             <div class="modal-body">
                 <ul class="list-group">
                     <li class="list-group-item">
-                        <strong>Total Normal Fare:</strong> ₹<span id="week_days_amount">0</span>
+                        <strong>Week Days Fare:</strong> ₹<span id="week_days_amount">0</span>
                     </li>
                     <li class="list-group-item">
-                        <strong>Total festival Fare:</strong> ₹<span id="festival_amount">0</span>
+                        <strong>Festival Fare:</strong> ₹<span id="festival_amount">0</span>
                     </li>
                     <li class="list-group-item">
-                        <strong>Total Weekend Fare:</strong> ₹<span id="week_end_amount">0</span>
+                        <strong>Weekend Fare:</strong> ₹<span id="week_end_amount">0</span>
                     </li>
+
                     <li class="list-group-item">
-                        <strong>Total Base Fare:</strong> ₹<span id="modal_base_fare">0</span>
+                        <strong>Base Fare:</strong> ₹<span id="modal_base_fare">0</span>
                     </li>
+
                     <li class="list-group-item">
                         <strong>Doorstep Delivery & Pickup:</strong> ₹<span id="delivery_fee">0</span>
                     </li>
+
                     <li class="list-group-item">
                         <strong>Coupon Amount:</strong> ₹<span id="coupon">0</span>
                     </li>
@@ -142,12 +145,14 @@
                     <li class="list-group-item">
                         <strong>Manual Discount:</strong> ₹<span id="manual_discount">0</span>
                     </li>
+
                     <li class="list-group-item">
                         <strong>Refundable Security Deposit:</strong> ₹<span id="dep_fee">0</span>
                     </li>
-                    {{-- <li class="list-group-item">--}}
-                        {{-- <strong>Coupon Amount :</strong> ₹<span id="modal_security_deposit">0</span>--}}
-                        {{-- </li>--}}
+
+                    <li class="list-group-item">
+                        <strong>Grand Total:</strong> ₹<span id="grand_total">0</span>
+                    </li>
                 </ul>
             </div>
             <div class="modal-footer">

@@ -22,12 +22,22 @@ class UserController extends BaseController {
         return view('admin.user.list', compact('user', 'permissions'));
     }
 
+
     public function search(Request $request)
     {
         $query = User::query();
         if (!empty($request['name_search'])) {
             $query->where('name', 'like', '%' .  $request['name_search']. '%');
         }
+
+        if (!empty($request['user_type'])) {
+            if($request['user_type'] == 2) {
+                $query->where('is_offline_booking', '=', 'null');
+            } else {
+                $query->where('is_offline_booking', 1);
+            }
+        }
+
         $user_list = $query->paginate(10);
         return response()->json(['data'=> ['user' => $user_list->items(),'pagination' => $user_list->links()->render()]]);
 

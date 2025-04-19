@@ -38,32 +38,70 @@
 
         <hr />
 
+        @php
+            $prices = [ 
+                'festival' =>  $booking->Car->carModel->peak_reason_surge ?? 0,
+                'weekend' => $booking->Car->carModel->weekend_surge ?? 0,
+                'weekday' =>  $booking->Car->carModel->price_per_hour ?? 0
+            ];
+
+            $price_list = \App\Http\Controllers\User\UserController::calculatePrice($prices,session('start_date'),session('end_date'));
+            $paymentDetails = json_decode($booking->details[0]->payment_details); 
+            $coupon = json_decode($booking->details[0]->coupon); 
+        @endphp
+
         <div style="padding: .3em;  border-radius: 5px; width: 50%">
             <h5 style="padding: 0 1em; margin-bottom: 0">Payment details:</h5>
             <ul style="font-size: .7em">
-                <li>Total fare: <b>Rs. {{ ($booking?->payment?->amount - $booking?->payment?->discount) }}</b></li>
-                <li>Total paid: <b>Rs. {{ ($booking?->payment?->amount - $booking?->payment?->discount) }}</b></li>
+                <li>Total fare: <b>Rs. {{ 
+                    (isNull($paymentDetails?->week_days_amount, 0) + 
+                    isNull($paymentDetails?->week_end_amount, 0) + 
+                    isNull($paymentDetails?->festival_amount, 0) + 
+                    isNull($booking?->delivery_fee, 0) + 
+                    isNull($booking?->Car?->carModel?->dep_amount, 0)) -
+                    (isNull($coupon?->discount, 0) + isNull($booking?->payment?->discount, 0))
+                }}</b></li>
+                <li>Total paid: <b>Rs. {{ ($booking?->payment?->amount) - (isNull($coupon?->discount, 0) + isNull($booking?->payment?->discount, 0)) }}</b></li>
             </ul>
         </div>
 
+       
 
         <div style="padding: .3em;  border-radius: 5px">
-
+            
             <h5 style="padding: 0 1em; margin-bottom: 0">Fare break-up:</h5>
             <ul style="font-size: .7em">
-                <li>Base fare (incl. discount for long bookings) <b>Rs. {{ $booking?->payment?->amount }}</b></li>
-                <li>Discounts: <b>Rs. {{ $booking?->payment?->discount }}</b></li>
+                <li>Weekdays Fare <b>Rs. {{ $paymentDetails?->week_days_amount }}</b></li>
+                <li>Weekends Fare <b>Rs. {{ $paymentDetails?->week_end_amount }}</b></li>
+                <li>Festival Fare <b>Rs. {{ $paymentDetails?->festival_amount }}</b></li>
+                <li>Base fare (incl. discount for long bookings) <b>Rs. {{ 
+                    (isNull($paymentDetails?->week_days_amount, 0) + 
+                    isNull($paymentDetails?->week_end_amount, 0) + 
+                    isNull($paymentDetails?->festival_amount, 0))
+                }}</b></li>
+                
                 <li>Doorstep delivery and pick-up charges: <b>Rs. {{ $booking?->delivery_fee ?? '0.00' }}</b></li>
-                <li>Fuel: <b>Rs. 0.00</b></li>
+                <li>Discounts: <b>Rs. {{ isNull($coupon?->discount, 0) +
+                        isNull($booking?->payment?->discount, 0) }}</b></li>
+                <li>Refundable security deposit: <b>Rs. {{ $booking?->Car?->carModel?->dep_amount }}</b></li>
+                <li>Grand Total: <b> Rs. {{ 
+                    (isNull($paymentDetails?->week_days_amount, 0) + 
+                    isNull($paymentDetails?->week_end_amount, 0) + 
+                    isNull($paymentDetails?->festival_amount, 0) + 
+                    isNull($booking?->delivery_fee, 0) + 
+                    isNull($booking?->Car?->carModel?->dep_amount, 0)) -
+                    (isNull($coupon?->discount, 0) + isNull($booking?->payment?->discount, 0))
+                }}</b></li>
+                
+                <br />
+                <br />
                 <li>Insurance and GST: <b>Included</b></li>
-                <li>Refundable security deposit: <b>Rs. 0</b></li>
-                <li>Add-on charges: <b>Rs. 0.00</b></li>
-                <li>Add-on charges: <b>Rs. 0.00</b></li>
-                <br />
-                <br />
-                <li>Pricing plan: <b>13 Kms/Hr</b></li>
-                <li>Kms limit: <b>{{ $booking->Car->carModel->per_day_km }}</b></li>
+                
+                
+                <li>Pricing plan: <b>{{ !empty($booking->Car->carModel->per_day_km) && !empty($price_list['different_hours'])
+    ? $booking->Car->carModel->per_day_km * $price_list['different_hours'] : 0 }} Kms/Hr</b></li>
                 <li>Extra Kilometres charge: <b>{{ $booking->Car->carModel->extra_km_charge }}</b></li>
+                <li>Extra Hour charge: <b>{{ $booking->Car->carModel->extra_hours_price }}</b></li>
 
             </ul>
         </div>

@@ -71,7 +71,10 @@ class OTPController extends Controller {
             'user_name' => 'required|string|max:255',
             'user_email' => 'required|email|unique:users,email',
             'reg_mobile_number' => 'required|digits:10|unique:users,mobile',
+            'password' => 'required|confirmed',
         ]);
+
+        dd($request->validated());
 
         $user = new User();
         $user->name = $request['user_name'];

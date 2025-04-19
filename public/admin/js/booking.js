@@ -390,8 +390,6 @@ $(function () {
         $('#booking_table').on('click', '.amount-modal', function() {
             let total = $(this).data('week_days_amount') + $(this).data('week_end_amount') + $(this).data('festival_amount');
 
-            console.log($(this).data());
-
             $('#booking_id').val($(this).data('id'));
             $('#week_days_amount').text($(this).data('week_days_amount'));
             $('#week_end_amount').text($(this).data('week_end_amount'));
@@ -401,7 +399,16 @@ $(function () {
             $('#dep_fee').text($(this).data('dep_fee'));
             $('#coupon').text($(this).data('coupon'));
             $('#manual_discount').text($(this).data('manual_discount'));
-            // $('#type').val($(this).data('type'));
+            $('#grand_total').text(
+                (isNull(parseFloat($(this).data('week_days_amount')), 0) + 
+                isNull(parseFloat($(this).data('week_end_amount')), 0) + 
+                isNull(parseFloat($(this).data('festival_amount')), 0) + 
+                isNull(parseFloat($(this).data('delivery_fee')), 0) + 
+                isNull(parseFloat($(this).data('dep_fee')), 0)) -
+                isNull(parseFloat($(this).data('coupon')), 0) -
+                isNull(parseFloat($(this).data('manual_discount')), 0)
+            );
+
             $('#amount_modal').modal('show');
         });
         // Handle risk comment form submission
@@ -488,10 +495,12 @@ $(function () {
                         : formatDateTime(item.start_date);
                     tbody.append(`
                 <tr class="${item.risk === 1 ? 'bg-light-red' : item.status === 2 ? 'bg-light-green' : ''}">
-                    <td style="font-size: .8em">${item.booking_type === 'pickup' ? '<h2>P</h2>' : '<h2>D</h2>'}</td>
-                     <td style="font-size: .7em">  ${!item.details[0].mode_of_payment ? 'N/A' : item.details[0].mode_of_payment}</td>
+                    <td style="font-size: .5em">${item.booking_type === 'pickup' ? '<h2 style="font-size: 2em">P</h2>' : '<h2 style="font-size: 2em">D</h2>'}</td>
+                    <td style="font-size: .7em; width: 100px !important; word-break: break-word; white-space: normal;">
+                    ${!item.details[0].mode_of_payment ? 'N/A' : item.details[0].mode_of_payment}
+                    </td>
                      ${(permissions.includes('hub_risk_status') || permissions.includes('hub_risk_comments')) ? `
-                        <td style="font-size: .8em">
+                        <td style="font-size: .7em; padding: .3em">
                             ${permissions.includes('hub_risk_status') ? `<div class="d-flex justify-content-center">
                                 <input type="checkbox" class="risk-checkbox" data-id="${item.id}" ${item.risk === 1 ? 'checked' : ''}>
                             </div>` : ''}
@@ -510,20 +519,20 @@ $(function () {
                     </td>
                     ` : ''}
 
-                    <td style="font-size: .8em">${mainDate}<br>${rescheduleDate}</td>
-                    <td style="font-size: .8em">${item?.user ? item?.user?.name : ''}</td>
-                    <td style="font-size: .8em">${item.user ? item.user.mobile : ""}</td>
-                    <td style="font-size: .8em">${carModel.model_name || ''}</td>
-                    <td style="font-size: .8em">${bookingDetails.register_number || ''}</td>
-                    <td class="truncate-text" title="${item.address}">${item.address}</td>
-                    <td style="font-size: .8em">
+                    <td style="font-size: .7em; padding: .3em; width: 100px !important; word-break: break-word; white-space: normal;">${mainDate}<br>${rescheduleDate}</td>
+                    <td style="font-size: .7em; padding: .3em">${item?.user ? item?.user?.name : ''}</td>
+                    <td style="font-size: .7em; padding: .3em">${item.user ? item.user.mobile : ""}</td>
+                    <td style="font-size: .7em; padding: .3em">${carModel.model_name || ''}</td>
+                    <td style="font-size: .7em; padding: .3em">${bookingDetails.register_number || ''}</td>
+                      <td class="truncate-text" style="font-size: .7em; padding: .3em" title="${item.address}">${item.address}</td>
+                    <td style="font-size: .7em; padding: .3em">
                         <button style="font-size: .9em !important; padding: .8em; border:none; outline: none; border-radius: 5px" class=" btn-warning user-details-modal" data-id="${item?.user_id}" data-mobile="${item?.user?.mobile}" data-booking="${item?.user?.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item?.user?.aadhaar_number}" >
                             <i class="fa fa-user"></i>
                         </button>
                     </td>
-                    <td style="font-size: .8em">${item?.user ? item?.user?.driving_licence : ''}</td>
-                    <td style="font-size: .8em">${item.booking_id}</td>
-                    <td style="font-size: .8em">${mainDate}<br>
+                    <td style="font-size: .7em; padding: .3em; width: 20px !important; word-break: break-word; white-space: normal;">${item?.user ? item?.user?.driving_licence : ''}</td>
+                    <td style="font-size: .7em; padding: .3em">${item.booking_id}</td>
+                    <td style="font-size: .7em; padding: .3em; width: 20px !important; word-break: break-word; white-space: normal;">${mainDate}<br>
                         ${permissions.includes('hub_reschedule') ? `
                         <button style="font-size: .9em !important; padding: .8em; border:none; outline: none; border-radius: 5px" class="btn-warning edit-booking-date" data-id="${item.id}"
                         data-booking_type="${item.booking_type}"
@@ -534,14 +543,14 @@ $(function () {
                             </button>
                             ` : ''}
                     </td>
-                    <td style="font-size: .8em">${carModel.dep_amount || 0}</td>
-                    <td style="font-size: .8em">
+                    <td style="font-size: .7em; text-align: right; padding: .3em">${carModel.dep_amount || 0}</td>
+                    <td style="font-size: .7em; padding: .3em">
                         <button style="font-size: .9em !important; padding: .8em; border:none; outline: none; border-radius: 5px" class=" btn-warning amount-modal" data-id="${item.booking_id}" data-week_days_amount="${paymentDetails.week_days_amount || 0}" data-week_end_amount="${paymentDetails.week_end_amount || 0}" data-festival_amount="${paymentDetails.festival_amount || 0}" data-delivery_fee="${item.delivery_fee || ''}" data-dep_fee="${carModel.dep_amount || ''}" data-coupon="${item.details?.[0].coupon ? JSON.parse(item.details?.[0].coupon).discount : '0'}" data-type="${item.details?.[0].coupon ? JSON.parse(item.details?.[0].coupon).type : ''}" data-manual_discount="${item?.payment?.discount ? item?.payment?.discount : 0 }" >
                              <i class="fa fa-wallet"></i>
                         </button>
                     </td>
                     ${permissions.includes('hub_cancel_booking') && item?.status == 1 ? `
-                    <td style="font-size: .8em">
+                    <td style="font-size: .7em; padding: .3em">
                         <button style="font-size: .9em !important; padding: .8em; border:none; outline: none; border-radius: 5px" class="btn-danger cancel_booking" data-id="${item.booking_id}">
                               Cancel order
                         </button>
@@ -622,3 +631,8 @@ $(function () {
         });
     });
 });
+
+
+function isNull(value, replacment) {
+    return !value ? replacment : value; 
+}

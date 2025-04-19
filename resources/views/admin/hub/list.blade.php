@@ -143,38 +143,37 @@
                     <table id="booking_table" class="table table-bordered table-hover text-nowrap">
                         <thead>
                         <tr>
-                            <th  style="font-size: .7em">Booking<br>Type</th>
-                            <th  style="font-size: .7em">Mode of<br>Payment</th>
+                            <th  style="font-size: .7em; text-align: center; padding: .3em">Booking<br>Type</th>
+                            <th  style="font-size: .7em; text-align: center; padding: .3em">Mode of<br>Payment</th>
                              @if (in_array('hub_risk_status', getAdminPermissions()) || in_array('hub_risk_comments', getAdminPermissions()))
-                                    <th  style="font-size: .7em">Risk</th>
+                                    <th  style="font-size: .7em; text-align: center; padding: .3em">Risk</th>
                                 @endif
 
                                 @if (in_array('hub_risk_status', getAdminPermissions()))
-                                    <th  style="font-size: .7em">Done</th>
+                                    <th  style="font-size: .7em; text-align: center; padding: .3em">Done</th>
                                 @endif
 
-                            <th style="font-size: .7em">Time</th>
-                            <th>
+                            <th style="font-size: .7em; text-align: center; padding: .3em 1.6em">Time</th>
+                            <th style="font-size: .7em; text-align: center; padding: .3em">
                                 <input type="text" id="customer_name" name="customer_name" class="form-control apply-width" placeholder="Name">
                             </th>
-                             <th  style="font-size: .7em">Mobile Number</th>
-                            <th  style="font-size: .7em"> <input type="text" id="car_model" name="car_model" class="form-control apply-width" placeholder="Model" style="padding: 0%;"></th>
-                            <th  style="font-size: .7em"><input type="text" id="register_number" name="register_number" class="form-control apply-width" placeholder="Registration Number"></th>
-                            <th  style="font-size: .7em">Address</th>
+                             <th  style="font-size: .7em; text-align: center; padding: .3em">Mobile Number</th>
+                            <th  style="font-size: .7em; text-align: center; padding: .3em"> <input type="text" id="car_model" name="car_model" class="form-control apply-width" placeholder="Model" style="padding: 0%;"></th>
+                            <th  style="font-size: .7em; text-align: center; padding: .3em"><input type="text" id="register_number" name="register_number" class="form-control apply-width" placeholder="REG"></th>
+                            <th  style="font-size: .7em; text-align: center; padding: .3em">Address</th>
 
-                                    <th  style="font-size: .7em">User Details</th>
+                            <th  style="font-size: .7em; text-align: center; padding: .3em">User Details</th>
 
-                            <th  style="font-size: .7em">D/L Number</th>
-                            <th  style="font-size: .7em"><input type="text" id="booking_id" name="booking_id" class="form-control" style="padding: 0%; min-width: 60px !important; font-size: .9em;" placeholder="Booking ID"></th>
+                            <th  style="font-size: .7em; text-align: center; padding: .3em">D/L Number</th>
+                            <th  style="font-size: .7em; text-align: center; padding: .3em"><input type="text" id="booking_id" name="booking_id" class="form-control" style="padding: 0%; min-width: 60px !important; font-size: .9em;" placeholder="Booking ID"></th>
                              @if (in_array('hub_reschedule', getAdminPermissions()))
-                                    <th  style="font-size: .7em">Reschedule</th>
+                                    <th  style="font-size: .7em; text-align: center; padding: .3em">Reschedule</th>
                                 @endif
-                            <th  style="font-size: .7em">Security Dep</th>
-                            <th  style="font-size: .7em">Amount</th>
+                            <th  style="font-size: .7em; text-align: right; padding: .3em">Security Dep</th>
+                            <th  style="font-size: .7em; text-align: right; padding: .3em">Amount</th>
                             @if (in_array('hub_cancel_booking', getAdminPermissions()))
-                                    <th  style="font-size: .7em">Action</th>
-                                @endif
-
+                                <th  style="font-size: .7em; text-align: center; padding: .3em">Action</th>
+                            @endif
                         </tr>
                         </thead>
                         <tbody>

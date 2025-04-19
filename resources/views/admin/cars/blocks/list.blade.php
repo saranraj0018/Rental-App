@@ -26,7 +26,7 @@
                 <div class="col-sm-6 text-right">
                      <a href="{{ route('car-block.history') }}" class="btn btn-primary mb-3" id="">View
                             History</a>
-                            
+
                     <button class="btn btn-primary mb-3" id="add_block">Add New Block</button>
                 </div>
                 @endif
@@ -75,7 +75,7 @@
                         @if(filled($car_block))
                             @foreach($car_block as $item)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $item->id }}</td>
                                     <td>{{ block_type()[$item->block_type] ?? '' }}</td>
                                     <td>{{ reason_type()[$item->reason] ?? '' }}</td>
                                     <td>{{ $item->user->email ?? '' }}</td>

@@ -190,30 +190,30 @@ $(function () {
                     console.log(item);
                     tbody.append(`
                 <tr>
-                    <td>${rowCount++}</td>
+                    <td>${item.id}</td>
                     <td>${block_type()[item.block_type] || ''}</td>
                     <td>${reason_type()[item.reason] || ''}</td>
-                    <td>${item.user ? item.user.email : ''}</td>
-                    <td>${item.comment}</td>
-                    <td>${item.car_register_number}</td>
-                    <td>${item.details.city.name}</td>
-                    <td>${item.start_date}</td>
-                    <td>${item.end_date}</td>
-                    <td>
+                    <td>${item?.user ? item.user.email : ''}</td>
+                    <td>${item?.comment}</td>
+                    <td>${item?.car_register_number}</td>
+                    <td>${item?.details?.city.name}</td>
+                    <td>${item?.start_date}</td>
+                    <td>${item?.end_date}</td>
+                    <td> 
                       ${permissions.includes('car_block_update') ? `
                         <a href="javascript:void(0)" class="edit_block_model"
-                           data-id="${item.id}"
-                           data-car_register_number="${item.car_register_number}"
-                           data-start_date="${item.start_date}"
-                           data-end_date="${item.end_date}"
-                           data-comment="${item.comment}">
+                           data-id="${item?.id}"
+                           data-car_register_number="${item?.car_register_number}"
+                           data-start_date="${item?.start_date}"
+                           data-end_date="${item?.end_date}"
+                           data-comment="${item?.comment}">
                             <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
                             </svg>
                         </a>
                          ` : ''}
-                        <!-- Uncomment this block if you want to enable the delete button -->
+                         
   ${permissions.includes('car_block_delete') ? `
                         <a href="#" class="delete_block_model text-danger w-4 h-4 mr-1" data-id="${item.id}">
                             <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"

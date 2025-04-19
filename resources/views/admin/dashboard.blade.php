@@ -116,6 +116,10 @@
                 </select>
             </div>
         </form>
+        
+        <div class="mb-3">
+            <h6>Today's Bookings: <strong style="font-size: 2em;" id="booking_today"></strong></h6>
+        </div>
     </div>
 
     <div class="row" id="dashboardCards">
@@ -160,7 +164,11 @@
                 axios.get(`{{ url('/') }}/admin/dashboard/dataset`, { params: { hub } })
                     .then(response => {
                         const data = response.data;
-
+                        
+                        
+                        const today = document.querySelector('#booking_today');
+                        today.textContent = data.todays_booking;
+                        
                         // Update the cards with data
                         document.getElementById('dashboardCards').innerHTML = `
                         <div class="col-md-3">

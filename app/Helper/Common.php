@@ -192,3 +192,10 @@ if (!function_exists('netty')) {
     }
 }
 
+
+
+if(!function_exists('isNull')) {
+    function isNull($needle, $replacement) {
+        return !$needle ? $replacement : $needle;
+    }
+}

@@ -166,17 +166,39 @@
                                 <div class="mb-3">
                                     <label for="reg_mobile_number" class="form-label fs-12 fw-500">Your Mobile
                                         Number</label>
-                                    <input type="text" class="form-control bg-grey form-bdr"
-                                        id="reg_mobile_number" name="reg_mobile_number" placeholder="+91">
+                                    <input type="text" class="form-control bg-grey form-bdr" id="reg_mobile_number"
+                                        name="reg_mobile_number" placeholder="+91">
                                     <div class="invalid-feedback">
                                         Please enter the Mobile Number.
                                     </div>
                                 </div>
-                              
+
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label fs-12 fw-500">Password</label>
+                                        <input type="password" class="form-control bg-grey form-bdr" id="password"
+                                            name="password" placeholder="********">
+                                        <div class="invalid-feedback">
+                                            Please enter the Mobile Number.
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="password_confirmation" class="form-label fs-12 fw-500">Confirm Password</label>
+                                        <input type="password" class="form-control bg-grey form-bdr" id="password_confirmation"
+                                            name="password_confirmation" placeholder="********">
+                                        <div class="invalid-feedback">
+                                            Please enter the Mobile Number.
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <button type="submit" class="btn my-button next-button w-100">Register</button>
 
                                 <div id="google_button">
-                                    <a href="{{ url('auth/google') }}"  class="mt-5 btn btn-light border d-flex align-items-center justify-content-center" style="gap: 8px; padding: 10px; text-decoration: none;">
+                                    <a href="{{ url('auth/google') }}"
+                                        class="mt-5 btn btn-light border d-flex align-items-center justify-content-center"
+                                        style="gap: 8px; padding: 10px; text-decoration: none;">
                                         <i class="fab fa-google"></i>
                                         <span>Sign in with Google</span>
                                     </a>
@@ -190,12 +212,12 @@
     </div>
 
 
- 
+
 
     {{-- User Document upload --}}
 
-    <div class="modal fade" id="user_document" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal fade" id="user_document" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content p-3">
                 <div class="d-flex justify-content-end">
@@ -214,8 +236,7 @@
                         <div class="my-file-border p-3">
                             <div id="beforeUpload"
                                 class="before-upload d-flex flex-column justify-content-center align-items-center">
-                                <img src="{{ asset('user/img/image 23.png') }}" alt=""
-                                    class="img-fluid w-25">
+                                <img src="{{ asset('user/img/image 23.png') }}" alt="" class="img-fluid w-25">
                                 <h2 class="text-center fs-5">
                                     Drag and drop font files to upload
                                 </h2>
@@ -280,7 +301,7 @@
     </div>
 
     <div class="modal" id="payment_alert" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel"
-         aria-hidden="true">
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document"> <!-- Centering the modal -->
             <div class="modal-content">
                 <div class="modal-header">
@@ -298,5 +319,3 @@
         </div>
     </div>
 </div>
-
-
