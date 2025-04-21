@@ -204,21 +204,21 @@
                     <div class="row g-3">
                         <div class="col-md-4">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name">
+                            <input type="text" class="form-control autofill_user_details" id="name" name="name">
                             <div class="invalid-feedback">
                                 Please enter the Name.
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email">
+                            <input type="email" class="form-control autofill_user_details" id="email" name="email">
                             <div class="invalid-feedback">
                                 Please enter the Email.
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label for="mobile" class="form-label">Mobile</label>
-                            <input type="text" class="form-control" id="mobile" name="mobile">
+                            <input type="text" class="form-control mobile_field" id="mobile" name="mobile">
                             <div class="invalid-feedback">
                                 Please enter the Mobile.
                             </div>
@@ -240,14 +240,14 @@
 
                         <div class="col-md-6">
                             <label for="license_number" class="form-label">License Number</label>
-                            <input type="text" class="form-control" id="license_number" name="license_number">
+                            <input type="text" class="form-control autofill_user_details" id="license_number" name="license_number">
                             <div class="invalid-feedback">
                                 Please enter the License Number.
                             </div>
                         </div>
                         <div class="col-md-6">
                             <label for="aadhaar_card" class="form-label">Aadhaar Card Number</label>
-                            <input type="number" class="form-control" id="aadhaar_card" name="aadhaar_card">
+                            <input type="number" class="form-control autofill_user_details" id="aadhaar_card" name="aadhaar_card">
                             <div class="invalid-feedback">
                                 Please enter the Aadhaar Card Number.
                             </div>

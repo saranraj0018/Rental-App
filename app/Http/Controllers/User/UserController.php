@@ -288,6 +288,18 @@ class UserController extends Controller
         ]);
         $auth_id = Auth::id() ?? 0;
         $user = User::find($auth_id);
+
+
+        // add the last username to the updated user name json array in db
+        $updated_user_name = json_decode($user->updated_user_name, true);
+        if (is_null($updated_user_name)) {
+            $updated_user_name = [];
+        }
+        $updated_user_name[] = [
+            "user_name" => $user->name,
+            "updated_at" => now(),
+        ];
+        $user->updated_user_name = json_encode($updated_user_name);
         $user->name = $request['profile_name'];
         // $user->mobile = $request['user_mobile'];
         // $user->email = $request['user_email'];

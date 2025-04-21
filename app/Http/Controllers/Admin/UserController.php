@@ -25,17 +25,15 @@ class UserController extends BaseController {
 
     public function search(Request $request)
     {
-        $query = User::query();
+        $query = User::with('userDoc');
         if (!empty($request['name_search'])) {
             $query->where('name', 'like', '%' .  $request['name_search']. '%');
         }
 
-        if (!empty($request['user_type'])) {
-            if($request['user_type'] == 2) {
-                $query->where('is_offline_booking', '=', 'null');
-            } else {
-                $query->where('is_offline_booking', 1);
-            }
+
+        // dd($request['user_type']);
+        if (!empty($request['user_type']) && $request['user_type'] != 2) {
+            $query->where('is_offline_booking', '=', $request['user_type']);
         }
 
         $user_list = $query->paginate(10);
@@ -134,6 +132,32 @@ class UserController extends BaseController {
             'updated_at'
         ]);
     }
+
+
+
+
+
+    public function fillUserDetails(Request $request) {
+        try {
+            
+            $request->validate([
+                'mobile_number' => 'required|digits:10',
+            ]);
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'User Details Fetched Successfully',
+                'user' => User::where('mobile', '=', $request->mobile_number)->get()->first()
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => $th->getCode(),
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+
 
 
 
