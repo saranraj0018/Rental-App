@@ -12,6 +12,40 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class OTPController extends Controller {
+
+
+
+
+    public function emailLogin(Request $request) {
+        
+        $request->validate([
+            'user_email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+    
+        try {
+            if (!Auth::attempt(['email' => $request->user_email, ...$request->only('password')])) {
+              throw new \Exception('Invalid credentials', 401);
+            }
+
+            return response()->json([
+                'success' => 'true',
+                'name' => Auth::user()->name ?? '',
+                'message' => 'Login successful.',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500); 
+        }
+    }
+
+
+
+
+
     public function sendOtp(Request $request) {
         $request->validate([
             'mobile_number' => 'required|digits:10',
@@ -74,12 +108,11 @@ class OTPController extends Controller {
             'password' => 'required|confirmed',
         ]);
 
-        dd($request->validated());
-
         $user = new User();
         $user->name = $request['user_name'];
         $user->mobile = $request['reg_mobile_number'];
         $user->email = $request['user_email'];
+        $user->password = bcrypt($request['password']);
         $user->save();
 
         return response()->json(['success' => 'true', 'message' => 'Registration successful!']);
