@@ -17,7 +17,7 @@
 
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
-        <img src="{{asset("admin/img/valam.png")}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3">
+        <img src="{{asset("user\img\Logo (4).png")}}" alt="AdminLTE Logo" class="brand-image">
         <span class="brand-text font-weight-light">Rental Cars</span>
     </a>
     <!-- Sidebar -->
