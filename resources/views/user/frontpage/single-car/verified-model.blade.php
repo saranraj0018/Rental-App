@@ -56,7 +56,90 @@
                                 </div>
                                 <button type="submit" class="btn my-button next-button w-100" id="sendOtpBtn">Request
                                     OTP</button>
+
+                                <div style="position: relative; width: 100%; margin: 2em 0;">
+                                    <p style="border: 1px solid #00000041; width: 100%;"></p>
+                                    <span
+                                        style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 1em; background-color: #fff;;">or</span>
+                                </div>
+                                <div>
+                                    <button type="button" id="login_with_email"
+                                        class="w-100 rounded-pill btn btn-light border">
+                                        <i class="fa fa-envelope"></i>
+                                        <span>Sign in with Email</span>
+                                    </button>
+                                </div>
+
                             </form>
+
+                            <div class="fs-10 text-secondary text-center mt-3">Don't have an account?
+                                <span class="text-dark fw-500 register-link">Register</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal left fade custom-modal m-0 overflow-hidden" id="emailModal" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog position-top-right">
+            <div class="modal-content bdr-20">
+                <div class="modal-body h-600px p-0">
+                    <div class="input-set fade-element show">
+                        <div class="other-heads-bg p-4 bdr-top-15">
+                            <div>
+                                <button type="button"
+                                    class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2"
+                                    data-bs-dismiss="modal" aria-label="Close">
+                                    <i class="fa fa-angle-left text-white fs-18"></i>
+                                </button>
+                            </div>
+                            <div>
+                                <h4 class="modal-title text-white my-2 lh-sm">Sign In To Your Account</h4>
+                                <p class="fs-12 text-white">Sign In To Your Account</p>
+                            </div>
+                        </div>
+                        <div class="py-3 px-2 px-lg-5">
+                            <form id="email-login">
+                                
+                                <div class="mb-3">
+                                    <label for="user_email" class="form-label fs-12 fw-500">Enter your email address</label>
+                                    <input type="email" class="form-control bg-grey form-bdr"
+                                        id="user_email" name="user_email" placeholder="ie.., bernard@hackwell.com">
+                                    <div class="invalid-feedback">
+                                        Please enter the Email Address.
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="password" class="form-label fs-12 fw-500">Enter your Password</label>
+                                    <input type="password" class="form-control bg-grey form-bdr"
+                                        id="password" name="password" placeholder="ie.., ********">
+                                    <div class="invalid-feedback">
+                                        Please enter the Password.
+                                    </div>
+                                </div>
+
+                                <span class="fw-500 text-danger mb-4" id="user_email_error"></span>
+                                <button type="submit" class="btn my-button next-button w-100 mt-5" id="emailLoginButton">Login</button>
+
+                                <div style="position: relative; width: 100%; margin: 2em 0;">
+                                    <p style="border: 1px solid #00000041; width: 100%;"></p>
+                                    <span
+                                        style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 1em; background-color: #fff;;">or</span>
+                                </div>
+                                <div>
+                                    <button type="button" id="login_with_mobile"
+                                        class="w-100 rounded-pill btn btn-light border">
+                                        <i class="fa fa-message"></i>
+                                        <span>Sign in with Mobile Number</span>
+                                    </button>
+                                </div>
+
+                            </form>
+
                             <div class="fs-10 text-secondary text-center mt-3">Don't have an account?
                                 <span class="text-dark fw-500 register-link">Register</span>
                             </div>
@@ -184,9 +267,11 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="password_confirmation" class="form-label fs-12 fw-500">Confirm Password</label>
-                                        <input type="password" class="form-control bg-grey form-bdr" id="password_confirmation"
-                                            name="password_confirmation" placeholder="********">
+                                        <label for="password_confirmation" class="form-label fs-12 fw-500">Confirm
+                                            Password</label>
+                                        <input type="password" class="form-control bg-grey form-bdr"
+                                            id="password_confirmation" name="password_confirmation"
+                                            placeholder="********">
                                         <div class="invalid-feedback">
                                             Please enter the Mobile Number.
                                         </div>

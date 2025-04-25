@@ -71,6 +71,51 @@ $(function () {
     });
 
 
+
+
+    // Send OTP form
+    $('#email-login').on('submit', function(e) {
+        e.preventDefault();
+
+        const fields = [
+            { id: '#user_email', condition: (val) => val === '' },
+            { id: '#password', condition: (val) => val === '' },
+        ];
+
+        let isValid = true;
+        fields.forEach(field => {
+            if (!validateField(field)) isValid = false;
+        });
+
+        if (isValid) {
+            $.ajax({
+                url: '/user/email-login', // Update with your route
+                method: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        $('#emailModal').modal('hide');
+                        $('#login_button').hide();
+                        $('#user_name').text(response.name)
+                        $('#after_login_button').css('display', 'block');
+                        $('#booking_button').css('display', 'block');
+                        $('#logout_button').css('display', 'block');
+                        $('#login_payment').hide();
+                        $('#payment').css('display', 'block');
+                        $('#user_email_error').text('');
+                   } else {
+                        $('#user_email_error').text('Invalid credentials');
+                   }
+                },
+                error: function(xhr) {
+                    $('#user_email_error').text('Invalid credentials');
+                    handleAjaxErrors(xhr, '#user_email');
+                }
+            });
+        }
+    });
+
+
      $('#resend-otp').on('click', function (e) {
 
         const mobileNumber = $('#mobile_number_otp2').val();
@@ -139,10 +184,20 @@ $(function () {
 
     // Show registration form
     $('.register-link').click(function() {
+        $('#emailModal').modal('hide');
         $('#mobileModal').modal('hide');
         $('#registerModal').modal('show');
         // $('#user_document').modal('show');
     });
+
+
+
+    // Show registration form
+    $('#login_with_email').click(function() {
+        $('#mobileModal').modal('hide');
+        $('#emailModal').modal('show');
+    });
+
 
 
 
@@ -155,7 +210,11 @@ $(function () {
        const fields = [
             { id: '#user_name_', condition: (val) => val === '' },
             { id: '#user_email', condition: (val) => val === '' },
-            { id: '#reg_mobile_number', condition: (val) => val === '' }
+            { id: '#reg_mobile_number', condition: (val) => val === '' },
+            { id: '#password', condition: (val) => val === '' },
+            { id: '#password_confirmation', condition: (val) => {
+                return val === '' && $('#password').val() == val;
+            }}
         ];
 
         let isValid = true;

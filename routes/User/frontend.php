@@ -18,6 +18,7 @@ Route::get('/search-car/list', [UserController::class, 'listCars'])->name('searc
 Route::get('/book/{model_id?}', [UserController::class, 'bookingCar'])->name('book.car');
 
 Route::post('user/send-otp', [OTPController::class, 'sendOTP'])->name('send.otp');
+Route::post('user/email-login', [OTPController::class, 'emailLogin'])->name('email.login');
 Route::post('user/verify-otp', [OTPController::class, 'verifyOtp'])->name('verify.otp');
 Route::post('user/register', [OTPController::class, 'register'])->name('register');
 Route::get('auth/google', [OAuthController::class, 'redirectToGoogle']);
