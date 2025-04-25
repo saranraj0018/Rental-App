@@ -26,7 +26,7 @@ class UserController extends Controller
     public function view()
     {
         $section1 = Frontend::with('frontendImage')->where('data_keys','section1-image-car')->first();
-        $section2 = Coupon::all();
+        $section2 = Coupon::whereDate('end_date', '>=', now())->get();
         $city_list = City::where('city_status', 1)->pluck('name', 'code');
         $section3 = !empty($booking_models) ? self::getAvailableCars() : CarDetails::all();
         $car_info = Frontend::with('frontendImage')->where('data_keys','car-info-section')->first();
@@ -83,7 +83,7 @@ class UserController extends Controller
         $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
         $car_models = self::getAvailableCars();
         $festival_days = Holiday::pluck('event_date')->toArray();
-        $section2 = Coupon::all();
+        $section2 = Coupon::whereDate('end_date', '>=', now())->get();
         return view('user.frontpage.list-cars.list',compact('car_models','festival_days','date','city_list','timing_setting','section2'));
     }
 
@@ -181,6 +181,7 @@ class UserController extends Controller
                 'end_date' => session('end_date'),
             ]
         ]);
+        
         return view('user.frontpage.single-car.view',compact('car_model','ipr_data','image_list','price_list','general_section','available_cars'));
     }
 
@@ -278,20 +279,20 @@ class UserController extends Controller
     {
         $request->validate([
             'profile_name' => 'required|string|max:255',
-            'user_mobile' => 'required|numeric|digits:10',
-              'user_email' => 'required|email',
-            'aadhaar_number' => 'required|digits:12',
-            'driving_licence' => 'required',
-            'other_documents' => 'nullable|mimes:jpg,png,pdf|max:2048',
+            // 'user_mobile' => 'required|numeric|digits:10',
+            //   'user_email' => 'required|email',
+            // 'aadhaar_number' => 'required|digits:12',
+            // 'driving_licence' => 'required',
+            // 'other_documents' => 'nullable|mimes:jpg,png,pdf|max:2048',
 
         ]);
         $auth_id = Auth::id() ?? 0;
         $user = User::find($auth_id);
         $user->name = $request['profile_name'];
-        $user->mobile = $request['user_mobile'];
-        $user->email = $request['user_email'];
-        $user->aadhaar_number = $request['aadhaar_number'];
-        $user->driving_licence = $request['driving_licence'];
+        // $user->mobile = $request['user_mobile'];
+        // $user->email = $request['user_email'];
+        // $user->aadhaar_number = $request['aadhaar_number'];
+        // $user->driving_licence = $request['driving_licence'];
         $user->save();
 
         return response()->json(['success' => true, 'message' => 'User Profile updated successfully']);

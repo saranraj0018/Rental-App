@@ -15,6 +15,11 @@ $(function () {
                     tbody.append(`
                 <tr>
                     <td>${item.id}</td>
+                    <td>
+                        <span class="bg-${ item.is_offline_booking == 0 ? 'success' : 'warning' } text-white p-1 rounded">
+                            ${ item.is_offline_booking == 0 ? 'Online' : 'Offline' }
+                        </span>
+                    </td>
                     <td>${item.name}</td>
                     <td>${item.mobile}</td>
                    <td>${item.email ? item.email : ""}</td>
@@ -40,11 +45,14 @@ $(function () {
 
         function fetchData() {
             let name_search = $("#name_search").val();
+            let user_type = $("#user_type").val();
+            
             $.ajax({
                 url: "/admin/user/search", // Define this route in your web.php
                 type: "GET",
                 data: {
                     name_search: name_search,
+                    user_type
                 },
                 success: function (response) {
                     updateHolidayTable(response.data); // Populate table with new data
@@ -56,6 +64,7 @@ $(function () {
         }
 
         $("#name_search").on("keyup", fetchData);
+        $("#user_type").on("change", fetchData);
 
         $("#user_table").on("click", ".user_view", function () {
             // Show the modal

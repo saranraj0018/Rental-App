@@ -114,7 +114,7 @@ class CarBlockController extends BaseController
         CarBlock::find($id)?->delete();
         Available::where('booking_id', $id)->first()?->delete();
 
-        $car_block_list = CarBlock::with('user', 'details', 'details.city')->orderBy('created_at', 'desc')->get();
+        $car_block_list = CarBlock::with('user',  'details', 'details.city')->orderBy('created_at', 'desc')->get();
         return response()->json(['data'=> $car_block_list,'success' => 'Car blocked Delete successfully']);
     }
 
