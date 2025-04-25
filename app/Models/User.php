@@ -27,7 +27,8 @@ class User extends Authenticatable
         'email',
         'password',
          'documents',
-         'is_offline_booking'
+         'is_offline_booking',
+         'updated_user_name'
     ];
 
     /**
@@ -53,5 +54,12 @@ class User extends Authenticatable
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+
+
+
+    public function getLastUpdatedUserNameAttribute() {
+        return collect(json_decode($this->updated_user_name, true))->sortByDesc('updated_at')->first()['user_name'];
     }
 }

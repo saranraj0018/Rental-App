@@ -92,6 +92,10 @@
 
                     $('#commentModal').modal('hide');
                     alertify.success('Comments saved successfully.');
+                    
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000)
                 } else {
                     alertify.error('Failed to save comments.');
                 }
@@ -110,9 +114,9 @@
                             <input type="text" id="name_search" name="keyword" class="form-control" placeholder="Search Name ....">
                         </div>
                         <select id="user_type" class="form-control w-25">
-                            <option value="0">Select User Type</option>
+                            <option value="2">Select User Type</option>
                             <option value="1">Offline</option>
-                            <option value="2">Online</option>
+                            <option value="0">Online</option>
                         </select>
                     </div>
                 </div>
@@ -143,7 +147,9 @@
                                             {{ $item->is_offline_booking == 0 ? 'Online' : 'Offline' }}
                                         </span>
                                     </td>
-                                    <td>{{ $item->name }}</td>
+                                    <td>
+                                        <span class="p-0">{{ $item->name }} <button data-legacy-user-names="{{ base64_encode($item->updated_user_name) }}" id="preview-legacy-names" data-target="#userNameModal" data-toggle="modal" style="background: transparent; border: none; outline: none;;"><i class="fa fa-eye text-primary"></i></button></span>
+                                    </td>
                                     <td>{{ $item->mobile }}</td>
                                     <td>{{ $item->email ?? ''}}</td>
                                     <td>{{ $item->aadhaar_number ?? ''}}</td>
@@ -153,7 +159,7 @@
                                             <td>
                                                 <a href="#" class="user_view text-primary w-4 h-4 mr-1"
                                                     data-id="{{ $item->id }}"
-                                                    data-images="{{ json_encode($item->userDoc->pluck('image_name')) }}"   data-documents="{{ $item->documents ?? '' }}">
+                                                    data-images="{{ json_encode($item->userDoc->pluck('image_name')) }}"   data-documents="{{ base64_encode($item->documents) ?? '' }}">
                                                     <svg class="filament-link-icon w-4 h-4 mr-1"
                                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                         fill="currentColor" aria-hidden="true">

@@ -630,6 +630,40 @@ $(function () {
             fetchData(1);
         });
     });
+
+
+
+
+    $('.mobile_field').on('blur', function() {
+        
+        if ($(this).val().length === 10) {
+
+            $.ajax({
+                url: '/admin/fill-user-details',
+                method: 'POST',
+                data: {
+                   mobile_number: $(this).val(),
+                },
+
+                success: function(response) {
+                    if(response.user) {
+                        const { name, email, aadhaar_number, driving_licence } = response.user;
+                      
+                        $('#name').val(name);
+                        $('#email').val(email);
+                        $('#aadhaar_card').val(aadhaar_number);
+                        $('#license_number').val(driving_licence);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alertify.error(error);
+                }
+            });
+        }
+    });
+
+
+
 });
 
 

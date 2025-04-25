@@ -181,5 +181,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/user/list/export', [UserController::class, 'users_export'])->name('user.list.export');
         Route::get('/user/search', [UserController::class, 'search'])->name('user.search');
         Route::post('/user/save-comments', [UserController::class, 'saveComments'])->name('user.save.comments');
+
+        Route::post('/fill-user-details', [UserController::class, 'fillUserDetails'])->name('user.save.comments');
     });
 });
