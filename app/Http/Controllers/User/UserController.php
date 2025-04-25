@@ -28,7 +28,8 @@ class UserController extends Controller
         $section1 = Frontend::with('frontendImage')->where('data_keys','section1-image-car')->first();
         $section2 = Coupon::whereDate('end_date', '>=', now())->get();
         $city_list = City::where('city_status', 1)->pluck('name', 'code');
-        $section3 = !empty($booking_models) ? self::getAvailableCars() : CarDetails::all();
+        $filter_car_info = !empty(self::getAvailableCars()) ? self::getAvailableCars() : CarDetails::all();
+        $section3 = collect($filter_car_info)->unique('model_id')->values()->all();
         $car_info = Frontend::with('frontendImage')->where('data_keys','car-info-section')->first();
         $section4 = !empty($car_info['data_values']) ? json_decode($car_info['data_values'],true) : [];
         $brand_info = Frontend::with('frontendImage')->where('data_keys','brand-section')->first();
