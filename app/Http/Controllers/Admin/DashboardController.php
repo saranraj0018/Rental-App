@@ -33,7 +33,7 @@ class DashboardController extends Controller {
         # get available list
         $_available = Available::where('end_date', '>=', now())->pluck('car_id','id')->toArray();
         $_blocked = CarBlock::where('end_date', '>=', now())->pluck('car_register_number')->toArray();
-        
+
         $todays_booking = \App\Models\Booking::select('booking_id')->whereBetween('created_at', [
             Carbon::now()->startOfDay(),
             Carbon::now()->endOfDay()
@@ -50,12 +50,12 @@ class DashboardController extends Controller {
                 "blocked" => in_array($car['register_number'], $_blocked)
             ];
         })->filter(fn($hub) => $hub["city"] != "");
-        
+
 
         if($hub != 'all') {
             $main = $main->filter(fn($item) => $item["city"] == $hub);
         }
-        
+
 
         $dataset = new Fluent();
         $dataset->available_cars = $main->filter(fn($car) => !$car['booked'] && !$car['blocked'])->count();
@@ -63,7 +63,7 @@ class DashboardController extends Controller {
         $dataset->blocked_cars = $main->filter(fn($car) => $car['blocked'] == true)->count();
         $dataset->total_users = User::count();
         $dataset->todays_booking = $todays_booking;
-        
+
 
 
         # get booking cars list

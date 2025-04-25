@@ -187,7 +187,6 @@ $(function () {
                 let rowCount = 1;
                 // Loop through the data and append rows
                 data.forEach(item => {
-                    console.log(item);
                     tbody.append(`
                 <tr>
                     <td>${item.id}</td>
@@ -199,7 +198,7 @@ $(function () {
                     <td>${item?.details?.city.name}</td>
                     <td>${item?.start_date}</td>
                     <td>${item?.end_date}</td>
-                    <td> 
+                    <td>
                       ${permissions.includes('car_block_update') ? `
                         <a href="javascript:void(0)" class="edit_block_model"
                            data-id="${item?.id}"
@@ -213,7 +212,7 @@ $(function () {
                             </svg>
                         </a>
                          ` : ''}
-                         
+
   ${permissions.includes('car_block_delete') ? `
                         <a href="#" class="delete_block_model text-danger w-4 h-4 mr-1" data-id="${item.id}">
                             <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"

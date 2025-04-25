@@ -13,71 +13,83 @@
 <!--LOCAL CSS -->
 
 <footer>
-    <section class="d-none d-lg-block footer-bg">
-        <div class="container-fluid p-3">
-            <div class="row g-0">
-                <div class="col-12 col-lg-1">
-                    <img src="{{ asset('user/img/Logo (4).png') }}" alt="Site-Logo" class="img-fluid d-block">
-                </div>
-                <div class="col-12 col-lg-8 mx-auto my-auto">
-                    <div class="d-flex justify-content-center">
-                        <a href="{{ route('privacy-policy') }}" class="text-white text-decoration-none mx-4 fs-16">
-                            Privacy Policy
-                        </a>
-                        <a href="{{ route('terms-and-conditions') }}"  class="text-white text-decoration-none mx-4 fs-16">
-                            Terms & Conditions
-                        </a>
-                        <a href="{{ route('faq') }}" class="text-white text-decoration-none mx-4 fs-16">
-                            FAQs
-                        </a>
-                        <a href="{{ route('shipping') }}"  class="text-white text-decoration-none mx-4 fs-16">
-                            Shipping
-                        </a>
-                        <a href="{{ route('refund') }}"  class="text-white text-decoration-none mx-4 fs-16">
-                            Refund
-                        </a>
-                        <a href="{{ route('pricing') }}"  class="text-white text-decoration-none mx-4 fs-16">
-                            Pricing
-                        </a>
-                        <a href="{{ route('cancellation') }}"  class="text-white text-decoration-none mx-4 fs-16">
-                            Cancellation
-                        </a>
-                    </div>
+    <section class="footer-bg">
+        <div class="container py-4 p-md-3">
+            <div class="row g-3 my-4">
+                <div class="col-12 col-lg-4 gap-5 my-auto">
+                    <img src="{{ asset('user/img/Logo (4).png') }}" alt="Site-Logo" class="img-fluid d-block" style="width:40%;">
+                    <p class="text-white text-justify my-3">Welcome to Valam Cars, India's premier self-driving car rental service! At Valam, we believe in empowering people to take charge of their journeys, offering a hassle-free and reliable self-driving experience.</p>
 
                 </div>
-                <div class="col-12 col-lg-2 d-flex justify-content-end my-auto">
-                    <div class="d-flex media-list p-1">
-                        <a href="https://www.youtube.com" target="_blank" class="me-3">
-                            <i class="fab fa-youtube fa-1x media-icon"></i>
-                        </a>
-                        <a href="https://www.facebook.com" target="_blank" class="me-3">
-                            <i class="fab fa-facebook fa-1x media-icon"></i>
-                        </a>
-                        <a href="https://www.instagram.com" target="_blank" class="me-3">
-                            <i class="fab fa-instagram fa-1x media-icon"></i>
-                        </a>
-                        <a href="https://www.linkedin.com" target="_blank" class="me-3">
-                            <i class="fab fa-linkedin fa-1x media-icon"></i>
-                        </a>
-                        <a href="https://www.twitter.com" target="_blank" class="me-3">
-                            <i class="fab fa-twitter fa-1x media-icon"></i>
-                        </a>
+                <div class="col-12 col-lg-4">
+                    <div class="d-flex flex-column gap-2">
+                        <h2 class="fs-4 fw-500 text-white">QUICK LINKS</h2>
+                        <a class="text-white text-decoration-none fs-16" href="{{ route('home') }}">Home</a>
+                        <a class="text-white text-decoration-none fs-16" href="{{ route('about') }}">About</a>
+                        <a class="text-white text-decoration-none fs-16" href="{{ route('faq') }}">FAQ</a>
+                        <a class="text-white text-decoration-none fs-16"href="{{ route('contact') }}">Contact-us</a></li>
+
                     </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="d-flex flex-column gap-2">
+                        <h2 class="fs-4 fw-500 text-white">POLICY PAGES</h2>
+                        <a href="{{ route('privacy-policy') }}" class="text-white text-decoration-none fs-16">
+                            Privacy Policy
+                        </a>
+                        <a href="{{ route('terms-and-conditions') }}"  class="text-white text-decoration-none fs-16">
+                            Terms & Conditions
+                        </a>
+                        {{-- <a href="{{ route('faq') }}" class="text-white text-decoration-none fs-16">
+                            FAQs
+                        </a>
+                        <a href="{{ route('shipping') }}"  class="text-white text-decoration-none fs-16">
+                            Shipping
+                        </a>
+                        <a href="{{ route('refund') }}"  class="text-white text-decoration-none fs-16">
+                            Refund
+                        </a>
+                        <a href="{{ route('pricing') }}"  class="text-white text-decoration-none fs-16">
+                            Pricing
+                        </a>
+                        <a href="{{ route('cancellation') }}"  class="text-white text-decoration-none fs-16">
+                            Cancellation
+                        </a> --}}
+                        <h2 class="fs-4 fw-500 text-white">SOCIAL MEDIA:</h2>
+                        <div class="d-flex media-list p-1">
+                            <a href="https://www.youtube.com" target="_blank" class="me-3">
+                                <i class="fab fa-youtube fa-1x media-icon"></i>
+                            </a>
+                            <a href="https://www.facebook.com" target="_blank" class="me-3">
+                                <i class="fab fa-facebook fa-1x media-icon"></i>
+                            </a>
+                            <a href="https://www.instagram.com" target="_blank" class="me-3">
+                                <i class="fab fa-instagram fa-1x media-icon"></i>
+                            </a>
+                            <a href="https://www.linkedin.com" target="_blank" class="me-3">
+                                <i class="fab fa-linkedin fa-1x media-icon"></i>
+                            </a>
+                            <a href="https://www.twitter.com" target="_blank" class="me-3">
+                                <i class="fab fa-twitter fa-1x media-icon"></i>
+                            </a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
         <div style="background-color: #11285A;">
-            <div class="container-fluid d-flex justify-content-between py-2">
+            <div class="container-fluid d-block d-md-flex justify-content-between py-2">
                 <div class="fs-14 fw-500 text-white">
                     Privacy | Terms & Conditions
                 </div>
-                <div class="fs-14 fw-500 text-white">
-                    ©2024 Valam
-                </div>
+                <a class="fs-14 fw-500 text-white" href="http://rankuhigher.in" target="_blank">
+                    ©2025 ValamCars | Designed & Developed By rankuhigher.in
+                </a>
             </div>
         </div>
     </section>
-    <section class="d-block d-lg-none footer-bg">
+    <section class="d-none footer-bg">
         <div class="container p-3">
             <div class="row">
                 <div class="col-6 d-flex flex-column justify-content-around">
