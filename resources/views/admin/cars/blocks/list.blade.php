@@ -78,10 +78,10 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{ block_type()[$item->block_type] ?? '' }}</td>
                                     <td>{{ reason_type()[$item->reason] ?? '' }}</td>
-                                    <td>{{ $item->user->email ?? '' }}</td>
+                                    <td>{{ $item->user?->email ?? '' }}</td>
                                     <td>{{ $item->comment }}</td>
                                     <td>{{ $item->car_register_number }}</td>
-                                    <td>{{ $item->details->city->name }}</td>
+                                    <td>{{ $item?->details?->city?->name }}</td>
                                     <td>{{ $item->start_date }}</td>
                                     <td>{{ $item->end_date }}</td>
                                     <td>

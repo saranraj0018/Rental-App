@@ -88,7 +88,7 @@
             min-width: 50px !important;
             padding: .5em !important;
             font-size: .9em;
-            padding: .5em !important; 
+            padding: .5em !important;
         }
 
     </style>
@@ -157,7 +157,7 @@
                             <th style="font-size: .7em; text-align: center; padding: .3em">
                                 <input type="text" id="customer_name" name="customer_name" class="form-control apply-width" placeholder="Name">
                             </th>
-                             <th  style="font-size: .7em; text-align: center; padding: .3em">Mobile Number</th>
+                             <th  style="font-size: .7em; text-align: center; padding: .3em">Phone</th>
                             <th  style="font-size: .7em; text-align: center; padding: .3em"> <input type="text" id="car_model" name="car_model" class="form-control apply-width" placeholder="Model" style="padding: 0%;"></th>
                             <th  style="font-size: .7em; text-align: center; padding: .3em"><input type="text" id="register_number" name="register_number" class="form-control apply-width" placeholder="REG"></th>
                             <th  style="font-size: .7em; text-align: center; padding: .3em">Address</th>

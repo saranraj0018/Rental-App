@@ -130,7 +130,7 @@
                         <strong>Weekend Fare:</strong> ₹<span id="week_end_amount">0</span>
                     </li>
 
-                    <li class="list-group-item">
+                    <li class="list-group-item bg-secondary">
                         <strong>Base Fare:</strong> ₹<span id="modal_base_fare">0</span>
                     </li>
 
@@ -150,7 +150,7 @@
                         <strong>Refundable Security Deposit:</strong> ₹<span id="dep_fee">0</span>
                     </li>
 
-                    <li class="list-group-item">
+                    <li class="list-group-item bg-secondary">
                         <strong>Grand Total:</strong> ₹<span id="grand_total">0</span>
                     </li>
                 </ul>
@@ -347,14 +347,14 @@
                                     <li class="list-group-item">Mode of Payment: <input x-on:change="updateTotal"
                                         class="form-control" id="mode_of_payment" type="text" name="mode_of_payment"
                                         x-model="mode_of_payment" :value="mode_of_payment" placeholder="Enter payment mode"></li>
-                                        
+
                                     <li class="list-group-item">Discount: <input x-on:change="updateTotal"
                                             class="form-control" id="discount" type="number" name="discount"
                                             x-model="discount" :value="discount" placeholder="Fixed Eg.., 200.00"></li>
                                     <span class="text-sm p-3">* The discount will be added to the Grand Total
                                         automatically
                                     </span>
-                                      
+
                                 </ul>
                             </div>
                         </div>

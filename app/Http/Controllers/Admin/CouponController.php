@@ -16,6 +16,13 @@ class CouponController extends BaseController
     public function list(Request $request)
     {
          $this->authorizePermission('coupon_view');
+         $expired_date = Coupon::whereDate('end_date', '<=', now())->get();
+         if(!empty($expired_date)){
+             $expired_date->each(function ($item) {
+                 $item->status = 2;
+                 $item->save();
+             });
+        }
         $coupons = Coupon::with('user')->orderBy('created_at', 'desc')->paginate(5);
         return view('admin.coupon.list', compact('coupons'));
     }
