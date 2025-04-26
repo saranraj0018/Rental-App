@@ -31,8 +31,8 @@ class UserController extends BaseController {
         }
 
 
-        // dd($request['user_type']);
-        if (!empty($request['user_type']) && $request['user_type'] != 2) {
+
+        if (isset($request['user_type']) && $request['user_type'] != 2) {
             $query->where('is_offline_booking', '=', $request['user_type']);
         }
 
@@ -139,7 +139,7 @@ class UserController extends BaseController {
 
     public function fillUserDetails(Request $request) {
         try {
-            
+
             $request->validate([
                 'mobile_number' => 'required|digits:10',
             ]);

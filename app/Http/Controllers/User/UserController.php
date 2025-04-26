@@ -26,7 +26,7 @@ class UserController extends Controller
     public function view()
     {
         $section1 = Frontend::with('frontendImage')->where('data_keys','section1-image-car')->first();
-        $section2 = Coupon::whereDate('end_date', '>=', now())->get();
+        $section2 = Coupon::where('status',1)->whereDate('end_date', '>=', now())->get();
         $city_list = City::where('city_status', 1)->pluck('name', 'code');
         $filter_car_info = !empty(self::getAvailableCars()) ? self::getAvailableCars() : CarDetails::all();
         $section3 = collect($filter_car_info)->unique('model_id')->values()->all();
@@ -182,7 +182,7 @@ class UserController extends Controller
                 'end_date' => session('end_date'),
             ]
         ]);
-        
+
         return view('user.frontpage.single-car.view',compact('car_model','ipr_data','image_list','price_list','general_section','available_cars'));
     }
 

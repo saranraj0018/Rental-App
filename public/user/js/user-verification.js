@@ -199,7 +199,10 @@ $(function () {
     });
 
 
-
+    $('#login_with_mobile').click(function() {
+        $('#mobileModal').modal('show');
+        $('#emailModal').modal('hide');
+    });
 
 
 
@@ -233,7 +236,7 @@ $(function () {
                         $('#registerModal').modal('hide');
                         $('.invalid-feedback').text('');
                         $('#mobileModal').modal('show');
-                       
+
                     } else {
                        //
                     }
