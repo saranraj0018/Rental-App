@@ -24,19 +24,17 @@ class UserController extends BaseController {
 
 
     public function search(Request $request)
-    {
+    {  $perPage = $request->input('per_page', 1);
         $query = User::with('userDoc');
         if (!empty($request['name_search'])) {
             $query->where('name', 'like', '%' .  $request['name_search']. '%');
         }
 
-
-
         if (isset($request['user_type']) && $request['user_type'] != 2) {
             $query->where('is_offline_booking', '=', $request['user_type']);
         }
 
-        $user_list = $query->paginate(10);
+        $user_list = $query->paginate($perPage);
         return response()->json(['data'=> ['user' => $user_list->items(),'pagination' => $user_list->links()->render()]]);
 
     }

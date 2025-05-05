@@ -103,7 +103,7 @@
                         </div>
                         <div class="py-3 px-2 px-lg-5">
                             <form id="email-login">
-                                
+
                                 <div class="mb-3">
                                     <label for="user_email" class="form-label fs-12 fw-500">Enter your email address</label>
                                     <input type="email" class="form-control bg-grey form-bdr"

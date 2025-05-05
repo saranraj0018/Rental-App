@@ -60,26 +60,30 @@
         }
     });
 
-    
+
 
 
     function googleRedirectAction(googleRegisterData) {
-
         const urlParams = new URLSearchParams(window.location.search);
 
         if (urlParams.has('google_redirect') && googleRegisterData != null) {
-            $('#registerModal').modal('show')
-            document.querySelector('#google_button').style.display = "none"
-            $('#user_name_').val(googleRegisterData.name);
-            $('#user_email').val(googleRegisterData.email);
-            // $('#user_email').prop('disabled', true);
+            $('#registerModal').modal('show');
+
+            $('#registerModal').on('shown.bs.modal', function () {
+                document.querySelector('#google_button').style.display = "none";
+
+                // Set name and email
+                $('#user_name_').val(googleRegisterData.name);
+                $('.user_email').val(googleRegisterData.email);
+            });
 
         } else {
-            document.querySelector('#google-button').style.display = 'unset'
+            document.querySelector('#google-button').style.display = 'unset';
             $('#user_name_').val('');
             $('#user_email').val('');
         }
     }
+
 </script>
 </body>
 

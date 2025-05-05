@@ -27,8 +27,8 @@ $(function () {
             singleDatePicker: true,
             timePickerIncrement: 30,
             timePicker24Hour: true,
-            startDate: moment().startOf('hour'),
-            minDate: moment().startOf('day'),
+            // startDate: moment().startOf('hour'),
+            // minDate: moment().startOf('day'),
             locale: {
                 format: 'DD-MM-YYYY HH:mm'
             }
@@ -39,8 +39,8 @@ $(function () {
             singleDatePicker: true,
             timePickerIncrement: 30,
             timePicker24Hour: true,
-            startDate: moment().startOf('hour'),
-            minDate: moment().startOf('day'),
+            // startDate: moment().startOf('hour'),
+            // minDate: moment().startOf('day'),
             locale: {
                 format: 'DD-MM-YYYY HH:mm'
             }
@@ -399,11 +399,12 @@ $(function () {
             $('#dep_fee').text($(this).data('dep_fee'));
             $('#coupon').text($(this).data('coupon'));
             $('#manual_discount').text($(this).data('manual_discount'));
+
             $('#grand_total').text(
-                (isNull(parseFloat($(this).data('week_days_amount')), 0) + 
-                isNull(parseFloat($(this).data('week_end_amount')), 0) + 
-                isNull(parseFloat($(this).data('festival_amount')), 0) + 
-                isNull(parseFloat($(this).data('delivery_fee')), 0) + 
+                (isNull(parseFloat($(this).data('week_days_amount')), 0) +
+                isNull(parseFloat($(this).data('week_end_amount')), 0) +
+                isNull(parseFloat($(this).data('festival_amount')), 0) +
+                isNull(parseFloat($(this).data('delivery_fee')), 0) +
                 isNull(parseFloat($(this).data('dep_fee')), 0)) -
                 isNull(parseFloat($(this).data('coupon')), 0) -
                 isNull(parseFloat($(this).data('manual_discount')), 0)
@@ -470,13 +471,13 @@ $(function () {
         function updateBookingTable(data,permissions) {
             let tbody = $('#booking_table tbody');
             tbody.empty(); // Clear existing rows
-       
+
 
             if (data.bookings.length === 0) {
                 tbody.append(`<tr><td colspan="15" class="text-center">Record Not Found</td></tr>`);
             } else {
                 $.each(data.bookings, function(index, item) {
-            
+
                     // Parse booking details and payment details if they exist
                     let bookingDetails = (item.details && item.details.length > 0)
                         ? JSON.parse(item.details?.[0].car_details || '{}')
@@ -635,7 +636,7 @@ $(function () {
 
 
     $('.mobile_field').on('blur', function() {
-        
+
         if ($(this).val().length === 10) {
 
             $.ajax({
@@ -648,7 +649,7 @@ $(function () {
                 success: function(response) {
                     if(response.user) {
                         const { name, email, aadhaar_number, driving_licence } = response.user;
-                      
+
                         $('#name').val(name);
                         $('#email').val(email);
                         $('#aadhaar_card').val(aadhaar_number);
@@ -668,5 +669,5 @@ $(function () {
 
 
 function isNull(value, replacment) {
-    return !value ? replacment : value; 
+    return !value ? replacment : value;
 }
