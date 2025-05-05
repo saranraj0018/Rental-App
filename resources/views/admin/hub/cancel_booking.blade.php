@@ -135,25 +135,25 @@
                     <table id="cancel_booking_table" class="table table-hover text-nowrap">
                         <thead>
                         <tr>
-                            <th>Booking<br>Type</th>
-                            <th>Mode of<br>Payment</th>
+                            <th  style="font-size: .7em; text-align: center; padding: .3em">Booking<br>Type</th>
+                            <th  style="font-size: .7em; text-align: center; padding: .3em">Mode of<br>Payment</th>
                             @if (in_array('hub_risk_status', getAdminPermissions()) || in_array('hub_risk_comments', getAdminPermissions()))
-                                    <th>Risk</th>
+                                    <th style="font-size: .7em; text-align: center; padding: .3em">Risk</th>
                                 @endif
-                            <th>Time</th>
-                             <th>
+                            <th style="font-size: .7em; text-align: center; padding: .3em 1.6em">Time</th>
+                             <th style="font-size: .7em; text-align: center; padding: .3em">
                                 <input type="text" id="cancel_customer_name" name="cancel_customer_name" class="form-control apply-width" placeholder="Name">
                             </th>
-                             <th>Mobile Number</th>
-                            <th> <input type="text" id="cancel_car_model" name="cancel_car_model" class="form-control apply-width" placeholder="Model" style="padding: 0%;"></th>
-                            <th><input type="text" id="cancel_register_number" name="cancel_register_number" class="form-control apply-width" placeholder="Registration Number"></th>
-                            <th>Address</th>
-                            <th>User Details</th>
-                            <th>D/L Number</th>
-                            <th><input type="text" id="cancel_booking_id" name="cancel_booking_id" class="form-control apply-min-width" style="padding: 0%    ;" placeholder="Booking ID"></th>
-                            <th>Reschedule</th>
-                            <th>Security Dep</th>
-                            <th>Amount</th>
+                            <th  style="font-size: .7em; text-align: center; padding: .3em">Phone</th>
+                            <th  style="font-size: .7em; text-align: center; padding: .3em"> <input type="text" id="cancel_car_model" name="cancel_car_model" class="form-control apply-width" placeholder="Model" style="padding: 0%;"></th>
+                            <th  style="font-size: .7em; text-align: center; padding: .3em"><input type="text" id="cancel_register_number" name="cancel_register_number" class="form-control apply-width" placeholder="Registration Number"></th>
+                            <th style="font-size: .7em; text-align: center; padding: .3em">Address</th>
+                            <th  style="font-size: .7em; text-align: center; padding: .3em">User Details</th>
+                            <th style="font-size: .7em; text-align: center; padding: .3em">D/L Number</th>
+                            <th style="font-size: .7em; text-align: center; padding: .3em"><input type="text" id="cancel_booking_id" name="cancel_booking_id" class="form-control apply-min-width" style="padding: 0%    ;" placeholder="Booking ID"></th>
+                            <th style="font-size: .7em; text-align: center; padding: .3em">Reschedule</th>
+                            <th  style="font-size: .7em; text-align: right; padding: .3em">Security Dep</th>
+                            <th  style="font-size: .7em; text-align: right; padding: .3em">Amount</th>
                         </tr>
                         </thead>
                         <tbody>

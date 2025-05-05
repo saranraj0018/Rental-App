@@ -63,12 +63,12 @@ $(function () {
             return date.toLocaleDateString();
         }
 
-        function fetchData() {
+        function fetchData(page = 1) {
             let name_search = $("#name_search").val();
             let user_type = $("#user_type").val();
-            
+
             $.ajax({
-                url: "/admin/user/search", // Define this route in your web.php
+                url: "/admin/user/search?page=" + page, // Define this route in your web.php
                 type: "GET",
                 data: {
                     name_search: name_search,
@@ -76,6 +76,7 @@ $(function () {
                 },
                 success: function (response) {
                     updateHolidayTable(response.data); // Populate table with new data
+                    $("#pagination").html(response.data.pagination);
                 },
                 error: function (xhr) {
                     alertify.error("Something Went Wrong");
@@ -83,11 +84,17 @@ $(function () {
             });
         }
 
+        $(document).on("click", "#pagination a", function (e) {
+            e.preventDefault();
+            let page = $(this).attr("href").split("page=")[1];
+            fetchData(page);
+        });
+
         $("#name_search").on("keyup", fetchData);
         $("#user_type").on("change", fetchData);
 
         $("#user_table").on("click", ".user_view", function () {
-            
+
             // Show the modal
             $("#document_model").modal("show");
 
@@ -100,7 +107,7 @@ $(function () {
             // Clear any existing images in the modal
             $("#image_gallery").empty();
             $("#documents").empty();
-            
+
             if (images && images.length > 0) {
                 images?.forEach((imageName, index) => {
                     if (imageName) {
@@ -122,7 +129,7 @@ $(function () {
             }
 
             if (documents && documents.length) {
-                
+
                 JSON.parse(documents)?.map((document) => {
                     if (document?.title) {
                         $("#documents").append(`
