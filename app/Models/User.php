@@ -28,7 +28,8 @@ class User extends Authenticatable
         'password',
          'documents',
          'is_offline_booking',
-         'updated_user_name'
+         'updated_user_name',
+         'password_reset_token'
     ];
 
     /**
