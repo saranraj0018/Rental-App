@@ -105,9 +105,10 @@
                             <form id="email-login">
 
                                 <div class="mb-3">
-                                    <label for="user_email" class="form-label fs-12 fw-500">Enter your email address</label>
-                                    <input type="email" class="form-control bg-grey form-bdr"
-                                        id="user_email" name="user_email" placeholder="ie.., bernard@hackwell.com">
+                                    <label for="user_email" class="form-label fs-12 fw-500">Enter your email
+                                        address</label>
+                                    <input type="email" class="form-control bg-grey form-bdr" id="user_email"
+                                        name="user_email" placeholder="ie.., bernard@hackwell.com">
                                     <div class="invalid-feedback">
                                         Please enter the Email Address.
                                     </div>
@@ -115,15 +116,18 @@
 
                                 <div class="mb-3">
                                     <label for="password" class="form-label fs-12 fw-500">Enter your Password</label>
-                                    <input type="password" class="form-control bg-grey form-bdr"
-                                        id="password" name="password" placeholder="ie.., ********">
+                                    <input type="password" class="form-control bg-grey form-bdr" id="password"
+                                        name="password" placeholder="ie.., ********">
                                     <div class="invalid-feedback">
                                         Please enter the Password.
                                     </div>
                                 </div>
 
-                                <span class="fw-500 text-danger mb-4" id="user_email_error"></span>
-                                <button type="submit" class="btn my-button next-button w-100 mt-5" id="emailLoginButton">Login</button>
+                                <a href="#" data-bs-target="#forget_password" data-bs-toggle="modal" data-bs-dismiss="modal">Forget Password</a>
+
+                                <span class="fw-500 text-danger mb-4 d-block" id="user_email_error"></span>
+                                <button type="submit" class="btn my-button next-button w-100 mt-5"
+                                    id="emailLoginButton">Login</button>
 
                                 <div style="position: relative; width: 100%; margin: 2em 0;">
                                     <p style="border: 1px solid #00000041; width: 100%;"></p>
@@ -296,6 +300,103 @@
         </div>
     </div>
 
+
+
+    {{-- Register model --}}
+    <div class="modal left fade custom-modal m-0 overflow-hidden" id="forget_password" tabindex="-1"
+        aria-labelledby="forget_password_form" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog position-top-right">
+            <div class="modal-content bdr-20">
+                <div class="modal-body h-600px p-0">
+                    <div class="input-set fade-element show">
+                        <div class="other-heads-bg p-4 bdr-top-15">
+                            <div>
+                                <button type="button"
+                                    class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2"
+                                    data-bs-dismiss="modal" aria-label="Close">
+                                    <i class="fa fa-angle-left text-white fs-18"></i>
+                                </button>
+                            </div>
+                            <div>
+                                <h4 class="modal-title text-white my-2 lh-sm">Forget Password</h4>
+                                <p class="fs-12 text-white">Reset Password form</p>
+                            </div>
+                        </div>
+                        <form x-data="{
+                            email: null,
+                            error: '',
+                        }" @submit.prevent="async () => {
+                            if(!email) {
+                                error = 'Email address is required'
+                                return false;
+                            } else error = ''
+
+
+                            try {
+                                const response = await axios.post('{{ route('forget-password') }}', {
+                                    email: email
+                                });
+
+                                if(response?.status) {
+                                    $('#forget_password').modal('hide')
+                                    $('#forget_password_confirmation').modal('show')
+                                }
+
+                            } catch(error) {
+                                console.log(error)
+                            }
+                                    
+                        }">
+                            <div class="py-3 px-2 px-lg-5">
+                                
+                                <div class="mb-2">
+                                    <label for="reset_email" class="form-label fs-12 fw-500">Your Email</label>
+                                    <input type="email" class="form-control bg-grey form-bdr" id="reset_email"
+                                        name="reset_email" x-model="email" placeholder="Enter your Email">
+                                    <span class="text-danger text-sm" x-text="error"></span>
+                                </div>
+
+                                <button type="submit" class="btn my-button next-button w-100 mb-5 mt-3">Send Password Reset
+                                    Link</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    {{-- Register model --}}
+    <div class="modal left fade custom-modal m-0 overflow-hidden" id="forget_password_confirmation" tabindex="-1"
+        aria-labelledby="forget_password_confirmation" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog position-top-right">
+            <div class="modal-content bdr-20">
+                <div class="modal-body h-600px p-0">
+                    <div class="input-set fade-element show">
+                        <div class="other-heads-bg p-4 bdr-top-15">
+                            <div>
+                                <button type="button"
+                                    class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2"
+                                    data-bs-dismiss="modal" aria-label="Close">
+                                    <i class="fa fa-angle-left text-white fs-18"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="px-5 mt-5">
+                            <h4 class="modal-title  my-2 lh-sm">Reset Password</h4>
+                            <p class="fs-12 ">The Password reset link has been sent to your email</p>
+                            <button type="button" data-bs-dismiss="modal" class="btn my-button next-button w-100 mb-5 mt-5">Okay</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 

@@ -7,7 +7,7 @@ use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\OAuthController;
-
+use App\Http\Controllers\User\PasswordResetController;
 
 Route::get('/', [UserController::class, 'view'])->name('home');
 Route::view('/test', 'dummy')->name('dummy');
@@ -28,8 +28,14 @@ Route::get('user/check-auth', function () {
     return response()->json(['isAuthenticated' => auth()->check()]);
 });
 
-Route::middleware(['auth'])->group(function () {
 
+Route::post('user/forget-password', [PasswordResetController::class, 'forgotPassword'])->name('forget-password');
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'create'])->name('password.reset');
+Route::post('/reset-user-password', [PasswordResetController::class, 'store'])->name('reset-user-password');
+
+Route::middleware(['auth'])->group(function () {
+    
+    Route::post('/update-password', [PasswordResetController::class, 'update'])->name('update-password');
     Route::post('user/check-location', [LocationController::class, 'checkLocation']);
     Route::get('/user/verify-document', [OTPController::class, 'verifyDocument'])->name('verify.document');
     Route::get('/user/verify-booking', [OTPController::class, 'verifyBooking'])->name('verify.booking');
