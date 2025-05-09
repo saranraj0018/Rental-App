@@ -210,14 +210,14 @@ $(function () {
     // User Registration form
     $('#user_registration').on('submit', function(e) {
         e.preventDefault();
-       const fields = [
+        const fields = [
             { id: '#user_name_', condition: (val) => val === '' },
-            { id: '#user_email', condition: (val) => val === '' },
+            { id: '#user_email_reg', condition: (val) => val === '' },
             { id: '#reg_mobile_number', condition: (val) => val === '' },
-            { id: '#password', condition: (val) => val === '' },
-            { id: '#password_confirmation', condition: (val) => {
-                return val === '' && $('#password').val() == val;
-            }}
+            { id: '#password_reg', condition: (val) => val === '' },
+            { id: '#password_reg_confirmation', condition: (val) => {
+                    return val === '' && $('#password_reg').val() == val;
+                }}
         ];
 
         let isValid = true;

@@ -29,6 +29,12 @@
         error: ''
     }" @submit.prevent="async () => {
 
+
+     if(password.length < 8) {
+            error = 'The password field must be at least 8 characters.'
+            return;
+        }
+
         if(!password || !password_confirmation) {
             error = 'Password Fields are required'
             return;
@@ -56,18 +62,24 @@
         <div class="shadow-sm p-4 form-bdr" style="width: 400px">
             <h4 class="mb-0">Reset Password</h4>
             <p class="mb-4 text-secondary">Please enter the new password</p>
-            <div class="mb-3 w-100">
+            <div class="mb-3 w-100 position-relative"  x-data="{ show: false }">
                 <label for="password" class="form-label fs-12 fw-500">Password</label>
-                <input type="password" class="form-control  w-100 bg-grey form-bdr" x-model="password" id="password" name="password"
+                <input :type="show ? 'text' : 'password'" class="form-control  w-100 bg-grey form-bdr" x-model="password" id="password" name="password"
                     placeholder="********">
+                <i @click="show = !show"
+                   :class="show ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                   style="position: absolute; top: 38px; right: 15px; cursor: pointer; color: #6c757d;"></i>
                 <span class="text-danger" x-text="error"></span>
             </div>
 
-            <div class="mb-3 w-100">
+            <div class="mb-3 w-100 position-relative"  x-data="{ show: false }">
                 <label for="password_confirmation" class="form-label fs-12 fw-500">Confirm
                     Password</label>
-                <input type="password" class="form-control bg-grey form-bdr" x-model="password_confirmation" id="password_confirmation"
+                <input :type="show ? 'text' : 'password'" class="form-control bg-grey form-bdr" x-model="password_confirmation" id="password_confirmation"
                     name="password_confirmation" placeholder="********">
+                <i @click="show = !show"
+                   :class="show ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                   style="position: absolute; top: 38px; right: 15px; cursor: pointer; color: #6c757d;"></i>
             </div>
 
             <button type="submit" class="btn my-button next-button w-100 mt-4">Change Password</button>

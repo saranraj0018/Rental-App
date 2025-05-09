@@ -38,7 +38,7 @@
             </div>
         </div>
     </div>
-    
+
         <div x-show="activeTab == 'profile'">
 
             <form id="user_profile">
@@ -225,7 +225,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </section>
         </div>
 
@@ -234,25 +234,25 @@
 
             <form x-data="{
                 old_password: null,
-                password: null, 
+                password: null,
                 password_confirmation: null,
                 error: '',
 
                 errors: {
                     old_password: '',
-                    password: '', 
+                    password: '',
                     password_confirmation: '',
                 },
-                  
+
                 validate() {
                     this.errors.old_password = '';
                     this.errors.password = '';
                     this.errors.password_confirmation = '';
-                  
+
                     if (!this.old_password) {
                       this.errors.old_password = 'Old password is required.';
                     }
-                  
+
                     if (!this.password) {
                       this.errors.password = 'New password is required.';
                     } else {
@@ -262,16 +262,16 @@
                         this.errors.password = 'New password must be at least 8 characters long.';
                       }
                     }
-                  
+
                     if (!this.password_confirmation) {
                       this.errors.password_confirmation = 'Confirm password is required.';
                     } else if (this.password && this.password_confirmation !== this.password) {
                       this.errors.password_confirmation = 'Confirm password does not match.';
                     }
-                  
+
                     return !this.errors.old_password && !this.errors.password && !this.errors.password_confirmation;
                 }
-                
+
 
             }" id="user_password_form" @submit.prevent="async() => {
                  if(!validate()) {
@@ -302,24 +302,38 @@
                                 <p style="font-size: .8em; color: gray">Change your password for the user</p>
                                 <span class="text-danger" style="font-size: .8em" x-text="error"></span>
 
-                                <div class="mt-3">
-                                    <label for="name" class="fs-14 fw-500">Current Password</label>
-                                    <input x-model="old_password" type="password" class="form-control fs-14" name="old_password" id="old_password"  placeholder="Enter Your Current Password">
+                                <!-- Current Password -->
+                                <div class="mt-3 position-relative" x-data="{ show: false }">
+                                    <label for="old_password" class="fs-14 fw-500">Current Password</label>
+                                    <input x-model="old_password" :type="show ? 'text' : 'password'" class="form-control fs-14 pe-5"
+                                           name="old_password" id="old_password" placeholder="Enter Your Current Password">
+                                    <i @click="show = !show"
+                                       :class="show ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                                       style="position: absolute; top: 38px; right: 15px; cursor: pointer; color: #6c757d;"></i>
                                     <span class="text-danger" style="font-size: .8em" x-text="errors.old_password"></span>
                                 </div>
-                                
-                                <div class="mt-3">
-                                    <label for="name" class="fs-14 fw-500">New Password</label>
-                                    <input x-model="password" type="password" class="form-control fs-14" name="password" id="password"  placeholder="Enter New Password">
+
+                                <!-- New Password -->
+                                <div class="mt-3 position-relative" x-data="{ show: false }">
+                                    <label for="password" class="fs-14 fw-500">New Password</label>
+                                    <input x-model="password" :type="show ? 'text' : 'password'" class="form-control fs-14 pe-5"
+                                           name="password" id="password" placeholder="Enter New Password">
+                                    <i @click="show = !show"
+                                       :class="show ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                                       style="position: absolute; top: 38px; right: 15px; cursor: pointer; color: #6c757d;"></i>
                                     <span class="text-danger" style="font-size: .8em" x-text="errors.password"></span>
                                 </div>
 
-                                <div class="mt-3">
-                                    <label for="name" class="fs-14 fw-500">Confirm Password</label>
-                                    <input x-model="password_confirmation" type="password" class="form-control fs-14" name="password_confirmation" id="password_confirmation"  placeholder="Confirm Password">
+                                <!-- Confirm Password -->
+                                <div class="mt-3 position-relative" x-data="{ show: false }">
+                                    <label for="password_confirmation" class="fs-14 fw-500">Confirm Password</label>
+                                    <input x-model="password_confirmation" :type="show ? 'text' : 'password'" class="form-control fs-14 pe-5"
+                                           name="password_confirmation" id="password_confirmation" placeholder="Confirm Password">
+                                    <i @click="show = !show"
+                                       :class="show ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                                       style="position: absolute; top: 38px; right: 15px; cursor: pointer; color: #6c757d;"></i>
                                     <span class="text-danger" style="font-size: .8em" x-text="errors.password_confirmation"></span>
                                 </div>
-
                                 <div class="w-100 mt-5">
                                     <button type="submit" class="btn my-blue-btn blue-bg text-white rounded-pill fs-14 fw-500 w-100"
                                         id="">Update Password</button>
