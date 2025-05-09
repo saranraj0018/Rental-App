@@ -17,13 +17,13 @@ class OTPController extends Controller {
 
 
     public function emailLogin(Request $request) {
-        
+
         $request->validate([
             'user_email' => 'required|email',
             'password' => 'required',
         ]);
 
-    
+
         try {
             if (!Auth::attempt(['email' => $request->user_email, ...$request->only('password')])) {
               throw new \Exception('Invalid credentials', 401);
@@ -38,7 +38,7 @@ class OTPController extends Controller {
             return response()->json([
                 'success' => false,
                 'message' => $th->getMessage()
-            ], 500); 
+            ], 500);
         }
     }
 
@@ -103,16 +103,16 @@ class OTPController extends Controller {
     public function register(Request $request) {
         $request->validate([
             'user_name' => 'required|string|max:255',
-            'user_email' => 'required|email|unique:users,email',
+            'user_email_reg' => 'required|email|unique:users,email',
             'reg_mobile_number' => 'required|digits:10|unique:users,mobile',
-            'password' => 'required|confirmed',
+            'password_reg' => 'required|confirmed',
         ]);
 
         $user = new User();
         $user->name = $request['user_name'];
         $user->mobile = $request['reg_mobile_number'];
-        $user->email = $request['user_email'];
-        $user->password = bcrypt($request['password']);
+        $user->email = $request['user_email_reg'];
+        $user->password = bcrypt($request['password_reg']);
         $user->save();
 
         return response()->json(['success' => 'true', 'message' => 'Registration successful!']);

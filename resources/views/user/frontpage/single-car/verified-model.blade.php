@@ -237,15 +237,15 @@
                                 <div class="mb-2">
                                     <label for="user_name_" class="form-label fs-12 fw-500">Your Name</label>
                                     <input type="text" class="form-control bg-grey form-bdr" id="user_name_"
-                                        name="user_name" placeholder="Enter your name">
+                                           name="user_name" placeholder="Enter your name">
                                     <div class="invalid-feedback">
                                         Please enter the User Name.
                                     </div>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="user_email" class="form-label fs-12 fw-500">Your Email</label>
-                                    <input type="email" class="form-control bg-grey form-bdr" id="user_email"
-                                        name="user_email" placeholder="Enter your Email">
+                                    <label for="user_email_reg" class="form-label fs-12 fw-500">Your Email</label>
+                                    <input type="email" class="form-control bg-grey form-bdr user_email" id="user_email_reg"
+                                           name="user_email_reg" placeholder="Enter your Email">
                                     <div class="invalid-feedback">
                                         Please enter the User Email.
                                     </div>
@@ -254,7 +254,7 @@
                                     <label for="reg_mobile_number" class="form-label fs-12 fw-500">Your Mobile
                                         Number</label>
                                     <input type="text" class="form-control bg-grey form-bdr" id="reg_mobile_number"
-                                        name="reg_mobile_number" placeholder="+91">
+                                           name="reg_mobile_number" placeholder="+91">
                                     <div class="invalid-feedback">
                                         Please enter the Mobile Number.
                                     </div>
@@ -262,27 +262,27 @@
 
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="mb-3">
-                                        <label for="password" class="form-label fs-12 fw-500">Password</label>
-                                        <input type="password" class="form-control bg-grey form-bdr" id="password"
-                                            name="password" placeholder="********">
+                                        <label for="password_reg" class="form-label fs-12 fw-500">Password</label>
+                                        <input type="password" class="form-control bg-grey form-bdr" id="password_reg"
+                                               name="password_reg" placeholder="********">
                                         <div class="invalid-feedback">
                                             Please enter the Mobile Number.
                                         </div>
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="password_confirmation" class="form-label fs-12 fw-500">Confirm
-                                            Password</label>
-                                        <input type="password" class="form-control bg-grey form-bdr"
-                                            id="password_confirmation" name="password_confirmation"
-                                            placeholder="********">
+                                        <label for="password_reg_confirmation" class="form-label fs-12 fw-500">Confirm Password</label>
+                                        <input type="password" class="form-control bg-grey form-bdr" id="password_reg_confirmation"
+                                               name="password_reg_confirmation" placeholder="********">
                                         <div class="invalid-feedback">
                                             Please enter the Mobile Number.
                                         </div>
                                     </div>
+
                                 </div>
 
                                 <button type="submit" class="btn my-button next-button w-100">Register</button>
+
 
                                 <div id="google_button">
                                     <a href="{{ url('auth/google') }}"
@@ -325,6 +325,8 @@
                         <form x-data="{
                             email: null,
                             error: '',
+                            disabled: false,
+                            title: 'Send Password Reset Link'
                         }" @submit.prevent="async () => {
                             if(!email) {
                                 error = 'Email address is required'
@@ -333,6 +335,8 @@
 
 
                             try {
+                                disabled = true
+                                 title = 'Please wait...'
                                 const response = await axios.post('{{ route('forget-password') }}', {
                                     email: email
                                 });
@@ -342,13 +346,17 @@
                                     $('#forget_password_confirmation').modal('show')
                                 }
 
+                                disabled = false
+                                  title = 'Send Password Reset Link'
+
                             } catch(error) {
+                                disabled = false
                                 console.log(error)
                             }
-                                    
+
                         }">
                             <div class="py-3 px-2 px-lg-5">
-                                
+
                                 <div class="mb-2">
                                     <label for="reset_email" class="form-label fs-12 fw-500">Your Email</label>
                                     <input type="email" class="form-control bg-grey form-bdr" id="reset_email"
@@ -356,8 +364,8 @@
                                     <span class="text-danger text-sm" x-text="error"></span>
                                 </div>
 
-                                <button type="submit" class="btn my-button next-button w-100 mb-5 mt-3">Send Password Reset
-                                    Link</button>
+                                <button x-text="title" type="submit" :disabled="disabled" class="btn my-button next-button w-100 mb-5 mt-3" :class="{ 'bg-secondary': disabled }">
+                                    </button>
                             </div>
                         </form>
                     </div>
@@ -386,7 +394,7 @@
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div class="px-5 mt-5">
                             <h4 class="modal-title  my-2 lh-sm">Reset Password</h4>
                             <p class="fs-12 ">The Password reset link has been sent to your email</p>

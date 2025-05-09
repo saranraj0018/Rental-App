@@ -29,6 +29,12 @@
         error: ''
     }" @submit.prevent="async () => {
 
+
+     if(password.length < 8) {
+            error = 'The password field must be at least 8 characters.'
+            return;
+        }
+
         if(!password || !password_confirmation) {
             error = 'Password Fields are required'
             return;
