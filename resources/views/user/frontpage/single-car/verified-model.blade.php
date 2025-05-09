@@ -114,14 +114,23 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
+                                <div class="mb-3" x-data="{ show: false }" style="position: relative;">
                                     <label for="password" class="form-label fs-12 fw-500">Enter your Password</label>
-                                    <input type="password" class="form-control bg-grey form-bdr" id="password"
-                                        name="password" placeholder="ie.., ********">
+
+                                    <input :type="show ? 'text' : 'password'" class="form-control bg-grey form-bdr pe-5"
+                                           id="password" name="password" placeholder="ie.., ********">
+
+                                    <!-- Toggle Icon -->
+                                    <i @click="show = !show"
+                                       :class="show ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                                       style="position: absolute; top: 38px; right: 15px; cursor: pointer; color: #6c757d;"></i>
+
                                     <div class="invalid-feedback">
                                         Please enter the Password.
                                     </div>
                                 </div>
+
+
 
                                 <a href="#" data-bs-target="#forget_password" data-bs-toggle="modal" data-bs-dismiss="modal">Forget Password</a>
 
@@ -261,24 +270,31 @@
                                 </div>
 
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="mb-3">
+                                    <!-- Password Field -->
+                                    <div class="mb-3 position-relative w-100" x-data="{ show: false }">
                                         <label for="password_reg" class="form-label fs-12 fw-500">Password</label>
-                                        <input type="password" class="form-control bg-grey form-bdr" id="password_reg"
-                                               name="password_reg" placeholder="********">
+                                        <input :type="show ? 'text' : 'password'" class="form-control bg-grey form-bdr pe-5"
+                                               id="password_reg" name="password_reg" placeholder="********">
+                                        <i @click="show = !show"
+                                           :class="show ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                                           style="position: absolute; top: 38px; right: 15px; cursor: pointer; color: #6c757d;"></i>
                                         <div class="invalid-feedback">
-                                            Please enter the Mobile Number.
+                                            Please enter the Password.
                                         </div>
                                     </div>
 
-                                    <div class="mb-3">
+                                    <!-- Confirm Password Field -->
+                                    <div class="mb-3 position-relative w-100" x-data="{ show: false }">
                                         <label for="password_reg_confirmation" class="form-label fs-12 fw-500">Confirm Password</label>
-                                        <input type="password" class="form-control bg-grey form-bdr" id="password_reg_confirmation"
-                                               name="password_reg_confirmation" placeholder="********">
+                                        <input :type="show ? 'text' : 'password'" class="form-control bg-grey form-bdr pe-5"
+                                               id="password_reg_confirmation" name="password_reg_confirmation" placeholder="********">
+                                        <i @click="show = !show"
+                                           :class="show ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                                           style="position: absolute; top: 38px; right: 15px; cursor: pointer; color: #6c757d;"></i>
                                         <div class="invalid-feedback">
-                                            Please enter the Mobile Number.
+                                            Please enter the Confirm Password.
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <button type="submit" class="btn my-button next-button w-100">Register</button>
