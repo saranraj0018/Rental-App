@@ -49,7 +49,7 @@ class PasswordResetController extends Controller
             return response()->json([
                 "status" => $th->getCode() ?: 500,
                 "message" => $th->getMessage()
-            ],  500);
+            ], $th->getCode() ?: 500);
         }
     }
 
@@ -57,10 +57,10 @@ class PasswordResetController extends Controller
 
     public function create(Request $request, string $token) {
 
-        if(!($user = \App\Models\User::where('email', '=', $request->get('email'))->first()))
+        if(!($user = \App\Models\User::where('email', '=', $request->get('email'))->first())) 
             abort(404);
 
-        if(!($token === $user->password_reset_token))
+        if(!($token === $user->password_reset_token)) 
             abort(404);
 
 
@@ -73,7 +73,7 @@ class PasswordResetController extends Controller
 
 
     public function store(Request $request) {
-
+       
         try {
 
             $request->validate([
@@ -82,10 +82,10 @@ class PasswordResetController extends Controller
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
             ]);
 
-            if(!($user = \App\Models\User::whereEmail($request->email)->first()))
+            if(!($user = \App\Models\User::whereEmail($request->email)->first())) 
                 throw new \Exception('Invalid or Expired Token');
 
-            if(!($request->token === $user->password_reset_token))
+            if(!($request->token === $user->password_reset_token)) 
                 throw new \Exception('Invalid or Expired Token');
 
             $user->update([
@@ -105,30 +105,30 @@ class PasswordResetController extends Controller
             ], $th->getCode() ?: 500);
         }
 
-    }
+    } 
 
 
 
     public function update(Request $request) {
-
+        
         try {
 
             $request->validate([
                 'old_password' => 'required',
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
             ]);
-
+        
             $user = \App\Models\User::find(auth()->id());
-
+        
             if (!$user) {
                 throw new \Exception('User not found.');
             }
-
+        
             if (!Hash::check($request->old_password, $user->password)) {
                 throw new \Exception('Old Password did not match.');
-
+                
             }
-
+        
             $user->update([
                 'password' => Hash::make($request->password),
             ]);
