@@ -25,7 +25,7 @@
 
 }">
     <div class="modal left fade custom-modal m-0 overflow-hidden" id="mobileModal" tabindex="-1"
-        aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+         aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog position-top-right">
             <div class="modal-content bdr-20">
                 <div class="modal-body h-600px p-0">
@@ -33,8 +33,8 @@
                         <div class="other-heads-bg p-4 bdr-top-15">
                             <div>
                                 <button type="button"
-                                    class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2"
-                                    data-bs-dismiss="modal" aria-label="Close">
+                                        class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2"
+                                        data-bs-dismiss="modal" aria-label="Close">
                                     <i class="fa fa-angle-left text-white fs-18"></i>
                                 </button>
                             </div>
@@ -49,7 +49,7 @@
                                     <label for="mobileNumber" class="form-label fs-12 fw-500">Enter your Mobile
                                         Number</label>
                                     <input type="number" x-model="mobileNumber" class="form-control bg-grey form-bdr"
-                                        id="mobile_number" name="mobile_number" placeholder="">
+                                           id="mobile_number" name="mobile_number" placeholder="">
                                     <div class="invalid-feedback">
                                         Please enter the Mobile Number.
                                     </div>
@@ -64,7 +64,7 @@
                                 </div>
                                 <div>
                                     <button type="button" id="login_with_email"
-                                        class="w-100 rounded-pill btn btn-light border">
+                                            class="w-100 rounded-pill btn btn-light border">
                                         <i class="fa fa-envelope"></i>
                                         <span>Sign in with Email</span>
                                     </button>
@@ -83,7 +83,7 @@
     </div>
 
     <div class="modal left fade custom-modal m-0 overflow-hidden" id="emailModal" tabindex="-1"
-        aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+         aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog position-top-right">
             <div class="modal-content bdr-20">
                 <div class="modal-body h-600px p-0">
@@ -91,8 +91,8 @@
                         <div class="other-heads-bg p-4 bdr-top-15">
                             <div>
                                 <button type="button"
-                                    class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2"
-                                    data-bs-dismiss="modal" aria-label="Close">
+                                        class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2"
+                                        data-bs-dismiss="modal" aria-label="Close">
                                     <i class="fa fa-angle-left text-white fs-18"></i>
                                 </button>
                             </div>
@@ -108,7 +108,7 @@
                                     <label for="user_email" class="form-label fs-12 fw-500">Enter your email
                                         address</label>
                                     <input type="email" class="form-control bg-grey form-bdr" id="user_email"
-                                        name="user_email" placeholder="ie.., bernard@hackwell.com">
+                                           name="user_email" placeholder="ie.., bernard@hackwell.com">
                                     <div class="invalid-feedback">
                                         Please enter the Email Address.
                                     </div>
@@ -136,7 +136,7 @@
 
                                 <span class="fw-500 text-danger mb-4 d-block" id="user_email_error"></span>
                                 <button type="submit" class="btn my-button next-button w-100 mt-5"
-                                    id="emailLoginButton">Login</button>
+                                        id="emailLoginButton">Login</button>
 
                                 <div style="position: relative; width: 100%; margin: 2em 0;">
                                     <p style="border: 1px solid #00000041; width: 100%;"></p>
@@ -145,7 +145,7 @@
                                 </div>
                                 <div>
                                     <button type="button" id="login_with_mobile"
-                                        class="w-100 rounded-pill btn btn-light border">
+                                            class="w-100 rounded-pill btn btn-light border">
                                         <i class="fa fa-message"></i>
                                         <span>Sign in with Mobile Number</span>
                                     </button>
@@ -166,7 +166,7 @@
 
     {{-- Opt Verification --}}
     <div class="modal left fade custom-modal m-0 overflow-hidden" id="otpModal" tabindex="-1"
-        aria-labelledby="otpModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+         aria-labelledby="otpModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog position-top-right">
             <div class="modal-content bdr-20">
                 <div class="modal-body h-600px p-0">
@@ -174,8 +174,8 @@
                         <div class="other-heads-bg p-4 bdr-top-15">
                             <div>
                                 <button type="button"
-                                    class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2"
-                                    data-bs-dismiss="modal" aria-label="Close">
+                                        class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2"
+                                        data-bs-dismiss="modal" aria-label="Close">
                                     <i class="fa fa-angle-left text-white fs-18"></i>
                                 </button>
                             </div>
@@ -186,7 +186,7 @@
                         <div class="py-3 px-2 px-lg-5">
                             <form id="verification_otp">
                                 <input type="hidden" name="mobile_number2" id="mobile_number_otp2"
-                                    :value="mobileNumber">
+                                       :value="mobileNumber">
                                 <div class="mb-3">
 
 
@@ -202,7 +202,7 @@
                                     </p>
 
                                     <input type="number" class="form-control bg-grey form-bdr" id="verification_code"
-                                        name="verification_code" placeholder="">
+                                           name="verification_code" placeholder="">
                                     <div class="invalid-feedback">
                                         Please enter the Verification Code.
                                     </div>
@@ -210,7 +210,7 @@
                                 </div>
                                 <button type="submit" class="btn my-button next-button w-100">Verify Code</button>
                                 <button x-show="!otpResend" id="resend-otp" @click="resendOTP" type="button"
-                                    style="color: rgb(9, 58, 163); background: transparent; border: none; outline: none; font-size: .9em; width: 100%; text-align: center; margin-top: 1em">
+                                        style="color: rgb(9, 58, 163); background: transparent; border: none; outline: none; font-size: .9em; width: 100%; text-align: center; margin-top: 1em">
                                     Resend
                                     OTP</button>
                             </form>
@@ -223,7 +223,7 @@
 
     {{-- Register model --}}
     <div class="modal left fade custom-modal m-0 overflow-hidden" id="registerModal" tabindex="-1"
-        aria-labelledby="registerModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+         aria-labelledby="registerModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog position-top-right">
             <div class="modal-content bdr-20">
                 <div class="modal-body h-600px p-0">
@@ -231,8 +231,8 @@
                         <div class="other-heads-bg p-4 bdr-top-15">
                             <div>
                                 <button type="button"
-                                    class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2"
-                                    data-bs-dismiss="modal" aria-label="Close">
+                                        class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2"
+                                        data-bs-dismiss="modal" aria-label="Close">
                                     <i class="fa fa-angle-left text-white fs-18"></i>
                                 </button>
                             </div>
@@ -302,8 +302,8 @@
 
                                 <div id="google_button">
                                     <a href="{{ url('auth/google') }}"
-                                        class="mt-5 btn btn-light border d-flex align-items-center justify-content-center"
-                                        style="gap: 8px; padding: 10px; text-decoration: none;">
+                                       class="mt-5 btn btn-light border d-flex align-items-center justify-content-center"
+                                       style="gap: 8px; padding: 10px; text-decoration: none;">
                                         <i class="fab fa-google"></i>
                                         <span>Sign in with Google</span>
                                     </a>
@@ -320,7 +320,7 @@
 
     {{-- Register model --}}
     <div class="modal left fade custom-modal m-0 overflow-hidden" id="forget_password" tabindex="-1"
-        aria-labelledby="forget_password_form" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+         aria-labelledby="forget_password_form" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog position-top-right">
             <div class="modal-content bdr-20">
                 <div class="modal-body h-600px p-0">
@@ -328,8 +328,8 @@
                         <div class="other-heads-bg p-4 bdr-top-15">
                             <div>
                                 <button type="button"
-                                    class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2"
-                                    data-bs-dismiss="modal" aria-label="Close">
+                                        class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2"
+                                        data-bs-dismiss="modal" aria-label="Close">
                                     <i class="fa fa-angle-left text-white fs-18"></i>
                                 </button>
                             </div>
@@ -339,51 +339,63 @@
                             </div>
                         </div>
                         <form x-data="{
-                            email: null,
-                            error: '',
-                            disabled: false,
-                            title: 'Send Password Reset Link'
-                        }" @submit.prevent="async () => {
-                            if(!email) {
-                                error = 'Email address is required'
-                                return false;
-                            } else error = ''
+                                        email: null,
+                                        error: '',
+                                        disabled: false,
+                                        title: 'Send Password Reset Link'
+                                    }" @submit.prevent="async () => {
+                                        if (!email) {
+                                            error = 'Email address is required';
+                                            return;
+                                        } else {
+                                            error = '';
+                                        }
 
+                                        try {
+                                            disabled = true;
+                                            title = 'Please wait...';
 
-                            try {
-                                disabled = true
-                                 title = 'Please wait...'
-                                const response = await axios.post('{{ route('forget-password') }}', {
-                                    email: email
-                                });
+                                            const response = await axios.post('{{ route('forget-password') }}', {
+                                                email: email
+                                            });
 
-                                if(response?.status) {
-                                    $('#forget_password').modal('hide')
-                                    $('#forget_password_confirmation').modal('show')
-                                }
+                                            if (response?.status === 200) {
+                                                $('#forget_password').modal('hide');
+                                                $('#forget_password_confirmation').modal('show');
+                                            }
 
-                                disabled = false
-                                  title = 'Send Password Reset Link'
+                                            disabled = false;
+                                            title = 'Send Password Reset Link';
 
-                            } catch(error) {
-                                disabled = false
-                                console.log(error)
-                            }
+                                        } catch (err) {
+                                            disabled = false;
+                                            title = 'Send Password Reset Link';
 
-                        }">
+                                            // Try to extract a useful error message
+                                            if (err.response?.data?.message) {
+                                                error = err.response.data.message;
+                                            } else {
+                                                error = 'Something went wrong. Please try again.';
+                                            }
+
+                                            console.error(err);
+                                        }
+                                    }">
                             <div class="py-3 px-2 px-lg-5">
-
                                 <div class="mb-2">
                                     <label for="reset_email" class="form-label fs-12 fw-500">Your Email</label>
                                     <input type="email" class="form-control bg-grey form-bdr" id="reset_email"
-                                        name="reset_email" x-model="email" placeholder="Enter your Email">
+                                           name="reset_email" x-model="email" placeholder="Enter your Email">
                                     <span class="text-danger text-sm" x-text="error"></span>
                                 </div>
 
-                                <button x-text="title" type="submit" :disabled="disabled" class="btn my-button next-button w-100 mb-5 mt-3" :class="{ 'bg-secondary': disabled }">
-                                    </button>
+                                <button x-text="title" type="submit" :disabled="disabled"
+                                        class="btn my-button next-button w-100 mb-5 mt-3"
+                                        :class="{ 'bg-secondary': disabled }">
+                                </button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -396,7 +408,7 @@
 
     {{-- Register model --}}
     <div class="modal left fade custom-modal m-0 overflow-hidden" id="forget_password_confirmation" tabindex="-1"
-        aria-labelledby="forget_password_confirmation" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+         aria-labelledby="forget_password_confirmation" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog position-top-right">
             <div class="modal-content bdr-20">
                 <div class="modal-body h-600px p-0">
@@ -404,8 +416,8 @@
                         <div class="other-heads-bg p-4 bdr-top-15">
                             <div>
                                 <button type="button"
-                                    class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2"
-                                    data-bs-dismiss="modal" aria-label="Close">
+                                        class="border-2 rounded-pill px-3 py-2 me-3 back-btn text-white mb-2"
+                                        data-bs-dismiss="modal" aria-label="Close">
                                     <i class="fa fa-angle-left text-white fs-18"></i>
                                 </button>
                             </div>
@@ -427,7 +439,7 @@
     {{-- User Document upload --}}
 
     <div class="modal fade" id="user_document" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-        data-bs-backdrop="static" data-bs-keyboard="false">
+         data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content p-3">
                 <div class="d-flex justify-content-end">
@@ -445,7 +457,7 @@
                         <!-- File input -->
                         <div class="my-file-border p-3">
                             <div id="beforeUpload"
-                                class="before-upload d-flex flex-column justify-content-center align-items-center">
+                                 class="before-upload d-flex flex-column justify-content-center align-items-center">
                                 <img src="{{ asset('user/img/image 23.png') }}" alt="" class="img-fluid w-25">
                                 <h2 class="text-center fs-5">
                                     Drag and drop font files to upload
@@ -460,7 +472,7 @@
                                 <!-- Uploaded files will be displayed here -->
                             </div>
                             <input type="file" id="documents" name="documents[]"
-                                class="form-control form-control-sm mt-3" multiple accept=".png, .jpg, .jpeg, .pdf">
+                                   class="form-control form-control-sm mt-3" multiple accept=".png, .jpg, .jpeg, .pdf">
                             <div class="invalid-feedback">
                                 Please select the Aadhaar and Driving License Image.
                             </div>
@@ -469,7 +481,7 @@
                         <div class="mb-2">
                             <label for="aadhaar-number" class="form-label fs-13 fw-500">Aadhaar Number</label>
                             <input type="number" name="aadhaar_number" id="aadhaar_number"
-                                class="form-control form-control-sm my-1" placeholder="Enter your Aadhaar Number">
+                                   class="form-control form-control-sm my-1" placeholder="Enter your Aadhaar Number">
                             <div class="invalid-feedback">
                                 Please enter the Aadhaar Number.
                             </div>
@@ -477,7 +489,7 @@
                         <div class="mb-2">
                             <label for="driving_licence" class="form-label fs-13 fw-500">Driving License</label>
                             <input type="text" id="driving_licence" name="driving_licence"
-                                class="form-control form-control-sm my-1" placeholder="Enter your Driving License">
+                                   class="form-control form-control-sm my-1" placeholder="Enter your Driving License">
                             <div class="invalid-feedback">
                                 Please enter the Driving License.
                             </div>
@@ -492,7 +504,7 @@
     </div>
 
     <div class="modal" id="login_alert" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel"
-        aria-hidden="true">
+         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document"> <!-- Centering the modal -->
             <div class="modal-content">
                 <div class="modal-header">
@@ -511,7 +523,7 @@
     </div>
 
     <div class="modal" id="payment_alert" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel"
-        aria-hidden="true">
+         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document"> <!-- Centering the modal -->
             <div class="modal-content">
                 <div class="modal-header">

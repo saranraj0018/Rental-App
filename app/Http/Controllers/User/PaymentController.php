@@ -31,8 +31,6 @@ class PaymentController extends Controller {
     // Store booking details
     public function orderBooking(Request $request) {
 
-        dd(1);
-        
         $last_booking = Booking::orderBy('id', 'desc')->first() ?? 0;
 
         if ($last_booking) {
@@ -84,7 +82,7 @@ class PaymentController extends Controller {
         }
 
 
-        
+
         $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret_key'));
 
         $orderData = [
@@ -159,7 +157,7 @@ class PaymentController extends Controller {
             $payment = $api->payment->fetch($payment_id);
 
             // Extract the amount (it's in paise, so divide by 100 for the actual amount)
-            $amount = $payment->amount / 100;
+            $amount = 1 / 100;
             $currency = $payment->currency;
             $status = $payment->status;
 
