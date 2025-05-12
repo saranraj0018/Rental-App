@@ -125,7 +125,7 @@ $(function () {
                     let paymentDetails = (item.details && item.details.length > 0)
                         ? JSON.parse(item.details[0].payment_details || '{}')
                         : {};
-
+ 
                     let carModel = bookingDetails.car_model || {};
                     let commends = item.comments || [];
 
@@ -133,8 +133,8 @@ $(function () {
 
                     tbody.append(`
                 <tr class="${item.risk === 1 ? 'bg-light-red' : item.status === 2 ? 'bg-light-green' : ''}">
-                <td>${item.booking_type === 'pickup' ? '<h2>P</h2>' : '<h2>D</h2>'}</td>
-                <td>  ${!item.details[0].mode_of_payment ? 'N/A' : item.details[0].mode_of_payment}</td>
+                <td style="font-size: .7em; padding: .3em">${item.booking_type === 'pickup' ? '<h2>P</h2>' : '<h2>D</h2>'}</td>
+                <td style="font-size: .7em; padding: .3em">  ${!item.details[0].mode_of_payment ? 'N/A' : item.details[0].mode_of_payment}</td>
                      ${permissions.includes('booking_revert') ? `
                     <td>
                     ${item.status === 2 ?
@@ -143,16 +143,16 @@ $(function () {
                         </button>` : ''}
                     </td>
                 ` : ''}
-                    <td>${formatDateTime(item.start_date)}<br>
-                    <p class="text-danger">${rescheduleDate}</p></td>
-                    <td>${item?.user ? item?.user.name : ''}</td>
-                    <td>${item?.user ? item?.user.mobile : ""}</td>
-                    <td>${carModel.model_name || ''}</td>
-                    <td>${bookingDetails.register_number || ''}</td>
-                    <td class="truncate-text" title="${item.address}">${item.address}</td>
-                    <td>
-                         <button class="btn btn-warning user-details-modal" data-id="${item.user_id}" data-mobile="${item?.user ? item?.user.mobile : ''}" data-booking="${item?.user.bookings ? item?.user.bookings.length / 2 : 0}" data-aadhaar_number="${item?.user ? item?.user.aadhaar_number : ''}">
-                            User details
+                    <td style="font-size: .7em; padding: .3em; width: 100px !important; word-break: break-word; white-space: normal;">${formatDateTime(item.start_date)}<br>
+                    <p style="font-size: .7em; padding: .3em; width: 100px !important; word-break: break-word; white-space: normal;">${rescheduleDate}</p></td>
+                    <td style="font-size: .7em; padding: .3em">${item?.user ? item?.user.name : ''}</td>
+                    <td style="font-size: .7em; padding: .3em">${item?.user ? item?.user.mobile : ""}</td>
+                    <td style="font-size: .7em; padding: .3em">${carModel.model_name || ''}</td>
+                    <td style="font-size: .7em; padding: .3em">${bookingDetails.register_number || ''}</td>
+                    <td style="font-size: .7em; padding: .3em" class="truncate-text" title="${item.address}">${item.address}</td>
+                    <td style="font-size: .7em; padding: .3em">
+                         <button style="font-size: .9em !important; padding: .8em; border:none; outline: none; border-radius: 5px" class=" btn-warning user-details-modal" data-id="${item.user_id}" data-mobile="${item?.user ? item?.user.mobile : ''}" data-booking="${item?.user.bookings ? item?.user.bookings.length / 2 : 0}" data-aadhaar_number="${item?.user ? item?.user.aadhaar_number : ''}">
+                             <i class="fa fa-user"></i>
                         </button>
                     </td>
                     <td>${item?.user ? item?.user.driving_licence : ''}</td>
@@ -161,8 +161,8 @@ $(function () {
                     </td>
                     <td>${carModel.dep_amount || 0}</td>
                     <td>
-                        <button class="btn btn-warning amount-modal" data-id="${item.booking_id}" data-week_days_amount="${paymentDetails.week_days_amount || 0}" data-week_end_amount="${paymentDetails.week_end_amount || 0}" data-festival_amount="${paymentDetails.festival_amount || 0}" data-delivery_fee="${item.delivery_fee || ''}" data-dep_fee="${carModel.dep_amount || ''}" data-coupon="${item.details[0].coupon ? JSON.parse(item.details[0].coupon).discount : '0'}" data-type="${item.details[0].coupon ? JSON.parse(item.details[0].coupon).type : ''}"  data-manual_discount="${item?.payment?.discount ? item?.payment?.discount : 0 }"  >
-                            Amount Details
+                        <button style="font-size: .9em !important; padding: .8em; border:none; outline: none; border-radius: 5px" class=" btn-warning amount-modal" data-id="${item.booking_id}" data-week_days_amount="${paymentDetails.week_days_amount || 0}" data-week_end_amount="${paymentDetails.week_end_amount || 0}" data-festival_amount="${paymentDetails.festival_amount || 0}" data-delivery_fee="${item.delivery_fee || ''}" data-dep_fee="${carModel.dep_amount || ''}" data-coupon="${item.details[0].coupon ? JSON.parse(item.details[0].coupon).discount : '0'}" data-type="${item.details[0].coupon ? JSON.parse(item.details[0].coupon).type : ''}"  data-manual_discount="${item?.payment?.discount ? item?.payment?.discount : 0 }"  >
+                            <i class="fa fa-wallet"></i>
                         </button>
                     </td>
                 </tr>
