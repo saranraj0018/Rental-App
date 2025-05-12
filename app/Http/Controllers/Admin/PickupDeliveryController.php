@@ -236,6 +236,8 @@ class PickupDeliveryController extends BaseController
             $booking->risk = $request['status'];
             if ($request['status'] == 2){
                 $booking->status = 2;
+            } elseif ($request['status'] == 1){
+                $booking->status = 1;
             }
             $booking->save();
             $bookings = self::getBooking();

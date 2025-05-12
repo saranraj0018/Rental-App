@@ -16,7 +16,6 @@ $(function () {
             timePickerIncrement: 30,
             timePicker24Hour: true,
             startDate: moment().startOf('hour'),
-            minDate: moment().startOf('day'),
             locale: {
                 format: 'DD-MM-YYYY HH:mm'
             }
