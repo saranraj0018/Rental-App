@@ -158,23 +158,23 @@ $(function () {
                         </button>
                     </td>
                     ` : ''}
-                    <td>${formatDateTime(item.start_date)}<br>
-<p class="text-danger">${rescheduleDate}</p></td>
-                    <td>${item.user ? item.user.name : ''}</td>
-                       <td>${item.user ? item.user.mobile : ""}</td>
-                    <td>${carModel.model_name || ''}</td>
-                    <td>${bookingDetails.register_number || ''}</td>
-                    <td class="truncate-text" title="${item.address}">${item.address}</td>
-                    <td>
-                         <button class="btn btn-warning user-details-modal" data-id="${item.user_id}" data-mobile="${item.user ? item.user.mobile : ''}" data-booking="${item.user.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item.user ? item.user.aadhaar_number : ''}">
+                    <td style="font-size: .7em; padding: .3em; width: 100px !important; word-break: break-word; white-space: normal;">${formatDateTime(item.start_date)}<br>
+<p class="text-danger" style="font-size: .7em; padding: .3em; width: 100px !important; word-break: break-word; white-space: normal;">${rescheduleDate}</p></td>
+                    <td style="font-size: .7em; padding: .3em">${item.user ? item.user.name : ''}</td>
+                       <td style="font-size: .7em; padding: .3em">${item.user ? item.user.mobile : ""}</td>
+                    <td style="font-size: .7em; padding: .3em">${carModel.model_name || ''}</td>
+                    <td style="font-size: .7em; padding: .3em">${bookingDetails.register_number || ''}</td>
+                    <td style="font-size: .7em; padding: .3em" class="truncate-text" title="${item.address}">${item.address}</td>
+                    <td style="font-size: .7em; padding: .3em">
+                         <button style="font-size: .9em !important; padding: .8em; border:none; outline: none; border-radius: 5px" class=" btn-warning user-details-modal" data-id="${item.user_id}" data-mobile="${item.user ? item.user.mobile : ''}" data-booking="${item.user.bookings ? item.user.bookings.length / 2 : 0}" data-aadhaar_number="${item.user ? item.user.aadhaar_number : ''}">
                             User details
                         </button>
                     </td>
-                    <td>${item.user ? item.user.driving_licence : ''}</td>
-                    <td>${item.booking_id}</td>
-                    <td>${item.start_date ? formatDateTime(item.start_date) : formatDateTime(item.end_date)}<br>
+                    <td style="font-size: .7em; padding: .3em">${item.user ? item.user.driving_licence : ''}</td>
+                    <td style="font-size: .7em; padding: .3em">${item.booking_id}</td>
+                    <td style="font-size: .7em; padding: .3em">${item.start_date ? formatDateTime(item.start_date) : formatDateTime(item.end_date)}<br>
                     </td>
-                    <td>${carModel.dep_amount || 0}</td>
+                    <td style="font-size: .7em; padding: .3em">${carModel.dep_amount || 0}</td>
                     <td>
                         <button class="btn btn-warning amount-modal" data-id="${item.booking_id}" data-week_days_amount="${paymentDetails.week_days_amount || 0}" data-week_end_amount="${paymentDetails.week_end_amount || 0}" data-festival_amount="${paymentDetails.festival_amount || 0}" data-delivery_fee="${item.delivery_fee || ''}" data-dep_fee="${carModel.dep_amount || ''}" data-coupon="${item.details[0].coupon ? JSON.parse(item.details[0].coupon).discount : '0'}" data-type="${item.details[0].coupon ? JSON.parse(item.details[0].coupon).type : ''}"  data-manual_discount="${item?.payment?.discount ? item?.payment?.discount : 0 }"   >
                             Amount Details

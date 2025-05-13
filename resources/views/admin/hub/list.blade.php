@@ -143,7 +143,7 @@
                     <table id="booking_table" class="table table-bordered table-hover text-nowrap">
                         <thead>
                         <tr>
-                            <th  style="font-size: .7em; text-align: center; padding: .3em">Booking<br>Type</th>
+                             <th  style="font-size: .7em; text-align: center; padding: .3em">Booking<br>Type</th>
                             <th  style="font-size: .7em; text-align: center; padding: .3em">Mode of<br>Payment</th>
                              @if (in_array('hub_risk_status', getAdminPermissions()) || in_array('hub_risk_comments', getAdminPermissions()))
                                     <th  style="font-size: .7em; text-align: center; padding: .3em">Risk</th>

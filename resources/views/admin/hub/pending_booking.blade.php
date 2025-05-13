@@ -18,7 +18,7 @@
             overflow: hidden;
             text-overflow: ellipsis; /* Adds ellipsis (...) for overflowing text */
             max-width: 150px; /* Adjust the width as needed */
-
+ 
         }
         .table-responsive td, .table-responsive th {
             white-space: nowrap; /* Keeps text on a single line */
@@ -85,6 +85,7 @@
         .apply-width {
             min-width: 100px !important;
             padding: .5em !important;
+            font-size: .9em;
         }
 
 
@@ -160,7 +161,7 @@
                             <th  style="font-size: .7em; text-align: center; padding: .3em">Address</th>
                             <th  style="font-size: .7em; text-align: center; padding: .3em">User Details</th>
                             <th  style="font-size: .7em; text-align: center; padding: .3em">D/L Number</th>
-                            <th  style="font-size: .7em; text-align: center; padding: .3em"><input type="text" id="booking_id" name="booking_id" class="form-control apply-min-width" style="padding: 0%    ;" placeholder="Booking ID"></th>
+                            <th  style="font-size: .7em; text-align: center; padding: .3em"><input type="text" id="booking_id" name="booking_id" class="form-control apply-min-width" style="padding: 0%; font-size: .9em;" placeholder="Booking ID"></th>
                             <th  style="font-size: .7em; text-align: center; padding: .3em">Reschedule</th>
                             <th  style="font-size: .7em; text-align: right; padding: .3em">Security Dep</th>
                             <th  style="font-size: .7em; text-align: right; padding: .3em">Amount</th>
@@ -197,10 +198,10 @@
                                         @if(!empty($item->reschedule_date))
                                             <p class="text-danger">{{ showDateTime($item->reschedule_date) }}</p>
                                         @endif</td>
-                                    <td>{{ $item->user->name ?? '' }}</td>
-                                    <td>{{ $car_model->model_name ?? 'Dummy Car' }}</td>
-                                    <td>{{ $booking_details->register_number ?? '' }}</td>
-                                    <td class="truncate-text" title="{{ $item->address }}">{{ $item->address }}</td>
+                                    <td  style="font-size: .7em">{{ $item->user->name ?? '' }}</td>
+                                    <td  style="font-size: .7em">{{ $car_model->model_name ?? 'Dummy Car' }}</td>
+                                    <td  style="font-size: .7em">{{ $booking_details->register_number ?? '' }}</td>
+                                    <td  style="font-size: .7em" class="truncate-text" title="{{ $item->address }}">{{ $item->address }}</td>
                                     <td>
                                         <button class="btn btn-warning user-details-modal" data-id="{{ $item->user_id }}" data-mobile="{{ $item->user->mobile }}" data-booking="{{ !empty($item->user->bookings->count()) ? $item->user->bookings->count() / 2 : 0 }}" data-aadhaar_number="{{ $item->user->aadhaar_number }}">
                                             User details

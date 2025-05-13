@@ -86,6 +86,7 @@
         .apply-width {
             min-width: 100px !important;
             padding: .5em !important;
+            font-size: .9em;
         }
 
 
@@ -150,7 +151,7 @@
                             <th style="font-size: .7em; text-align: center; padding: .3em">Address</th>
                             <th  style="font-size: .7em; text-align: center; padding: .3em">User Details</th>
                             <th style="font-size: .7em; text-align: center; padding: .3em">D/L Number</th>
-                            <th style="font-size: .7em; text-align: center; padding: .3em"><input type="text" id="cancel_booking_id" name="cancel_booking_id" class="form-control apply-min-width" style="padding: 0%    ;" placeholder="Booking ID"></th>
+                            <th style="font-size: .7em; text-align: center; padding: .3em"><input type="text" id="cancel_booking_id" name="cancel_booking_id" class="form-control apply-min-width" style="padding: 0%; font-size: .9em;" placeholder="Booking ID"></th>
                             <th style="font-size: .7em; text-align: center; padding: .3em">Reschedule</th>
                             <th  style="font-size: .7em; text-align: right; padding: .3em">Security Dep</th>
                             <th  style="font-size: .7em; text-align: right; padding: .3em">Amount</th>
