@@ -41,39 +41,47 @@ class PickupDeliveryController extends BaseController
     public static function getBooking()
     {
         $timeLimit = now()->addHours(48);
-        return Booking::with(['user', 'details', 'comments', 'user.bookings'])
+          return Booking::with(['user', 'details', 'comments', 'user.bookings', 'payment'])
             ->where('status', 1)
             ->where(function ($query) use ($timeLimit) {
-                $query->where('risk', 2)
-                    ->where(function ($query) use ($timeLimit) {
-                        $query->where(function ($query) use ($timeLimit) {
-                            $query->where('booking_type', 'delivery')
-                                ->whereBetween('start_date', [now(), $timeLimit]);
-                        })->orWhere(function ($query) use ($timeLimit) {
-                            $query->where('booking_type', 'pickup')
-                                ->whereBetween('end_date', [now(), $timeLimit]);
+                $query->where(function ($query) use ($timeLimit) {
+                    $query->where('risk', 2)
+                        ->where(function ($query) use ($timeLimit) {
+                            $query->where(function ($query) use ($timeLimit) {
+                                $query->where('booking_type', 'delivery')
+                                    ->where(function ($query) use ($timeLimit) {
+                                        $query->whereNotNull('reschedule_date')
+                                            ->whereBetween('reschedule_date', [now()->addHours(-1), $timeLimit])
+                                            ->orWhere(function ($query) use ($timeLimit) {
+                                                $query->whereNull('reschedule_date')
+                                                    ->whereBetween('start_date', [now()->addHours(-1), $timeLimit]);
+                                            });
+                                    });
+                            })->orWhere(function ($query) use ($timeLimit) {
+                                $query->where('booking_type', 'pickup')
+                                    ->where(function ($query) use ($timeLimit) {
+                                        $query->whereNotNull('reschedule_date')
+                                            ->whereBetween('reschedule_date', [now(), $timeLimit])
+                                            ->orWhere(function ($query) use ($timeLimit) {
+                                                $query->whereNull('reschedule_date')
+                                                    ->whereBetween('end_date', [now(), $timeLimit]);
+                                            });
+                                    });
+                            });
                         });
-                    })
-                    ->orWhere(function ($query) {
-                        $query->where('risk', 1);
-                    });
-            })
-            ->orWhere(function ($query) {
-                $query->where('risk', 1)
-                    ->where('status', 1);
-            })
-           ->orderByRaw("booking_id desc,
-            CASE
-                WHEN booking_type = 'delivery' THEN start_date
-                WHEN booking_type = 'pickup' THEN end_date
-            END ASC
-        ") // Conditional ordering based on booking_type
-            ->paginate(20);
+                })->orWhere('risk', 1); // Only `risk` check here as `status` and `city_code` are global
+            })->orderByRaw("risk asc, booking_id desc,
+                CASE
+                    WHEN booking_type = 'delivery' THEN COALESCE(reschedule_date, start_date)
+                    WHEN booking_type = 'pickup' THEN COALESCE(reschedule_date, end_date)
+                END ASC
+            ")->paginate(20);
     }
 
     public function rescheduleDate(Request $request)
     {
-          $this->authorizePermission('hub_reschedule');
+        
+        $this->authorizePermission('hub_reschedule');
         $request->validate([
             'booking_id' => 'required|numeric',
             'car_id' => 'required|numeric',
@@ -81,17 +89,17 @@ class PickupDeliveryController extends BaseController
             'start_date' => 'required|date',
             'end_date' => 'required|date',
         ]);
-
+        
           $setting = Frontend::where('data_keys','general-setting')->orderBy('created_at', 'desc')->first();
         $timing_setting = !empty($setting['data_values']) ? json_decode($setting['data_values'],true) : [];
-
+       
 
         $booking = Booking::find($request['booking_id']);
 
         $booking->reschedule_date = formDateTime($request['end_date']);
         $booking->save();
-
-
+        
+        
         if ($booking->booking_type == 'delivery') {
             Available::where('booking_id', $booking->booking_id)->update(['start_date' => formDateTime($request['end_date'])]);
         } else {
@@ -146,7 +154,7 @@ class PickupDeliveryController extends BaseController
         }
         # send mail and SMS to user
         event(new \App\Events\BookingUpdated($booking, 'rescheduled'));
-
+        
         $bookings = self::getBooking();
         return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'success' => 'Reschedule date Update successfully']);
 
@@ -225,7 +233,6 @@ class PickupDeliveryController extends BaseController
             'status' => 'required',
         ]);
         $booking = Booking::find($request['booking_id']);
-
         if (!empty($booking) && !empty($request['note']) && $request['note'] == 'complete' ) {
             $booking->status = $request['status'];
             $booking->risk = 2;
@@ -234,7 +241,7 @@ class PickupDeliveryController extends BaseController
             return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
         } elseif (!empty($booking) && !empty($request['note']) && $request['note'] == 'risk' ) {
             $booking->risk = $request['status'];
-            if ($request['status'] == 2){
+              if ($request['status'] == 2){
                 $booking->status = 2;
             } elseif ($request['status'] == 1){
                 $booking->status = 1;
@@ -244,7 +251,7 @@ class PickupDeliveryController extends BaseController
             return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
 
         }
-        $bookings = self::getBooking();
+        $bookings = self::getBooking(); 
         return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Booking not found']);
     }
 
@@ -268,7 +275,7 @@ class PickupDeliveryController extends BaseController
                         ->where('end_date', '<', now());
                 });
             })->orderBy('booking_id', 'desc');
-
+            
         if (!empty($booking) && !empty($request['note']) && $request['note'] == 'complete' ) {
             $booking->status = $request['status'];
             $booking->risk = 2;
@@ -282,7 +289,7 @@ class PickupDeliveryController extends BaseController
             return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Risk updated successfully']);
 
         }
-
+        
         $bookings = Booking::with(['user','details','comments','user.bookings'])->orderBy('booking_id', 'desc')->where('status',2)->paginate(20);
 
         return response()->json(['data'=> ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()],'message' => 'Booking not found']);
@@ -295,7 +302,7 @@ class PickupDeliveryController extends BaseController
             'booking_id' => 'required',
             'reason' => 'required|string|max:255',
         ]);
-
+       
         $booking = Booking::where('booking_id', $request['booking_id']);
 
         $booking->update([
@@ -309,7 +316,7 @@ class PickupDeliveryController extends BaseController
         # send mail and SMS to user and admin
         event(new \App\Events\BookingUpdated($booking->get()->first(), 'cancelled'));
 
-
+      
         $query = Booking::with(['user', 'details', 'comments', 'user.bookings'])
             ->where('status', 1) // Filter by status = 1
             ->where('city_code', $booking->get()->first()->city_code ?? 632) // Default city_code filter
@@ -340,10 +347,10 @@ class PickupDeliveryController extends BaseController
             'status' => 3,
         ]);
          Available::where('booking_id', $request['booking_id'])->delete();
-
+     
         # send mail and SMS to user and admin
         event(new \App\Events\BookingUpdated($booking->get()->first(), 'cancelled'));
-
+      
             $bookings = self::getBooking();
         return response()->json(['data' => ['bookings' => $bookings->items(), 'pagination' => $bookings->links()->render()], 'message' => 'Booking cancelled successfully']);
     }
@@ -351,8 +358,8 @@ class PickupDeliveryController extends BaseController
     public function fetchBookings(Request $request) {
         // Set the number of items per page
         $perPage = $request->input('per_page', 20);
-
-
+        
+        
           if (!empty($request->input('booking_id')) && !empty($request['hub_type'])) {
             $booking = Booking::with(['user', 'details', 'comments', 'user.bookings', 'payment'])
                 ->where('city_code', $request['hub_type'])
@@ -364,7 +371,7 @@ class PickupDeliveryController extends BaseController
         }
 
         if (!empty($request['status']) && ($request['status'] == 2 || $request['status'] == 3)) {
-            $booking = Booking::with(['user', 'details', 'comments', 'user.bookings','payment'])
+            $booking = Booking::with(['user', 'details', 'comments', 'user.bookings', 'payment'])
                 ->where('city_code', $request['hub_type'])
                 ->where('status', $request['status']);
 
@@ -373,7 +380,7 @@ class PickupDeliveryController extends BaseController
 
         }
 
-
+        
         $timeLimit = now()->addHours(48);
           $query = Booking::with(['user', 'details', 'comments', 'user.bookings', 'payment'])
             ->where('status', $request['status'])
@@ -386,10 +393,10 @@ class PickupDeliveryController extends BaseController
                                 $query->where('booking_type', 'delivery')
                                     ->where(function ($query) use ($timeLimit) {
                                         $query->whereNotNull('reschedule_date')
-                                            ->whereBetween('reschedule_date', [now(), $timeLimit])
+                                            ->whereBetween('reschedule_date', [now()->addHours(-1), $timeLimit])
                                             ->orWhere(function ($query) use ($timeLimit) {
                                                 $query->whereNull('reschedule_date')
-                                                    ->whereBetween('start_date', [now(), $timeLimit]);
+                                                    ->whereBetween('start_date', [now()->addHours(-1), $timeLimit]);
                                             });
                                     });
                             })->orWhere(function ($query) use ($timeLimit) {
@@ -416,7 +423,7 @@ class PickupDeliveryController extends BaseController
         if (!empty($request['register_number'])) {
             $query->where('register_number', 'like', '%' . $request->input('register_number') . '%');
         }
-
+      
         if (!empty($request['customer_name'])) {
             $query->whereHas('user', function($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->input('customer_name') . '%');
@@ -430,7 +437,7 @@ class PickupDeliveryController extends BaseController
             $query->where('city_code', $request->input('hub_type'));
         }
         // Paginate the results
-        $bookings = $query->orderByRaw("
+        $bookings = $query->orderByRaw("risk asc, booking_id desc, 
             CASE
                 WHEN booking_type = 'delivery' THEN COALESCE(reschedule_date, start_date)
                 WHEN booking_type = 'pickup' THEN COALESCE(reschedule_date, end_date)
@@ -783,7 +790,7 @@ class PickupDeliveryController extends BaseController
         $city_list = City::where('city_status',1)->pluck('name','code');
         return view('admin.hub.cancel_booking',compact('city_list'));
     }
-
+    
     public function bookingCompleteExport(Request $request) {
         $this->authorizePermission('booking_completed_export');
         $hub = $request->query('id');

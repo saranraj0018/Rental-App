@@ -23,9 +23,9 @@
                 <li>Booking ID: <b>{{ $booking->booking_id }}</b></li>
                 <li>Car Model: <b>{{ $booking?->Car?->carModel?->model_name }}</b></li>
                 <li>Drop-off Location: <b>{{ $booking->location()->dropoff }}</b></li>
-                <li>Drop-off Date/Time: <b>{{ $booking->start_date }}</b></li>
+                <li>Drop-off Date/Time: <b>{{ $booking->booking_type == 'delivery' ? ($booking->reschedule_date ? $booking->reschedule_date : $booking->start_date) :  $booking->start_date }}</b></li>
                 <li>Pick-up Location: <b>{{ $booking->location()->pickup }}</b></li>
-                <li>Pick-up Date/Time: <b>{{ $booking->end_date }}</b></li>
+                <li>Pick-up Date/Time: <b>{{ $booking->booking_type == 'pickup' ? ($booking->reschedule_date ? $booking->reschedule_date : $booking->end_date) : $booking->end_date }}</b></li>
             </ul>
         </div>
 
