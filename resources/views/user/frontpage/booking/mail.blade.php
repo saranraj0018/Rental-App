@@ -49,7 +49,7 @@
                 'weekday' => $booking->Car->carModel->price_per_hour ?? 0
             ];
 
-            $price_list = \App\Http\Controllers\User\UserController::calculatePrice($prices, session('start_date'), session('end_date'));
+            $price_list = \App\Http\Controllers\User\UserController::calculatePrice($prices, $booking->start_date, $booking->end_date);
             $paymentDetails = json_decode($booking->details[0]->payment_details);
             $coupon = json_decode($booking->details[0]->coupon); 
         @endphp
