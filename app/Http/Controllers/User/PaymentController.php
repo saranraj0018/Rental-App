@@ -23,6 +23,7 @@ use App\Mail\NofiyBookingConfrimedMail;
 use App\Mail\NotifyBookingCancelledMail;
 use App\Mail\NotifyBookingConfirmedMail;
 use App\Models\AdminDetail;
+use Illuminate\Support\Facades\Session;
 use Twilio\Rest\Client;
 use Razorpay\Api\Api;
 
@@ -51,7 +52,7 @@ class PaymentController extends Controller {
         $booking->latitude = !empty(session('delivery.lat')) ? session('delivery.lat') : session('pick-delivery.lat');
         $booking->longitude = !empty(session('delivery.lng')) ? session('delivery.lng') : session('pick-delivery.lng');
         $booking->address = !empty(session('delivery.address')) ? session('delivery.address') : session('pick-delivery.address');
-        $booking->delivery_fee = session('booking_details.delivery_fee') ?? session('delivery_fee');
+        $booking->delivery_fee = session('booking_details.delivery_fee') ? session('delivery_fee') : 0;
         $booking->status = 1;
         $booking->payment_id = $request['payment_id'] ?? 1;
         $booking->save();
@@ -68,7 +69,7 @@ class PaymentController extends Controller {
         $delivery_booking->latitude = !empty(session('pickup.lat')) ? session('pickup.lat') : session('pick-delivery.lat');
         $delivery_booking->longitude = !empty(session('pickup.lng')) ? session('pickup.lng') : session('pick-delivery.lng');
         $delivery_booking->address = !empty(session('pickup.address')) ? session('pickup.address') : session('pick-delivery.address');
-        $delivery_booking->delivery_fee = session('booking_details.delivery_fee') ?? session('delivery_fee');
+        $delivery_booking->delivery_fee = session('booking_details.delivery_fee') ? session('delivery_fee') : 0;
         $delivery_booking->status = 1;
         $delivery_booking->payment_id = $request['payment_id'] ?? 1;
         $delivery_booking->save();
@@ -137,7 +138,7 @@ class PaymentController extends Controller {
             'booking_details.start_date', 'booking_details.end_date', 'delivery.lat',
             'delivery.lng', 'delivery.address', 'booking_details.delivery_fee',
             'booking_details.price_list', 'booking_details.car_details', 'coupon','delivery_fee','coupon_amount']);
-
+        Session::forget('delivery_fee');
         session(['booking_id' => $new_booking_id]);
         return response()->json([
             'success' => true,

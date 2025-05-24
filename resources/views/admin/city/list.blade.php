@@ -120,7 +120,7 @@
                                             <span class="badge badge-danger" style="background-color: red">Deactivate</span>
                                         @endif</td>
                                     <td>{{ showDateTime($item->updated_at) }}</td>
-                                    
+
                                     <td>
                                          @if (in_array('city_list_update', $permissions))
                                         <a href="javascript:void(0)" class="city_edit" data-id="{{ $item->id }}"

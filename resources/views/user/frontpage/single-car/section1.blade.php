@@ -400,7 +400,7 @@
                 url: '/user/generate/order', // Replace with your actual endpoint.
                 method: 'POST',
                 data: {
-                    amount: 1, // Send the amount to the server.
+                    amount: amount, // Send the amount to the server.
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {

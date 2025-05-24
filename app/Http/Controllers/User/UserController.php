@@ -328,7 +328,6 @@ class UserController extends Controller
      public function updateUserDocument(Request $request)
     {
         $uniq_id =  Str::random(6);
-
         if ($request->hasFile('other_documents') && !empty($request['other_documents'])) {
             foreach ($request->file('other_documents') as $file) {
                 $img_name = $file->getClientOriginalName();
